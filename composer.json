@@ -1,0 +1,14 @@
+{
+  "autoload": {
+    "psr-4": {
+      "rBibliaWeb\\": "src/core/"
+    }
+  },
+  "config": {
+    "vendor-dir": "src/vendor/"
+  },
+  "require": {
+    "symfony/console": "^5.2",
+    "doctrine/dbal": "^3.1"
+  }
+}

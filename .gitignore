@@ -1,0 +1,3 @@
+src/vendor
+src/config/app.php
+.php_cs.cache
