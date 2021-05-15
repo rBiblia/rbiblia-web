@@ -9,6 +9,7 @@
   },
   "require": {
     "symfony/console": "^5.2",
-    "doctrine/dbal": "^3.1"
+    "doctrine/dbal": "^3.1",
+    "bramus/router": "^1.5"
   }
 }

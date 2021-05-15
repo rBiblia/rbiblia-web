@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Table;
+use rBibliaWeb\Controller\TranslationController;
 use rBibliaWeb\Value\About;
 use rBibliaWeb\Value\Body;
 use rBibliaWeb\Value\Translation;
@@ -19,8 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends Command
 {
-    const TABLE_TRANSLATION = 'translation';
-    const TABLE_DATA = 'data_%s';
     const TABLE_TEMP = 'temp';
     const ENTRY_TEMP_ID = '_%s';
 
@@ -197,7 +196,7 @@ class ImportCommand extends Command
     private function loadTranslationIntoDatabase(Translation $translation): int
     {
         // check if we really need to update translation
-        $statement = $this->db()->executeQuery(sprintf('SELECT id FROM %s WHERE id=? AND hash=?', self::TABLE_TRANSLATION), [
+        $statement = $this->db()->executeQuery(sprintf('SELECT id FROM %s WHERE id=? AND hash=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
             $translation->getAbout()->getHash(),
         ], [
@@ -260,7 +259,7 @@ class ImportCommand extends Command
             throw $e;
         }
 
-        $translationTable = sprintf(self::TABLE_DATA, $translation->getAbout()->getId());
+        $translationTable = sprintf(TranslationController::TABLE_DATA, $translation->getAbout()->getId());
 
         // remove old translation data table
         $this->db()->executeQuery(sprintf('DROP TABLE IF EXISTS %s', $translationTable));
@@ -273,7 +272,7 @@ class ImportCommand extends Command
 
         try {
             // create new translation details
-            $this->db()->insert(self::TABLE_TRANSLATION, [
+            $this->db()->insert(TranslationController::TABLE_TRANSLATION, [
                 'shortname' => $translation->getAbout()->getShortname(),
                 'language' => $translation->getAbout()->getLanguage(),
                 'authorised' => (int) $translation->getAbout()->getAuthorised(),
@@ -292,14 +291,14 @@ class ImportCommand extends Command
         }
 
         // remove existing translation details
-        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', self::TABLE_TRANSLATION), [
+        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
         ], [
             ParameterType::STRING,
         ]);
 
         // rename translation details
-        $this->db()->executeQuery(sprintf('UPDATE %s SET id=? WHERE id=?', self::TABLE_TRANSLATION), [
+        $this->db()->executeQuery(sprintf('UPDATE %s SET id=? WHERE id=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
             sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
         ], [
@@ -312,7 +311,7 @@ class ImportCommand extends Command
 
     private function removeTemporaryDetails(Translation $translation): void
     {
-        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', self::TABLE_TRANSLATION), [
+        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
             sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
         ], [
             ParameterType::STRING,
