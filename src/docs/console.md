@@ -17,3 +17,9 @@ Import wszystkich tłumaczeń z plików *.bibx tylko z wybranej grupy językowej
 ```bash
 bin\console i --all --language pl
 ```
+
+Import wszystkich autoryzowanych tłumaczeń z wybranej grupy językowej:
+
+```bash
+bin\console i --all --language pl --authorised 1
+```

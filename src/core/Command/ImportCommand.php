@@ -12,6 +12,7 @@ use rBibliaWeb\Controller\TranslationController;
 use rBibliaWeb\Value\About;
 use rBibliaWeb\Value\Body;
 use rBibliaWeb\Value\Translation;
+use SimpleXMLElement;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,6 +34,9 @@ class ImportCommand extends Command
     /** @var Connection */
     private $db;
 
+    /** @var SimpleXMLElement */
+    private $xml;
+
     public function __construct(array $settings = [])
     {
         $this->settings = $settings;
@@ -49,6 +53,7 @@ class ImportCommand extends Command
             ->addOption('file', 'f', InputOption::VALUE_OPTIONAL, 'Import only specific *.bibx file, eg. <info>pl_bt5.bibx</info>')
             ->addOption('all', 'a', InputOption::VALUE_OPTIONAL, 'Import all *.bibx files', false)
             ->addOption('language', 'l', InputOption::VALUE_OPTIONAL, 'Import all files from a specific language group only, eg. <info>pl</info>', false)
+            ->addOption('authorised', 'auth', InputOption::VALUE_OPTIONAL, 'Import only authorised or nonauthorised files, eg <info>1</info>', false)
         ;
     }
 
@@ -57,25 +62,27 @@ class ImportCommand extends Command
         $this->output = $output;
 
         if (false !== $input->getOption('all')) {
-            $filesList = $this->getList();
+            $filesList = $this->getFilesList();
 
+            $inputLanguage = null;
             if (false !== $input->getOption('language')) {
                 $inputLanguage = $input->getOption('language');
 
                 if (null === $inputLanguage) {
                     return $this->displayError('No input language group given');
                 }
-
-                $filteredList = [];
-                foreach ($filesList as $file) {
-                    if (0 === strpos($file, sprintf('%s_', $inputLanguage))) {
-                        $filteredList[] = $file;
-                    }
-                }
-                $filesList = $filteredList;
             }
 
-            return $this->importAll($filesList);
+            $authorised = null;
+            if (false !== $input->getOption('authorised')) {
+                $authorised = $input->getOption('authorised');
+
+                if (null === $authorised) {
+                    return $this->displayError('No input authorised option given');
+                }
+            }
+
+            return $this->importAll($filesList, $inputLanguage, $authorised);
         }
 
         if ($input->hasOption('file')) {
@@ -85,22 +92,61 @@ class ImportCommand extends Command
                 return $this->displayError('No input file given');
             }
 
-            return $this->importFile($inputFile);
+            if (Command::SUCCESS !== $this->decompressFile($inputFile)) {
+                return Command::FAILURE;
+            }
+
+            return $this->importFileFromXml($inputFile);
         }
 
         return Command::FAILURE;
     }
 
-    private function importAll(array $fileList = []): int
+    private function importAll(array $fileList = [], ?string $language = null, ?string $authorised = null): int
     {
-        $index = 0;
+        $this->output->writeln('Scanning files...');
 
+        $progressBar = new ProgressBar($this->output, \count($fileList));
+        $progressBar->setFormat('debug');
+        $progressBar->start();
+
+        $filteredFileList = [];
         foreach ($fileList as $file) {
-            $this->output->writeln(sprintf('Progress: %d/%d', ++$index, \count($fileList)));
+            $progressBar->advance();
 
-            $result = $this->importFile($file);
+            if (Command::SUCCESS !== $this->decompressFile($file)) {
+                return Command::FAILURE;
+            }
 
-            if (Command::SUCCESS !== $result) {
+            $process = true;
+            if (null !== $language && $this->xml->about->language->__toString() !== $language) {
+                $process = false;
+            }
+
+            if (null !== $authorised && $this->xml->about->authorised->__toString() !== $authorised) {
+                $process = false;
+            }
+
+            if (!$process) {
+                continue;
+            }
+
+            $filteredFileList[] = $file;
+        }
+
+        $progressBar->finish();
+        $this->output->writeln('');
+        $this->output->writeln('');
+
+        $index = 0;
+        foreach ($filteredFileList as $file) {
+            $this->output->writeln(sprintf('Progress: %d/%d', ++$index, \count($filteredFileList)));
+
+            if (Command::SUCCESS !== $this->decompressFile($file)) {
+                return Command::FAILURE;
+            }
+
+            if (Command::SUCCESS !== $this->importFileFromXml($file)) {
                 return Command::FAILURE;
             }
         }
@@ -108,7 +154,7 @@ class ImportCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getList(): array
+    private function getFilesList(): array
     {
         $bibxFolder = $this->settings['bibx_folder'];
 
@@ -131,7 +177,7 @@ class ImportCommand extends Command
         return $list;
     }
 
-    private function importFile($file): int
+    private function decompressFile($file): int
     {
         $filePath = $this->settings['bibx_folder'].'/'.$file;
 
@@ -157,22 +203,29 @@ class ImportCommand extends Command
             $this->displayError(sprintf('No translation data found in: %s', $filePath));
         }
 
-        $xml = simplexml_load_string($content);
+        $this->xml = simplexml_load_string($content);
+
+        return Command::SUCCESS;
+    }
+
+    private function importFileFromXml(string $file): int
+    {
+        $filePath = $this->settings['bibx_folder'].'/'.$file;
 
         $about = new About(
             $file,
             md5_file($filePath),
-            $xml->about->name->__toString(),
-            $xml->about->shortname->__toString(),
-            $xml->about->language->__toString(),
-            $xml->about->description->__toString(),
-            '1' === $xml->about->authorised->__toString() ? true : false,
-            isset($xml->about->date) ? $xml->about->date->__toString() : ''
+            $this->xml->about->name->__toString(),
+            $this->xml->about->shortname->__toString(),
+            $this->xml->about->language->__toString(),
+            $this->xml->about->description->__toString(),
+            '1' === $this->xml->about->authorised->__toString() ? true : false,
+            isset($this->xml->about->date) ? $this->xml->about->date->__toString() : ''
         );
 
         $body = new Body();
 
-        foreach ($xml->translation as $book) {
+        foreach ($this->xml->translation as $book) {
             foreach ($book as $bookElement) {
                 $bookId = $bookElement->attributes()['id']->__toString();
 
