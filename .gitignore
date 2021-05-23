@@ -1,3 +1,5 @@
+node_modules
 src/vendor
 src/config/app.php
+public_html/assets
 .php_cs.cache

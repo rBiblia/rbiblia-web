@@ -23,3 +23,28 @@ Import wszystkich autoryzowanych tłumaczeń z wybranej grupy językowej:
 ```bash
 bin\console i --all --language pl --authorised 1
 ```
+
+Przygotowanie dystrybucji developerskiej:
+
+```bash
+bin\make dev
+```
+
+
+Przygotowanie dystrybucji produkcyjnej:
+
+```bash
+bin\make prod
+```
+
+Kompilacja assetów:
+
+```bash
+bin\make assets
+```
+
+Kompilacja assetów w czasie rzeczywistym:
+
+```bash
+bin\make assets-watch
+```
