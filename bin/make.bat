@@ -7,6 +7,7 @@ if ["%1"] == [""] (
     echo assets-watch - recompile assets automatically when files change
     echo dev          - prepare development environment
     echo prod         - install only `prod` dependencies and optimize build before deployment
+    echo lint         - run linter on assets folder
 )
 
 if ["%1"] == ["assets"] (
@@ -32,4 +33,8 @@ if ["%1"] == ["prod"] (
 
     echo Build optimized for deployment.
     echo This build from now on will not work in `dev` environment.
+)
+
+if ["%1"] == ["lint"] (
+    node_modules\.bin\eslint assets
 )
