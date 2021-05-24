@@ -12,6 +12,7 @@ Encore
 
     .disableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
+    .enableReactPreset()
 
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
