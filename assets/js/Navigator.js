@@ -8,10 +8,10 @@ export default class Navigator extends Component {
         return (
             <div className="row">
                 <div className="col-4">
-                    <TranslationSelector translations={this.props.translations} books={this.props.books} />
+                    <TranslationSelector translations={this.props.translations} />
                 </div>
                 <div className="col-4">
-                    <BookSelector/>
+                    <BookSelector books={this.props.books} />
                 </div>
                 <div className="col-4">
                     <ChapterSelector/>
