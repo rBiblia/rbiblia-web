@@ -6,7 +6,7 @@ import ChapterSelector from "./ChapterSelector";
 export default class Navigator extends Component {
     render() {
         return (
-            <div className="row">
+            <header className="row">
                 <div className="col-4">
                     <TranslationSelector translations={this.props.translations} />
                 </div>
@@ -16,7 +16,7 @@ export default class Navigator extends Component {
                 <div className="col-4">
                     <ChapterSelector/>
                 </div>
-            </div>
+            </header>
         );
     }
 }

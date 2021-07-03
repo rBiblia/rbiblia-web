@@ -1,0 +1,5 @@
+rBiblia Web, dziennik zmian
+https://web.rbiblia.toborek.info
+
+[2021-07-03]
+- pierwsze publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.

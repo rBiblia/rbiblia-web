@@ -1,0 +1,4 @@
+/* required to show drop down cursor for select box in FF */
+.form-control {
+  -moz-appearance: button;
+}

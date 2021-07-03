@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
+import StatusBar from "./StatusBar";
 
 export default class Bible extends Component {
     constructor(props) {
@@ -69,6 +70,7 @@ export default class Bible extends Component {
                 <div className="container">
                     <Navigator translations={translations} books={books} />
                     <Reader/>
+                    <StatusBar translations={translations} />
                 </div>
             );
         }
