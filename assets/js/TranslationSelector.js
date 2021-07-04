@@ -1,20 +1,8 @@
 import React, {Component} from "react";
 
 export default class TranslationSelector extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            selectedTranslation: null
-        };
-    }
-
-    handleTranslationSelect(id, event) {
-        this.setState({selectedTranslation: event.target.value});
-    }
-
     render() {
-        const {translations} = this.props,
+        const {translations, onTranslationSelectorChange} = this.props,
               translationList = [],
               map = {},
               languageNames = new Intl.DisplayNames(['pl'], {type: 'language'});
@@ -33,7 +21,7 @@ export default class TranslationSelector extends Component {
         });
 
         return (
-            <select className="form-control" onChange={(event) => this.handleTranslationSelect(this.selectedIndex, event)}>
+            <select className="form-control" onChange={(event) => onTranslationSelectorChange(event)}>
                 {translationList.map(({languageName, children}, key) => {
                     return (
                         <optgroup label={languageName} key={key}>{

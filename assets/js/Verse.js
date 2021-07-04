@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 
 export default class Verse extends Component {
     render() {
+        const {verseContent, bookId, chapterId, verseId} = this.props,
+              appLink = "bib://" + bookId + chapterId + ":" + verseId;
+
         return (
             <div className="row">
                 <div className="col-1">
-                    <a href={"bib://" + this.props.bookId + this.props.chapterId + ":" + this.props.verseId}>{this.props.verseId}</a>
+                    <a href={appLink}>{verseId}</a>
                 </div>
                 <div className="col-11">
-                    {this.props.verseContent}
+                    {verseContent}
                 </div>
             </div>
         );

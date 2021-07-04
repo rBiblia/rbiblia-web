@@ -11,6 +11,7 @@ class Books
 
     const ALIASES = [
         'gen' => [
+            'name' => 'Rodzaju (1 Mojż.)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'gen',
@@ -24,6 +25,7 @@ class Books
             ],
         ],
         'exo' => [
+            'name' => 'Wyjścia (2 Mojż.)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'exo',
@@ -37,6 +39,7 @@ class Books
             ],
         ],
         'lev' => [
+            'name' => 'Kapłańska (3 Mojż.)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'lev',
@@ -50,6 +53,7 @@ class Books
             ],
         ],
         'num' => [
+            'name' => 'Liczb (4 Mojż.)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'num',
@@ -63,6 +67,7 @@ class Books
             ],
         ],
         'deu' => [
+            'name' => 'Powtórzonego Prawa (5 Mojż.)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'deu',
@@ -76,6 +81,7 @@ class Books
             ],
         ],
         'jos' => [
+            'name' => 'Jozuego',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'jos',
@@ -89,6 +95,7 @@ class Books
             ],
         ],
         'jdg' => [
+            'name' => 'Sędziów',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'jdg',
@@ -102,6 +109,7 @@ class Books
             ],
         ],
         'rut' => [
+            'name' => 'Rut (Ruty)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'rut',
@@ -114,6 +122,7 @@ class Books
             ],
         ],
         '1sa' => [
+            'name' => '1 Samuela',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '1sa',
@@ -128,6 +137,7 @@ class Books
             ],
         ],
         '2sa' => [
+            'name' => '2 Samuela',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '2sa',
@@ -142,6 +152,7 @@ class Books
             ],
         ],
         '1ki' => [
+            'name' => '1 Królewska',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '1ki',
@@ -156,6 +167,7 @@ class Books
             ],
         ],
         '2ki' => [
+            'name' => '2 Królewska',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '2ki',
@@ -170,6 +182,7 @@ class Books
             ],
         ],
         '1ch' => [
+            'name' => '1 Kronik',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '1ch',
@@ -184,6 +197,7 @@ class Books
             ],
         ],
         '2ch' => [
+            'name' => '2 Kronik',
             'group' => self::GROUP_OT,
             'aliases' => [
                 '2ch',
@@ -198,6 +212,7 @@ class Books
             ],
         ],
         'ezr' => [
+            'name' => 'Ezdrasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'ezr',
@@ -211,6 +226,7 @@ class Books
             ],
         ],
         'neh' => [
+            'name' => 'Nehemiasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'neh',
@@ -224,18 +240,21 @@ class Books
             ],
         ],
         'tob' => [
+            'name' => 'Tobiasza',
             'aliases' => [
                 'tob',
                 '69',
             ],
         ],
         'jdt' => [
+            'name' => 'Judyty',
             'aliases' => [
                 'jdt',
                 '67',
             ],
         ],
         'est' => [
+            'name' => 'Estery',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'est',
@@ -248,28 +267,33 @@ class Books
             ],
         ],
         '1ma' => [
+            'name' => '1 Machabejska',
             'aliases' => [
                 'ma1',
                 '72',
             ],
         ],
         '2ma' => [
+            'name' => '2 Machabejska',
             'aliases' => [
                 'ma2',
                 '73',
             ],
         ],
         '3ma' => [
+            'name' => '3 Machabejska',
             'aliases' => [
                 'ma3',
             ],
         ],
         '4ma' => [
+            'name' => '4 Machabejska',
             'aliases' => [
                 'ma4',
             ],
         ],
         'job' => [
+            'name' => 'Hioba (Joba)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'job',

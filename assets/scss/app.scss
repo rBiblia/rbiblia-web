@@ -2,3 +2,7 @@
 .form-control {
   -moz-appearance: button;
 }
+
+.selector-disabled {
+  pointer-events: none;
+}
