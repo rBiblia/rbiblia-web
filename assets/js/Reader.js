@@ -26,7 +26,7 @@ export default class Reader extends Component {
         } else
             return (
                 <main className="row">
-                    <div className="col-12 text-center">
+                    <div className="col-12 text-center m-auto">
                         Ładowanie...
                     </div>
                 </main>

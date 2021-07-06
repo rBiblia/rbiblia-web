@@ -6,3 +6,28 @@
 .selector-disabled {
   pointer-events: none;
 }
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+header, footer {
+  position: sticky;
+  background: #fff;
+}
+
+header {
+  top: 0;
+  padding-bottom: 1.5em;
+}
+
+footer {
+  padding-top: 1em;
+  bottom: 0;
+}

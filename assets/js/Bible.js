@@ -145,7 +145,7 @@ export default class Bible extends Component {
             );
         } else {
             return (
-                <div className="container">
+                <div className="container app">
                     <Navigator
                         books={books}
                         translations={translations}
