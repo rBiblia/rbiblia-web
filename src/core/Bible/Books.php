@@ -307,6 +307,7 @@ class Books
             ],
         ],
         'psa' => [
+            'name' => 'Psalmy',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'psa',
@@ -320,6 +321,7 @@ class Books
             ],
         ],
         'pro' => [
+            'name' => 'Przysłów (Przypowieści Salomona)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'pro',
@@ -333,6 +335,7 @@ class Books
             ],
         ],
         'ecc' => [
+            'name' => 'Koheleta (Kaznodziei Salomona)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'ecc',
@@ -346,6 +349,7 @@ class Books
             ],
         ],
         'sol' => [
+            'name' => 'Pieśń nad Pieśniami',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'sol',
@@ -359,28 +363,33 @@ class Books
             ],
         ],
         'wis' => [
+            'name' => 'Mądrości',
             'aliases' => [
                 'wis',
                 '68',
             ],
         ],
         'sip' => [
+            'name' => 'Prolog Syracha',
             'aliases' => [
                 'sip',
             ],
         ],
         'sir' => [
+            'name' => 'Mądrość Syracha',
             'aliases' => [
                 'sir',
                 '70',
             ],
         ],
         'pss' => [
+            'name' => 'Psalmy Solomona',
             'aliases' => [
                 'pss',
             ],
         ],
         'isa' => [
+            'name' => 'Izajasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'isa',
@@ -394,6 +403,7 @@ class Books
             ],
         ],
         'jer' => [
+            'name' => 'Jeremiasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'jer',
@@ -407,6 +417,7 @@ class Books
             ],
         ],
         'lam' => [
+            'name' => 'Treny (Lamentacje Jeremiasza)',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'lam',
@@ -419,12 +430,14 @@ class Books
             ],
         ],
         'bar' => [
+            'name' => 'Barucha',
             'aliases' => [
                 'bar',
                 '71',
             ],
         ],
         'eze' => [
+            'name' => 'Ezechiela',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'eze',
@@ -438,6 +451,7 @@ class Books
             ],
         ],
         'dan' => [
+            'name' => 'Daniela',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'dan',
@@ -450,6 +464,7 @@ class Books
             ],
         ],
         'hos' => [
+            'name' => 'Ozeasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'hos',
@@ -463,6 +478,7 @@ class Books
             ],
         ],
         'joe' => [
+            'name' => 'Joela',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'joe',
@@ -476,6 +492,7 @@ class Books
             ],
         ],
         'amo' => [
+            'name' => 'Amosa',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'amo',
@@ -489,6 +506,7 @@ class Books
             ],
         ],
         'oba' => [
+            'name' => 'Abdiasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'oba',
@@ -502,6 +520,7 @@ class Books
             ],
         ],
         'jon' => [
+            'name' => 'Jonasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'jon',
@@ -514,6 +533,7 @@ class Books
             ],
         ],
         'mic' => [
+            'name' => 'Micheasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'mic',
@@ -527,6 +547,7 @@ class Books
             ],
         ],
         'nah' => [
+            'name' => 'Nahuma',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'nah',
@@ -540,6 +561,7 @@ class Books
             ],
         ],
         'hab' => [
+            'name' => 'Habakuka',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'hab',
@@ -552,6 +574,7 @@ class Books
             ],
         ],
         'zep' => [
+            'name' => 'Sofoniasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'zep',
@@ -565,6 +588,7 @@ class Books
             ],
         ],
         'hag' => [
+            'name' => 'Aggeusza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'hag',
@@ -578,6 +602,7 @@ class Books
             ],
         ],
         'zec' => [
+            'name' => 'Zachariasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'zac',
@@ -591,6 +616,7 @@ class Books
             ],
         ],
         'mal' => [
+            'name' => 'Malachiasza',
             'group' => self::GROUP_OT,
             'aliases' => [
                 'mal',
@@ -604,6 +630,7 @@ class Books
             ],
         ],
         'mat' => [
+            'name' => 'Ewangelia Mateusza',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'mat',
@@ -616,6 +643,7 @@ class Books
             ],
         ],
         'mar' => [
+            'name' => 'Ewangelia Marka',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'mar',
@@ -629,6 +657,7 @@ class Books
             ],
         ],
         'luk' => [
+            'name' => 'Ewangelia Łukasza',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'luk',
@@ -642,6 +671,7 @@ class Books
             ],
         ],
         'joh' => [
+            'name' => 'Ewangelia Jana',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'joh',
@@ -655,6 +685,7 @@ class Books
             ],
         ],
         'act' => [
+            'name' => 'Dzieje Apostolskie',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'act',
@@ -668,6 +699,7 @@ class Books
             ],
         ],
         'rom' => [
+            'name' => 'List do Rzymian',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'rom',
@@ -681,6 +713,7 @@ class Books
             ],
         ],
         '1co' => [
+            'name' => '1 List do Koryntian',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '1co',
@@ -695,6 +728,7 @@ class Books
             ],
         ],
         '2co' => [
+            'name' => '2 List do Koryntian',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '2co',
@@ -709,6 +743,7 @@ class Books
             ],
         ],
         'gal' => [
+            'name' => 'List do Galatów',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'gal',
@@ -721,6 +756,7 @@ class Books
             ],
         ],
         'eph' => [
+            'name' => 'List do Efezjan',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'eph',
@@ -734,6 +770,7 @@ class Books
             ],
         ],
         'phi' => [
+            'name' => 'List do Filipian',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'phi',
@@ -747,6 +784,7 @@ class Books
             ],
         ],
         'col' => [
+            'name' => 'List do Kolosan',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'col',
@@ -760,6 +798,7 @@ class Books
             ],
         ],
         '1th' => [
+            'name' => '1 List do Tesaloniczan',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '1th',
@@ -774,6 +813,7 @@ class Books
             ],
         ],
         '2th' => [
+            'name' => '2 List do Tesaloniczan',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '2th',
@@ -788,6 +828,7 @@ class Books
             ],
         ],
         '1ti' => [
+            'name' => '1 List do Tymoteusza',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '1ti',
@@ -802,6 +843,7 @@ class Books
             ],
         ],
         '2ti' => [
+            'name' => '2 List do Tymoteusza',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '2ti',
@@ -816,6 +858,7 @@ class Books
             ],
         ],
         'tit' => [
+            'name' => 'List do Tytusa',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'tit',
@@ -829,6 +872,7 @@ class Books
             ],
         ],
         'phm' => [
+            'name' => 'List do Filemona',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'plm',
@@ -842,6 +886,7 @@ class Books
             ],
         ],
         'heb' => [
+            'name' => 'List do Hebrajczyków',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'heb',
@@ -855,6 +900,7 @@ class Books
             ],
         ],
         'jam' => [
+            'name' => 'List św. Jakuba',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'jam',
@@ -868,6 +914,7 @@ class Books
             ],
         ],
         '1pe' => [
+            'name' => '1 List św. Piotra',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '1pe',
@@ -882,6 +929,7 @@ class Books
             ],
         ],
         '2pe' => [
+            'name' => '2 List św. Piotra',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '2pe',
@@ -896,6 +944,7 @@ class Books
             ],
         ],
         '1jo' => [
+            'name' => '1 List św. Jana',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '1jo',
@@ -910,6 +959,7 @@ class Books
             ],
         ],
         '2jo' => [
+            'name' => '2 List św. Jana',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '2jo',
@@ -924,6 +974,7 @@ class Books
             ],
         ],
         '3jo' => [
+            'name' => '3 List św. Jana',
             'group' => self::GROUP_NT,
             'aliases' => [
                 '3jo',
@@ -938,6 +989,7 @@ class Books
             ],
         ],
         'jud' => [
+            'name' => 'List św. Judy',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'jde',
@@ -951,6 +1003,7 @@ class Books
             ],
         ],
         'rev' => [
+            'name' => 'Objawienie św. Jana (Apokalipsa)',
             'group' => self::GROUP_NT,
             'aliases' => [
                 'rev',
@@ -964,44 +1017,56 @@ class Books
             ],
         ],
         'epj' => [
+            'name' => 'List Jeremiasza',
             'aliases' => [
                 'epj',
             ],
         ],
         'sus' => [
+            'name' => 'Susanna',
             'aliases' => [
                 'sus',
                 '87',
             ],
         ],
+        'sn3' => [
+            'name' => 'Pieśń trzech młodzieńców',
+            'aliases' => [
+                'sn3',
+            ],
+        ],
         'bel' => [
+            'name' => 'Bel',
             'aliases' => [
                 'bel',
-                '88',
             ],
         ],
         'pra' => [
+            'name' => 'Modlitwa Azariasza',
             'aliases' => [
                 'pra',
             ],
         ],
         'prm' => [
+            'name' => 'Modlitwa Manassesa',
             'aliases' => [
                 'prm',
-                '76',
             ],
         ],
         'lao' => [
+            'name' => 'List do Laodicean',
             'aliases' => [
                 'lao',
             ],
         ],
         '3es' => [
+            'name' => '3 Ezdrasz',
             'aliases' => [
                 '3es',
             ],
         ],
         '4es' => [
+            'name' => '4 Ezdrasz',
             'aliases' => [
                 '4es',
             ],
