@@ -275,7 +275,7 @@ class ImportCommand extends Command
             $dataTable->addColumn('book', 'string', ['length' => '3']);
             $dataTable->addColumn('chapter', 'integer', ['length' => '3']);
             $dataTable->addColumn('verse', 'integer', ['length' => '3']);
-            $dataTable->addColumn('content', 'string');
+            $dataTable->addColumn('content', 'text');
             $dataTable->addUniqueIndex(['book', 'chapter', 'verse']);
 
             $schemaManager = $this->db()->createSchemaManager();
