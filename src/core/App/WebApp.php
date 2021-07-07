@@ -34,7 +34,7 @@ class WebApp
             $router->get('/translation', 'TranslationController@getTranslationList');
             $router->mount('/translation/([a-z]{2}_\w+)', function () use ($router): void {
                 $router->get('', 'TranslationController@getTranslationStructureById');
-                $router->get('/book/([a-z]{3})/chapter/(\d+)', 'TranslationController@getVerses');
+                $router->get('/book/([a-z0-9]{3})/chapter/(\d+)', 'TranslationController@getVerses');
             });
         });
 
