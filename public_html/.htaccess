@@ -10,6 +10,10 @@ Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
 AddDefaultCharset utf-8
 
 RewriteEngine On
+
+RewriteRule ^favicon\.png$ /assets/favicon.png [L]
+RewriteRule ^favicon\.ico$ /assets/favicon.png [L]
+
 RewriteRule ^$ index.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
