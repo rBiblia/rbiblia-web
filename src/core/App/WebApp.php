@@ -26,7 +26,7 @@ class WebApp
 
         $router->mount('', function () use ($router): void {
             $router->get('/', function (): void {
-                LandingPageResponse::render();
+                LandingPageResponse::render($this->settings);
             });
 
             TranslationController::createDatabaseConnection($this->settings);

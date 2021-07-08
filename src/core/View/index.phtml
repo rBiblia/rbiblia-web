@@ -12,5 +12,6 @@
     <body>
         <div id="root"></div>
         <script src="/assets/app.js"></script>
+        <?= (isset($matomo) ? $matomo : '<!-- the Matomo code will be placed here only in prod env -->').PHP_EOL ?>
     </body>
 </html>

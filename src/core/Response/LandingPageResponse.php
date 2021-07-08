@@ -8,8 +8,15 @@ class LandingPageResponse
 {
     const TEMPLATE_INDEX = __DIR__.'/../View/index.phtml';
 
-    public static function render(): void
+    public static function render(array $settings = []): void
     {
+        if (isset($settings['stats_class']) && file_exists($settings['stats_class'])) {
+            require_once $settings['stats_class'];
+
+            // this variable is used in index.phtml template
+            $matomo = \matomo::getCode(26);
+        }
+
         require_once self::TEMPLATE_INDEX;
     }
 }

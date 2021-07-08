@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 return [
     'bibx_folder' => '',
-    ; https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration
+
+    // https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration
     'db_driver' => '',
     'db_name' => '',
     'db_host' => '',
     'db_user' => '',
     'db_pass' => '',
+
+    // skip if no production
+    'stats_class' => '',
 ];
