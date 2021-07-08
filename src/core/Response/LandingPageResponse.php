@@ -13,9 +13,11 @@ class LandingPageResponse
         if (isset($settings['stats_class']) && file_exists($settings['stats_class'])) {
             require_once $settings['stats_class'];
 
-            // this variable is used in index.phtml template
             $matomo = \matomo::getCode(26);
         }
+
+        $cssTimestamp = filemtime(getcwd().'/assets/app.css');
+        $jsTimestamp = filemtime(getcwd().'/assets/app.js');
 
         require_once self::TEMPLATE_INDEX;
     }

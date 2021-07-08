@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noindex, follow">
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <link href="/assets/app.css" rel="stylesheet">
+        <link href="/assets/app.css?<?= $cssTimestamp ?>" rel="stylesheet">
         <link rel="icon" sizes="192x192" href="/assets/icon_192x192.png">
         <link rel="icon" sizes="128x128" href="/assets/icon_128x128.png">
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon_180x180.png">
@@ -15,7 +15,7 @@
     </head>
     <body>
         <div id="root"></div>
-        <script src="/assets/app.js"></script>
+        <script src="/assets/app.js?<?= $jsTimestamp ?>"></script>
         <?= (isset($matomo) ? $matomo : '<!-- the Matomo code will be placed here only in prod env -->').PHP_EOL ?>
     </body>
 </html>
