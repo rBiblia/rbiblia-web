@@ -92,6 +92,6 @@ class About
 
     public function getId(): string
     {
-        return strtolower(pathinfo($this->file, PATHINFO_FILENAME));
+        return strtolower(pathinfo($this->file, \PATHINFO_FILENAME));
     }
 }
