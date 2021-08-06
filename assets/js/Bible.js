@@ -133,14 +133,22 @@ export default class Bible extends Component {
 
         if (error) {
             return (
-                <div className="container">
-                    Wystąpił nieoczekiwany błąd: {error.message}
+                <div className="container app-preloader">
+                    <div className="row">
+                        <div className="col-12 d-flex align-items-center justify-content-center">
+                            Wystąpił nieoczekiwany błąd: {error.message}
+                        </div>
+                    </div>
                 </div>
             );
         } else if (!isTranslationsLoaded || !isBooksLoaded) {
             return (
-                <div className="container">
-                    Przygotowuję aplikację, proszę czekać...
+                <div className="container app-preloader">
+                    <div className="row">
+                        <div className="col-12 d-flex align-items-center justify-content-center">
+                            Przygotowuję aplikację, proszę czekać...
+                        </div>
+                    </div>
                 </div>
             );
         } else {

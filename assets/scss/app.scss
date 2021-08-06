@@ -1,3 +1,25 @@
+@import '../fonts/open_sans';
+
+$rb-background-color: #fff;
+$rb-border-color: #928269;
+$rb-verse-link-color: inherit;
+$rb-verse-hover-color: #5a5a5a;
+$rb-header-background-color: #dbd1c1;
+$rb-footer-background-color: #dbd1c1;
+$rb-footer-link-color: inherit;
+$rb-footer-hover-color: #6c6c6c;
+$rb-verse-even-color: #F5F5F5;
+
+@mixin rb-border {
+  border-left: 1px solid $rb-border-color;
+  border-right: 1px solid $rb-border-color;
+}
+
+@mixin rb-border-clean {
+  border-left: 0;
+  border-right: 0;
+}
+
 /* required to show drop down cursor for select box in FF */
 .form-control {
   -moz-appearance: button;
@@ -7,27 +29,117 @@
   pointer-events: none;
 }
 
+.app-preloader {
+  height: 100vh;
+
+  .row {
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: .95em;
+  background: url('../images/background.jpg');
+  background-size: 84px 83px;
+}
+
 main {
+  @include rb-border;
   flex: 1;
+  background: $rb-background-color;
+
+  .row {
+    padding-top: .2em;
+    padding-bottom: .2em;
+
+    &:nth-child(even) {
+      background: $rb-verse-even-color;
+    }
+  }
+
+  a {
+    text-decoration: none;
+
+    &:link,
+    &:visited {
+      color: $rb-verse-link-color;
+    }
+    &:hover {
+      color: $rb-verse-hover-color;
+    }
+  }
 }
 
 header, footer {
+  @include rb-border;
   position: sticky;
-  background: #fff;
+  background: $rb-background-color;
 }
 
 header {
+  background: $rb-header-background-color;
   top: 0;
-  padding-bottom: 1.5em;
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
 
 footer {
-  padding-top: 1em;
+  background: $rb-footer-background-color;
+  padding-top: .2em;
+  padding-bottom: .2em;
   bottom: 0;
+
+  a {
+    &:link,
+    &:visited {
+      color: $rb-footer-link-color;
+    }
+    &:hover {
+      color: $rb-footer-hover-color;
+    }
+  }
+}
+
+.preloader-image {
+  &:before {
+    width: 6em;
+    height: 6em;
+    content: '';
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    transform-origin: 46% 54%;
+    animation: preloader-image-spin 1s linear infinite;
+    background: url('../images/preloader.svg') no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes preloader-image-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  header {
+    div:not(:last-child) {
+      select {
+        margin-bottom: 1em;
+      }
+    }
+  }
+
+  header,
+  footer,
+  main {
+    @include rb-border-clean;
+  }
 }

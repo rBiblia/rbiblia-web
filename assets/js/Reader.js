@@ -27,7 +27,7 @@ export default class Reader extends Component {
             return (
                 <main className="row">
                     <div className="col-12 text-center m-auto">
-                        Ładowanie...
+                        <div className="preloader-image"></div>
                     </div>
                 </main>
             );

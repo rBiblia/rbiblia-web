@@ -10,13 +10,13 @@ export default class Navigator extends Component {
 
         return (
             <header className="row">
-                <div className="col-4">
+                <div className="col-12 col-sm-4">
                     <TranslationSelector
                         translations={translations}
                         onTranslationSelectorChange={onTranslationSelectorChange}
                     />
                 </div>
-                <div className="col-4">
+                <div className="col-12 col-sm-4">
                     <BookSelector
                         books={books}
                         structure={structure}
@@ -24,7 +24,7 @@ export default class Navigator extends Component {
                         onBookSelectorChange={onBookSelectorChange}
                     />
                 </div>
-                <div className="col-4">
+                <div className="col-12 col-sm-4">
                     <ChapterSelector
                         chapters={chapters}
                         isStructureLoaded={isStructureLoaded}

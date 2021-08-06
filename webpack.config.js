@@ -27,6 +27,11 @@ Encore
 })
 
 .copyFiles({
+    from: './assets/fonts',
+    to: '[path][name].[ext]'
+})
+
+.copyFiles({
     from: './assets/docs',
     to: '[path][name].[ext]'
 })
