@@ -1,8 +1,19 @@
 import React, {Component} from "react";
 
 export default class TranslationSelector extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.onSelect = this.onSelect.bind(this);
+    }
+
+    onSelect(event) {
+        return this.props.changeSelectedTranslation(event.target.value)
+    }
+
     render() {
-        const {translations, onTranslationSelectorChange} = this.props,
+        const {translations, selectedTranslation} = this.props,
               translationList = [],
               map = {},
               languageNames = new Intl.DisplayNames(['pl'], {type: 'language'});
@@ -21,16 +32,14 @@ export default class TranslationSelector extends Component {
         });
 
         return (
-            <select className="form-control" onChange={(event) => onTranslationSelectorChange(event)}>
-                {translationList.map(({languageName, children}, key) => {
-                    return (
-                        <optgroup label={languageName} key={key}>{
-                            children.map(({id, name}) => (
-                                <option value={id} key={id}>{name}</option>
-                            ))
-                        }</optgroup>
-                    );
-                })}
+            <select className="form-control" onChange={this.onSelect} value={selectedTranslation}>
+                {translationList.map(({languageName, children}, key) => (
+                    <optgroup label={languageName} key={key}>{
+                        children.map(({id, name}) => (
+                            <option value={id} key={id}>{name}</option>
+                        ))
+                    }</optgroup>
+                ))}
             </select>
         );
     }

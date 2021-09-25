@@ -5,7 +5,7 @@ export default class Reader extends Component {
     render() {
         const {selectedBook, selectedChapter, verses, showVerses} = this.props;
 
-        if (showVerses) {
+        if (showVerses && verses) {
             return (
                 <main className="row">
                     <div className="col-12">

@@ -21,21 +21,18 @@ export default class Bible extends Component {
             chapters: [],
             verses: [],
 
-            selectedTranslation: null,
-            selectedBook: null,
-            selectedChapter: null,
+            selectedTranslation: 'pl_pubg', // default translation
+            selectedBook: '',
+            selectedChapter: '',
         };
     }
 
-    onTranslationSelectorChange(event) {
-        const selectedTranslation = event.target.value;
+    changeSelectedTranslation(selectedTranslation) {
 
         this.setState({
             showVerses: false,
             isStructureLoaded: false,
-            selectedTranslation: null,
-            selectedBook: null,
-            selectedChapter: null,
+            selectedTranslation: selectedTranslation,
         });
 
         fetch("/translation/" + selectedTranslation)
@@ -44,8 +41,10 @@ export default class Bible extends Component {
                 (result) => {
                     this.setState({
                         isStructureLoaded: true,
-                        selectedTranslation: selectedTranslation,
                         structure: result.data,
+                    }, () => {
+                        const defaultBook = result.data.joh ? 'joh' : Object.keys(result.data)[0];
+                        this.changeSelectedBook(defaultBook);
                     });
                 },
                 (error) => {
@@ -56,17 +55,17 @@ export default class Bible extends Component {
             );
     }
 
-    onBookSelectorChange(event) {
-        const selectedBook = event.target.value;
-
+    changeSelectedBook(selectedBook) {
         this.setState({
             selectedBook: selectedBook,
             chapters: this.state.structure[selectedBook],
+        }, () => {
+            const defaultChapter = this.state.structure[selectedBook][0];
+            this.changeSelectedChapter(defaultChapter);
         });
     }
 
-    onChapterSelectorChange(event) {
-        const selectedChapter = event.target.value;
+    changeSelectedChapter(selectedChapter) {
 
         this.setState({
             showVerses: false,
@@ -78,7 +77,7 @@ export default class Bible extends Component {
                 (result) => {
                     this.setState({
                         showVerses: true,
-                        selectedChapter: selectedChapter,
+                        selectedChapter,
                         verses: result.data,
                     });
                 },
@@ -91,45 +90,48 @@ export default class Bible extends Component {
     }
 
     componentDidMount() {
-        fetch("/translation")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isTranslationsLoaded: true,
-                        translations: result.data
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isTranslationsLoaded: true,
-                        error
-                    });
-                }
-            );
-
-        fetch("/book")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isBooksLoaded: true,
-                        books: result.data
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isBooksLoaded: true,
-                        error
-                    });
-                }
-            )
+        Promise.all([
+            fetch("/translation")
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isTranslationsLoaded: true,
+                            translations: result.data
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isTranslationsLoaded: true,
+                            error
+                        });
+                    }
+                ),
+            fetch("/book")
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isBooksLoaded: true,
+                            books: result.data
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isBooksLoaded: true,
+                            error
+                        });
+                    }
+                )
+            ]).then(() => {
+                this.changeSelectedTranslation(this.state.selectedTranslation);
+            });
     }
 
     render() {
         const {error, isTranslationsLoaded, isBooksLoaded, isStructureLoaded, showVerses,
             translations, books, verses, structure, chapters,
-            selectedBook, selectedChapter} = this.state;
+            selectedBook, selectedChapter, selectedTranslation} = this.state;
 
         if (error) {
             return (
@@ -157,12 +159,15 @@ export default class Bible extends Component {
                     <Navigator
                         books={books}
                         translations={translations}
+                        selectedTranslation={selectedTranslation}
+                        selectedChapter={selectedChapter}
+                        selectedBook={selectedBook}
                         structure={structure}
                         chapters={chapters}
                         isStructureLoaded={isStructureLoaded}
-                        onTranslationSelectorChange={this.onTranslationSelectorChange.bind(this)}
-                        onBookSelectorChange={this.onBookSelectorChange.bind(this)}
-                        onChapterSelectorChange={this.onChapterSelectorChange.bind(this)}
+                        changeSelectedTranslation={this.changeSelectedTranslation.bind(this)}
+                        changeSelectedBook={this.changeSelectedBook.bind(this)}
+                        changeSelectedChapter={this.changeSelectedChapter.bind(this)}
                     />
                     <Reader
                         showVerses={showVerses}
