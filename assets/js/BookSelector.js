@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 
 export default class BookSelector extends Component {
+    constructor(props) {
+        super(props);
+        this.onSelect = this.onSelect.bind(this);
+    }
+
+    onSelect(event) {
+        return this.props.changeSelectedBook(event.target.value)
+    }
+
     render() {
-        const {books, structure, isStructureLoaded, onBookSelectorChange} = this.props,
+        const {books, structure, isStructureLoaded, selectedBook} = this.props,
               options = [];
 
         if (isStructureLoaded) {
@@ -12,10 +21,10 @@ export default class BookSelector extends Component {
             });
 
             return (
-                <select className="form-control" onChange={(event) => onBookSelectorChange(event)}>
-                    {options.map((bookId) => {
-                        return (<option value={bookId} key={bookId}>{books[bookId].name}</option>);
-                    })}
+                <select className="form-control" onChange={this.onSelect} value={selectedBook}>
+                    {options.map((bookId) => (
+                        <option value={bookId} key={bookId}>{books[bookId].name}</option>
+                    ))}
                 </select>
             );
         } else
