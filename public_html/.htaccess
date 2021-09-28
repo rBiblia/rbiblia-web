@@ -11,6 +11,15 @@ AddDefaultCharset utf-8
 
 RewriteEngine On
 
+# always redirect to SSL version
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# cut www. prefix
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1%{REQUEST_URI} [R=301,QSA,NC,L]
+
+# handle favicon requests more graceful
 RewriteRule ^favicon\.png$ /assets/favicon.png [L]
 RewriteRule ^favicon\.ico$ /assets/favicon.png [L]
 
