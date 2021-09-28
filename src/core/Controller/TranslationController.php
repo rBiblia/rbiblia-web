@@ -18,7 +18,7 @@ class TranslationController extends DatabaseController
     const ERROR_QUERY_LIMIT_EXCEEDED = 'Query limit for IP address exceeded, try tomorrow';
     const ERROR_WRONG_IP_ADDRESS = 'Cannot determine IP address of the user';
 
-    const SECURITY_QUERY_LIMIT = 100;
+    const SECURITY_QUERY_LIMIT = 256;
 
     public static function getTranslationList(): void
     {
