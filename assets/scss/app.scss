@@ -63,6 +63,10 @@ main {
     &:nth-child(even) {
       background: $rb-verse-even-color;
     }
+
+    .verse {
+      white-space: pre-wrap;
+    }
   }
 
   a {
@@ -76,6 +80,7 @@ main {
       color: $rb-verse-hover-color;
     }
   }
+
 }
 
 header, footer {
