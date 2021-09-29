@@ -1,6 +1,13 @@
-rBiblia Web, dziennik zmian
+rBiblia Web - dziennik wydań
+
+Strona domowa projektu:
 https://web.rbiblia.toborek.info
+
+Kod źródłowy:
 https://github.com/rBiblia/rbiblia-web
 
-0.1.0.0 [2021-09-28]
-- pierwsze publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.
+Strona domowa rBiblii (wersja dla Windows):
+https://rbiblia.toborek.info
+
+2021-09-29:
+- pierwsze (prawie) publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.
