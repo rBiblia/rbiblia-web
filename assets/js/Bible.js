@@ -3,6 +3,8 @@ import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
 
+const URL_PREFIX = '/b';
+
 export default class Bible extends Component {
     constructor(props) {
         super(props);
@@ -21,10 +23,24 @@ export default class Bible extends Component {
             chapters: [],
             verses: [],
 
-            selectedTranslation: 'pl_pubg', // default translation
+            selectedTranslation: this.getAddressFromHistory().translation, // default translation
             selectedBook: '',
             selectedChapter: '',
         };
+    }
+
+    getAddressFromHistory() {
+        const [, translation = 'pl_pubg', book = '', chapter = ''] = window.location.pathname.split("").shift();
+        return {translation, book, chapter};
+    }
+
+    updateHistory(translation, book, chapter) {
+        window.history.pushState({},"",
+            URL_PREFIX+"/"+
+            translation+"/"+
+            book+"/"+
+            chapter
+        );
     }
 
     changeSelectedTranslation(selectedTranslation) {
@@ -67,11 +83,15 @@ export default class Bible extends Component {
 
     changeSelectedChapter(selectedChapter) {
 
+        const {selectedTranslation, selectedBook} = this.state;
+
+        this.updateHistory(selectedTranslation, selectedBook, selectedChapter);
+
         this.setState({
             showVerses: false,
         });
-
-        fetch("/translation/" + this.state.selectedTranslation + "/book/" + this.state.selectedBook + "/chapter/" + selectedChapter)
+        
+        fetch("/translation/" + selectedTranslation + "/book/" + selectedBook + "/chapter/" + selectedChapter)
             .then(res => res.json())
             .then(
                 (result) => {

@@ -28,6 +28,9 @@ class WebApp
             $router->get('/', function (): void {
                 LandingPageResponse::render($this->settings);
             });
+            $router->get('/b/(.*)', function (): void {
+                LandingPageResponse::render($this->settings);
+            });
 
             TranslationController::createDatabaseConnection($this->settings);
 
