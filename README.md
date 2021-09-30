@@ -21,7 +21,6 @@ Todo's
 ------
 - add better error handling when dealing with response data
 - add multiple languages support (currently UI supports only Polish language)
-- add option to make specific chapter accessible by URL (eg. /r/pl_bt5/gen/3)
 - add option to save app state via cookies (recently read translation/book/chapter)
 - add caching to avoid server querying with every location change
 - sort translations list
