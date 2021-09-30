@@ -4,6 +4,9 @@ import Reader from "./Reader";
 import StatusBar from "./StatusBar";
 
 const URL_PREFIX = '/b';
+const DEFAULT_TRANSLATION = 'pl_pubg';
+const DEFAULT_BOOK = 'joh';
+const DEFAULT_CHAPTER = '1';
 
 export default class Bible extends Component {
     constructor(props) {
@@ -26,14 +29,30 @@ export default class Bible extends Component {
             selectedTranslation: this.getAddressFromHistory().translation, // default translation
             selectedBook: '',
             selectedChapter: '',
+            isInitialLoading: true
         };
+
+        this.getDefaultBook = this.getDefaultBook.bind(this);
+        this.getDefaultChapter = this.getDefaultChapter.bind(this);
+
     }
 
     getAddressFromHistory() {
-        const [, translation = 'pl_pubg', book = '', chapter = ''] = window.location.pathname.split("").shift();
+        const [
+            ,, //ignore first two elements "", "b"
+            translation = DEFAULT_TRANSLATION,
+            book = DEFAULT_BOOK,
+            chapter = DEFAULT_CHAPTER
+        ] = window.location.pathname
+            .replace(/\/$/, "") // remove trailing slash from the end of path
+            .split("/");
         return {translation, book, chapter};
     }
 
+    /*
+     * The history (url path) should be updated when
+     * the last call is finished and verses are ready to be displayed
+     */
     updateHistory(translation, book, chapter) {
         window.history.pushState({},"",
             URL_PREFIX+"/"+
@@ -59,7 +78,7 @@ export default class Bible extends Component {
                         isStructureLoaded: true,
                         structure: result.data,
                     }, () => {
-                        const defaultBook = result.data.joh ? 'joh' : Object.keys(result.data)[0];
+                        const defaultBook = this.getDefaultBook();
                         this.changeSelectedBook(defaultBook);
                     });
                 },
@@ -71,12 +90,43 @@ export default class Bible extends Component {
             );
     }
 
+    /*
+     * when initial (first) call, return default book from url
+     * otherwise, return DEFAULT_BOOK if exist
+     * otherwise, return first existing book
+     */
+    getDefaultBook() {
+        const { structure, isInitialLoading } = this.state;
+        if(isInitialLoading) {
+            return this.getAddressFromHistory().book;
+        }
+
+        if(structure[DEFAULT_BOOK]) {
+            return DEFAULT_BOOK;
+        }
+
+        // otherwise, get first book
+        return Object.keys(structure)[0];
+    }
+
+    /*
+     * when initial (first) call, return DEFAULT_CHAPTER from url
+     * otherwise, return first existing chapter
+     */
+    getDefaultChapter() {
+        const {structure, selectedBook, isInitialLoading} = this.state;
+        if(isInitialLoading) {
+            return this.getAddressFromHistory().chapter;
+        }
+        return structure[selectedBook][0];
+    }
+
     changeSelectedBook(selectedBook) {
         this.setState({
             selectedBook: selectedBook,
             chapters: this.state.structure[selectedBook],
         }, () => {
-            const defaultChapter = this.state.structure[selectedBook][0];
+            const defaultChapter = this.getDefaultChapter();
             this.changeSelectedChapter(defaultChapter);
         });
     }
@@ -89,6 +139,7 @@ export default class Bible extends Component {
 
         this.setState({
             showVerses: false,
+            isInitialLoading: false
         });
         
         fetch("/translation/" + selectedTranslation + "/book/" + selectedBook + "/chapter/" + selectedChapter)
