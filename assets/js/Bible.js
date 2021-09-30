@@ -70,7 +70,7 @@ export default class Bible extends Component {
             selectedTranslation: selectedTranslation,
         });
 
-        fetch("/translation/" + selectedTranslation)
+        fetch("/api/translation/" + selectedTranslation)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -142,7 +142,7 @@ export default class Bible extends Component {
             isInitialLoading: false
         });
         
-        fetch("/translation/" + selectedTranslation + "/book/" + selectedBook + "/chapter/" + selectedChapter)
+        fetch("/api/translation/" + selectedTranslation + "/book/" + selectedBook + "/chapter/" + selectedChapter)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -162,7 +162,7 @@ export default class Bible extends Component {
 
     componentDidMount() {
         Promise.all([
-            fetch("/translation")
+            fetch("/api/translation")
                 .then(res => res.json())
                 .then(
                     (result) => {
@@ -178,7 +178,7 @@ export default class Bible extends Component {
                         });
                     }
                 ),
-            fetch("/book")
+            fetch("/api/book")
                 .then(res => res.json())
                 .then(
                     (result) => {
