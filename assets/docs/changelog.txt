@@ -9,5 +9,8 @@ https://github.com/rBiblia/rbiblia-web
 Strona domowa rBiblii (wersja dla Windows):
 https://rbiblia.toborek.info
 
+2021-09-30:
+- dodano aktualizację paska adresu po zmianie wskazania bieżącego rozdziału. Funkcja ta działa w dwie strony i umożliwia otwarcie aplikacji z wybranym tłumaczeniem, księgą i rozdziałem.
+
 2021-09-29:
 - pierwsze (prawie) publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.
