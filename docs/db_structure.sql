@@ -21,7 +21,7 @@ CREATE TABLE `translation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `security` (
-  `ip` int(11) NOT NULL,
+  `ip` int(11) unsigned NOT NULL,
   `query_counter` int(11) NOT NULL DEFAULT '1',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ip`)
