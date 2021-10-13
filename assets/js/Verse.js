@@ -4,7 +4,7 @@ export default class Verse extends Component {
     render() {
         const {verseContent, bookId, chapterId, verseId} = this.props,
               appLink = 'bib://' + bookId + chapterId + ':' + verseId,
-              appVerse = bookId+' '+chapterId+':'+verseId;
+              appVerse = bookId+'\u00A0'+chapterId+':'+verseId;
 
         return (
             <div className="row">
