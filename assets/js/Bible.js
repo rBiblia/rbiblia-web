@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Cookies from "js-cookie";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
@@ -7,6 +8,7 @@ const URL_PREFIX = '/b';
 const DEFAULT_TRANSLATION = 'pl_pubg';
 const DEFAULT_BOOK = 'joh';
 const DEFAULT_CHAPTER = '1';
+const COOKIE_EXPIRES = 365;
 
 export default class Bible extends Component {
     constructor(props) {
@@ -40,12 +42,17 @@ export default class Bible extends Component {
     getAddressFromHistory() {
         const [
             ,, //ignore first two elements "", "b"
-            translation = DEFAULT_TRANSLATION,
-            book = DEFAULT_BOOK,
-            chapter = DEFAULT_CHAPTER
+            defaultTranslation = DEFAULT_TRANSLATION,
+            defaultBook = DEFAULT_BOOK,
+            defaultChapter = DEFAULT_CHAPTER,
         ] = window.location.pathname
             .replace(/\/$/, "") // remove trailing slash from the end of path
             .split("/");
+
+        const translation = Cookies.get('recent_translation') ? Cookies.get('recent_translation') : defaultTranslation,
+            book = Cookies.get('recent_book') ? Cookies.get('recent_book') : defaultBook,
+            chapter = Cookies.get('recent_chapter') ? Cookies.get('recent_chapter') : defaultChapter;
+
         return {translation, book, chapter};
     }
 
@@ -54,6 +61,10 @@ export default class Bible extends Component {
      * the last call is finished and verses are ready to be displayed
      */
     updateHistory(translation, book, chapter) {
+        Cookies.set('recent_translation', translation, { expires: COOKIE_EXPIRES });
+        Cookies.set('recent_book', book, { expires: COOKIE_EXPIRES });
+        Cookies.set('recent_chapter', chapter, { expires: COOKIE_EXPIRES });
+
         window.history.pushState({},"",
             URL_PREFIX+"/"+
             translation+"/"+
