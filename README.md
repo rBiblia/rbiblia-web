@@ -23,7 +23,6 @@ Todo's
 - add multiple languages support (currently UI supports only Polish language)
 - add option to save app state via cookies (recently read translation/book/chapter)
 - add caching to avoid server querying with every location change
-- sort translations list
 - implement tests (who cares about tests...)
 
 Donations

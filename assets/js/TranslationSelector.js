@@ -35,9 +35,11 @@ export default class TranslationSelector extends Component {
             <select className="form-control" onChange={this.onSelect} value={selectedTranslation}>
                 {translationList.map(({languageName, children}, key) => (
                     <optgroup label={languageName} key={key}>{
-                        children.map(({id, name}) => (
-                            <option value={id} key={id}>{name}</option>
-                        ))
+                        children
+                            .sort((a, b) => a.name > b.name ? 1 : -1)
+                            .map(({id, name}) =>
+                                <option value={id} key={id}>{name}</option>
+                            )
                     }</optgroup>
                 ))}
             </select>
