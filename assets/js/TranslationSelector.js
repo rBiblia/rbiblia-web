@@ -37,8 +37,8 @@ export default class TranslationSelector extends Component {
                     <optgroup label={languageName} key={key}>{
                         children
                             .sort((a, b) => a.name > b.name ? 1 : -1)
-                            .map(({id, name}) =>
-                                <option value={id} key={id}>{name}</option>
+                            .map(({id, name, date}) =>
+                                <option value={id} key={id}>{name} {date === '' ? '' : '['+date+']'}</option>
                             )
                     }</optgroup>
                 ))}
