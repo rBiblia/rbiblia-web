@@ -52,7 +52,7 @@ class ImportCommand extends Command
             ->setHelp('Import given *.bibx files into database.')
             ->addOption('file', 'f', InputOption::VALUE_OPTIONAL, 'Import only specific *.bibx file, eg. <info>pl_bt5.bibx</info>')
             ->addOption('all', 'a', InputOption::VALUE_OPTIONAL, 'Import all *.bibx files', false)
-            ->addOption('language', 'l', InputOption::VALUE_OPTIONAL, 'Import all files from a specific language group only, eg. <info>pl</info>', false)
+            ->addOption('language', 'l', InputOption::VALUE_OPTIONAL, 'Import all files from a specific language group only, eg. <info>pl</info> or <info>pl,en,fr</info>', false)
             ->addOption('authorised', 'auth', InputOption::VALUE_OPTIONAL, 'Import only authorised or nonauthorised files, eg <info>1</info>', false)
         ;
     }
@@ -110,6 +110,7 @@ class ImportCommand extends Command
         $progressBar->setFormat('debug');
         $progressBar->start();
 
+        $languageGroup = explode(',', str_replace(' ', '', empty($language) ? '' : $language));
         $filteredFileList = [];
         foreach ($fileList as $file) {
             $progressBar->advance();
@@ -119,7 +120,7 @@ class ImportCommand extends Command
             }
 
             $process = true;
-            if (null !== $language && $this->xml->about->language->__toString() !== $language) {
+            if (null !== $language && !\in_array($this->xml->about->language->__toString(), $languageGroup, true)) {
                 $process = false;
             }
 
