@@ -15,7 +15,7 @@ Please refer to [docs](https://github.com/rBiblia/rbiblia-web/tree/master/docs) 
 
 Technical talk
 --------------
-App was created using PHP v7.4 on the backend with support of ReactJS v17 on the frontend side. We use modern (on the date of writing this note) dev-technologies like Webpack, JSX, SASS, PSR's, etc.
+App was created using PHP v8.0 on the backend with support of ReactJS v17 on the frontend side. We use modern (on the date of writing this note) dev-technologies like Webpack, JSX, SASS, PSR's, etc.
 
 Todo's
 ------
