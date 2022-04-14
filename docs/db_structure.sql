@@ -8,7 +8,7 @@
 DROP TABLE IF EXISTS `translation`;
 
 CREATE TABLE `translation` (
-  `id` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `language` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shortname` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
