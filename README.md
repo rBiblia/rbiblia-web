@@ -23,6 +23,7 @@ Todo's
 - add multiple languages support (currently UI supports only Polish language)
 - add caching to avoid server querying with every location change
 - implement tests (who cares about tests...)
+- prevent changing book/chapter when switching translation
 
 Donations
 ---------
