@@ -11,27 +11,22 @@ export default class BookSelector extends Component {
     }
 
     render() {
-        const {books, structure, isStructureLoaded, selectedBook} = this.props,
-              options = [];
+        const {books, structure, isStructureLoaded, selectedBook} = this.props;
 
-        if (isStructureLoaded) {
-            // TODO: do we really need to repack those values, no other option to do it in more elegant way?
-            Object.keys(structure).forEach(bookId => {
-                options.push(bookId);
-            });
-
-            return (
-                <select className="form-control" onChange={this.onSelect} value={selectedBook}>
-                    {options.map((bookId) => (
-                        <option value={bookId} key={bookId}>{books[bookId].name}</option>
-                    ))}
-                </select>
-            );
-        } else
+        if (!isStructureLoaded) {
             return (
                 <select className="form-control selector-disabled">
                     <option>Lista ksiąg</option>
                 </select>
             );
+        }
+
+        return (
+            <select className="form-control" onChange={this.onSelect} value={selectedBook}>
+                {Object.keys(structure).map(bookId => (
+                    <option value={bookId} key={bookId}>{books[bookId].name}</option>
+                ))}
+            </select>
+        );
     }
 }

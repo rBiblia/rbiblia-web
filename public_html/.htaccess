@@ -13,6 +13,7 @@ RewriteEngine On
 
 # always redirect to SSL version
 RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !=localhost
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # cut www. prefix
