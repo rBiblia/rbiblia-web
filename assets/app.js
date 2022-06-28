@@ -3,7 +3,8 @@ import {render} from "react-dom";
 import "@fontsource/open-sans";
 import "bootstrap/scss/bootstrap.scss";
 import "./scss/app.scss";
+import AppWithIntlProvider from './AppWithIntlProvider';
 
-import Bible from "./js/Bible";
-
-render(<Bible/>, document.getElementById("root"));
+render(
+    <AppWithIntlProvider />
+, document.getElementById("root"));

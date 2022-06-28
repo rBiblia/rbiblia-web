@@ -1,6 +1,8 @@
+import { formatMessage } from "@formatjs/intl";
 import React, {Component} from "react";
+import { injectIntl } from "react-intl";
 
-export default class ChapterSelector extends Component {
+class ChapterSelector extends Component {
 
     constructor(props) {
         super(props);
@@ -12,7 +14,7 @@ export default class ChapterSelector extends Component {
     }
 
     render() {
-        const {chapters, isStructureLoaded, selectedChapter} = this.props,
+        const {chapters, isStructureLoaded, selectedChapter, intl: {formatMessage}} = this.props,
               options = [];
 
         if (isStructureLoaded && chapters && chapters.length) {
@@ -31,9 +33,11 @@ export default class ChapterSelector extends Component {
         } else
             return (
                 <select className="form-control selector-disabled">
-                    <option>Lista rozdziałów</option>
+                    <option>{formatMessage({id:"chapterList"})}</option>
                 </select>
             );
 
     }
 }
+
+export default injectIntl(ChapterSelector);

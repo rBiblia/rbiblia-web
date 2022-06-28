@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import { injectIntl } from 'react-intl';
 
-export default class BookSelector extends Component {
+class BookSelector extends Component {
     constructor(props) {
         super(props);
         this.onSelect = this.onSelect.bind(this);
@@ -11,12 +12,12 @@ export default class BookSelector extends Component {
     }
 
     render() {
-        const {books, structure, isStructureLoaded, selectedBook} = this.props;
+        const {books, structure, isStructureLoaded, selectedBook, intl: {formatMessage}} = this.props;
 
         if (!isStructureLoaded) {
             return (
                 <select className="form-control selector-disabled">
-                    <option>Lista ksiąg</option>
+                    <option>{formatMessage({id:'bookList'})}</option>
                 </select>
             );
         }
@@ -30,3 +31,5 @@ export default class BookSelector extends Component {
         );
     }
 }
+
+export default injectIntl(BookSelector);
