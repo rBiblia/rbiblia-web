@@ -1,6 +1,7 @@
 import React, {Component} from "react";
+import { injectIntl } from "react-intl";
 
-export default class TranslationSelector extends Component {
+class TranslationSelector extends Component {
 
     constructor(props) {
         super(props);
@@ -13,10 +14,10 @@ export default class TranslationSelector extends Component {
     }
 
     render() {
-        const {translations, selectedTranslation} = this.props,
+        const {translations, selectedTranslation, intl: { locale }} = this.props,
               translationList = [],
               map = {},
-              languageNames = new Intl.DisplayNames(['pl'], {type: 'language'});
+              languageNames = new Intl.DisplayNames([locale], {type: 'language'});
 
         translations.forEach(trans => {
             const languageGroup = {};
@@ -46,3 +47,5 @@ export default class TranslationSelector extends Component {
         );
     }
 }
+
+export default injectIntl(TranslationSelector);
