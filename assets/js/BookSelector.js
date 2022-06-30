@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import { injectIntl } from 'react-intl';
 
-export default class BookSelector extends Component {
+class BookSelector extends Component {
     constructor(props) {
         super(props);
         this.onSelect = this.onSelect.bind(this);
@@ -11,27 +12,24 @@ export default class BookSelector extends Component {
     }
 
     render() {
-        const {books, structure, isStructureLoaded, selectedBook} = this.props,
-              options = [];
+        const {books, structure, isStructureLoaded, selectedBook, intl: {formatMessage}} = this.props;
 
-        if (isStructureLoaded) {
-            // TODO: do we really need to repack those values, no other option to do it in more elegant way?
-            Object.keys(structure).forEach(bookId => {
-                options.push(bookId);
-            });
-
-            return (
-                <select className="form-control" onChange={this.onSelect} value={selectedBook}>
-                    {options.map((bookId) => (
-                        <option value={bookId} key={bookId}>{books[bookId].name}</option>
-                    ))}
-                </select>
-            );
-        } else
+        if (!isStructureLoaded) {
             return (
                 <select className="form-control selector-disabled">
-                    <option>Lista ksiąg</option>
+                    <option>{formatMessage({id:'bookList'})}</option>
                 </select>
             );
+        }
+
+        return (
+            <select className="form-control" onChange={this.onSelect} value={selectedBook}>
+                {Object.keys(structure).map(bookId => (
+                    <option value={bookId} key={bookId}>{books[bookId].name}</option>
+                ))}
+            </select>
+        );
     }
 }
+
+export default injectIntl(BookSelector);

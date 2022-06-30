@@ -22,3 +22,6 @@ https://rbiblia.toborek.info
 
 2021-09-29:
 - pierwsze (prawie) publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.
+
+2022-06-28:
+- dodano podstawowe wsparcie dla tłumaczeń interfejsu uzytkownika

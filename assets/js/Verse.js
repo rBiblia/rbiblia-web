@@ -1,20 +1,19 @@
-import React, {Component} from 'react';
+import React from 'react';
+import { useIntl } from 'react-intl';
 
-export default class Verse extends Component {
-    render() {
-        const {verseContent, bookId, chapterId, verseId} = this.props,
-              appLink = 'bib://' + bookId + chapterId + ':' + verseId,
-              appVerse = bookId+'\u00A0'+chapterId+':'+verseId;
+export default function Verse({verseContent, bookId, chapterId, verseId}) {
+    const {formatMessage} = useIntl();
+    const appLink = 'bib://' + bookId + chapterId + ':' + verseId;
+    const appVerse = bookId+'\u00A0'+chapterId+':'+verseId;
 
-        return (
-            <div className="row">
-                <div className="col-2 col-lg-1 d-flex align-items-center justify-content-center">
-                    <a href={appLink} title="Otwórz w programie rBiblia dla Windows">{appVerse}</a>
-                </div>
-                <div className="col-10 col-lg-11 verse">
-                    {verseContent.replaceAll('//', "\u000A")}
-                </div>
+    return (
+        <div className="row">
+            <div className="col-2 col-lg-1 d-flex align-items-center justify-content-center">
+                <a href={appLink} title={formatMessage({id:'linkOpenInRBibliaApp'})}>{appVerse}</a>
             </div>
-        );
-    }
+            <div className="col-10 col-lg-11 verse">
+                {verseContent.replaceAll('//', "\u000A")}
+            </div>
+        </div>
+    );
 }

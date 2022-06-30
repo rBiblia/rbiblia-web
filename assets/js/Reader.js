@@ -9,27 +9,26 @@ export default class Reader extends Component {
             return (
                 <main className="row">
                     <div className="col-12">
-                        {Object.entries(verses).map(verse => {
-                            return (
-                                <Verse
-                                    key={verse[0]}
-                                    bookId={selectedBook}
-                                    chapterId={selectedChapter}
-                                    verseId={verse[0]}
-                                    verseContent={verse[1]}
-                                />
-                            );
-                        })}
+                        {Object.entries(verses).map(verse => 
+                            <Verse
+                                key={verse[0]}
+                                bookId={selectedBook}
+                                chapterId={selectedChapter}
+                                verseId={verse[0]}
+                                verseContent={verse[1]}
+                            />
+                        )}
                     </div>
                 </main>
             );
-        } else
-            return (
-                <main className="row">
-                    <div className="col-12 text-center m-auto">
-                        <div className="preloader-image"></div>
-                    </div>
-                </main>
-            );
+        }
+
+        return (
+            <main className="row">
+                <div className="col-12 text-center m-auto">
+                    <div className="preloader-image"></div>
+                </div>
+            </main>
+        );
     }
 }

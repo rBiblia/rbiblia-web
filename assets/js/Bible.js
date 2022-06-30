@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
+import { injectIntl } from "react-intl";
 
 const URL_PREFIX = '/b';
 const DEFAULT_TRANSLATION = 'pl_pubg';
@@ -10,7 +11,7 @@ const DEFAULT_BOOK = 'joh';
 const DEFAULT_CHAPTER = '1';
 const COOKIE_EXPIRES = 365;
 
-export default class Bible extends Component {
+class Bible extends Component {
     constructor(props) {
         super(props);
 
@@ -215,12 +216,14 @@ export default class Bible extends Component {
             translations, books, verses, structure, chapters,
             selectedBook, selectedChapter, selectedTranslation} = this.state;
 
+        const { setLocale, intl: {formatMessage} } = this.props;
+
         if (error) {
             return (
                 <div className="container app-preloader">
                     <div className="row">
                         <div className="col-12 d-flex align-items-center justify-content-center">
-                            Wystąpił nieoczekiwany błąd: {error.message}
+                            {formatMessage({id:'unexpectedErrorOccurred'})} {error.message}
                         </div>
                     </div>
                 </div>
@@ -230,7 +233,7 @@ export default class Bible extends Component {
                 <div className="container app-preloader">
                     <div className="row">
                         <div className="col-12 d-flex align-items-center justify-content-center">
-                            Przygotowuję aplikację, proszę czekać...
+                            {formatMessage({id:'preparingApplicationPleaseWait'})}
                         </div>
                     </div>
                 </div>
@@ -258,6 +261,7 @@ export default class Bible extends Component {
                         verses={verses}
                     />
                     <StatusBar
+                        setLocale={setLocale}
                         translations={translations}
                     />
                 </div>
@@ -265,3 +269,5 @@ export default class Bible extends Component {
         }
     }
 }
+
+export default injectIntl(Bible);
