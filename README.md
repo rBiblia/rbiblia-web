@@ -33,6 +33,10 @@ Changelog
 ---------
 List of recent releases and changes can be tracked using [assets/docs/changelog.txt](https://github.com/rBiblia/rbiblia-web/blob/master/assets/docs/changelog.txt) file.
 
+Contributors
+------------
+See [full list](https://github.com/rBiblia/rbiblia-web/graphs/contributors).
+
 License and terms of usage
 --------------------------
 Legal stuff can be found in [LICENSE](https://github.com/rBiblia/rbiblia-web/blob/master/LICENSE) file included in this repo.
