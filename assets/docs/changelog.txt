@@ -9,6 +9,9 @@ https://github.com/rBiblia/rbiblia-web
 Strona domowa rBiblii (wersja dla Windows):
 https://rbiblia.toborek.info
 
+2022-06-28:
+- dodano podstawowe wsparcie dla tłumaczeń interfejsu użytkownika.
+
 2021-12-24:
 - dodano wyświetlanie daty wydania tłumaczenia na liście wszystkich tłumaczeń do wyboru.
 
@@ -22,6 +25,3 @@ https://rbiblia.toborek.info
 
 2021-09-29:
 - pierwsze (prawie) publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.
-
-2022-06-28:
-- dodano podstawowe wsparcie dla tłumaczeń interfejsu uzytkownika
