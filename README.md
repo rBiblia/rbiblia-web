@@ -20,7 +20,6 @@ App was created using PHP v8.0 on the backend with support of ReactJS v17 on the
 Todo's
 ------
 - add better error handling when dealing with response data
-- add multiple languages support (currently UI supports only Polish language)
 - add caching to avoid server querying with every location change
 - implement tests (who cares about tests...)
 - prevent changing book/chapter when switching translation
