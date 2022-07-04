@@ -1,6 +1,8 @@
 FROM php:8.0-apache
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+      git\
+      unzip\
       libicu-dev \
       sudo \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \

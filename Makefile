@@ -21,6 +21,7 @@ help:
 	$(call list_item, "lint", "run linter on assets folder")
 	$(call list_item, "dev", "prepare development environment")
 	$(call list_item, "prod", "install only prod dependencies and optimize build before deployment")
+	$(call list_item, "cs-fix", "fix PHP coding standards using php-cs-fixer tool")
 	@printf "\n"
 .PHONY:
 
@@ -72,4 +73,8 @@ prod:
 	@docker exec -t ${APP_IMAGE_NAME} yarn encore production
 
 	@echo Build optimized for deployment.
+.PHONY:
+
+cs-fix:
+	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/php-cs-fixer fix
 .PHONY:

@@ -3,4 +3,4 @@ src/vendor
 src/config/app.php
 public_html/assets
 yarn-error.log
-.php_cs.cache
+.php-cs-fixer.cache
