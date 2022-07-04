@@ -6,7 +6,7 @@ namespace rBibliaWeb\Response;
 
 class LandingPageResponse
 {
-    const TEMPLATE_INDEX = __DIR__.'/../View/index.phtml';
+    public const TEMPLATE_INDEX = __DIR__.'/../View/index.phtml';
 
     public static function render(array $settings = []): void
     {

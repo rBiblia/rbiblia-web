@@ -9,16 +9,16 @@ use rBibliaWeb\Bible\Books;
 
 class TranslationController extends DatabaseController
 {
-    const TABLE_SECURITY = 'security';
-    const TABLE_TRANSLATION = 'translation';
-    const TABLE_DATA = 'data_%s';
+    public const TABLE_SECURITY = 'security';
+    public const TABLE_TRANSLATION = 'translation';
+    public const TABLE_DATA = 'data_%s';
 
-    const ERROR_TRANSLATION_NOT_FOUND = 'Translation not found';
-    const ERROR_NO_VERSES_FOUND = 'No verses found in a given chapter';
-    const ERROR_QUERY_LIMIT_EXCEEDED = 'Query limit for IP address exceeded, try tomorrow';
-    const ERROR_WRONG_IP_ADDRESS = 'Cannot determine IP address of the user';
+    public const ERROR_TRANSLATION_NOT_FOUND = 'Translation not found';
+    public const ERROR_NO_VERSES_FOUND = 'No verses found in a given chapter';
+    public const ERROR_QUERY_LIMIT_EXCEEDED = 'Query limit for IP address exceeded, try tomorrow';
+    public const ERROR_WRONG_IP_ADDRESS = 'Cannot determine IP address of the user';
 
-    const SECURITY_QUERY_LIMIT = 256;
+    public const SECURITY_QUERY_LIMIT = 256;
 
     public static function getTranslationList(): void
     {

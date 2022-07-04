@@ -21,8 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends Command
 {
-    const TABLE_TEMP = 'temp';
-    const ENTRY_TEMP_ID = '_%s';
+    public const TABLE_TEMP = 'temp';
+    public const ENTRY_TEMP_ID = '_%s';
 
     protected static $defaultName = 'import';
 

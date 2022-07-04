@@ -6,8 +6,8 @@ namespace rBibliaWeb\Response;
 
 abstract class JsonResponse
 {
-    const STATUS_OK = 200;
-    const STATUS_ERROR = 404;
+    public const STATUS_OK = 200;
+    public const STATUS_ERROR = 404;
 
     private static $response = [];
 
