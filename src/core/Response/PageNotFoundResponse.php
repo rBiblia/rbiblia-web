@@ -6,7 +6,7 @@ namespace rBibliaWeb\Response;
 
 class PageNotFoundResponse extends JsonResponse
 {
-    public const ERROR_MESSAGE = 'Not found';
+    private const ERROR_MESSAGE = 'Not found';
 
     public static function render(): void
     {

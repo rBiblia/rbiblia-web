@@ -1,0 +1,1071 @@
+{
+  "messages": {
+    "error_translation_not_found": "Tłumaczenie nie zostało odnalezione",
+    "error_no_verses_found": "Nie znaleziono żadnych wersetów w wybranym rozdziale",
+    "error_query_limit_exceeded": "Limit użyteczności dla aktualnego adresu IP został wyczerpany, spróbuj ponownie jutro",
+    "error_wrong_ip_address": "Nie można uzyskać informacji o aktualnym adresie IP"
+  },
+  "aliases": {
+    "gen": {
+      "name": "Rodzaju (1 Mojż.)",
+      "group": "ot",
+      "aliases": [
+        "gen",
+        "IMojżeszowe",
+        "genesis",
+        "Gen",
+        "I Księga Mojżesza",
+        "vol1",
+        "1",
+        "rodz"
+      ]
+    },
+    "exo": {
+      "name": "Wyjścia (2 Mojż.)",
+      "group": "ot",
+      "aliases": [
+        "exo",
+        "IIMojżeszowe",
+        "exodus",
+        "Exod",
+        "II Księga Mojżesza",
+        "vol2",
+        "2",
+        "wyjscia"
+      ]
+    },
+    "lev": {
+      "name": "Kapłańska (3 Mojż.)",
+      "group": "ot",
+      "aliases": [
+        "lev",
+        "IIIMojżeszowe",
+        "leviticus",
+        "Lev",
+        "III Księga Mojżesza",
+        "vol3",
+        "3",
+        "kapl"
+      ]
+    },
+    "num": {
+      "name": "Liczb (4 Mojż.)",
+      "group": "ot",
+      "aliases": [
+        "num",
+        "IVMojżeszowe",
+        "numbers",
+        "Num",
+        "IV Księga Mojżesza",
+        "vol4",
+        "4",
+        "liczb"
+      ]
+    },
+    "deu": {
+      "name": "Powtórzonego Prawa (5 Mojż.)",
+      "group": "ot",
+      "aliases": [
+        "deu",
+        "VMojżeszowe",
+        "deuteronomy",
+        "Deut",
+        "V Księga Mojżesza",
+        "vol5",
+        "5",
+        "powt pr"
+      ]
+    },
+    "jos": {
+      "name": "Jozuego",
+      "group": "ot",
+      "aliases": [
+        "jos",
+        "Jozue",
+        "joshua",
+        "Josh",
+        "Księga Jezusa syna Nuna",
+        "vol6",
+        "6",
+        "joz"
+      ]
+    },
+    "jdg": {
+      "name": "Sędziów",
+      "group": "ot",
+      "aliases": [
+        "jdg",
+        "Sędziów",
+        "judges",
+        "Judg",
+        "Księga Sędziów",
+        "vol7",
+        "7",
+        "sedz"
+      ]
+    },
+    "rut": {
+      "name": "Rut (Ruty)",
+      "group": "ot",
+      "aliases": [
+        "rut",
+        "Ruty",
+        "ruth",
+        "Ruth",
+        "Księga Rut",
+        "vol8",
+        "8"
+      ]
+    },
+    "1sa": {
+      "name": "1 Samuela",
+      "group": "ot",
+      "aliases": [
+        "1sa",
+        "sa1",
+        "ISamuelowe",
+        "1samuel",
+        "1Sam",
+        "1 Samuela",
+        "vol9",
+        "9",
+        "1 sam"
+      ]
+    },
+    "2sa": {
+      "name": "2 Samuela",
+      "group": "ot",
+      "aliases": [
+        "2sa",
+        "sa2",
+        "IISamuelowe",
+        "2samuel",
+        "2Sam",
+        "2 Samuela",
+        "vol10",
+        "10",
+        "2 sam"
+      ]
+    },
+    "1ki": {
+      "name": "1 Królewska",
+      "group": "ot",
+      "aliases": [
+        "1ki",
+        "kg1",
+        "IKrólewskie",
+        "1kings",
+        "1Kgs",
+        "Pierwsza Księga Królów",
+        "vol11",
+        "11",
+        "1 krol"
+      ]
+    },
+    "2ki": {
+      "name": "2 Królewska",
+      "group": "ot",
+      "aliases": [
+        "2ki",
+        "kg2",
+        "IIKrólewskie",
+        "2kings",
+        "2Kgs",
+        "Druga Księga Królów",
+        "vol12",
+        "12",
+        "2 krol"
+      ]
+    },
+    "1ch": {
+      "name": "1 Kronik",
+      "group": "ot",
+      "aliases": [
+        "1ch",
+        "ch1",
+        "IKroniki",
+        "1chronicles",
+        "1Chr",
+        "1 Kronik",
+        "vol13",
+        "13",
+        "1 kron"
+      ]
+    },
+    "2ch": {
+      "name": "2 Kronik",
+      "group": "ot",
+      "aliases": [
+        "2ch",
+        "ch2",
+        "IIKroniki",
+        "2chronicles",
+        "2Chr",
+        "2 Kronik",
+        "vol14",
+        "14",
+        "2 kron"
+      ]
+    },
+    "ezr": {
+      "name": "Ezdrasza",
+      "group": "ot",
+      "aliases": [
+        "ezr",
+        "Ezdrasza",
+        "ezra",
+        "Ezra",
+        "Księga Ezdrasza",
+        "vol15",
+        "15",
+        "ezd"
+      ]
+    },
+    "neh": {
+      "name": "Nehemiasza",
+      "group": "ot",
+      "aliases": [
+        "neh",
+        "Nehemiasza",
+        "nehemiah",
+        "Neh",
+        "Księga Nehemiasza",
+        "vol16",
+        "16",
+        "nehem"
+      ]
+    },
+    "tob": {
+      "name": "Tobiasza",
+      "aliases": [
+        "tob",
+        "69"
+      ]
+    },
+    "jdt": {
+      "name": "Judyty",
+      "aliases": [
+        "jdt",
+        "67"
+      ]
+    },
+    "est": {
+      "name": "Estery",
+      "group": "ot",
+      "aliases": [
+        "est",
+        "Ester",
+        "esther",
+        "Esth",
+        "Księga Estery",
+        "vol17",
+        "17"
+      ]
+    },
+    "1ma": {
+      "name": "1 Machabejska",
+      "aliases": [
+        "ma1",
+        "72"
+      ]
+    },
+    "2ma": {
+      "name": "2 Machabejska",
+      "aliases": [
+        "ma2",
+        "73"
+      ]
+    },
+    "3ma": {
+      "name": "3 Machabejska",
+      "aliases": [
+        "ma3"
+      ]
+    },
+    "4ma": {
+      "name": "4 Machabejska",
+      "aliases": [
+        "ma4"
+      ]
+    },
+    "job": {
+      "name": "Hioba (Joba)",
+      "group": "ot",
+      "aliases": [
+        "job",
+        "Hiobowe",
+        "job",
+        "Job",
+        "Księga Ijoba",
+        "vol18",
+        "18",
+        "hioba"
+      ]
+    },
+    "psa": {
+      "name": "Psalmy",
+      "group": "ot",
+      "aliases": [
+        "psa",
+        "Psalmów",
+        "psalms",
+        "Ps",
+        "Księga Psalmów",
+        "vol19",
+        "19",
+        "ps"
+      ]
+    },
+    "pro": {
+      "name": "Przysłów (Przypowieści Salomona)",
+      "group": "ot",
+      "aliases": [
+        "pro",
+        "Przypowieści",
+        "proverbs",
+        "Prov",
+        "Przypowieści Salomona",
+        "vol20",
+        "20",
+        "prz"
+      ]
+    },
+    "ecc": {
+      "name": "Koheleta (Kaznodziei Salomona)",
+      "group": "ot",
+      "aliases": [
+        "ecc",
+        "Ekklesiastesa",
+        "ecclesiastes",
+        "Eccl",
+        "Księga Koheleta",
+        "vol21",
+        "21",
+        "kazn"
+      ]
+    },
+    "sol": {
+      "name": "Pieśń nad Pieśniami",
+      "group": "ot",
+      "aliases": [
+        "sol",
+        "Pieśni",
+        "songofsolomon",
+        "Song",
+        "Pieśń nad pieśniami",
+        "vol22",
+        "22",
+        "piesn"
+      ]
+    },
+    "wis": {
+      "name": "Mądrości",
+      "aliases": [
+        "wis",
+        "68"
+      ]
+    },
+    "sip": {
+      "name": "Prolog Syracha",
+      "aliases": [
+        "sip"
+      ]
+    },
+    "sir": {
+      "name": "Mądrość Syracha",
+      "aliases": [
+        "sir",
+        "70"
+      ]
+    },
+    "pss": {
+      "name": "Psalmy Solomona",
+      "aliases": [
+        "pss"
+      ]
+    },
+    "isa": {
+      "name": "Izajasza",
+      "group": "ot",
+      "aliases": [
+        "isa",
+        "Ezjasza",
+        "isaiah",
+        "Isa",
+        "Księga Izajasza",
+        "vol23",
+        "23",
+        "izaj"
+      ]
+    },
+    "jer": {
+      "name": "Jeremiasza",
+      "group": "ot",
+      "aliases": [
+        "jer",
+        "Jeremiasza",
+        "jeremiah",
+        "Jer",
+        "Księga Jeremiasza",
+        "vol24",
+        "24",
+        "jer"
+      ]
+    },
+    "lam": {
+      "name": "Treny (Lamentacje Jeremiasza)",
+      "group": "ot",
+      "aliases": [
+        "lam",
+        "Lamenty",
+        "lamentations",
+        "Lam",
+        "Treny",
+        "vol25",
+        "25"
+      ]
+    },
+    "bar": {
+      "name": "Barucha",
+      "aliases": [
+        "bar",
+        "71"
+      ]
+    },
+    "eze": {
+      "name": "Ezechiela",
+      "group": "ot",
+      "aliases": [
+        "eze",
+        "Ezechiela",
+        "ezekiel",
+        "Ezek",
+        "Księga Ezechiela",
+        "vol26",
+        "26",
+        "ezech"
+      ]
+    },
+    "dan": {
+      "name": "Daniela",
+      "group": "ot",
+      "aliases": [
+        "dan",
+        "Daniela",
+        "daniel",
+        "Dan",
+        "Księga Daniela",
+        "vol27",
+        "27"
+      ]
+    },
+    "hos": {
+      "name": "Ozeasza",
+      "group": "ot",
+      "aliases": [
+        "hos",
+        "Ozeasza",
+        "hosea",
+        "Hos",
+        "Księga Ozeasza",
+        "vol28",
+        "28",
+        "oz"
+      ]
+    },
+    "joe": {
+      "name": "Joela",
+      "group": "ot",
+      "aliases": [
+        "joe",
+        "Joela",
+        "joel",
+        "Joel",
+        "Księga Joela",
+        "vol29",
+        "29",
+        "joela"
+      ]
+    },
+    "amo": {
+      "name": "Amosa",
+      "group": "ot",
+      "aliases": [
+        "amo",
+        "Amosa",
+        "amos",
+        "Amos",
+        "Księga Amosa",
+        "vol30",
+        "30",
+        "am"
+      ]
+    },
+    "oba": {
+      "name": "Abdiasza",
+      "group": "ot",
+      "aliases": [
+        "oba",
+        "Abdiasza",
+        "obadiah",
+        "Obad",
+        "Księga Abdjasza",
+        "vol31",
+        "31",
+        "abd"
+      ]
+    },
+    "jon": {
+      "name": "Jonasza",
+      "group": "ot",
+      "aliases": [
+        "jon",
+        "Jonasza",
+        "jonah",
+        "Jonah",
+        "Księga Jonasza",
+        "vol32",
+        "32"
+      ]
+    },
+    "mic": {
+      "name": "Micheasza",
+      "group": "ot",
+      "aliases": [
+        "mic",
+        "Micheasza",
+        "micah",
+        "Mic",
+        "Księga Micheasza",
+        "vol33",
+        "33",
+        "mich"
+      ]
+    },
+    "nah": {
+      "name": "Nahuma",
+      "group": "ot",
+      "aliases": [
+        "nah",
+        "Nahuma",
+        "nahum",
+        "Nah",
+        "Ksiega Nahuma",
+        "vol34",
+        "34",
+        "nahuma"
+      ]
+    },
+    "hab": {
+      "name": "Habakuka",
+      "group": "ot",
+      "aliases": [
+        "hab",
+        "Abakuka",
+        "habakkuk",
+        "Hab",
+        "Księga Habakuka",
+        "vol35",
+        "35"
+      ]
+    },
+    "zep": {
+      "name": "Sofoniasza",
+      "group": "ot",
+      "aliases": [
+        "zep",
+        "Sofoniasza",
+        "zephaniah",
+        "Zeph",
+        "Księga Sofonjasza",
+        "vol36",
+        "36",
+        "sof"
+      ]
+    },
+    "hag": {
+      "name": "Aggeusza",
+      "group": "ot",
+      "aliases": [
+        "hag",
+        "Aggeusza",
+        "haggai",
+        "Hag",
+        "Księga Aggeusza",
+        "vol37",
+        "37",
+        "agg"
+      ]
+    },
+    "zec": {
+      "name": "Zachariasza",
+      "group": "ot",
+      "aliases": [
+        "zac",
+        "Zachariasza",
+        "zechariah",
+        "Zech",
+        "Księga Zacharjasza",
+        "vol38",
+        "38",
+        "zach"
+      ]
+    },
+    "mal": {
+      "name": "Malachiasza",
+      "group": "ot",
+      "aliases": [
+        "mal",
+        "Malachiasza",
+        "malachi",
+        "Mal",
+        "Księga Malachjasza",
+        "vol39",
+        "39",
+        "malach"
+      ]
+    },
+    "mat": {
+      "name": "Ewangelia Mateusza",
+      "group": "nt",
+      "aliases": [
+        "mat",
+        "Mateusz",
+        "matthew",
+        "Matt",
+        "Ewangelia Mateusza",
+        "vol40",
+        "40"
+      ]
+    },
+    "mar": {
+      "name": "Ewangelia Marka",
+      "group": "nt",
+      "aliases": [
+        "mar",
+        "Marek",
+        "mark",
+        "Mark",
+        "Ewangelia Marka",
+        "vol41",
+        "41",
+        "marka"
+      ]
+    },
+    "luk": {
+      "name": "Ewangelia Łukasza",
+      "group": "nt",
+      "aliases": [
+        "luk",
+        "Łukasz",
+        "luke",
+        "Luke",
+        "Ewangelia Łukasza",
+        "vol42",
+        "42",
+        "luk"
+      ]
+    },
+    "joh": {
+      "name": "Ewangelia Jana",
+      "group": "nt",
+      "aliases": [
+        "joh",
+        "Jan",
+        "john",
+        "John",
+        "Ewangelia Jana",
+        "vol43",
+        "43",
+        "jana"
+      ]
+    },
+    "act": {
+      "name": "Dzieje Apostolskie",
+      "group": "nt",
+      "aliases": [
+        "act",
+        "Dzieje",
+        "act",
+        "Acts",
+        "Dokonania apostołów",
+        "vol44",
+        "44",
+        "dzieje"
+      ]
+    },
+    "rom": {
+      "name": "List do Rzymian",
+      "group": "nt",
+      "aliases": [
+        "rom",
+        "Rzymianów",
+        "romans",
+        "Rom",
+        "List do Rzymian",
+        "vol45",
+        "45",
+        "rzym"
+      ]
+    },
+    "1co": {
+      "name": "1 List do Koryntian",
+      "group": "nt",
+      "aliases": [
+        "1co",
+        "co1",
+        "IKoryntów",
+        "1corinthians",
+        "1Cor",
+        "Pierwszy list do Koryntian",
+        "vol46",
+        "46",
+        "1 kor"
+      ]
+    },
+    "2co": {
+      "name": "2 List do Koryntian",
+      "group": "nt",
+      "aliases": [
+        "2co",
+        "co2",
+        "IIKoryntów",
+        "2corinthians",
+        "2Cor",
+        "Drugi list do Koryntian",
+        "vol47",
+        "47",
+        "2 kor"
+      ]
+    },
+    "gal": {
+      "name": "List do Galatów",
+      "group": "nt",
+      "aliases": [
+        "gal",
+        "Galatów",
+        "galatians",
+        "Gal",
+        "List do Galacjan",
+        "vol48",
+        "48"
+      ]
+    },
+    "eph": {
+      "name": "List do Efezjan",
+      "group": "nt",
+      "aliases": [
+        "eph",
+        "Efezów",
+        "ephesians",
+        "Eph",
+        "List do Efezjan",
+        "vol49",
+        "49",
+        "efez"
+      ]
+    },
+    "phi": {
+      "name": "List do Filipian",
+      "group": "nt",
+      "aliases": [
+        "phi",
+        "Filipensów",
+        "philippians",
+        "Phil",
+        "List do Filippian",
+        "vol50",
+        "50",
+        "filip"
+      ]
+    },
+    "col": {
+      "name": "List do Kolosan",
+      "group": "nt",
+      "aliases": [
+        "col",
+        "Kolosenów",
+        "colossians",
+        "Col",
+        "List do Kolosan",
+        "vol51",
+        "51",
+        "kol"
+      ]
+    },
+    "1th": {
+      "name": "1 List do Tesaloniczan",
+      "group": "nt",
+      "aliases": [
+        "1th",
+        "th1",
+        "ITessalonicensów",
+        "1thessalonians",
+        "1Thess",
+        "Pierwszy list do Tesaloniczan",
+        "vol52",
+        "52",
+        "1 tes"
+      ]
+    },
+    "2th": {
+      "name": "2 List do Tesaloniczan",
+      "group": "nt",
+      "aliases": [
+        "2th",
+        "th2",
+        "IITessalonicensów",
+        "2thessalonians",
+        "2Thess",
+        "Drugi list do Tesaloniczan",
+        "vol53",
+        "53",
+        "2 tes"
+      ]
+    },
+    "1ti": {
+      "name": "1 List do Tymoteusza",
+      "group": "nt",
+      "aliases": [
+        "1ti",
+        "ti1",
+        "ITymoteusza",
+        "1timothy",
+        "1Tim",
+        "Pierwszy list do Tymoteusza",
+        "vol54",
+        "54",
+        "1 tym"
+      ]
+    },
+    "2ti": {
+      "name": "2 List do Tymoteusza",
+      "group": "nt",
+      "aliases": [
+        "2ti",
+        "ti2",
+        "IITymoteusza",
+        "2timothy",
+        "2Tim",
+        "Drugi list do Tymoteusza",
+        "vol55",
+        "55",
+        "2 tym"
+      ]
+    },
+    "tit": {
+      "name": "List do Tytusa",
+      "group": "nt",
+      "aliases": [
+        "tit",
+        "Tytus",
+        "titus",
+        "Titus",
+        "List do Tytusa",
+        "vol56",
+        "56",
+        "tyt"
+      ]
+    },
+    "phm": {
+      "name": "List do Filemona",
+      "group": "nt",
+      "aliases": [
+        "plm",
+        "Filemon",
+        "philemon",
+        "Phlm",
+        "List do Filemona",
+        "vol57",
+        "57",
+        "filem"
+      ]
+    },
+    "heb": {
+      "name": "List do Hebrajczyków",
+      "group": "nt",
+      "aliases": [
+        "heb",
+        "Żydów",
+        "hebrews",
+        "Heb",
+        "List do Hebrajczyków",
+        "vol58",
+        "58",
+        "hebr"
+      ]
+    },
+    "jam": {
+      "name": "List św. Jakuba",
+      "group": "nt",
+      "aliases": [
+        "jam",
+        "Jakub",
+        "james",
+        "Jas",
+        "List Jakóba",
+        "vol59",
+        "59",
+        "jak"
+      ]
+    },
+    "1pe": {
+      "name": "1 List św. Piotra",
+      "group": "nt",
+      "aliases": [
+        "1pe",
+        "pe1",
+        "IPiotra",
+        "1peter",
+        "1Pet",
+        "Pierwszy list Piotra",
+        "vol60",
+        "60",
+        "1 piotra"
+      ]
+    },
+    "2pe": {
+      "name": "2 List św. Piotra",
+      "group": "nt",
+      "aliases": [
+        "2pe",
+        "pe2",
+        "IIPiotra",
+        "2peter",
+        "2Pet",
+        "Drugi list Piotra",
+        "vol61",
+        "61",
+        "2 piotra"
+      ]
+    },
+    "1jo": {
+      "name": "1 List św. Jana",
+      "group": "nt",
+      "aliases": [
+        "1jo",
+        "jo1",
+        "IJana",
+        "1john",
+        "1John",
+        "Pierwszy List Jana",
+        "vol62",
+        "62",
+        "1 jana"
+      ]
+    },
+    "2jo": {
+      "name": "2 List św. Jana",
+      "group": "nt",
+      "aliases": [
+        "2jo",
+        "jo2",
+        "IIJana",
+        "2john",
+        "2John",
+        "Drugi List Jana",
+        "vol63",
+        "63",
+        "2 jana"
+      ]
+    },
+    "3jo": {
+      "name": "3 List św. Jana",
+      "group": "nt",
+      "aliases": [
+        "3jo",
+        "jo3",
+        "IIIJana",
+        "3john",
+        "3John",
+        "Trzeci List Jana",
+        "vol64",
+        "64",
+        "3 jana"
+      ]
+    },
+    "jud": {
+      "name": "List św. Judy",
+      "group": "nt",
+      "aliases": [
+        "jde",
+        "Judy",
+        "jude",
+        "Jude",
+        "List Judasa",
+        "vol65",
+        "65",
+        "judy"
+      ]
+    },
+    "rev": {
+      "name": "Objawienie św. Jana (Apokalipsa)",
+      "group": "nt",
+      "aliases": [
+        "rev",
+        "Zjawienie",
+        "revelations",
+        "Rev",
+        "Objawienie spisane przez Jana",
+        "vol66",
+        "66",
+        "obj"
+      ]
+    },
+    "epj": {
+      "name": "List Jeremiasza",
+      "aliases": [
+        "epj"
+      ]
+    },
+    "sus": {
+      "name": "Susanna",
+      "aliases": [
+        "sus",
+        "87"
+      ]
+    },
+    "sn3": {
+      "name": "Pieśń trzech młodzieńców",
+      "aliases": [
+        "sn3"
+      ]
+    },
+    "bel": {
+      "name": "Bel",
+      "aliases": [
+        "bel"
+      ]
+    },
+    "pra": {
+      "name": "Modlitwa Azariasza",
+      "aliases": [
+        "pra"
+      ]
+    },
+    "prm": {
+      "name": "Modlitwa Manassesa",
+      "aliases": [
+        "prm"
+      ]
+    },
+    "lao": {
+      "name": "List do Laodicean",
+      "aliases": [
+        "lao"
+      ]
+    },
+    "3es": {
+      "name": "3 Ezdrasz",
+      "aliases": [
+        "3es"
+      ]
+    },
+    "4es": {
+      "name": "4 Ezdrasz",
+      "aliases": [
+        "4es"
+      ]
+    }
+  }
+}

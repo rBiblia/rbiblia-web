@@ -10,8 +10,7 @@ use rBibliaWeb\Response\JsonResponse;
 
 abstract class DatabaseController extends JsonResponse
 {
-    /** @var Connection */
-    protected static $db;
+    protected static Connection $db;
 
     public static function createDatabaseConnection(array $settings): void
     {

@@ -6,7 +6,7 @@ namespace rBibliaWeb\Response;
 
 class LandingPageResponse
 {
-    public const TEMPLATE_INDEX = __DIR__.'/../View/index.phtml';
+    private const TEMPLATE_INDEX = __DIR__.'/../View/index.phtml';
 
     public static function render(array $settings = []): void
     {
@@ -16,8 +16,8 @@ class LandingPageResponse
             $matomo = \matomo::getCode(26);
         }
 
-        $cssTimestamp = filemtime(getcwd().'/assets/app.css');
-        $jsTimestamp = filemtime(getcwd().'/assets/app.js');
+        $cssTimestamp = filemtime(APP_PATH_ASSETS.'/app.css');
+        $jsTimestamp = filemtime(APP_PATH_ASSETS.'/app.js');
 
         require_once self::TEMPLATE_INDEX;
     }

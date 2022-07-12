@@ -21,21 +21,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends Command
 {
-    public const TABLE_TEMP = 'temp';
-    public const ENTRY_TEMP_ID = '_%s';
+    private const TABLE_TEMP = 'temp';
+    private const ENTRY_TEMP_ID = '_%s';
 
     protected static $defaultName = 'import';
 
-    private $settings = [];
+    private array $settings = [];
 
-    /** @var OutputInterface */
-    private $output;
+    private OutputInterface $output;
 
-    /** @var Connection */
-    private $db;
+    private Connection $db;
 
-    /** @var SimpleXMLElement */
-    private $xml;
+    private SimpleXMLElement $xml;
 
     public function __construct(array $settings = [])
     {
@@ -220,7 +217,7 @@ class ImportCommand extends Command
             $this->xml->about->shortname->__toString(),
             $this->xml->about->language->__toString(),
             $this->xml->about->description->__toString(),
-            '1' === $this->xml->about->authorised->__toString() ? true : false,
+            '1' === $this->xml->about->authorised->__toString(),
             isset($this->xml->about->date) ? $this->xml->about->date->__toString() : ''
         );
 

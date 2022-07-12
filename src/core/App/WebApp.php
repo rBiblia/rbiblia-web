@@ -11,7 +11,7 @@ use rBibliaWeb\Response\PageNotFoundResponse;
 
 class WebApp
 {
-    private $settings = [];
+    private array $settings = [];
 
     public function __construct(array $settings = [])
     {
@@ -36,7 +36,7 @@ class WebApp
 
             TranslationController::createDatabaseConnection($this->settings);
 
-            $router->mount('/api', function () use ($router): void {
+            $router->mount('/api/([a-z]{2})', function () use ($router): void {
                 $router->get('/translation', 'TranslationController@getTranslationList');
                 $router->mount('/translation/([a-z]{2}_\w+)', function () use ($router): void {
                     $router->get('', 'TranslationController@getTranslationStructureById');

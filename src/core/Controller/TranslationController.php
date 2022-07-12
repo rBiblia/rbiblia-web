@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace rBibliaWeb\Controller;
 
 use Doctrine\DBAL\ParameterType;
-use rBibliaWeb\Bible\Books;
+use rBibliaWeb\Exception\LanguageNotSupportedException;
+use rBibliaWeb\Provider\LanguageProvider;
 
 class TranslationController extends DatabaseController
 {
-    public const TABLE_SECURITY = 'security';
     public const TABLE_TRANSLATION = 'translation';
     public const TABLE_DATA = 'data_%s';
+    private const TABLE_SECURITY = 'security';
+    private const SECURITY_QUERY_LIMIT = 256;
 
-    public const ERROR_TRANSLATION_NOT_FOUND = 'Translation not found';
-    public const ERROR_NO_VERSES_FOUND = 'No verses found in a given chapter';
-    public const ERROR_QUERY_LIMIT_EXCEEDED = 'Query limit for IP address exceeded, try tomorrow';
-    public const ERROR_WRONG_IP_ADDRESS = 'Cannot determine IP address of the user';
-
-    public const SECURITY_QUERY_LIMIT = 256;
+    private static ?LanguageProvider $languageProvider = null;
 
     public static function getTranslationList(): void
     {
@@ -42,9 +39,9 @@ class TranslationController extends DatabaseController
         self::setResponse($response);
     }
 
-    public static function getTranslationStructureById(string $translationId): void
+    public static function getTranslationStructureById(string $language, string $translationId): void
     {
-        self::checkIfTranslationTableExists($translationId);
+        self::checkIfTranslationTableExists($language, $translationId);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $statement = self::$db->executeQuery(sprintf(
@@ -58,7 +55,7 @@ class TranslationController extends DatabaseController
         }
 
         $response = [];
-        foreach (array_keys(Books::ALIASES) as $alias) {
+        foreach (array_keys(self::getLanguageProvider($language)->getAliases()) as $alias) {
             if (isset($results[$alias])) {
                 $response[$alias] = $results[$alias];
             }
@@ -67,10 +64,10 @@ class TranslationController extends DatabaseController
         self::setResponse($response);
     }
 
-    public static function getVerses(string $translationId, string $bookId, int $chapterId): void
+    public static function getVerses(string $language, string $translationId, string $bookId, int $chapterId): void
     {
-        self::checkIfTranslationTableExists($translationId);
-        self::trackAndValidateQueryUsage();
+        self::checkIfTranslationTableExists($language, $translationId);
+        self::trackAndValidateQueryUsage($language);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $statement = self::$db->executeQuery(sprintf(
@@ -90,13 +87,13 @@ class TranslationController extends DatabaseController
         }
 
         if (empty($response)) {
-            self::setErrorResponse(self::ERROR_NO_VERSES_FOUND);
+            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_no_verses_found'));
         }
 
         self::setResponse($response);
     }
 
-    private static function checkIfTranslationTableExists(string $translationId): void
+    private static function checkIfTranslationTableExists(string $language, string $translationId): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $result = self::$db->fetchOne('SHOW TABLES LIKE ?', [
@@ -106,7 +103,7 @@ class TranslationController extends DatabaseController
         ]);
 
         if (empty($result)) {
-            self::setErrorResponse(self::ERROR_TRANSLATION_NOT_FOUND);
+            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_translation_not_found'));
         }
     }
 
@@ -115,13 +112,13 @@ class TranslationController extends DatabaseController
         return sprintf(self::TABLE_DATA, $translationId);
     }
 
-    private static function trackAndValidateQueryUsage(): void
+    private static function trackAndValidateQueryUsage(string $language): void
     {
         $ip = self::getIP();
 
         // IP address is incorrect
         if (empty($ip) || '0.0.0.0' === $ip) {
-            self::setErrorResponse(self::ERROR_WRONG_IP_ADDRESS);
+            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_wrong_ip_address'));
         }
 
         /* @noinspection PhpUnhandledExceptionInspection */
@@ -154,7 +151,7 @@ class TranslationController extends DatabaseController
 
         // limit exceeded, thrown an exception
         if ((int) $response >= self::SECURITY_QUERY_LIMIT) {
-            self::setErrorResponse(self::ERROR_QUERY_LIMIT_EXCEEDED);
+            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_query_limit_exceeded'));
         }
 
         /* @noinspection PhpUnhandledExceptionInspection */
@@ -178,5 +175,18 @@ class TranslationController extends DatabaseController
         }
 
         return $httpXForwardedFor;
+    }
+
+    private static function getLanguageProvider(string $language): LanguageProvider
+    {
+        if (null === self::$languageProvider) {
+            try {
+                self::$languageProvider = new LanguageProvider($language);
+            } catch (LanguageNotSupportedException $e) {
+                self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
+            }
+        }
+
+        return self::$languageProvider;
     }
 }
