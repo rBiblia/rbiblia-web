@@ -2,13 +2,13 @@ import React from "react";
 import { useIntl } from "react-intl";
 import LanguageSelector from "./LanguageSelector";
 
-const StatusBar = ({translations, setLocale}) => {
+const StatusBar = ({translations, setLocaleAndUpdateHistory}) => {
     const {formatMessage} = useIntl();
 
     return (
         <footer className="row">
             <div className="col-4">
-                <LanguageSelector setLocale={setLocale} />
+                <LanguageSelector setLocaleAndUpdateHistory={setLocaleAndUpdateHistory} />
             </div>
             <div className="col-4 text-center">
                 <div className="d-none d-sm-inline">{formatMessage({id: 'availableTranslationsCounter'})} </div>{translations.length}

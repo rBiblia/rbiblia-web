@@ -1,0 +1,9 @@
+# Ignore artifacts:
+.github
+.docker
+bin
+docs
+node_modules
+public
+public_html/assets
+src
