@@ -1,4 +1,4 @@
-Instalacja.
+### Instalacja
 
 - Sklonuj repozytorium.
 
@@ -17,3 +17,30 @@ bin\make dev
 ```bash
 bin\console i --all
 ```
+
+###
+
+Korzystanie z dockera.
+
+```bash
+$ docker-compose up
+```
+
+Logowanie się do kontenera dockera
+
+```bash
+$ docker-compose exec web bash
+```
+
+Aby przygotować środowisko do odpalenia w kontenerze,
+    jeśli nie dysponujesz Windowsem
+    i nie mozesz uruchomić pliku make.bat,
+wykonaj następujące komendy w kontenerze:
+
+```
+$ composer install
+$ yarn install
+$ yarn encore dev --watch
+```
+
+Podgląd strony będzie dostępny pod adresem http://localhost/ .

@@ -17,10 +17,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     && apt-get clean
 
 # install composer globally
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN sudo mv composer.phar /usr/local/bin/composer
+COPY .docker/composer_installer.sh /tmp/composer_installer.sh
+RUN sh /tmp/composer_installer.sh
 
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -

@@ -4,12 +4,8 @@ import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
 import { injectIntl } from "react-intl";
-
-const URL_PREFIX = '/b';
-const DEFAULT_TRANSLATION = 'pl_pubg';
-const DEFAULT_BOOK = 'joh';
-const DEFAULT_CHAPTER = '1';
-const COOKIE_EXPIRES = 365;
+import {URL_PREFIX, DEFAULT_BOOK, COOKIE_EXPIRES } from '../consts';
+import getDataFromCurrentPathname from "./getDataFromCurrentPathname";
 
 class Bible extends Component {
     constructor(props) {
@@ -29,7 +25,7 @@ class Bible extends Component {
             chapters: [],
             verses: [],
 
-            selectedTranslation: this.getAddressFromHistory().translation, // default translation
+            selectedTranslation: getDataFromCurrentPathname().translation, // default translation
             selectedBook: '',
             selectedChapter: '',
             isInitialLoading: true
@@ -37,40 +33,21 @@ class Bible extends Component {
 
         this.getDefaultBook = this.getDefaultBook.bind(this);
         this.getDefaultChapter = this.getDefaultChapter.bind(this);
-
-    }
-
-    getAddressFromHistory() {
-        const [
-            ,, //ignore first two elements "", "b"
-            defaultTranslation = DEFAULT_TRANSLATION,
-            defaultBook = DEFAULT_BOOK,
-            defaultChapter = DEFAULT_CHAPTER,
-        ] = window.location.pathname
-            .replace(/\/$/, "") // remove trailing slash from the end of path
-            .split("/");
-
-        const translation = Cookies.get('recent_translation') ? Cookies.get('recent_translation') : defaultTranslation,
-            book = Cookies.get('recent_book') ? Cookies.get('recent_book') : defaultBook,
-            chapter = Cookies.get('recent_chapter') ? Cookies.get('recent_chapter') : defaultChapter;
-
-        return {translation, book, chapter};
+        this.setLocaleAndUpdateHistory = this.setLocaleAndUpdateHistory.bind(this);
     }
 
     /*
      * The history (url path) should be updated when
      * the last call is finished and verses are ready to be displayed
      */
-    updateHistory(translation, book, chapter) {
+    updateHistory(language, translation, book, chapter) {
+        Cookies.set('recent_language', language, { expires: COOKIE_EXPIRES });
         Cookies.set('recent_translation', translation, { expires: COOKIE_EXPIRES });
         Cookies.set('recent_book', book, { expires: COOKIE_EXPIRES });
         Cookies.set('recent_chapter', chapter, { expires: COOKIE_EXPIRES });
 
         window.history.pushState({},"",
-            URL_PREFIX+"/"+
-            translation+"/"+
-            book+"/"+
-            chapter
+            `${URL_PREFIX}/${language}/${translation}/${book}/${chapter}`
         );
     }
 
@@ -110,7 +87,7 @@ class Bible extends Component {
     getDefaultBook() {
         const { structure, isInitialLoading } = this.state;
         if(isInitialLoading) {
-            return this.getAddressFromHistory().book;
+            return getDataFromCurrentPathname().book;
         }
 
         if(structure[DEFAULT_BOOK]) {
@@ -128,7 +105,7 @@ class Bible extends Component {
     getDefaultChapter() {
         const {structure, selectedBook, isInitialLoading} = this.state;
         if(isInitialLoading) {
-            return this.getAddressFromHistory().chapter;
+            return getDataFromCurrentPathname().chapter;
         }
         return structure[selectedBook][0];
     }
@@ -146,8 +123,8 @@ class Bible extends Component {
     changeSelectedChapter(selectedChapter) {
 
         const {selectedTranslation, selectedBook} = this.state;
-
-        this.updateHistory(selectedTranslation, selectedBook, selectedChapter);
+        const { intl: {locale} } = this.props;
+        this.updateHistory(locale, selectedTranslation, selectedBook, selectedChapter);
 
         this.setState({
             showVerses: false,
@@ -211,13 +188,21 @@ class Bible extends Component {
             });
     }
 
+    setLocaleAndUpdateHistory(locale) {
+        const { setLocale } = this.props;
+        const { chapter, book, translation } = getDataFromCurrentPathname();
+
+        setLocale(locale);
+        this.updateHistory(locale, translation, book, chapter);
+    }
+
     render() {
         const {error, isTranslationsLoaded, isBooksLoaded, isStructureLoaded, showVerses,
             translations, books, verses, structure, chapters,
             selectedBook, selectedChapter, selectedTranslation} = this.state;
 
-        const { setLocale, intl: {formatMessage} } = this.props;
-
+        const { intl: {formatMessage} } = this.props;
+    
         if (error) {
             return (
                 <div className="container app-preloader">
@@ -261,7 +246,7 @@ class Bible extends Component {
                         verses={verses}
                     />
                     <StatusBar
-                        setLocale={setLocale}
+                        setLocaleAndUpdateHistory={this.setLocaleAndUpdateHistory}
                         translations={translations}
                     />
                 </div>
