@@ -1,12 +1,10 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace rBibliaWeb\Response;
 
 class LandingPageResponse
 {
-    private const TEMPLATE_INDEX = __DIR__ . '/../../view/index.phtml';
+    private const TEMPLATE_INDEX = __DIR__.'/../../view/index.phtml';
 
     public static function render(array $settings = []): void
     {

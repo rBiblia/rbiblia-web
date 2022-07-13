@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
     ->path('src/core/')
@@ -11,7 +9,6 @@ $config = new PhpCsFixer\Config();
 
 return $config->setRules([
         '@PHP71Migration' => true,
-        '@Symfony' => true,
         '@Symfony:risky' => true,
         'array_syntax' => ['syntax' => 'short'],
         'combine_consecutive_unsets' => true,
@@ -35,7 +32,7 @@ return $config->setRules([
         'strict_comparison' => true,
         'strict_param' => true,
         'phpdoc_align' => false,
-        'declare_strict_types' => true
+        'declare_strict_types' => true,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder);

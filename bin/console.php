@@ -1,7 +1,5 @@
 #!/usr/bin/env php
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 const APP_FILE_CONFIG = __DIR__.'/../src/config/app.php';
 
