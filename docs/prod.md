@@ -1,7 +1,7 @@
-Przygotowanie pakietu do dystrybucji.
+### Przygotowanie pakietu do dystrybucji
 
 Zainstaluj zależności produkcyjne:
 
 ```bash
-bin\make prod
+make prod
 ```

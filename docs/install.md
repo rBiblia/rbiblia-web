@@ -6,41 +6,14 @@
 
 - Zaimportuj strukturę dla bazy MySQL z pliku `/docs/db_structure.sql`.
 
-- Zainstaluj zależności:
+- Zainstaluj zależności (zobacz plik [docker.md](docker.md) w celu uzyskania instrukcji jak korzystać z Dockera w projekcie):
 
 ```bash
-bin\make dev
+$ make dev
 ```
 
-- Zaimportuj tłumczenia (zobacz również plik [console.md](console.md)):
+- Zaimportuj tłumaczenia **wewnątrz kontenera** (zobacz również plik [console.md](console.md)):
 
 ```bash
-bin\console i --all
+$ bin/console i --all
 ```
-
-###
-
-Korzystanie z dockera.
-
-```bash
-$ docker-compose up
-```
-
-Logowanie się do kontenera dockera
-
-```bash
-$ docker-compose exec web bash
-```
-
-Aby przygotować środowisko do odpalenia w kontenerze,
-    jeśli nie dysponujesz Windowsem
-    i nie mozesz uruchomić pliku make.bat,
-wykonaj następujące komendy w kontenerze:
-
-```
-$ composer install
-$ yarn install
-$ yarn encore dev --watch
-```
-
-Podgląd strony będzie dostępny pod adresem http://localhost/ .
