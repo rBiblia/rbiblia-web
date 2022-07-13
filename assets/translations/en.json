@@ -1,8 +1,8 @@
 {
-    "availableTranslationsCounter": "Translations:",
-    "unexpectedErrorOccurred": "Unexpected error occured:",
-    "preparingApplicationPleaseWait": "Prepearing application. Please wait...",
-    "bookList": "Book list",
-    "chapterList": "Chapter list",
-    "linkOpenInRBibliaApp": "Open at rBiblia Windows app"
+  "availableTranslationsCounter": "Translations:",
+  "unexpectedErrorOccurred": "Unexpected error occured:",
+  "preparingApplicationPleaseWait": "Prepearing application. Please wait...",
+  "bookList": "Book list",
+  "chapterList": "Chapter list",
+  "linkOpenInRBibliaApp": "Open at rBiblia Windows app"
 }

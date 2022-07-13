@@ -8,7 +8,7 @@ import getDataFromCurrentPathname from "./js/getDataFromCurrentPathname";
 
 const translations = {
     pl,
-    en
+    en,
 };
 
 export default function AppWithIntlProvider() {
