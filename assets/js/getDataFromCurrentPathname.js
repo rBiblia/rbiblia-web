@@ -8,9 +8,10 @@ import getDefaultLanguage from "./getDefaultLanguage";
  * 3. If not exist, get default value from constants.
  */
 export default function getDataFromCurrentPathname() {
-
     const [
-        ,, //ignore first two elements "", "b"
+        ,
+        ,
+        //ignore first two elements "", "b"
         defaultLanguage,
         defaultTranslation,
         defaultBook,
@@ -21,9 +22,13 @@ export default function getDataFromCurrentPathname() {
         .split("/");
 
     const language = defaultLanguage || getDefaultLanguage();
-    const translation = defaultTranslation || Cookies.get('recent_translation') || DEFAULT_TRANSLATION;
-    const book = defaultBook || Cookies.get('recent_book') || DEFAULT_BOOK;
-    const chapter = defaultChapter || Cookies.get('recent_chapter') || DEFAULT_CHAPTER;
+    const translation =
+        defaultTranslation ||
+        Cookies.get("recent_translation") ||
+        DEFAULT_TRANSLATION;
+    const book = defaultBook || Cookies.get("recent_book") || DEFAULT_BOOK;
+    const chapter =
+        defaultChapter || Cookies.get("recent_chapter") || DEFAULT_CHAPTER;
 
-    return {language, translation, book, chapter};
+    return { language, translation, book, chapter };
 }

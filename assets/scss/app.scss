@@ -6,7 +6,7 @@ $rb-header-background-color: #dbd1c1;
 $rb-footer-background-color: #dbd1c1;
 $rb-footer-link-color: inherit;
 $rb-footer-hover-color: #6c6c6c;
-$rb-verse-even-color: #F5F5F5;
+$rb-verse-even-color: #f5f5f5;
 
 @mixin rb-border {
   border-left: 1px solid $rb-border-color;
@@ -43,9 +43,9 @@ $rb-verse-even-color: #F5F5F5;
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: .95em;
-  background: url('../images/background.jpg');
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.95em;
+  background: url("../images/background.jpg");
   background-size: 84px 83px;
 }
 
@@ -55,8 +55,8 @@ main {
   background: $rb-background-color;
 
   .row {
-    padding-top: .2em;
-    padding-bottom: .2em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 
     &:nth-child(even) {
       background: $rb-verse-even-color;
@@ -78,10 +78,10 @@ main {
       color: $rb-verse-hover-color;
     }
   }
-
 }
 
-header, footer {
+header,
+footer {
   @include rb-border;
   position: sticky;
   background: $rb-background-color;
@@ -96,8 +96,8 @@ header {
 
 footer {
   background: $rb-footer-background-color;
-  padding-top: .2em;
-  padding-bottom: .2em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
   bottom: 0;
 
   a {
@@ -115,13 +115,14 @@ footer {
   &:before {
     width: 6em;
     height: 6em;
-    content: '';
+    content: "";
     position: relative;
     display: inline-block;
     overflow: hidden;
     transform-origin: 46% 54%;
     animation: preloader-image-spin 1s linear infinite;
-    background: url('../images/preloader.svg') no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("../images/preloader.svg") no-repeat scroll 0 0
+      rgba(0, 0, 0, 0);
   }
 }
 

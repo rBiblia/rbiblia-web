@@ -1,13 +1,23 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import TranslationSelector from "./TranslationSelector";
 import BookSelector from "./BookSelector";
 import ChapterSelector from "./ChapterSelector";
 
 export default class Navigator extends Component {
     render() {
-        const {translations, books, structure, chapters, isStructureLoaded,
-            changeSelectedTranslation, changeSelectedBook, changeSelectedChapter,
-            selectedTranslation, selectedBook, selectedChapter} = this.props;
+        const {
+            translations,
+            books,
+            structure,
+            chapters,
+            isStructureLoaded,
+            changeSelectedTranslation,
+            changeSelectedBook,
+            changeSelectedChapter,
+            selectedTranslation,
+            selectedBook,
+            selectedChapter,
+        } = this.props;
 
         return (
             <header className="row">

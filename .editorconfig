@@ -1,0 +1,4 @@
+# this file is used by prettier but also by many code editors/IDEs
+[assets/**.js]
+indent_style = space
+indent_size = 4

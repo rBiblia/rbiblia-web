@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Cookies from "js-cookie";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
 import { injectIntl } from "react-intl";
-import {URL_PREFIX, DEFAULT_BOOK, COOKIE_EXPIRES } from '../consts';
+import { URL_PREFIX, DEFAULT_BOOK, COOKIE_EXPIRES } from "../consts";
 import getDataFromCurrentPathname from "./getDataFromCurrentPathname";
 
 class Bible extends Component {
@@ -26,14 +26,15 @@ class Bible extends Component {
             verses: [],
 
             selectedTranslation: getDataFromCurrentPathname().translation, // default translation
-            selectedBook: '',
-            selectedChapter: '',
-            isInitialLoading: true
+            selectedBook: "",
+            selectedChapter: "",
+            isInitialLoading: true,
         };
 
         this.getDefaultBook = this.getDefaultBook.bind(this);
         this.getDefaultChapter = this.getDefaultChapter.bind(this);
-        this.setLocaleAndUpdateHistory = this.setLocaleAndUpdateHistory.bind(this);
+        this.setLocaleAndUpdateHistory =
+            this.setLocaleAndUpdateHistory.bind(this);
     }
 
     /*
@@ -41,39 +42,49 @@ class Bible extends Component {
      * the last call is finished and verses are ready to be displayed
      */
     updateHistory(language, translation, book, chapter) {
-        Cookies.set('recent_language', language, { expires: COOKIE_EXPIRES });
-        Cookies.set('recent_translation', translation, { expires: COOKIE_EXPIRES });
-        Cookies.set('recent_book', book, { expires: COOKIE_EXPIRES });
-        Cookies.set('recent_chapter', chapter, { expires: COOKIE_EXPIRES });
+        Cookies.set("recent_language", language, { expires: COOKIE_EXPIRES });
+        Cookies.set("recent_translation", translation, {
+            expires: COOKIE_EXPIRES,
+        });
+        Cookies.set("recent_book", book, { expires: COOKIE_EXPIRES });
+        Cookies.set("recent_chapter", chapter, { expires: COOKIE_EXPIRES });
 
-        window.history.pushState({},"",
+        window.history.pushState(
+            {},
+            "",
             `${URL_PREFIX}/${language}/${translation}/${book}/${chapter}`
         );
     }
 
     changeSelectedTranslation(selectedTranslation) {
-
         this.setState({
             showVerses: false,
             isStructureLoaded: false,
             selectedTranslation: selectedTranslation,
         });
 
-        fetch("/api/pl/translation/" + selectedTranslation)
-            .then(res => res.json())
+        const {
+            intl: { locale },
+        } = this.props;
+
+        fetch("/api/" + locale + "/translation/" + selectedTranslation)
+            .then((res) => res.json())
             .then(
                 (result) => {
-                    this.setState({
-                        isStructureLoaded: true,
-                        structure: result.data,
-                    }, () => {
-                        const defaultBook = this.getDefaultBook();
-                        this.changeSelectedBook(defaultBook);
-                    });
+                    this.setState(
+                        {
+                            isStructureLoaded: true,
+                            structure: result.data,
+                        },
+                        () => {
+                            const defaultBook = this.getDefaultBook();
+                            this.changeSelectedBook(defaultBook);
+                        }
+                    );
                 },
                 (error) => {
                     this.setState({
-                        error
+                        error,
                     });
                 }
             );
@@ -86,11 +97,11 @@ class Bible extends Component {
      */
     getDefaultBook() {
         const { structure, isInitialLoading } = this.state;
-        if(isInitialLoading) {
+        if (isInitialLoading) {
             return getDataFromCurrentPathname().book;
         }
 
-        if(structure[DEFAULT_BOOK]) {
+        if (structure[DEFAULT_BOOK]) {
             return DEFAULT_BOOK;
         }
 
@@ -103,36 +114,54 @@ class Bible extends Component {
      * otherwise, return first existing chapter
      */
     getDefaultChapter() {
-        const {structure, selectedBook, isInitialLoading} = this.state;
-        if(isInitialLoading) {
+        const { structure, selectedBook, isInitialLoading } = this.state;
+        if (isInitialLoading) {
             return getDataFromCurrentPathname().chapter;
         }
         return structure[selectedBook][0];
     }
 
     changeSelectedBook(selectedBook) {
-        this.setState({
-            selectedBook: selectedBook,
-            chapters: this.state.structure[selectedBook],
-        }, () => {
-            const defaultChapter = this.getDefaultChapter();
-            this.changeSelectedChapter(defaultChapter);
-        });
+        this.setState(
+            {
+                selectedBook: selectedBook,
+                chapters: this.state.structure[selectedBook],
+            },
+            () => {
+                const defaultChapter = this.getDefaultChapter();
+                this.changeSelectedChapter(defaultChapter);
+            }
+        );
     }
 
     changeSelectedChapter(selectedChapter) {
-
-        const {selectedTranslation, selectedBook} = this.state;
-        const { intl: {locale} } = this.props;
-        this.updateHistory(locale, selectedTranslation, selectedBook, selectedChapter);
+        const { selectedTranslation, selectedBook } = this.state;
+        const {
+            intl: { locale },
+        } = this.props;
+        this.updateHistory(
+            locale,
+            selectedTranslation,
+            selectedBook,
+            selectedChapter
+        );
 
         this.setState({
             showVerses: false,
-            isInitialLoading: false
+            isInitialLoading: false,
         });
-        
-        fetch("/api/pl/translation/" + selectedTranslation + "/book/" + selectedBook + "/chapter/" + selectedChapter)
-            .then(res => res.json())
+
+        fetch(
+            "/api/" +
+                locale +
+                "/translation/" +
+                selectedTranslation +
+                "/book/" +
+                selectedBook +
+                "/chapter/" +
+                selectedChapter
+        )
+            .then((res) => res.json())
             .then(
                 (result) => {
                     this.setState({
@@ -143,49 +172,53 @@ class Bible extends Component {
                 },
                 (error) => {
                     this.setState({
-                        error
+                        error,
                     });
                 }
             );
     }
 
     componentDidMount() {
+        const {
+            intl: { locale },
+        } = this.props;
+
         Promise.all([
-            fetch("/api/pl/translation")
-                .then(res => res.json())
+            fetch("/api/" + locale + "/translation")
+                .then((res) => res.json())
                 .then(
                     (result) => {
                         this.setState({
                             isTranslationsLoaded: true,
-                            translations: result.data
+                            translations: result.data,
                         });
                     },
                     (error) => {
                         this.setState({
                             isTranslationsLoaded: true,
-                            error
+                            error,
                         });
                     }
                 ),
-            fetch("/api/pl/book")
-                .then(res => res.json())
+            fetch("/api/" + locale + "/book")
+                .then((res) => res.json())
                 .then(
                     (result) => {
                         this.setState({
                             isBooksLoaded: true,
-                            books: result.data
+                            books: result.data,
                         });
                     },
                     (error) => {
                         this.setState({
                             isBooksLoaded: true,
-                            error
+                            error,
                         });
                     }
-                )
-            ]).then(() => {
-                this.changeSelectedTranslation(this.state.selectedTranslation);
-            });
+                ),
+        ]).then(() => {
+            this.changeSelectedTranslation(this.state.selectedTranslation);
+        });
     }
 
     setLocaleAndUpdateHistory(locale) {
@@ -197,18 +230,33 @@ class Bible extends Component {
     }
 
     render() {
-        const {error, isTranslationsLoaded, isBooksLoaded, isStructureLoaded, showVerses,
-            translations, books, verses, structure, chapters,
-            selectedBook, selectedChapter, selectedTranslation} = this.state;
+        const {
+            error,
+            isTranslationsLoaded,
+            isBooksLoaded,
+            isStructureLoaded,
+            showVerses,
+            translations,
+            books,
+            verses,
+            structure,
+            chapters,
+            selectedBook,
+            selectedChapter,
+            selectedTranslation,
+        } = this.state;
 
-        const { intl: {formatMessage} } = this.props;
-    
+        const {
+            intl: { formatMessage },
+        } = this.props;
+
         if (error) {
             return (
                 <div className="container app-preloader">
                     <div className="row">
                         <div className="col-12 d-flex align-items-center justify-content-center">
-                            {formatMessage({id:'unexpectedErrorOccurred'})} {error.message}
+                            {formatMessage({ id: "unexpectedErrorOccurred" })}{" "}
+                            {error.message}
                         </div>
                     </div>
                 </div>
@@ -218,7 +266,9 @@ class Bible extends Component {
                 <div className="container app-preloader">
                     <div className="row">
                         <div className="col-12 d-flex align-items-center justify-content-center">
-                            {formatMessage({id:'preparingApplicationPleaseWait'})}
+                            {formatMessage({
+                                id: "preparingApplicationPleaseWait",
+                            })}
                         </div>
                     </div>
                 </div>
@@ -235,9 +285,13 @@ class Bible extends Component {
                         structure={structure}
                         chapters={chapters}
                         isStructureLoaded={isStructureLoaded}
-                        changeSelectedTranslation={this.changeSelectedTranslation.bind(this)}
+                        changeSelectedTranslation={this.changeSelectedTranslation.bind(
+                            this
+                        )}
                         changeSelectedBook={this.changeSelectedBook.bind(this)}
-                        changeSelectedChapter={this.changeSelectedChapter.bind(this)}
+                        changeSelectedChapter={this.changeSelectedChapter.bind(
+                            this
+                        )}
                     />
                     <Reader
                         showVerses={showVerses}
@@ -246,7 +300,9 @@ class Bible extends Component {
                         verses={verses}
                     />
                     <StatusBar
-                        setLocaleAndUpdateHistory={this.setLocaleAndUpdateHistory}
+                        setLocaleAndUpdateHistory={
+                            this.setLocaleAndUpdateHistory
+                        }
                         translations={translations}
                     />
                 </div>
