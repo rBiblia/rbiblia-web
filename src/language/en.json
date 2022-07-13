@@ -1,0 +1,1083 @@
+{
+  "messages": {
+    "error_translation_not_found": "Translation not found",
+    "error_no_verses_found": "No verses found in a given chapter",
+    "error_query_limit_exceeded": "Query limit for IP address exceeded, try tomorrow",
+    "error_wrong_ip_address": "Cannot determine IP address of the user"
+  },
+  "aliases": {
+    "gen": {
+      "name": "Genesis",
+      "group": "ot",
+      "aliases": [
+        "gen",
+        "genesis",
+        "ge",
+        "gn",
+        "1m",
+        "1mo",
+        "1mos",
+        "1moses",
+        "Im",
+        "Imo",
+        "Imos",
+        "Imoses"
+      ]
+    },
+    "exo": {
+      "name": "Exodus",
+      "group": "ot",
+      "aliases": [
+        "ex",
+        "exo",
+        "exod",
+        "exodus",
+        "2m",
+        "2mo",
+        "2mos",
+        "2moses",
+        "IIm",
+        "IImo",
+        "IImos",
+        "IImoses"
+      ]
+    },
+    "lev": {
+      "name": "Leviticus",
+      "group": "ot",
+      "aliases": [
+        "lev",
+        "le",
+        "lv",
+        "leviticus",
+        "levit",
+        "3m",
+        "3mo",
+        "3mos",
+        "3moses",
+        "IIIm",
+        "IIImo",
+        "IIImos",
+        "IIImoses"
+      ]
+    },
+    "num": {
+      "name": "Numbers",
+      "group": "ot",
+      "aliases": [
+        "num",
+        "nu",
+        "nm",
+        "nb",
+        "4m",
+        "4mo",
+        "4mos",
+        "4moses",
+        "IVm",
+        "IVmo",
+        "IVmos",
+        "IVmoses"
+      ]
+    },
+    "deu": {
+      "name": "Deuteronomy",
+      "group": "ot",
+      "aliases": [
+        "deut",
+        "dt",
+        "deuteronomy",
+        "deuter",
+        "deu",
+        "5m",
+        "5mo",
+        "5mos",
+        "5moses",
+        "Vm",
+        "Vmo",
+        "Vmos",
+        "Vmoses"
+      ]
+    },
+    "jos": {
+      "name": "Joshua",
+      "group": "ot",
+      "aliases": [
+        "josh",
+        "jos",
+        "jsh",
+        "joshua"
+      ]
+    },
+    "jdg": {
+      "name": "Judges",
+      "group": "ot",
+      "aliases": [
+        "judg",
+        "jdg",
+        "jg",
+        "jdgs",
+        "jud",
+        "judges"
+      ]
+    },
+    "rut": {
+      "name": "Ruth",
+      "group": "ot",
+      "aliases": [
+        "ruth",
+        "rth",
+        "ru",
+        "rh"
+      ]
+    },
+    "1sa": {
+      "name": "1 Samuel",
+      "group": "ot",
+      "aliases": [
+        "1sam",
+        "Isam",
+        "1sa",
+        "1samuel",
+        "Isamuel",
+        "1s",
+        "1sm",
+        "Ism",
+        "1stsamuel",
+        "1sl",
+        "Isl"
+      ]
+    },
+    "2sa": {
+      "name": "2 Samuel",
+      "group": "ot",
+      "aliases": [
+        "2sam",
+        "IIsam",
+        "2sa",
+        "IIsa",
+        "2s",
+        "IIs",
+        "2sm",
+        "IIsm",
+        "2samuel",
+        "IIsamuel",
+        "2ndsamuel",
+        "2sl",
+        "IIsl"
+      ]
+    },
+    "1ki": {
+      "name": "1 Kings",
+      "group": "ot",
+      "aliases": [
+        "1kings",
+        "1kgs",
+        "Ikgs",
+        "1ki",
+        "Iki",
+        "1k",
+        "Ik",
+        "Ikings",
+        "1stkgs",
+        "1stkings",
+        "1kin",
+        "Ikin",
+        "1ks",
+        "Iks"
+      ]
+    },
+    "2ki": {
+      "name": "2 Kings",
+      "group": "ot",
+      "aliases": [
+        "2kings",
+        "2kgs",
+        "IIkgs",
+        "2ki",
+        "IIki",
+        "2k",
+        "IIk",
+        "IIkings",
+        "2ndkgs",
+        "2ndkings",
+        "2kin",
+        "IIkin",
+        "2ks",
+        "IIks"
+      ]
+    },
+    "1ch": {
+      "name": "1 Chronicles",
+      "group": "ot",
+      "aliases": [
+        "1chron",
+        "Ichron",
+        "1ch",
+        "Ich",
+        "1chr",
+        "Ichr",
+        "1chronicles",
+        "Ichronicles",
+        "1stchronicles"
+      ]
+    },
+    "2ch": {
+      "name": "2 Chronicles",
+      "group": "ot",
+      "aliases": [
+        "2chron",
+        "IIchron",
+        "2ch",
+        "IIch",
+        "2chr",
+        "IIchr",
+        "2chron",
+        "IIchron",
+        "2chronicles",
+        "IIchronicles",
+        "2ndchronicles"
+      ]
+    },
+    "ezr": {
+      "name": "Ezra",
+      "group": "ot",
+      "aliases": [
+        "ezra",
+        "ezr",
+        "er"
+      ]
+    },
+    "neh": {
+      "name": "Nehemiah",
+      "group": "ot",
+      "aliases": [
+        "neh",
+        "ne",
+        "nehemiah",
+        "nmh",
+        "nhmh",
+        "nehem"
+      ]
+    },
+    "tob": {
+      "name": "Tobit",
+      "aliases": [
+        "tob",
+        "tb",
+        "tobit"
+      ]
+    },
+    "jdt": {
+      "name": "Judith",
+      "aliases": [
+        "jth",
+        "jdt",
+        "jdth"
+      ]
+    },
+    "est": {
+      "name": "Esther",
+      "group": "ot",
+      "aliases": [
+        "est",
+        "esth",
+        "es",
+        "et",
+        "esther",
+        "eth"
+      ]
+    },
+    "1ma": {
+      "name": "1 Maccabees",
+      "aliases": [
+        "1macc",
+        "1mac",
+        "1ma",
+        "1maccabees",
+        "1stmaccabees"
+      ]
+    },
+    "2ma": {
+      "name": "2 Maccabees",
+      "aliases": [
+        "2macc",
+        "2mac",
+        "2ma",
+        "2maccabees",
+        "2ndmaccabees"
+      ]
+    },
+    "3ma": {
+      "name": "3 Maccabees",
+      "aliases": [
+        "3macc",
+        "3mac",
+        "3ma",
+        "3rdmaccabees"
+      ]
+    },
+    "4ma": {
+      "name": "4 Maccabees",
+      "aliases": [
+        "4macc",
+        "4mac",
+        "4ma",
+        "4maccabees",
+        "4thmaccabees"
+      ]
+    },
+    "job": {
+      "name": "Job",
+      "group": "ot",
+      "aliases": [
+        "job",
+        "jb"
+      ]
+    },
+    "psa": {
+      "name": "Psalms",
+      "group": "ot",
+      "aliases": [
+        "ps",
+        "pslm",
+        "psalms",
+        "psa",
+        "psm",
+        "pss",
+        "psalm"
+      ]
+    },
+    "pro": {
+      "name": "Proverbs",
+      "group": "ot",
+      "aliases": [
+        "prov",
+        "pr",
+        "prv",
+        "proverbs",
+        "prvbs",
+        "provbs"
+      ]
+    },
+    "ecc": {
+      "name": "Ecclesiastes",
+      "group": "ot",
+      "aliases": [
+        "eccles",
+        "ec",
+        "eccl",
+        "ecclesiastes",
+        "ecc",
+        "qoh",
+        "qoheleth",
+        "qh"
+      ]
+    },
+    "sol": {
+      "name": "Song of Solomon",
+      "group": "ot",
+      "aliases": [
+        "song",
+        "songofsolomon",
+        "so",
+        "canticleofcanticles",
+        "canticles",
+        "songofsongs",
+        "sos",
+        "songofsol",
+        "songofsg",
+        "sosg"
+      ]
+    },
+    "wis": {
+      "name": "Wisdom of Solomon",
+      "aliases": [
+        "wisdofsol",
+        "wis",
+        "ws",
+        "wisdom"
+      ]
+    },
+    "sip": {
+      "name": "Sirach's Prologue",
+      "aliases": [
+        "sip"
+      ]
+    },
+    "sir": {
+      "name": "Wisdom of Sirach",
+      "aliases": [
+        "sir",
+        "sirach",
+        "ecclesiasticus",
+        "ecclus"
+      ]
+    },
+    "pss": {
+      "name": "Psalms of Solomon",
+      "aliases": [
+        "pssol",
+        "pssolomon",
+        "psalmssolomon"
+      ]
+    },
+    "isa": {
+      "name": "Isaiah",
+      "group": "ot",
+      "aliases": [
+        "isa",
+        "is",
+        "isaiah",
+        "ish"
+      ]
+    },
+    "jer": {
+      "name": "Jeremiah",
+      "group": "ot",
+      "aliases": [
+        "jer",
+        "jr",
+        "je",
+        "jerem",
+        "jeremiah",
+        "jrh",
+        "jrm",
+        "jrmh"
+      ]
+    },
+    "lam": {
+      "name": "Lamentations",
+      "group": "ot",
+      "aliases": [
+        "lam",
+        "la",
+        "lamentations",
+        "lament",
+        "lts",
+        "lt",
+        "lmnt",
+        "lmnts"
+      ]
+    },
+    "bar": {
+      "name": "Baruch",
+      "aliases": [
+        "bar",
+        "baruch"
+      ]
+    },
+    "eze": {
+      "name": "Ezekiel",
+      "group": "ot",
+      "aliases": [
+        "ezek",
+        "eze",
+        "ezk",
+        "ez",
+        "ezekiel",
+        "el",
+        "ezkl",
+        "ekl",
+        "ek"
+      ]
+    },
+    "dan": {
+      "name": "Daniel",
+      "group": "ot",
+      "aliases": [
+        "dan",
+        "dn",
+        "da",
+        "daniel",
+        "dl",
+        "dnl",
+        "dal"
+      ]
+    },
+    "hos": {
+      "name": "Hosea",
+      "group": "ot",
+      "aliases": [
+        "hos",
+        "ho",
+        "hosea",
+        "hse",
+        "hs"
+      ]
+    },
+    "joe": {
+      "name": "Joel",
+      "group": "ot",
+      "aliases": [
+        "joel",
+        "jl",
+        "joe"
+      ]
+    },
+    "amo": {
+      "name": "Amos",
+      "group": "ot",
+      "aliases": [
+        "amos",
+        "am",
+        "ams",
+        "as"
+      ]
+    },
+    "oba": {
+      "name": "Obadiah",
+      "group": "ot",
+      "aliases": [
+        "obad",
+        "ob",
+        "obd",
+        "obdh",
+        "obadiah",
+        "obh",
+        "oh",
+        "odh",
+        "od"
+      ]
+    },
+    "jon": {
+      "name": "Jonah",
+      "group": "ot",
+      "aliases": [
+        "jonah",
+        "jon",
+        "jnh"
+      ]
+    },
+    "mic": {
+      "name": "Micah",
+      "group": "ot",
+      "aliases": [
+        "mic",
+        "micah",
+        "mch",
+        "mc"
+      ]
+    },
+    "nah": {
+      "name": "Nahum",
+      "group": "ot",
+      "aliases": [
+        "nah",
+        "na",
+        "nahum",
+        "nh",
+        "nhm"
+      ]
+    },
+    "hab": {
+      "name": "Habakkuk",
+      "group": "ot",
+      "aliases": [
+        "hab",
+        "habakkuk",
+        "hbk",
+        "hbkk",
+        "habak",
+        "hb",
+        "haba"
+      ]
+    },
+    "zep": {
+      "name": "Zephaniah",
+      "group": "ot",
+      "aliases": [
+        "zeph",
+        "zep",
+        "zp",
+        "zephaniah",
+        "zph",
+        "zphn",
+        "zphnh",
+        "zephn",
+        "zephnh"
+      ]
+    },
+    "hag": {
+      "name": "Haggai",
+      "group": "ot",
+      "aliases": [
+        "hag",
+        "haggai",
+        "hg",
+        "hgg",
+        "hagg",
+        "hgi"
+      ]
+    },
+    "zec": {
+      "name": "Zechariah",
+      "group": "ot",
+      "aliases": [
+        "zech",
+        "zec",
+        "zc",
+        "ze",
+        "zechariah",
+        "zechar",
+        "zecha",
+        "zch",
+        "zchr",
+        "zchrh",
+        "zh"
+      ]
+    },
+    "mal": {
+      "name": "Malachi",
+      "group": "ot",
+      "aliases": [
+        "mal",
+        "ml",
+        "mala",
+        "malachi",
+        "mlch"
+      ]
+    },
+    "mat": {
+      "name": "Matthew",
+      "group": "nt",
+      "aliases": [
+        "matt",
+        "mt",
+        "matthew",
+        "mat",
+        "mth",
+        "mthw",
+        "m"
+      ]
+    },
+    "mar": {
+      "name": "Mark",
+      "group": "nt",
+      "aliases": [
+        "mark",
+        "mrk",
+        "mk",
+        "mr"
+      ]
+    },
+    "luk": {
+      "name": "Luke",
+      "group": "nt",
+      "aliases": [
+        "luke",
+        "lu",
+        "lk",
+        "l"
+      ]
+    },
+    "joh": {
+      "name": "John",
+      "group": "nt",
+      "aliases": [
+        "john",
+        "jn",
+        "jhn",
+        "joh",
+        "j"
+      ]
+    },
+    "act": {
+      "name": "Acts",
+      "group": "nt",
+      "aliases": [
+        "acts",
+        "ac"
+      ]
+    },
+    "rom": {
+      "name": "Romans",
+      "group": "nt",
+      "aliases": [
+        "rom",
+        "ro",
+        "rm",
+        "romans",
+        "rms",
+        "rmns",
+        "rmn"
+      ]
+    },
+    "1co": {
+      "name": "1 Corinthians",
+      "group": "nt",
+      "aliases": [
+        "1cor",
+        "1c",
+        "Ic",
+        "Icor",
+        "1co",
+        "Ico",
+        "1corinthians",
+        "Icorinthians",
+        "1stcorinthians"
+      ]
+    },
+    "2co": {
+      "name": "2 Corinthians",
+      "group": "nt",
+      "aliases": [
+        "2cor",
+        "2c",
+        "IIc",
+        "IIcor",
+        "2co",
+        "IIco",
+        "2corinthians",
+        "IIcorinthians",
+        "2ndcorinthians"
+      ]
+    },
+    "gal": {
+      "name": "Galatians",
+      "group": "nt",
+      "aliases": [
+        "gal",
+        "ga",
+        "gala",
+        "galatians",
+        "glt",
+        "glts"
+      ]
+    },
+    "eph": {
+      "name": "Ephesians",
+      "group": "nt",
+      "aliases": [
+        "eph",
+        "ephes",
+        "ephesians",
+        "ephs"
+      ]
+    },
+    "phi": {
+      "name": "Philippians",
+      "group": "nt",
+      "aliases": [
+        "phil",
+        "php",
+        "philippians",
+        "phps",
+        "phlp",
+        "phlps"
+      ]
+    },
+    "col": {
+      "name": "Colossians",
+      "group": "nt",
+      "aliases": [
+        "col",
+        "cl",
+        "colos",
+        "colossians",
+        "cls",
+        "clss"
+      ]
+    },
+    "1th": {
+      "name": "1 Thessalonians",
+      "group": "nt",
+      "aliases": [
+        "1thess",
+        "Ithess",
+        "1th",
+        "Ith",
+        "1thes",
+        "Ithes",
+        "1thessalonians",
+        "Ithessalonians",
+        "1stthessalonians"
+      ]
+    },
+    "2th": {
+      "name": "2 Thessalonians",
+      "group": "nt",
+      "aliases": [
+        "2thess",
+        "IIthess",
+        "2th",
+        "IIth",
+        "2thes",
+        "IIthes",
+        "2thessalonians",
+        "IIthessalonians",
+        "2ndthessalonians",
+        "2ths",
+        "IIths",
+        "2thss",
+        "IIthss"
+      ]
+    },
+    "1ti": {
+      "name": "1 Timothy",
+      "group": "nt",
+      "aliases": [
+        "1tim",
+        "Itim",
+        "1ti",
+        "Iti",
+        "1timothy",
+        "Itimothy",
+        "1sttimothy",
+        "1tm",
+        "Itm",
+        "1tmt",
+        "Itmt",
+        "1tmth",
+        "Itmth"
+      ]
+    },
+    "2ti": {
+      "name": "2 Timothy",
+      "group": "nt",
+      "aliases": [
+        "2tim",
+        "IItim",
+        "2ti",
+        "IIti",
+        "2timothy",
+        "IItimothy",
+        "2ndsttimothy",
+        "2tm",
+        "IItm",
+        "2tmt",
+        "IItmt",
+        "2tmth",
+        "IItmth"
+      ]
+    },
+    "tit": {
+      "name": "Titus",
+      "group": "nt",
+      "aliases": [
+        "titus",
+        "tit",
+        "tt",
+        "ts",
+        "tts"
+      ]
+    },
+    "phm": {
+      "name": "Philemon",
+      "group": "nt",
+      "aliases": [
+        "philem",
+        "phlm",
+        "phm",
+        "philemon",
+        "phmn",
+        "phlmn"
+      ]
+    },
+    "heb": {
+      "name": "Hebrews",
+      "group": "nt",
+      "aliases": [
+        "heb",
+        "hebrews",
+        "hbr",
+        "hebr",
+        "hbs",
+        "hbrs"
+      ]
+    },
+    "jam": {
+      "name": "James",
+      "group": "nt",
+      "aliases": [
+        "james",
+        "jas",
+        "jm",
+        "jms",
+        "ja"
+      ]
+    },
+    "1pe": {
+      "name": "1 Peter",
+      "group": "nt",
+      "aliases": [
+        "1pet",
+        "Ipet",
+        "1pe",
+        "Ipe",
+        "1pt",
+        "Ipt",
+        "1peter",
+        "Ipeter",
+        "1stpeter",
+        "1p",
+        "Ip",
+        "1ptr",
+        "Iptr",
+        "1petr",
+        "Ipetr"
+      ]
+    },
+    "2pe": {
+      "name": "2 Peter",
+      "group": "nt",
+      "aliases": [
+        "2pet",
+        "IIpet",
+        "2pe",
+        "IIpe",
+        "2pt",
+        "IIpt",
+        "2peter",
+        "IIpeter",
+        "2ndpeter",
+        "2p",
+        "IIp",
+        "2ptr",
+        "IIptr",
+        "2petr",
+        "IIpetr"
+      ]
+    },
+    "1jo": {
+      "name": "1 John",
+      "group": "nt",
+      "aliases": [
+        "1john",
+        "Ijohn",
+        "1jn",
+        "Ijn",
+        "1jo",
+        "Ijo",
+        "1joh",
+        "Ijoh",
+        "1jhn",
+        "Ijhn",
+        "1stjohn",
+        "1j",
+        "Ij"
+      ]
+    },
+    "2jo": {
+      "name": "2 John",
+      "group": "nt",
+      "aliases": [
+        "2john",
+        "IIjohn",
+        "2jn",
+        "IIjn",
+        "2jo",
+        "IIjo",
+        "2joh",
+        "IIjoh",
+        "2jhn",
+        "IIjhn",
+        "2ndjohn",
+        "2j",
+        "IIj"
+      ]
+    },
+    "3jo": {
+      "name": "3 John",
+      "group": "nt",
+      "aliases": [
+        "3john",
+        "IIIjohn",
+        "3jn",
+        "IIIjn",
+        "3jo",
+        "IIIjo",
+        "3joh",
+        "IIIjoh",
+        "3jhn",
+        "IIIjhn",
+        "3rdjohn",
+        "3j",
+        "IIIj"
+      ]
+    },
+    "jud": {
+      "name": "Jude",
+      "group": "nt",
+      "aliases": [
+        "jude",
+        "jud",
+        "jd"
+      ]
+    },
+    "rev": {
+      "name": "Revelation",
+      "group": "nt",
+      "aliases": [
+        "rev",
+        "re",
+        "therevelation",
+        "revelation",
+        "apocalypse",
+        "therev",
+        "rv",
+        "apoc",
+        "apc",
+        "rvl",
+        "revl",
+        "revel"
+      ]
+    },
+    "epj": {
+      "name": "Epistle of Jeremiah",
+      "aliases": [
+        "epjer"
+      ]
+    },
+    "sus": {
+      "name": "Susanna",
+      "aliases": [
+        "sus",
+        "sussanna"
+      ]
+    },
+    "bel": {
+      "name": "Bel and the Dragon",
+      "aliases": [
+        "bel"
+      ]
+    },
+    "pra": {
+      "name": "Prayer of Azariah",
+      "aliases": [
+        "aza",
+        "prazar"
+      ]
+    },
+    "prm": {
+      "name": "Prayer of Manasseh",
+      "aliases": [
+        "profman",
+        "prman",
+        "pma",
+        "prayerofmanasses",
+        "mns"
+      ]
+    },
+    "lao": {
+      "name": "Epistle of the Laodiceans",
+      "aliases": [
+        "laodiceans",
+        "laod",
+        "eplaod",
+        "epistlaodiceans",
+        "epistlelaodiceans",
+        "epistletolaodiceans"
+      ]
+    },
+    "4es": {
+      "name": "4 Esdras",
+      "aliases": [
+        "4es",
+        "4esd",
+        "4esdr",
+        "4esdras",
+        "4thesdras"
+      ]
+    }
+  }
+}
