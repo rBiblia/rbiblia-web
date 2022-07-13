@@ -30,7 +30,7 @@ class ImportCommand extends Command
 
     private OutputInterface $output;
 
-    private Connection $db;
+    private ?Connection $db = null;
 
     private SimpleXMLElement $xml;
 
