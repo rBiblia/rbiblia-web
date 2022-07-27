@@ -1,13 +1,21 @@
-rBiblia Web - dziennik wydań
-
 Strona domowa projektu:
 https://web.rbiblia.toborek.info
 
-Kod źródłowy:
+Kod źródłowy aplikacji na GitHubie:
 https://github.com/rBiblia/rbiblia-web
+
+Lista autorów:
+https://github.com/rBiblia/rbiblia-web/graphs/contributors
 
 Strona domowa rBiblii (wersja dla Windows):
 https://rbiblia.toborek.info
+
+Dziennik wydań (od najnowszych):
+
+2022-07-27:
+- dodano pełne wsparcie dla tłumaczeń interfejsu użytkownika (w tym również dla nazw ksiąg),
+- usunięto identyfikator księgi wyświetlany przy numerze wersetu,
+- wiele mniejszych poprawek i usprawnień w kodzie aplikacji.
 
 2022-06-28:
 - dodano podstawowe wsparcie dla tłumaczeń interfejsu użytkownika.
