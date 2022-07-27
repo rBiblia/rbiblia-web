@@ -4,7 +4,7 @@ import { useIntl } from "react-intl";
 export default function Verse({ verseContent, bookId, chapterId, verseId }) {
     const { formatMessage } = useIntl();
     const appLink = "bib://" + bookId + chapterId + ":" + verseId;
-    const appVerse = bookId + "\u00A0" + chapterId + ":" + verseId;
+    const appVerse = chapterId + ":" + verseId;
 
     return (
         <div className="row">
