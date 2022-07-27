@@ -1,5 +1,10 @@
 import Cookies from "js-cookie";
-import { DEFAULT_BOOK, DEFAULT_CHAPTER, DEFAULT_TRANSLATION } from "../consts";
+import {
+    DEFAULT_BOOK,
+    DEFAULT_CHAPTER,
+    DEFAULT_TRANSLATION,
+    URL_PREFIX,
+} from "../consts";
 import getDefaultLanguage from "./getDefaultLanguage";
 /**
  * It gets specific resource id with the following priorities:
@@ -10,13 +15,13 @@ import getDefaultLanguage from "./getDefaultLanguage";
 export default function getDataFromCurrentPathname() {
     const [
         ,
-        ,
-        //ignore first two elements "", "b"
+        //ignore first element ""
         defaultLanguage,
         defaultTranslation,
         defaultBook,
         defaultChapter,
     ] = window.location.pathname
+        .replace(URL_PREFIX, "")
         // remove trailing slash from the end of path
         .replace(/\/$/, "")
         .split("/");

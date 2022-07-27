@@ -35,6 +35,8 @@ class Bible extends Component {
         this.getDefaultChapter = this.getDefaultChapter.bind(this);
         this.setLocaleAndUpdateHistory =
             this.setLocaleAndUpdateHistory.bind(this);
+        this.loadTranslationsAndBooks =
+            this.loadTranslationsAndBooks.bind(this);
     }
 
     /*
@@ -179,6 +181,10 @@ class Bible extends Component {
     }
 
     componentDidMount() {
+        this.loadTranslationsAndBooks();
+    }
+
+    loadTranslationsAndBooks() {
         const {
             intl: { locale },
         } = this.props;
@@ -227,6 +233,10 @@ class Bible extends Component {
 
         setLocale(locale);
         this.updateHistory(locale, translation, book, chapter);
+
+        this.setState({ isInitialLoading: true }, () => {
+            this.loadTranslationsAndBooks();
+        });
     }
 
     render() {
