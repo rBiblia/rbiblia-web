@@ -4,5 +4,6 @@
   "preparingApplicationPleaseWait": "Przygotowuję aplikację, proszę czekać...",
   "bookList": "Lista ksiąg",
   "chapterList": "Lista rozdziałów",
-  "linkOpenInRBibliaApp": "Otwórz w programie rBiblia dla Windows"
+  "linkOpenInRBibliaApp": "Otwórz w programie rBiblia dla Windows",
+  "changelogLink": "Zobacz dziennik zmian"
 }

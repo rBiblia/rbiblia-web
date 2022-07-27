@@ -22,7 +22,7 @@ const StatusBar = ({ translations, setLocaleAndUpdateHistory }) => {
                 <a
                     href="/assets/changelog.txt"
                     target="_blank"
-                    title="Zobacz dziennik zmian"
+                    title={formatMessage({ id: "changelogLink" })}
                 >
                     changelog.txt
                 </a>
