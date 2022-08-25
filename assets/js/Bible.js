@@ -26,17 +26,21 @@ class Bible extends Component {
             verses: [],
 
             selectedTranslation: getDataFromCurrentPathname().translation, // default translation
-            selectedBook: "",
-            selectedChapter: "",
+            selectedBook: getDataFromCurrentPathname().book,
+            selectedChapter: getDataFromCurrentPathname().chapter,
             isInitialLoading: true,
         };
 
-        this.getDefaultBook = this.getDefaultBook.bind(this);
-        this.getDefaultChapter = this.getDefaultChapter.bind(this);
+        this.getAppropriateBook = this.getAppropriateBook.bind(this);
+        this.getAppropriateChapter = this.getAppropriateChapter.bind(this);
         this.setLocaleAndUpdateHistory =
             this.setLocaleAndUpdateHistory.bind(this);
         this.loadTranslationsAndBooks =
             this.loadTranslationsAndBooks.bind(this);
+        this.changeSelectedTranslation =
+            this.changeSelectedTranslation.bind(this);
+        this.changeSelectedBook = this.changeSelectedBook.bind(this);
+        this.changeSelectedChapter = this.changeSelectedChapter.bind(this);
     }
 
     /*
@@ -59,48 +63,47 @@ class Bible extends Component {
     }
 
     changeSelectedTranslation(selectedTranslation) {
-        this.setState({
-            showVerses: false,
-            isStructureLoaded: false,
-            selectedTranslation: selectedTranslation,
-        });
+        this.setState(
+            {
+                showVerses: false,
+                isStructureLoaded: false,
+                selectedTranslation: selectedTranslation,
+            },
+            () => {
+                const {
+                    intl: { locale },
+                } = this.props;
 
-        const {
-            intl: { locale },
-        } = this.props;
-
-        fetch("/api/" + locale + "/translation/" + selectedTranslation)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    this.setState(
-                        {
-                            isStructureLoaded: true,
-                            structure: result.data,
+                fetch("/api/" + locale + "/translation/" + selectedTranslation)
+                    .then((res) => res.json())
+                    .then(
+                        (result) => {
+                            this.setState(
+                                {
+                                    isStructureLoaded: true,
+                                    structure: result.data,
+                                },
+                                () => {
+                                    this.changeSelectedBook(
+                                        this.getAppropriateBook()
+                                    );
+                                }
+                            );
                         },
-                        () => {
-                            const defaultBook = this.getDefaultBook();
-                            this.changeSelectedBook(defaultBook);
+                        (error) => {
+                            this.setState({
+                                error,
+                            });
                         }
                     );
-                },
-                (error) => {
-                    this.setState({
-                        error,
-                    });
-                }
-            );
+            }
+        );
     }
 
-    /*
-     * when initial (first) call, return default book from url
-     * otherwise, return DEFAULT_BOOK if exist
-     * otherwise, return first existing book
-     */
-    getDefaultBook() {
-        const { structure, isInitialLoading } = this.state;
-        if (isInitialLoading) {
-            return getDataFromCurrentPathname().book;
+    getAppropriateBook() {
+        const { structure, selectedBook } = this.state;
+        if (structure[selectedBook]) {
+            return selectedBook;
         }
 
         if (structure[DEFAULT_BOOK]) {
@@ -111,27 +114,34 @@ class Bible extends Component {
         return Object.keys(structure)[0];
     }
 
-    /*
-     * when initial (first) call, return DEFAULT_CHAPTER from url
-     * otherwise, return first existing chapter
-     */
-    getDefaultChapter() {
-        const { structure, selectedBook, isInitialLoading } = this.state;
-        if (isInitialLoading) {
-            return getDataFromCurrentPathname().chapter;
+    getAppropriateChapter(keepChapterIfPossible) {
+        const { structure, selectedBook, selectedChapter } = this.state;
+
+        if (
+            keepChapterIfPossible &&
+            structure[selectedBook].some(
+                (chapter) => chapter == selectedChapter
+            )
+        ) {
+            return selectedChapter;
         }
+
         return structure[selectedBook][0];
     }
 
     changeSelectedBook(selectedBook) {
+        // if the book is the same as previous, keep the chapter if possible as well
+        const keepChapterIfPossible = selectedBook === this.state.selectedBook;
+
         this.setState(
             {
                 selectedBook: selectedBook,
                 chapters: this.state.structure[selectedBook],
             },
             () => {
-                const defaultChapter = this.getDefaultChapter();
-                this.changeSelectedChapter(defaultChapter);
+                this.changeSelectedChapter(
+                    this.getAppropriateChapter(keepChapterIfPossible)
+                );
             }
         );
     }
@@ -295,13 +305,11 @@ class Bible extends Component {
                         structure={structure}
                         chapters={chapters}
                         isStructureLoaded={isStructureLoaded}
-                        changeSelectedTranslation={this.changeSelectedTranslation.bind(
-                            this
-                        )}
-                        changeSelectedBook={this.changeSelectedBook.bind(this)}
-                        changeSelectedChapter={this.changeSelectedChapter.bind(
-                            this
-                        )}
+                        changeSelectedTranslation={
+                            this.changeSelectedTranslation
+                        }
+                        changeSelectedBook={this.changeSelectedBook}
+                        changeSelectedChapter={this.changeSelectedChapter}
                     />
                     <Reader
                         showVerses={showVerses}

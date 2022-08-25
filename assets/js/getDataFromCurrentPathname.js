@@ -16,24 +16,24 @@ export default function getDataFromCurrentPathname() {
     const [
         ,
         //ignore first element ""
-        defaultLanguage,
-        defaultTranslation,
-        defaultBook,
-        defaultChapter,
+        urlLanguage,
+        urlTranslation,
+        urlBook,
+        urlChapter,
     ] = window.location.pathname
         .replace(URL_PREFIX, "")
         // remove trailing slash from the end of path
         .replace(/\/$/, "")
         .split("/");
 
-    const language = defaultLanguage || getDefaultLanguage();
+    const language = urlLanguage || getDefaultLanguage();
     const translation =
-        defaultTranslation ||
+        urlTranslation ||
         Cookies.get("recent_translation") ||
         DEFAULT_TRANSLATION;
-    const book = defaultBook || Cookies.get("recent_book") || DEFAULT_BOOK;
+    const book = urlBook || Cookies.get("recent_book") || DEFAULT_BOOK;
     const chapter =
-        defaultChapter || Cookies.get("recent_chapter") || DEFAULT_CHAPTER;
+        urlChapter || Cookies.get("recent_chapter") || DEFAULT_CHAPTER;
 
     return { language, translation, book, chapter };
 }
