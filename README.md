@@ -21,7 +21,6 @@ App was created using PHP v8.1 on the backend with support of ReactJS v17 on the
 - add better error handling when dealing with response data
 - add caching to avoid server querying with every location change
 - implement tests (who cares about tests...)
-- prevent changing book/chapter when switching translation
 
 ## Donations
 
