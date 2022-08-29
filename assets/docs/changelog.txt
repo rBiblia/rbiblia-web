@@ -12,8 +12,8 @@ https://rbiblia.toborek.info
 
 Dziennik wydań (od najnowszych):
 
-2022-08-25:
-- zapobieganie zmianom księgi i rozdziało podczas zmiany tłumaczenia
+2022-08-29:
+- dodano zapobieganie zmianom księgi i rozdziałów podczas zmiany tłumaczenia.
 
 2022-07-27:
 - dodano pełne wsparcie dla tłumaczeń interfejsu użytkownika (w tym również dla nazw ksiąg),
