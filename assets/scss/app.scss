@@ -83,22 +83,16 @@ main {
 header,
 footer {
   @include rb-border;
-  position: sticky;
-  background: $rb-background-color;
 }
 
 header {
   background: $rb-header-background-color;
-  top: 0;
-  padding-bottom: 1em;
-  padding-top: 1em;
 }
 
 footer {
   background: $rb-footer-background-color;
   padding-top: 0.2em;
   padding-bottom: 0.2em;
-  bottom: 0;
 
   a {
     &:link,

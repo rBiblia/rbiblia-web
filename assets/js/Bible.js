@@ -295,7 +295,7 @@ class Bible extends Component {
             );
         } else {
             return (
-                <div className="container app">
+                <div className="app">
                     <Navigator
                         books={books}
                         translations={translations}
