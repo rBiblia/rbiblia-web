@@ -93,6 +93,8 @@ footer {
   background: $rb-footer-background-color;
   padding-top: 0.2em;
   padding-bottom: 0.2em;
+  position: sticky;
+  bottom: 0;
 
   a {
     &:link,
@@ -106,11 +108,15 @@ footer {
 }
 
 .preloader-image {
+  height: 100%;
+  position: relative;
   &:before {
     width: 6em;
     height: 6em;
     content: "";
-    position: relative;
+    position: absolute;
+    top: calc(50% - 3em);
+    left: calc(50% - 3em);
     display: inline-block;
     overflow: hidden;
     transform-origin: 46% 54%;

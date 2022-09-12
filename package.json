@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "yarn encore dev --watch",
-    "eslint": "eslint assets"
+    "eslint": "eslint assets --fix"
   },
   "devDependencies": {
     "@babel/preset-react": "7.0.0",

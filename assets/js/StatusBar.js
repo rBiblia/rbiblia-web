@@ -6,7 +6,7 @@ const StatusBar = ({ translations, setLocaleAndUpdateHistory }) => {
     const { formatMessage } = useIntl();
 
     return (
-        <footer className="container sticky-bottom">
+        <footer className="container">
             <div className="row">
                 <div className="col-4">
                     <LanguageSelector
