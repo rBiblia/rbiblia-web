@@ -8,28 +8,24 @@ export default class Reader extends Component {
 
         if (showVerses && verses) {
             return (
-                <main className="row">
-                    <div className="col-12">
-                        {Object.entries(verses).map((verse) => (
-                            <Verse
-                                key={verse[0]}
-                                bookId={selectedBook}
-                                chapterId={selectedChapter}
-                                verseId={verse[0]}
-                                verseContent={verse[1]}
-                            />
-                        ))}
+                <main className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            {Object.entries(verses).map((verse) => (
+                                <Verse
+                                    key={verse[0]}
+                                    bookId={selectedBook}
+                                    chapterId={selectedChapter}
+                                    verseId={verse[0]}
+                                    verseContent={verse[1]}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </main>
             );
         }
 
-        return (
-            <main className="row">
-                <div className="col-12 text-center m-auto">
-                    <div className="preloader-image"></div>
-                </div>
-            </main>
-        );
+        return <main className="container preloader-image" />;
     }
 }
