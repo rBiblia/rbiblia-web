@@ -95,6 +95,7 @@ footer {
   padding-bottom: 0.2em;
   position: sticky;
   bottom: 0;
+  overflow-y: hidden;
 
   a {
     &:link,
