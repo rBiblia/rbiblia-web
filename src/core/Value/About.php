@@ -4,48 +4,16 @@ namespace rBibliaWeb\Value;
 
 class About
 {
-    /** @var string */
-    private $language;
-
-    /** @var bool */
-    private $authorised;
-
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $description;
-
-    /** @var string */
-    private $shortname;
-
-    /** @var string */
-    private $date;
-
-    /** @var string */
-    private $hash;
-
-    /** @var string */
-    private $file;
-
     public function __construct(
-        string $file,
-        string $hash,
-        string $name,
-        string $shortname,
-        string $language,
-        string $description = '',
-        bool $authorised = false,
-        string $date = ''
+        private readonly string $file,
+        private readonly string $hash,
+        private readonly string $name,
+        private readonly string $shortname,
+        private readonly string $language,
+        private readonly string $description = '',
+        private readonly bool $authorised = false,
+        private readonly string $date = ''
     ) {
-        $this->file = $file;
-        $this->hash = $hash;
-        $this->name = $name;
-        $this->shortname = $shortname;
-        $this->language = $language;
-        $this->description = $description;
-        $this->authorised = $authorised;
-        $this->date = $date;
     }
 
     public function getFile(): string

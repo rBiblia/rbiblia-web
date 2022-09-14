@@ -10,7 +10,7 @@ class LanguageProvider
 
     private array $data = [];
 
-    public function __construct(string $language)
+    public function __construct(readonly string $language)
     {
         $path = sprintf('%s/%s.json', APP_PATH_LANGUAGE, $language);
 

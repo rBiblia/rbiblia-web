@@ -24,18 +24,14 @@ class ImportCommand extends Command
 
     protected static $defaultName = 'import';
 
-    private array $settings = [];
-
     private OutputInterface $output;
 
     private ?Connection $db = null;
 
     private SimpleXMLElement $xml;
 
-    public function __construct(array $settings = [])
+    public function __construct(private readonly array $settings = [])
     {
-        $this->settings = $settings;
-
         parent::__construct();
     }
 

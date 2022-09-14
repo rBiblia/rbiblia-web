@@ -4,9 +4,9 @@ namespace rBibliaWeb\Value;
 
 class Body
 {
-    private $body = [];
+    private array $body = [];
 
-    private $totalVerseCount = 0;
+    private int $totalVerseCount = 0;
 
     public function addVerse(string $bookId, int $chapterId, int $verseId, string $content): void
     {

@@ -9,11 +9,8 @@ use rBibliaWeb\Response\PageNotFoundResponse;
 
 class WebApp
 {
-    private array $settings = [];
-
-    public function __construct(array $settings = [])
+    public function __construct(private readonly array $settings = [])
     {
-        $this->settings = $settings;
     }
 
     public function run(): void

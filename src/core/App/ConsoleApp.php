@@ -7,10 +7,9 @@ use Symfony\Component\Console\Application;
 
 class ConsoleApp
 {
-    /** @var Application */
-    private $application;
+    private Application $application;
 
-    public function __construct(array $settings = [])
+    public function __construct(readonly array $settings = [])
     {
         $this->application = new Application();
 

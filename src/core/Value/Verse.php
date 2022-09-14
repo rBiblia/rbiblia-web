@@ -4,24 +4,12 @@ namespace rBibliaWeb\Value;
 
 class Verse
 {
-    /** @var string */
-    private $bookId;
-
-    /** @var int */
-    private $chapterId;
-
-    /** @var int */
-    private $verseId;
-
-    /** @var string */
-    private $content;
-
-    public function __construct(string $bookid, int $chapterId, int $verseId, string $content)
-    {
-        $this->bookId = $bookid;
-        $this->chapterId = $chapterId;
-        $this->verseId = $verseId;
-        $this->content = $content;
+    public function __construct(
+        private readonly string $bookId,
+        private readonly int $chapterId,
+        private readonly int $verseId,
+        private readonly string $content
+    ) {
     }
 
     public function getBookId(): string

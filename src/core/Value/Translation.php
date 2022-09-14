@@ -6,17 +6,13 @@ use rBibliaWeb\Exception\VerseNotFoundException;
 
 class Translation
 {
-    /** @var About */
-    private $about;
+    private array $verses;
 
-    private $body = [];
+    private int $totalVerseCount;
 
-    private $totalVerseCount = 0;
-
-    public function __construct(About $about, Body $body)
+    public function __construct(private readonly About $about, Body $body)
     {
-        $this->about = $about;
-        $this->body = $body->getContent();
+        $this->verses = $body->getContent();
         $this->totalVerseCount = $body->getTotalVerseCount();
     }
 
@@ -27,26 +23,26 @@ class Translation
 
     public function getVerseAt(string $bookId, $chapterId, $verseId): Verse
     {
-        if (!isset($this->body[$bookId][$chapterId][$verseId])) {
+        if (!isset($this->verses[$bookId][$chapterId][$verseId])) {
             throw new VerseNotFoundException($bookId, $chapterId, $verseId);
         }
 
-        return new Verse($bookId, $chapterId, $verseId, $this->body[$bookId][$chapterId][$verseId]);
+        return new Verse($bookId, $chapterId, $verseId, $this->verses[$bookId][$chapterId][$verseId]);
     }
 
     public function getBooks(): array
     {
-        return array_keys($this->body);
+        return array_keys($this->verses);
     }
 
     public function getChapters(string $bookId): array
     {
-        return array_keys($this->body[$bookId]);
+        return array_keys($this->verses[$bookId]);
     }
 
     public function getVerses(string $bookId, int $chapterId): array
     {
-        return array_keys($this->body[$bookId][$chapterId]);
+        return array_keys($this->verses[$bookId][$chapterId]);
     }
 
     public function getTotalVerseCount(): int
