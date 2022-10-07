@@ -6,27 +6,29 @@ const StatusBar = ({ translations, setLocaleAndUpdateHistory }) => {
     const { formatMessage } = useIntl();
 
     return (
-        <footer className="container">
-            <div className="row">
-                <div className="col-4">
-                    <LanguageSelector
-                        setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
-                    />
-                </div>
-                <div className="col-4 text-center">
-                    <div className="d-none d-sm-inline">
-                        {formatMessage({ id: "availableTranslationsCounter" })}{" "}
+        <footer>
+            <div className="container">
+                <div className="row">
+                    <div className="col-4">
+                        <LanguageSelector
+                            setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
+                        />
                     </div>
-                    {translations.length}
-                </div>
-                <div className="col-4 text-end">
-                    <a
-                        href="/assets/changelog.txt"
-                        target="_blank"
-                        title={formatMessage({ id: "changelogLink" })}
-                    >
-                        changelog.txt
-                    </a>
+                    <div className="col-4 text-center">
+                        <div className="d-none d-sm-inline">
+                            {formatMessage({ id: "availableTranslationsCounter" })}{" "}
+                        </div>
+                        {translations.length}
+                    </div>
+                    <div className="col-4 text-end">
+                        <a
+                            href="/assets/changelog.txt"
+                            target="_blank"
+                            title={formatMessage({ id: "changelogLink" })}
+                        >
+                            changelog.txt
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

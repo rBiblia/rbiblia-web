@@ -28,7 +28,6 @@ class Bible extends Component {
             selectedTranslation: getDataFromCurrentPathname().translation, // default translation
             selectedBook: getDataFromCurrentPathname().book,
             selectedChapter: getDataFromCurrentPathname().chapter,
-            isInitialLoading: true,
         };
 
         this.getAppropriateBook = this.getAppropriateBook.bind(this);
@@ -160,7 +159,6 @@ class Bible extends Component {
 
         this.setState({
             showVerses: false,
-            isInitialLoading: false,
         });
 
         fetch(
@@ -244,9 +242,7 @@ class Bible extends Component {
         setLocale(locale);
         this.updateHistory(locale, translation, book, chapter);
 
-        this.setState({ isInitialLoading: true }, () => {
-            this.loadTranslationsAndBooks();
-        });
+        this.loadTranslationsAndBooks();
     }
 
     render() {
@@ -295,7 +291,7 @@ class Bible extends Component {
             );
         } else {
             return (
-                <div className="app">
+                <>
                     <Navigator
                         books={books}
                         translations={translations}
@@ -323,7 +319,7 @@ class Bible extends Component {
                         }
                         translations={translations}
                     />
-                </div>
+                </>
             );
         }
     }
