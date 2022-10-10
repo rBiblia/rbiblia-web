@@ -241,8 +241,7 @@ class Bible extends Component {
 
         setLocale(locale);
         this.updateHistory(locale, translation, book, chapter);
-
-        this.loadTranslationsAndBooks();
+        this.setState({}, this.loadTranslationsAndBooks);
     }
 
     render() {
