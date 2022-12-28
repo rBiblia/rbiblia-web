@@ -12,6 +12,9 @@ https://rbiblia.toborek.info
 
 Dziennik wydań (od najnowszych):
 
+2022-12-28:
+- naprawiono błąd uniemożliwiający wyświetlenie strony w przypadku, gdy język przeglądarki ustawiony był na inny niż angielski lub polski.
+
 2022-10-10:
 - po raz kolejny podejmujemy próbę poprawienia wyświetlania stopki na niektórych urządzeniach mobilnych.
 
