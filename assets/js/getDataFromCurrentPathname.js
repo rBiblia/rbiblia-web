@@ -29,9 +29,9 @@ export default function getDataFromCurrentPathname() {
         .replace(/\/$/, "")
         .split("/");
 
-    const languageFetched = urlLanguage || getDefaultLanguage();
-    const language = ACCEPTED_LANGUAGES.includes(languageFetched)
-        ? languageFetched
+    const languageDetected = urlLanguage || getDefaultLanguage();
+    const language = ACCEPTED_LANGUAGES.includes(languageDetected)
+        ? languageDetected
         : "en";
     const translation =
         urlTranslation ||
