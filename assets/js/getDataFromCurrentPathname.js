@@ -6,6 +6,9 @@ import {
     URL_PREFIX,
 } from "../consts";
 import getDefaultLanguage from "./getDefaultLanguage";
+
+const ACCEPTED_LANGUAGES = ["pl", "en"];
+
 /**
  * It gets specific resource id with the following priorities:
  * 1. From the URL
@@ -26,7 +29,10 @@ export default function getDataFromCurrentPathname() {
         .replace(/\/$/, "")
         .split("/");
 
-    const language = urlLanguage || getDefaultLanguage();
+    const languageFetched = urlLanguage || getDefaultLanguage();
+    const language = ACCEPTED_LANGUAGES.includes(languageFetched)
+        ? languageFetched
+        : "en";
     const translation =
         urlTranslation ||
         Cookies.get("recent_translation") ||
