@@ -29,6 +29,7 @@ class WebApp
                     $router->get('/book/([a-z0-9]{3})/chapter/(\d+)', 'TranslationController@getVerses');
                 });
                 $router->get('/book', 'BookController@getBookList');
+                $router->post('/search', 'SearchController@query');
             });
 
             $router->get('/(.*)', function (): void {

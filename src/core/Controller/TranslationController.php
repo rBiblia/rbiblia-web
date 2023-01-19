@@ -97,6 +97,24 @@ class TranslationController extends DatabaseController
         self::setResponse($response);
     }
 
+    public static function getTranslationTable(string $translationId): string
+    {
+        return sprintf(self::TABLE_DATA, $translationId);
+    }
+
+    private static function getLanguageProvider(string $language): LanguageProvider
+    {
+        if (!self::$languageProvider instanceof \rBibliaWeb\Provider\LanguageProvider) {
+            try {
+                self::$languageProvider = new LanguageProvider($language);
+            } catch (LanguageNotSupportedException) {
+                self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
+            }
+        }
+
+        return self::$languageProvider;
+    }
+
     private static function checkIfTranslationTableExists(string $language, string $translationId): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -109,11 +127,6 @@ class TranslationController extends DatabaseController
         if (empty($result)) {
             self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_translation_not_found'));
         }
-    }
-
-    private static function getTranslationTable(string $translationId): string
-    {
-        return sprintf(self::TABLE_DATA, $translationId);
     }
 
     private static function trackAndValidateQueryUsage(string $language): void
@@ -179,18 +192,5 @@ class TranslationController extends DatabaseController
         }
 
         return $httpXForwardedFor;
-    }
-
-    private static function getLanguageProvider(string $language): LanguageProvider
-    {
-        if (!self::$languageProvider instanceof LanguageProvider) {
-            try {
-                self::$languageProvider = new LanguageProvider($language);
-            } catch (LanguageNotSupportedException) {
-                self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
-            }
-        }
-
-        return self::$languageProvider;
     }
 }

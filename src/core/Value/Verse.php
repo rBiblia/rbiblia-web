@@ -31,4 +31,14 @@ class Verse
     {
         return $this->content;
     }
+
+    public function serialize(): array
+    {
+        return [
+            'book' => $this->bookId,
+            'chapter' => $this->chapterId,
+            'verse' => $this->verseId,
+            'content' => $this->content,
+        ];
+    }
 }
