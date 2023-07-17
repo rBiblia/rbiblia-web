@@ -1,0 +1,14 @@
+parameters:
+    level: 7
+    paths:
+        - src/core
+        - public_html/index.php
+        - src/config/app.php.dist
+        - rector.php
+        - .php-cs-fixer.php
+        - bin/console.php
+    ignoreErrors:
+        - '#Call to static method getCode\(\) on an unknown class matomo.#'
+        - '#type has no value type specified in iterable type array#'
+        - '#with no value type specified in iterable type array#'
+        - '#Router::get\(\) expects \(callable\(\): mixed\)\|object#'

@@ -1,0 +1,32 @@
+name: lint
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - dev
+      - master
+
+jobs:
+  lint:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+    name: running on ${{ matrix.operating-system }} / Node v16
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Yarn dependencies
+        run: yarn install
+
+      - name: Run linter on assets folder
+        run: node_modules/.bin/eslint assets

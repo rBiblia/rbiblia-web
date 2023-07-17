@@ -18,10 +18,12 @@ help:
 	$(call list_item, "status", "show status of the working Docker container")
 	$(call list_item, "asset", "build assets using webpack-encore")
 	$(call list_item, "asset-watch", "recompile assets automatically when files change")
-	$(call list_item, "lint", "run linter on assets folder")
+	$(call list_item, "lint", "run linter (fix) on assets folder")
 	$(call list_item, "dev", "prepare development environment")
 	$(call list_item, "prod", "install only prod dependencies and optimize build before deployment")
 	$(call list_item, "cs-fix", "fix PHP coding standards using php-cs-fixer tool")
+	$(call list_item, "rector", "fix PHP deprecations using rector tool")
+	$(call list_item, "phpstan", "analyse PHP code structure using phpstan tool")
 	@printf "\n"
 .PHONY:
 
@@ -57,7 +59,7 @@ asset-watch:
 .PHONY:
 
 lint:
-	@docker exec -t ${APP_IMAGE_NAME} node_modules/.bin/eslint assets
+	@docker exec -t ${APP_IMAGE_NAME} node_modules/.bin/eslint assets --fix
 .PHONY:
 
 dev:
@@ -77,4 +79,12 @@ prod:
 
 cs-fix:
 	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/php-cs-fixer fix
+.PHONY:
+
+rector:
+	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/rector process
+.PHONY:
+
+phpstan:
+	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/phpstan analyse
 .PHONY:
