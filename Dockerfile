@@ -1,6 +1,6 @@
 FROM php:8.1-apache
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt update && apt upgrade -y && apt install -y \
       git\
       unzip\
       libicu-dev \
@@ -22,7 +22,7 @@ RUN sh /tmp/composer_installer.sh
 
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-RUN apt install nodejs
+RUN apt update && apt install -y nodejs npm
 
 # install yarn
 RUN npm install -g yarn

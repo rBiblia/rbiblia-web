@@ -2,6 +2,10 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->path('src/core/')
+    ->path('public_html/index.php')
+    ->path('src/config/app.php.dist')
+    ->path('rector.php')
+    ->path('.php-cs-fixer.php')
     ->path('bin/console.php')
     ->in(__DIR__);
 
