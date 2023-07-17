@@ -6,7 +6,7 @@ use rBibliaWeb\Exception\LanguageNotSupportedException;
 
 class LanguageProvider
 {
-    public const ERROR_LANGUAGE_NOT_SUPPORTED = 'Given language code is not supported';
+    final public const ERROR_LANGUAGE_NOT_SUPPORTED = 'Given language code is not supported';
 
     private array $data = [];
 
@@ -18,7 +18,7 @@ class LanguageProvider
             throw new LanguageNotSupportedException($language);
         }
 
-        $this->data = json_decode(file_get_contents($path), true);
+        $this->data = json_decode((string)file_get_contents($path), true, 512, \JSON_THROW_ON_ERROR);
     }
 
     public function getAliases(): array

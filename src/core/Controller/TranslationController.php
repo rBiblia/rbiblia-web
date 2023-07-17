@@ -8,8 +8,8 @@ use rBibliaWeb\Provider\LanguageProvider;
 
 class TranslationController extends DatabaseController
 {
-    public const TABLE_TRANSLATION = 'translation';
-    public const TABLE_DATA = 'data_%s';
+    final public const TABLE_TRANSLATION = 'translation';
+    final public const TABLE_DATA = 'data_%s';
     private const TABLE_SECURITY = 'security';
     private const SECURITY_QUERY_LIMIT = 256;
 
@@ -84,7 +84,7 @@ class TranslationController extends DatabaseController
             $response[$row['verse']] = $row['content'];
         }
 
-        if (empty($response)) {
+        if ($response === []) {
             self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_no_verses_found'));
         }
 
@@ -115,7 +115,7 @@ class TranslationController extends DatabaseController
         $ip = self::getIP();
 
         // IP address is incorrect
-        if (empty($ip) || '0.0.0.0' === $ip) {
+        if ($ip === '' || '0.0.0.0' === $ip) {
             self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_wrong_ip_address'));
         }
 
@@ -168,8 +168,8 @@ class TranslationController extends DatabaseController
     {
         $httpXForwardedFor = getenv('HTTP_X_FORWARDED_FOR');
 
-        if (empty($httpXForwardedFor)) {
-            return getenv('REMOTE_ADDR');
+        if ($httpXForwardedFor === '' || $httpXForwardedFor === false) {
+            return (string)getenv('REMOTE_ADDR');
         }
 
         return $httpXForwardedFor;
@@ -177,10 +177,10 @@ class TranslationController extends DatabaseController
 
     private static function getLanguageProvider(string $language): LanguageProvider
     {
-        if (null === self::$languageProvider) {
+        if (!self::$languageProvider instanceof LanguageProvider) {
             try {
                 self::$languageProvider = new LanguageProvider($language);
-            } catch (LanguageNotSupportedException $e) {
+            } catch (LanguageNotSupportedException) {
                 self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
             }
         }

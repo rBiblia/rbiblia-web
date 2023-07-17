@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Table;
+use Exception;
 use rBibliaWeb\Controller\TranslationController;
 use rBibliaWeb\Value\About;
 use rBibliaWeb\Value\Body;
@@ -101,7 +102,7 @@ class ImportCommand extends Command
         $progressBar->setFormat('debug');
         $progressBar->start();
 
-        $languageGroup = explode(',', str_replace(' ', '', empty($language) ? '' : $language));
+        $languageGroup = explode(',', str_replace(' ', '', $language === null || $language === '' ? '' : $language));
         $filteredFileList = [];
         foreach ($fileList as $file) {
             $progressBar->advance();
@@ -150,7 +151,7 @@ class ImportCommand extends Command
     {
         $bibxFolder = $this->settings['bibx_folder'];
 
-        if ('/' !== substr($bibxFolder, -1)) {
+        if (!str_ends_with((string) $bibxFolder, '/')) {
             $bibxFolder .= '/';
         }
 
@@ -169,7 +170,7 @@ class ImportCommand extends Command
         return $list;
     }
 
-    private function decompressFile($file): int
+    private function decompressFile(string $file): int
     {
         $filePath = $this->settings['bibx_folder'].'/'.$file;
 
@@ -182,20 +183,30 @@ class ImportCommand extends Command
         try {
             $zh = gzopen($filePath, 'r');
 
+            if ($zh === false) {
+                return $this->displayError(sprintf('Error occurred while reading input file `%s`', $filePath));
+            }
+
             while ($line = gzgets($zh)) {
                 $content .= $line;
             }
 
             gzclose($zh);
-        } catch (\Exception $e) {
-            $this->displayError(sprintf('Error occurred while reading XML file: %s', $e->getMessage()));
+        } catch (Exception $e) {
+            return $this->displayError(sprintf('Error occurred while reading XML file: %s', $e->getMessage()));
         }
 
-        if (empty($content)) {
-            $this->displayError(sprintf('No translation data found in: %s', $filePath));
+        if ($content === '') {
+            return $this->displayError(sprintf('No translation data found in: %s', $filePath));
         }
 
-        $this->xml = simplexml_load_string($content);
+        $xml = simplexml_load_string($content);
+
+        if ($xml === false) {
+            return $this->displayError(sprintf('Error occurred while loading XML file: %s', $filePath));
+        }
+
+        $this->xml = $xml;
 
         return Command::SUCCESS;
     }
@@ -206,7 +217,7 @@ class ImportCommand extends Command
 
         $about = new About(
             $file,
-            md5_file($filePath),
+            (string)md5_file($filePath),
             $this->xml->about->name->__toString(),
             $this->xml->about->shortname->__toString(),
             $this->xml->about->language->__toString(),
@@ -297,7 +308,7 @@ class ImportCommand extends Command
 
             $progressBar->finish();
             $this->output->writeln('');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // something went wrong, remove temporary translation table
             $this->dropTemporaryTable();
 
@@ -328,7 +339,7 @@ class ImportCommand extends Command
                 'file' => $translation->getAbout()->getFile(),
                 'id' => sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // something went wrong, remove temporary translation details
             $this->removeTemporaryDetails($translation);
 
@@ -368,9 +379,9 @@ class ImportCommand extends Command
         $this->db()->executeQuery(sprintf('DROP TABLE IF EXISTS %s', self::TABLE_TEMP));
     }
 
-    private function db()
+    private function db(): Connection
     {
-        if (null === $this->db) {
+        if (!$this->db instanceof Connection) {
             $params = [
                 'dbname' => $this->settings['db_name'],
                 'user' => $this->settings['db_user'],
