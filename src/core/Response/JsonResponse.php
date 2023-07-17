@@ -13,7 +13,7 @@ abstract class JsonResponse
     {
         header('Content-Type: application/json');
 
-        exit(json_encode(self::$response));
+        exit(json_encode(self::$response, \JSON_THROW_ON_ERROR));
     }
 
     protected static function setResponse(array $response = []): void

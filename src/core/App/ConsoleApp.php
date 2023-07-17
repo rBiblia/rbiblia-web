@@ -7,7 +7,7 @@ use Symfony\Component\Console\Application;
 
 class ConsoleApp
 {
-    private Application $application;
+    private readonly Application $application;
 
     public function __construct(readonly array $settings = [])
     {

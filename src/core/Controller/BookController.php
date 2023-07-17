@@ -10,9 +10,10 @@ class BookController extends JsonResponse
 {
     public static function getBookList(string $language): void
     {
+        $languageProvider = null;
         try {
             $languageProvider = new LanguageProvider($language);
-        } catch (LanguageNotSupportedException $e) {
+        } catch (LanguageNotSupportedException) {
             self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
         }
 

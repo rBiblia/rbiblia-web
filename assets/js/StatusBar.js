@@ -11,12 +11,16 @@ const StatusBar = ({ translations, setLocaleAndUpdateHistory }) => {
                 <div className="row">
                     <div className="col-4">
                         <LanguageSelector
-                            setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
+                            setLocaleAndUpdateHistory={
+                                setLocaleAndUpdateHistory
+                            }
                         />
                     </div>
                     <div className="col-4 text-center">
                         <div className="d-none d-sm-inline">
-                            {formatMessage({ id: "availableTranslationsCounter" })}{" "}
+                            {formatMessage({
+                                id: "availableTranslationsCounter",
+                            })}{" "}
                         </div>
                         {translations.length}
                     </div>

@@ -8,7 +8,7 @@ class Translation
 {
     private array $verses;
 
-    private int $totalVerseCount;
+    private readonly int $totalVerseCount;
 
     public function __construct(private readonly About $about, Body $body)
     {
@@ -21,7 +21,7 @@ class Translation
         return $this->about;
     }
 
-    public function getVerseAt(string $bookId, $chapterId, $verseId): Verse
+    public function getVerseAt(string $bookId, int $chapterId, int $verseId): Verse
     {
         if (!isset($this->verses[$bookId][$chapterId][$verseId])) {
             throw new VerseNotFoundException($bookId, $chapterId, $verseId);
