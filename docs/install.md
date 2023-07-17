@@ -1,4 +1,4 @@
-### Instalacja
+### Instalacja od podstaw
 
 - Sklonuj repozytorium.
 
