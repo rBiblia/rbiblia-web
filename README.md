@@ -1,5 +1,10 @@
 # rBiblia Web
 
+![php-cs-fixer](https://github.com/rbiblia/rbiblia-web/actions/workflows/php-cs-fixer.yaml/badge.svg)
+![phpstan](https://github.com/rbiblia/rbiblia-web/actions/workflows/phpstan.yaml/badge.svg)
+![rector](https://github.com/rbiblia/rbiblia-web/actions/workflows/rector.yaml/badge.svg)
+![lint](https://github.com/rbiblia/rbiblia-web/actions/workflows/lint.yaml/badge.svg)
+
 Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://web.rbiblia.toborek.info](https://web.rbiblia.toborek.info).
 
 Check also standalone and more powerful desktop version of this application at [https://rbiblia.toborek.info](https://rbiblia.toborek.info/en-US/). Binary version is available in different languages (English, Polish and Russian) and works on Windows.
@@ -37,3 +42,5 @@ See [full list](https://github.com/rBiblia/rbiblia-web/graphs/contributors).
 ## License and terms of usage
 
 Legal stuff can be found in [LICENSE](https://github.com/rBiblia/rbiblia-web/blob/master/LICENSE) file included in this repo.
+
+Jezus żyje! 🧡
