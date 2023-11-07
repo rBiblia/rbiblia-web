@@ -11,7 +11,7 @@ class TranslationController extends DatabaseController
     final public const TABLE_TRANSLATION = 'translation';
     final public const TABLE_DATA = 'data_%s';
     private const TABLE_SECURITY = 'security';
-    private const SECURITY_QUERY_LIMIT = 256;
+    private const SECURITY_QUERY_LIMIT = 1000;
 
     private static ?LanguageProvider $languageProvider = null;
 
