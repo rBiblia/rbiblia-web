@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 RUN apt update && apt upgrade -y && apt install -y \
       git\
