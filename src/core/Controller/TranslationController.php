@@ -11,9 +11,15 @@ class TranslationController extends DatabaseController
     final public const TABLE_TRANSLATION = 'translation';
     final public const TABLE_DATA = 'data_%s';
     private const TABLE_SECURITY = 'security';
-    private const SECURITY_QUERY_LIMIT = 1000;
+
+    private static int $securityQueryLimit = 0;
 
     private static ?LanguageProvider $languageProvider = null;
+
+    public static function setSecurityQueryLimit(int $limit): void
+    {
+        self::$securityQueryLimit = $limit;
+    }
 
     public static function getTranslationList(): void
     {
@@ -148,7 +154,7 @@ class TranslationController extends DatabaseController
         }
 
         // limit exceeded, thrown an exception
-        if ((int) $response >= self::SECURITY_QUERY_LIMIT) {
+        if (self::$securityQueryLimit > 0 && (int) $response >= self::$securityQueryLimit) {
             self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_query_limit_exceeded'));
         }
 

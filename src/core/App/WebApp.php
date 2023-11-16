@@ -21,6 +21,7 @@ class WebApp
         $router->mount('', function () use ($router): void {
             $router->mount('/api/([a-z]{2})', function () use ($router): void {
                 TranslationController::createDatabaseConnection($this->settings);
+                TranslationController::setSecurityQueryLimit($this->settings['security_query_limit']);
 
                 $router->get('/translation', 'TranslationController@getTranslationList');
                 $router->mount('/translation/([a-z]{2}_\w+)', function () use ($router): void {

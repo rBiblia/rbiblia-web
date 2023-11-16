@@ -3,6 +3,9 @@
 return [
     'bibx_folder' => '',
 
+    // put 0 for unlimited queries
+    'security_query_limit' => 0,
+
     // https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration
     'db_driver' => '',
     'db_name' => '',
