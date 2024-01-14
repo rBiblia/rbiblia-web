@@ -7,7 +7,7 @@ export default function Verse({ verseContent, bookId, chapterId, verseId }) {
     const appVerse = chapterId + ":" + verseId;
 
     return (
-        <div className="row">
+        <div className="row line">
             <div className="col-2 col-lg-1 d-flex align-items-center justify-content-center">
                 <a
                     href={appLink}
