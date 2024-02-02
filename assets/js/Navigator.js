@@ -31,7 +31,10 @@ export default class Navigator extends Component {
                             }
                         />
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                        <div className="icon-navigator icon-navigator-left"></div>
+                    </div>
+                    <div className="col-10 col-sm-2">
                         <BookSelector
                             selectedBook={selectedBook}
                             books={books}
@@ -40,13 +43,22 @@ export default class Navigator extends Component {
                             changeSelectedBook={changeSelectedBook}
                         />
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                        <div className="icon-navigator icon-navigator-right"></div>
+                    </div>
+                    <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                        <div className="icon-navigator icon-navigator-left"></div>
+                    </div>
+                    <div className="col-10 col-sm-2">
                         <ChapterSelector
                             selectedChapter={selectedChapter}
                             chapters={chapters}
                             isStructureLoaded={isStructureLoaded}
                             changeSelectedChapter={changeSelectedChapter}
                         />
+                    </div>
+                    <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                        <div className="icon-navigator icon-navigator-right"></div>
                     </div>
                 </div>
             </header>
