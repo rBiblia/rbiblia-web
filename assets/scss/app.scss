@@ -99,6 +99,10 @@ header {
     &:focus {
       background: $rb-header-navigator-arrow-hover;
     }
+
+    &:active {
+      background: $rb-header-navigator-arrow-active;
+    }
   }
 
   .icon-navigator-left {
