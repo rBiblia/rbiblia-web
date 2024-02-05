@@ -8,18 +8,18 @@ use rBibliaWeb\Value\Verse;
 
 class SearchController extends DatabaseController
 {
-    public static function query(): void
+    public function query(): void
     {
         $search = null;
 
         try {
             $search = new Search($_POST);
         } catch (InvalidArgumentException $e) {
-            self::setErrorResponse($e->getMessage());
+            $this->setErrorResponse($e->getMessage());
         }
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $statement = self::$db->executeQuery(sprintf(
+        $statement = $this->db->executeQuery(sprintf(
             'SELECT book, chapter, verse, content FROM %s WHERE content LIKE :query ORDER BY book ASC, chapter ASC, verse ASC',
              TranslationController::getTranslationTable($search->getTranslation())),
             [
@@ -37,7 +37,7 @@ class SearchController extends DatabaseController
             ))->serialize();
         }
 
-        self::setResponse([
+        $this->setResponse([
             'translation' => $search->getTranslation(),
             'query' => $search->getQuery(),
             'results' => $results,

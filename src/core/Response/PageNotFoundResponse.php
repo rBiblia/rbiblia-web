@@ -6,7 +6,7 @@ class PageNotFoundResponse extends JsonResponse
 {
     private const ERROR_MESSAGE = 'Not found';
 
-    public static function render(): void
+    public function render(): void
     {
         self::setErrorResponse(self::ERROR_MESSAGE);
     }

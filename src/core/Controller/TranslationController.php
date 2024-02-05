@@ -12,19 +12,20 @@ class TranslationController extends DatabaseController
     final public const TABLE_DATA = 'data_%s';
     private const TABLE_SECURITY = 'security';
 
-    private static int $securityQueryLimit = 0;
+    private int $securityQueryLimit = 0;
 
-    private static ?LanguageProvider $languageProvider = null;
+    private ?LanguageProvider $languageProvider = null;
 
-    public static function setSecurityQueryLimit(int $limit): void
+    public function __construct(array $settings)
     {
-        self::$securityQueryLimit = $limit;
+        $this->securityQueryLimit = $settings['security_query_limit'];
+        $this->createDatabaseConnection($settings);
     }
 
-    public static function getTranslationList(): void
+    public function getTranslationList(string $language): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $statement = self::$db->executeQuery(sprintf(
+        $statement = $this->db->executeQuery(sprintf(
             'SELECT id, language, name, description, date FROM %s ORDER BY language ASC',
             self::TABLE_TRANSLATION
         ));
@@ -40,15 +41,15 @@ class TranslationController extends DatabaseController
             ];
         }
 
-        self::setResponse($response);
+        $this->setResponse($response);
     }
 
-    public static function getTranslationStructureById(string $language, string $translationId): void
+    public function getTranslationStructureById(string $language, string $translationId): void
     {
-        self::checkIfTranslationTableExists($language, $translationId);
+        $this->checkIfTranslationTableExists($language, $translationId);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $statement = self::$db->executeQuery(sprintf(
+        $statement = $this->db->executeQuery(sprintf(
             'SELECT DISTINCT book, chapter FROM %s ORDER BY book ASC, chapter ASC',
             self::getTranslationTable($translationId)
         ));
@@ -59,22 +60,22 @@ class TranslationController extends DatabaseController
         }
 
         $response = [];
-        foreach (array_keys(self::getLanguageProvider($language)->getAliases()) as $alias) {
+        foreach (array_keys($this->getLanguageProvider($language)->getAliases()) as $alias) {
             if (isset($results[$alias])) {
                 $response[$alias] = $results[$alias];
             }
         }
 
-        self::setResponse($response);
+        $this->setResponse($response);
     }
 
-    public static function getVerses(string $language, string $translationId, string $bookId, int $chapterId): void
+    public function getVerses(string $language, string $translationId, string $bookId, int $chapterId): void
     {
-        self::checkIfTranslationTableExists($language, $translationId);
-        self::trackAndValidateQueryUsage($language);
+        $this->checkIfTranslationTableExists($language, $translationId);
+        $this->trackAndValidateQueryUsage($language);
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $statement = self::$db->executeQuery(sprintf(
+        $statement = $this->db->executeQuery(sprintf(
             'SELECT verse, content FROM %s WHERE book=? AND chapter=? ORDER BY verse ASC',
             self::getTranslationTable($translationId)
         ), [
@@ -91,10 +92,10 @@ class TranslationController extends DatabaseController
         }
 
         if ($response === []) {
-            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_no_verses_found'));
+            $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_no_verses_found'));
         }
 
-        self::setResponse($response);
+        $this->setResponse($response);
     }
 
     public static function getTranslationTable(string $translationId): string
@@ -102,52 +103,52 @@ class TranslationController extends DatabaseController
         return sprintf(self::TABLE_DATA, $translationId);
     }
 
-    private static function getLanguageProvider(string $language): LanguageProvider
+    private function getLanguageProvider(string $language): LanguageProvider
     {
-        if (!self::$languageProvider instanceof \rBibliaWeb\Provider\LanguageProvider) {
+        if (!$this->languageProvider instanceof LanguageProvider) {
             try {
-                self::$languageProvider = new LanguageProvider($language);
+                $this->languageProvider = new LanguageProvider($language);
             } catch (LanguageNotSupportedException) {
-                self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
+                $this->setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
             }
         }
 
-        return self::$languageProvider;
+        return $this->languageProvider;
     }
 
-    private static function checkIfTranslationTableExists(string $language, string $translationId): void
+    private function checkIfTranslationTableExists(string $language, string $translationId): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        $result = self::$db->fetchOne('SHOW TABLES LIKE ?', [
+        $result = $this->db->fetchOne('SHOW TABLES LIKE ?', [
             self::getTranslationTable($translationId),
         ], [
             ParameterType::STRING,
         ]);
 
         if (empty($result)) {
-            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_translation_not_found'));
+            $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_translation_not_found'));
         }
     }
 
-    private static function trackAndValidateQueryUsage(string $language): void
+    private function trackAndValidateQueryUsage(string $language): void
     {
-        $ip = self::getIP();
+        $ip = $this->getIP();
 
         // IP address is incorrect
         if ($ip === '' || '0.0.0.0' === $ip) {
-            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_wrong_ip_address'));
+            $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_wrong_ip_address'));
         }
 
         /* @noinspection PhpUnhandledExceptionInspection */
         // remove all IP addresses older than today
-        self::$db->executeQuery(sprintf(
+        $this->db->executeQuery(sprintf(
             'DELETE FROM %s WHERE DATE<CURDATE()',
             self::TABLE_SECURITY
         ));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         // query for a given IP address
-        $response = self::$db->fetchOne(sprintf(
+        $response = $this->db->fetchOne(sprintf(
             'SELECT query_counter FROM %s WHERE ip=? AND DATE(date)=CURDATE()',
             self::TABLE_SECURITY
         ), [
@@ -159,7 +160,7 @@ class TranslationController extends DatabaseController
         // insert IP address for tracking
         if (false === $response) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            self::$db->insert(self::TABLE_SECURITY, [
+            $this->db->insert(self::TABLE_SECURITY, [
                 'ip' => ip2long($ip),
             ]);
 
@@ -167,13 +168,13 @@ class TranslationController extends DatabaseController
         }
 
         // limit exceeded, thrown an exception
-        if (self::$securityQueryLimit > 0 && (int) $response >= self::$securityQueryLimit) {
-            self::setErrorResponse(self::getLanguageProvider($language)->showMessage('error_query_limit_exceeded'));
+        if ($this->securityQueryLimit > 0 && (int) $response >= $this->securityQueryLimit) {
+            $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_query_limit_exceeded'));
         }
 
         /* @noinspection PhpUnhandledExceptionInspection */
         // increment query counter for current IP address
-        self::$db->executeQuery(sprintf(
+        $this->db->executeQuery(sprintf(
             'UPDATE %s SET query_counter=query_counter+1 WHERE ip=? AND DATE(date)=CURDATE()',
             self::TABLE_SECURITY
         ), [
@@ -183,7 +184,7 @@ class TranslationController extends DatabaseController
         ]);
     }
 
-    private static function getIP(): string
+    private function getIP(): string
     {
         $httpXForwardedFor = getenv('HTTP_X_FORWARDED_FOR');
 

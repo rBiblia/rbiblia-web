@@ -8,15 +8,15 @@ use rBibliaWeb\Response\JsonResponse;
 
 class BookController extends JsonResponse
 {
-    public static function getBookList(string $language): void
+    public function getBookList(string $language): void
     {
         $languageProvider = null;
         try {
             $languageProvider = new LanguageProvider($language);
         } catch (LanguageNotSupportedException) {
-            self::setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
+            $this->setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
         }
 
-        self::setResponse($languageProvider->getAliases());
+        $this->setResponse($languageProvider->getAliases());
     }
 }

@@ -2,13 +2,13 @@
 
 namespace rBibliaWeb\Value;
 
-class Verse
+readonly class Verse
 {
     public function __construct(
-        private readonly string $bookId,
-        private readonly int $chapterId,
-        private readonly int $verseId,
-        private readonly string $content
+        private string $bookId,
+        private int $chapterId,
+        private int $verseId,
+        private string $content
     ) {
     }
 

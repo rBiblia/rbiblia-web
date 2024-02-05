@@ -6,7 +6,7 @@ class LandingPageResponse
 {
     private const TEMPLATE_INDEX = __DIR__.'/../../view/index.phtml';
 
-    public static function render(array $settings = []): void
+    public function render(array $settings = []): void
     {
         if (isset($settings['stats_class']) && file_exists($settings['stats_class'])) {
             require_once $settings['stats_class'];

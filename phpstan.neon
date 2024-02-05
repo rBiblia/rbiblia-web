@@ -11,5 +11,3 @@ parameters:
         - '#Call to static method getCode\(\) on an unknown class matomo.#'
         - '#type has no value type specified in iterable type array#'
         - '#with no value type specified in iterable type array#'
-        - '#Router::get\(\) expects \(callable\(\): mixed\)\|object#'
-        - '#Router::post\(\) expects \(callable\(\): mixed\)\|object#'

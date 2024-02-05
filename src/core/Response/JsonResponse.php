@@ -7,36 +7,36 @@ abstract class JsonResponse
     private const STATUS_OK = 200;
     private const STATUS_ERROR = 404;
 
-    private static array $response = [];
+    private array $response = [];
 
-    public static function renderResponse(): void
+    public function renderResponse(): void
     {
         header('Content-Type: application/json');
 
-        exit(json_encode(self::$response, \JSON_THROW_ON_ERROR));
+        exit(json_encode($this->response, \JSON_THROW_ON_ERROR));
     }
 
-    protected static function setResponse(array $response = []): void
+    protected function setResponse(array $response = []): void
     {
         http_response_code(self::STATUS_OK);
 
-        self::$response = [
+        $this->response = [
             'code' => self::STATUS_OK,
             'data' => $response,
         ];
 
-        self::renderResponse();
+        $this->renderResponse();
     }
 
-    protected static function setErrorResponse(string $message): void
+    protected function setErrorResponse(string $message): void
     {
         http_response_code(self::STATUS_ERROR);
 
-        self::$response = [
+        $this->response = [
             'code' => self::STATUS_ERROR,
             'message' => $message,
         ];
 
-        self::renderResponse();
+        $this->renderResponse();
     }
 }

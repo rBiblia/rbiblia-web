@@ -8,9 +8,9 @@ use rBibliaWeb\Response\JsonResponse;
 
 abstract class DatabaseController extends JsonResponse
 {
-    protected static Connection $db;
+    protected Connection $db;
 
-    public static function createDatabaseConnection(array $settings): void
+    protected function createDatabaseConnection(array $settings): void
     {
         $params = [
             'dbname' => $settings['db_name'],
@@ -20,6 +20,6 @@ abstract class DatabaseController extends JsonResponse
             'driver' => $settings['db_driver'],
         ];
 
-        self::$db = DriverManager::getConnection($params);
+        $this->db = DriverManager::getConnection($params);
     }
 }

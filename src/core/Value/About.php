@@ -2,17 +2,17 @@
 
 namespace rBibliaWeb\Value;
 
-class About
+readonly class About
 {
     public function __construct(
-        private readonly string $file,
-        private readonly string $hash,
-        private readonly string $name,
-        private readonly string $shortname,
-        private readonly string $language,
-        private readonly string $description = '',
-        private readonly bool $authorised = false,
-        private readonly string $date = ''
+        private string $file,
+        private string $hash,
+        private string $name,
+        private string $shortname,
+        private string $language,
+        private string $description = '',
+        private bool $authorised = false,
+        private string $date = ''
     ) {
     }
 
