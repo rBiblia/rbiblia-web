@@ -3,7 +3,8 @@
     "error_translation_not_found": "Translation not found",
     "error_no_verses_found": "No verses found in a given chapter",
     "error_query_limit_exceeded": "Query limit for IP address exceeded, try tomorrow",
-    "error_wrong_ip_address": "Cannot determine IP address of the user"
+    "error_wrong_ip_address": "Cannot determine IP address of the user",
+    "error_database_connection_failed": "Database connection failed"
   },
   "aliases": {
     "gen": {

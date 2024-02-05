@@ -34,7 +34,7 @@ class WebApp
                 });
 
                 $r->addRoute('GET', '/book', new Action(new BookController(), 'getBookList'));
-                $r->addRoute('POST', '/search', new Action(new SearchController(), 'query'));
+                $r->addRoute('POST', '/search', new Action(new SearchController($this->settings), 'query'));
             });
             $r->addRoute('*', '{uri:.*}', new Action(new LandingPageResponse(), 'render', $this->settings));
         });

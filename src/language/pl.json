@@ -3,7 +3,8 @@
     "error_translation_not_found": "Tłumaczenie nie zostało odnalezione",
     "error_no_verses_found": "Nie znaleziono żadnych wersetów w wybranym rozdziale",
     "error_query_limit_exceeded": "Limit użyteczności dla aktualnego adresu IP został wyczerpany, spróbuj ponownie jutro",
-    "error_wrong_ip_address": "Nie można uzyskać informacji o aktualnym adresie IP"
+    "error_wrong_ip_address": "Nie można uzyskać informacji o aktualnym adresie IP",
+    "error_database_connection_failed": "Błąd łączenia z bazą danych"
   },
   "aliases": {
     "gen": {
