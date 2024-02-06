@@ -24,6 +24,7 @@ help:
 	$(call list_item, "cs-fix", "fix PHP coding standards using php-cs-fixer tool")
 	$(call list_item, "rector", "fix PHP deprecations using rector tool")
 	$(call list_item, "phpstan", "analyse PHP code structure using phpstan tool")
+	$(call list_item, "test", "run PHP test suite")
 	@printf "\n"
 .PHONY:
 
@@ -87,4 +88,8 @@ rector:
 
 phpstan:
 	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/phpstan analyse
+.PHONY:
+
+test:
+	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/phpunit
 .PHONY:

@@ -8,6 +8,12 @@ class LanguageProvider
 {
     final public const ERROR_LANGUAGE_NOT_SUPPORTED = 'Given language code is not supported';
 
+    final public const MSG_ERROR_TRANSLATION_NOT_FOUND = 'error_translation_not_found';
+    final public const MSG_ERROR_NO_VERSES_FOUND = 'error_no_verses_found';
+    final public const MSG_ERROR_QUERY_LIMIT_EXCEEDED = 'error_query_limit_exceeded';
+    final public const MSG_ERROR_WRONG_IP_ADDRESS = 'error_wrong_ip_address';
+    final public const MSG_ERROR_DATABASE_CONNECTION_FAILED = 'error_database_connection_failed';
+
     private array $data = [];
 
     public function __construct(readonly string $language)

@@ -2,10 +2,13 @@
 
 namespace rBibliaWeb\Controller\Traits;
 
+use rBibliaWeb\Provider\LanguageProvider;
+
 trait DatabaseConnectionErrorResponseTrait
 {
     private function renderDatabaseConnectionErrorResponse(string $language): void
     {
-        $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_database_connection_failed'));
+        $this->setErrorResponse($this->getLanguageProvider($language)
+            ->showMessage(LanguageProvider::MSG_ERROR_DATABASE_CONNECTION_FAILED));
     }
 }

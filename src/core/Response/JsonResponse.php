@@ -13,7 +13,7 @@ abstract class JsonResponse
     {
         header('Content-Type: application/json');
 
-        exit(json_encode($this->response, \JSON_THROW_ON_ERROR));
+        echo json_encode($this->response, \JSON_THROW_ON_ERROR);
     }
 
     protected function setResponse(array $response = []): void

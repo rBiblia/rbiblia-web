@@ -6,6 +6,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use rBibliaWeb\Controller\Traits\DatabaseConnectionErrorResponseTrait;
 use rBibliaWeb\Controller\Traits\LanguageProviderTrait;
+use rBibliaWeb\Provider\LanguageProvider;
 
 class TranslationController extends DatabaseController
 {
@@ -124,7 +125,8 @@ class TranslationController extends DatabaseController
             ]);
 
             if (empty($result)) {
-                $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_translation_not_found'));
+                $this->setErrorResponse($this->getLanguageProvider($language)
+                    ->showMessage(LanguageProvider::MSG_ERROR_TRANSLATION_NOT_FOUND));
             }
         } catch (Exception) {
             $this->renderDatabaseConnectionErrorResponse($language);
@@ -137,7 +139,8 @@ class TranslationController extends DatabaseController
 
         // IP address is incorrect
         if ($ip === '' || '0.0.0.0' === $ip) {
-            $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_wrong_ip_address'));
+            $this->setErrorResponse($this->getLanguageProvider($language)
+                ->showMessage(LanguageProvider::MSG_ERROR_WRONG_IP_ADDRESS));
         }
 
         try {
@@ -168,7 +171,8 @@ class TranslationController extends DatabaseController
 
             // limit exceeded, thrown an exception
             if ($this->securityQueryLimit > 0 && (int)$response >= $this->securityQueryLimit) {
-                $this->setErrorResponse($this->getLanguageProvider($language)->showMessage('error_query_limit_exceeded'));
+                $this->setErrorResponse($this->getLanguageProvider($language)
+                    ->showMessage(LanguageProvider::MSG_ERROR_QUERY_LIMIT_EXCEEDED));
             }
 
             // increment query counter for current IP address

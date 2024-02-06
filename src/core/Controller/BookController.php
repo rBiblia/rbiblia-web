@@ -2,21 +2,15 @@
 
 namespace rBibliaWeb\Controller;
 
-use rBibliaWeb\Exception\LanguageNotSupportedException;
-use rBibliaWeb\Provider\LanguageProvider;
+use rBibliaWeb\Controller\Traits\LanguageProviderTrait;
 use rBibliaWeb\Response\JsonResponse;
 
 class BookController extends JsonResponse
 {
+    use LanguageProviderTrait;
+
     public function getBookList(string $language): void
     {
-        $languageProvider = null;
-        try {
-            $languageProvider = new LanguageProvider($language);
-        } catch (LanguageNotSupportedException) {
-            $this->setErrorResponse(LanguageProvider::ERROR_LANGUAGE_NOT_SUPPORTED);
-        }
-
-        $this->setResponse($languageProvider->getAliases());
+        $this->setResponse($this->getLanguageProvider($language)->getAliases());
     }
 }

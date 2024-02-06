@@ -4,6 +4,7 @@ parameters:
         - src/core
         - public_html/index.php
         - src/config/app.php.dist
+        - tests
         - rector.php
         - .php-cs-fixer.php
         - bin/console.php
