@@ -22,6 +22,10 @@ Please refer to [docs](https://github.com/rBiblia/rbiblia-web/tree/master/docs) 
 
 App was created using PHP v8.2 on the backend with support of ReactJS v17 on the frontend side. We use modern (on the date of writing this note) dev-technologies like Webpack, JSX, SASS, PSR's, etc.
 
+## API Specification
+
+Documentation for the API was created in OpenAPI format and is available [here](https://rbiblia.github.io/rbiblia-web/api).
+
 ## Todo's
 
 - add better error handling when dealing with response data

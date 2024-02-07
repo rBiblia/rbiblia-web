@@ -1,0 +1,287 @@
+openapi: 3.0.1
+info:
+  title: rBiblia Web API Specification
+  version: 2023-12-28
+
+tags:
+  - name: public
+    description: List of all public endpoints
+
+paths:
+  /api/{language}/translation:
+    get:
+      summary: Get a list of all available translations
+      tags:
+        - public
+      parameters:
+        - $ref: '#/components/parameters/language'
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: Error code
+                    default: 200
+                  data:
+                    type: array
+                    description: Response data
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: en_kjv
+                        language:
+                          type: string
+                          example: en
+                        name:
+                          type: string
+                          example: King James Version
+                        description:
+                          type: string
+                          example: Translation made by the Christian Bible for the Church of England
+                        date:
+                          type: string
+                          example: 1611
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/{language}/translation/{translationId}:
+    get:
+      summary: Get a structure of selected translation
+      tags:
+        - public
+      description: Structure contains list of available books and chapters of a given translation
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/translationId'
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: Error code
+                    default: 200
+                  data:
+                    type: object
+                    description: List of book identifiers. Every book is an array containing a list of available chapters
+                    properties:
+                      gen:
+                        type: array
+                        uniqueItems: true
+                        items:
+                          type: number
+                          example:
+                            - 1
+                            - 2
+                            - 3
+                      exo:
+                        type: array
+                        uniqueItems: true
+                        items:
+                          type: number
+                          example:
+                            - 1
+                            - 2
+                            - 3
+                      lev:
+                        type: array
+                        uniqueItems: true
+                        items:
+                          type: number
+                          example:
+                            - 1
+                            - 2
+                            - 3
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/{language}/translation/{translationId}/book/{bookId}/chapter/{chapterId}:
+    get:
+      summary: Get a list of all verses for the given translation, book and chapter
+      tags:
+        - public
+      parameters:
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/translationId'
+        - $ref: '#/components/parameters/bookId'
+        - $ref: '#/components/parameters/chapterId'
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: Error code
+                    default: 200
+                  data:
+                    type: object
+                    description: List of all verses in key (verseId) / value (content) format
+                    additionalProperties:
+                      type: string
+                    example:
+                        1: "In the beginning God created the heaven and the earth."
+                        2: "And the earth was without form, and void; and darkness [was] upon the face of the deep. And the Spirit of God moved upon the face of the waters."
+                        3: "And God said, Let there be light: and there was light."
+                        4: "And God saw the light, that [it was] good: and God divided the light from the darkness."
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/{language}/search:
+    post:
+      summary: Search for a string in a given translation
+      tags:
+        - public
+      parameters:
+        - $ref: '#/components/parameters/language'
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                translation:
+                  type: string
+                  description: Translation Id to search for
+                  example: en_kjv
+                query:
+                  type: string
+                  description: Phrase to search for in a given translation
+                  example: Jesus
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: Error code
+                    default: 200
+                  data:
+                    type: object
+                    description: List of all locations in translation where a given string was found
+                    properties:
+                      translation:
+                        type: string
+                        example: en_kjv
+                      query:
+                        type: string
+                        description: Given search query
+                        example: Jesus
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            book:
+                              type: string
+                              description: Book Id
+                              example: 1co
+                            chapter:
+                              type: number
+                              description: Chapter Id
+                              example: 1
+                            verse:
+                              type: number
+                              description: Verse Id
+                              example: 1
+                            content:
+                              type: string
+                              description: Full verse line containing the given phrase
+                              example: "Paul, called [to be[ an apostle of Jesus Chris through the will of God, and Sosthenes [our] brother,"
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  parameters:
+    language:
+      in: path
+      name: language
+      schema:
+        type: string
+      required: true
+      description: Local translation language identifier
+      example: en
+
+    translationId:
+      in: path
+      name: translationId
+      schema:
+        type: string
+      required: true
+      description: Translation Id
+      example: en_kjv
+
+    bookId:
+      in: path
+      name: bookId
+      schema:
+        type: string
+      required: true
+      description: Book Id
+      example: gen
+
+    chapterId:
+      in: path
+      name: chapterId
+      schema:
+        type: number
+      required: true
+      description: Chapter Id
+      example: 1
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          description: Error code
+          default: 400
+        message:
+          type: string
+          description: Error description
+          example: Database connection failed
