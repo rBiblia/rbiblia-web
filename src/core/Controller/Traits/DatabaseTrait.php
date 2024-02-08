@@ -1,16 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace rBibliaWeb\Controller;
+namespace rBibliaWeb\Controller\Traits;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use rBibliaWeb\Response\JsonResponse;
+use rBibliaWeb\Provider\LanguageProvider;
 
-abstract class DatabaseController extends JsonResponse
+trait DatabaseTrait
 {
+    use ResponseTrait;
+
     protected Connection $db;
 
-    protected function createDatabaseConnection(array $settings): void
+    private function createDatabaseConnection(array $settings): void
     {
         $params = [
             'dbname' => $settings['db_name'],
@@ -21,5 +23,11 @@ abstract class DatabaseController extends JsonResponse
         ];
 
         $this->db = DriverManager::getConnection($params);
+    }
+
+    private function renderDatabaseConnectionErrorResponse(string $language): void
+    {
+        $this->setErrorResponse($this->getLanguageProvider($language)
+            ->showMessage(LanguageProvider::MSG_ERROR_DATABASE_CONNECTION_FAILED));
     }
 }

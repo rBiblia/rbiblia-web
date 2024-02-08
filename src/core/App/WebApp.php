@@ -21,6 +21,11 @@ class WebApp
     public function run(): void
     {
         $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r): void {
+            $landingPageAction = new Action(new LandingPageResponse(), 'render', $this->settings);
+
+            $r->addRoute('GET', '/', $landingPageAction);
+            $r->addRoute('GET', '/{l:[a-z]{2}}/{t:[a-z]{2}_\w+}/{b:[a-z0-9]{3}}/{c:\d+}', $landingPageAction);
+
             $r->addGroup('/api/{language:[a-z]{2}}', function (FastRoute\RouteCollector $r): void {
                 $translationController = new TranslationController($this->settings);
 
@@ -36,7 +41,6 @@ class WebApp
                 $r->addRoute('GET', '/book', new Action(new BookController(), 'getBookList'));
                 $r->addRoute('POST', '/search', new Action(new SearchController($this->settings), 'query'));
             });
-            $r->addRoute('*', '{uri:.*}', new Action(new LandingPageResponse(), 'render', $this->settings));
         });
 
         // fetch method and URI

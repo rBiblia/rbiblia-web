@@ -4,14 +4,16 @@ namespace rBibliaWeb\Controller;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
-use rBibliaWeb\Controller\Traits\DatabaseConnectionErrorResponseTrait;
+use rBibliaWeb\Controller\Traits\DatabaseTrait;
 use rBibliaWeb\Controller\Traits\LanguageProviderTrait;
+use rBibliaWeb\Controller\Traits\ResponseTrait;
 use rBibliaWeb\Provider\LanguageProvider;
 
-class TranslationController extends DatabaseController
+class TranslationController
 {
-    use DatabaseConnectionErrorResponseTrait;
+    use DatabaseTrait;
     use LanguageProviderTrait;
+    use ResponseTrait;
 
     final public const TABLE_TRANSLATION = 'translation';
     final public const TABLE_DATA = 'data_%s';

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace rBibliaWeb\Response;
+namespace rBibliaWeb\Controller\Traits;
 
-abstract class JsonResponse
+trait ResponseTrait
 {
     private const STATUS_OK = 200;
     private const STATUS_ERROR = 404;
@@ -16,7 +16,7 @@ abstract class JsonResponse
         echo json_encode($this->response, \JSON_THROW_ON_ERROR);
     }
 
-    protected function setResponse(array $response = []): void
+    private function setResponse(array $response = []): void
     {
         http_response_code(self::STATUS_OK);
 
@@ -28,7 +28,7 @@ abstract class JsonResponse
         $this->renderResponse();
     }
 
-    protected function setErrorResponse(string $message): void
+    private function setErrorResponse(string $message): void
     {
         http_response_code(self::STATUS_ERROR);
 

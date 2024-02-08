@@ -4,7 +4,9 @@
     "error_no_verses_found": "Nie znaleziono żadnych wersetów w wybranym rozdziale",
     "error_query_limit_exceeded": "Limit użyteczności dla aktualnego adresu IP został wyczerpany, spróbuj ponownie jutro",
     "error_wrong_ip_address": "Nie można uzyskać informacji o aktualnym adresie IP",
-    "error_database_connection_failed": "Błąd łączenia z bazą danych"
+    "error_database_connection_failed": "Błąd łączenia z bazą danych",
+    "error_json_is_malformed": "Przesłany ciąg w formacie JSON jest pusty lub zawiera błędy",
+    "error_json_parameter_is_missing": "Parametr `%s` nie został znaleziony lub jest nieprawidłowy"
   },
   "aliases": {
     "gen": {

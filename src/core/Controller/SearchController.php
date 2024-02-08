@@ -3,16 +3,17 @@
 namespace rBibliaWeb\Controller;
 
 use Doctrine\DBAL\Exception;
-use InvalidArgumentException;
-use rBibliaWeb\Controller\Traits\DatabaseConnectionErrorResponseTrait;
+use rBibliaWeb\Controller\Traits\DatabaseTrait;
 use rBibliaWeb\Controller\Traits\LanguageProviderTrait;
-use rBibliaWeb\Value\Search;
+use rBibliaWeb\Controller\Traits\ResponseTrait;
+use rBibliaWeb\Provider\SearchQueryProvider;
 use rBibliaWeb\Value\Verse;
 
-class SearchController extends DatabaseController
+class SearchController
 {
-    use DatabaseConnectionErrorResponseTrait;
+    use DatabaseTrait;
     use LanguageProviderTrait;
+    use ResponseTrait;
 
     public function __construct(array $settings)
     {
@@ -21,20 +22,21 @@ class SearchController extends DatabaseController
 
     public function query(string $language): void
     {
-        $search = null;
-
         try {
-            $search = new Search($_POST);
-        } catch (InvalidArgumentException $e) {
+            $inputStream = file_get_contents('php://input');
+            $searchQuery = (new SearchQueryProvider($language, $inputStream))->getSearchQuery();
+        } catch (\InvalidArgumentException $e) {
             $this->setErrorResponse($e->getMessage());
+
+            return;
         }
 
         try {
             $statement = $this->db->executeQuery(sprintf(
                 'SELECT book, chapter, verse, content FROM %s WHERE content LIKE :query ORDER BY book ASC, chapter ASC, verse ASC',
-                TranslationController::getTranslationTable($search->getTranslation())),
+                TranslationController::getTranslationTable($searchQuery->getTranslation())),
                 [
-                    'query' => '%' . $search->getQuery() . '%',
+                    'query' => '%' . $searchQuery->getQuery() . '%',
                 ]
             );
 
@@ -49,8 +51,8 @@ class SearchController extends DatabaseController
             }
 
             $this->setResponse([
-                'translation' => $search->getTranslation(),
-                'query' => $search->getQuery(),
+                'translation' => $searchQuery->getTranslation(),
+                'query' => $searchQuery->getQuery(),
                 'results' => $results,
             ]);
         } catch (Exception) {

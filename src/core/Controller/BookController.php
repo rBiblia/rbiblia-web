@@ -3,11 +3,12 @@
 namespace rBibliaWeb\Controller;
 
 use rBibliaWeb\Controller\Traits\LanguageProviderTrait;
-use rBibliaWeb\Response\JsonResponse;
+use rBibliaWeb\Controller\Traits\ResponseTrait;
 
-class BookController extends JsonResponse
+class BookController
 {
     use LanguageProviderTrait;
+    use ResponseTrait;
 
     public function getBookList(string $language): void
     {

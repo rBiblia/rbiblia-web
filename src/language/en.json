@@ -4,7 +4,9 @@
     "error_no_verses_found": "No verses found in a given chapter",
     "error_query_limit_exceeded": "Query limit for IP address exceeded, try tomorrow",
     "error_wrong_ip_address": "Cannot determine IP address of the user",
-    "error_database_connection_failed": "Database connection failed"
+    "error_database_connection_failed": "Database connection failed",
+    "error_json_is_malformed": "Submitted JSON string is empty or is malformed",
+    "error_json_parameter_is_missing": "Parameter `%s` was not found or is invalid"
   },
   "aliases": {
     "gen": {

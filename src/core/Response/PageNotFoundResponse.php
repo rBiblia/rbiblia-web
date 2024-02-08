@@ -2,12 +2,16 @@
 
 namespace rBibliaWeb\Response;
 
-class PageNotFoundResponse extends JsonResponse
+use rBibliaWeb\Controller\Traits\ResponseTrait;
+
+class PageNotFoundResponse
 {
+    use ResponseTrait;
+
     private const ERROR_MESSAGE = 'Not found';
 
     public function render(): void
     {
-        self::setErrorResponse(self::ERROR_MESSAGE);
+        $this->setErrorResponse(self::ERROR_MESSAGE);
     }
 }
