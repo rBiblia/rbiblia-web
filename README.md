@@ -16,7 +16,7 @@ Everyone is invited to help make this software better and help to `spread God's 
 
 ## Development
 
-Please refer to [docs](https://github.com/rBiblia/rbiblia-web/tree/master/docs) folder where you can find materials which will help you to develop locally. Please keep in mind that there is still a lot to do here (especially in the documentation part). It is recommended to text directly to Rafał in order to get instructions on how to build project locally (use [contact form](https://kontakt.toborek.info)).
+Refer to the [official wiki](https://github.com/rBiblia/rbiblia-web/wiki) where you can find tutorials which will help you to develop locally.
 
 ## Technical talk
 
@@ -24,16 +24,16 @@ App was created using PHP v8.2 on the backend with support of ReactJS v17 on the
 
 ## API Specification
 
-Documentation for the API was created in OpenAPI format and is available [here](https://rbiblia.github.io/rbiblia-web/api).
+Documentation for the API was created in OpenAPI format and is hosted [here](https://rbiblia.github.io/rbiblia-web/api).
 
 ## Todo's
 
-- add better error handling when dealing with response data
-- add caching to avoid server querying with every location change
+- add better error handling when dealing with response data (display error message when something will fail)
+- add caching to avoid server querying with every location change (if location was visited then keep it in memory and use it again)
 
 ## Donations
 
-Maintaining of this repo and translations is generating costs. If you wish to you can always [support our work](https://rbiblia.toborek.info/donation/).
+Maintaining of this repo and translations is generating costs. If you wish you can always [support our work](https://rbiblia.toborek.info/donation/).
 
 ## Changelog
 
