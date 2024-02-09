@@ -10,7 +10,7 @@ if (!file_exists(APP_FILE_CONFIG)) {
     exit(sprintf('ERROR: Settings file `%s` not exists!', APP_FILE_CONFIG));
 }
 
-$settings = include APP_FILE_CONFIG;
+$settings = require_once APP_FILE_CONFIG;
 
 $app = new rBibliaWeb\App\WebApp($settings);
 $app->run();
