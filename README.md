@@ -5,6 +5,7 @@
 ![rector](https://github.com/rbiblia/rbiblia-web/actions/workflows/rector.yaml/badge.svg)
 ![lint](https://github.com/rbiblia/rbiblia-web/actions/workflows/lint.yaml/badge.svg)
 ![phpunit](https://github.com/rbiblia/rbiblia-web/actions/workflows/phpunit.yaml/badge.svg)
+![sonarcloud](https://github.com/rbiblia/rbiblia-web/actions/workflows/sonarcloud.yaml/badge.svg)
 
 Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://web.rbiblia.toborek.info](https://web.rbiblia.toborek.info).
 
