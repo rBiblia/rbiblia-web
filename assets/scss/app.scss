@@ -105,6 +105,17 @@ header {
     }
   }
 
+  .icon-navigator-disabled {
+    background: $rb-header-navigator-arrow-disabled;
+    cursor: default;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: $rb-header-navigator-arrow-disabled;
+    }
+  }
+
   .icon-navigator-left {
     mask: url("../images/arrow_left.svg");
     mask-size: cover;
