@@ -22,7 +22,7 @@ RUN sh /tmp/composer_installer.sh
 
 # install node
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-RUN apt update && apt install -y nodejs npm
+RUN apt update && apt install -y nodejs
 
 # install yarn
 RUN npm install -g yarn
