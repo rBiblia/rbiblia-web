@@ -15,6 +15,10 @@ export default function Navigator({
     selectedTranslation,
     selectedBook,
     selectedChapter,
+    prevChapter,
+    nextChapter,
+    prevBook,
+    nextBook,
 }) {
     return (
         <header className="container sticky-top pt-2 pb-2">
@@ -26,7 +30,10 @@ export default function Navigator({
                         changeSelectedTranslation={changeSelectedTranslation}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                <div
+                    className="col-1 col-sm-1 d-flex justify-content-end pe-0"
+                    onClick={prevBook}
+                >
                     <div className="icon-navigator icon-navigator-left"></div>
                 </div>
                 <div className="col-10 col-sm-2">
@@ -38,10 +45,16 @@ export default function Navigator({
                         changeSelectedBook={changeSelectedBook}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                <div
+                    className="col-1 col-sm-1 d-flex justify-content-start ps-0"
+                    onClick={nextBook}
+                >
                     <div className="icon-navigator icon-navigator-right"></div>
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                <div
+                    className="col-1 col-sm-1 d-flex justify-content-end pe-0"
+                    onClick={prevChapter}
+                >
                     <div className="icon-navigator icon-navigator-left"></div>
                 </div>
                 <div className="col-10 col-sm-2">
@@ -52,7 +65,10 @@ export default function Navigator({
                         changeSelectedChapter={changeSelectedChapter}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                <div
+                    className="col-1 col-sm-1 d-flex justify-content-start ps-0"
+                    onClick={nextChapter}
+                >
                     <div className="icon-navigator icon-navigator-right"></div>
                 </div>
             </div>
