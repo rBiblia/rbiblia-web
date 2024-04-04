@@ -19,6 +19,10 @@ export default function Navigator({
     nextChapter,
     prevBook,
     nextBook,
+    isNextBookAvailable,
+    isPrevBookAvailable,
+    isNextChapterAvailable,
+    isPrevChapterAvailable,
 }) {
     return (
         <header className="container sticky-top pt-2 pb-2">
@@ -30,11 +34,16 @@ export default function Navigator({
                         changeSelectedTranslation={changeSelectedTranslation}
                     />
                 </div>
-                <div
-                    className="col-1 col-sm-1 d-flex justify-content-end pe-0"
-                    onClick={prevBook}
-                >
-                    <div className="icon-navigator icon-navigator-left"></div>
+                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                    <button
+                        onClick={prevBook}
+                        className={
+                            "icon-navigator icon-navigator-left" +
+                            (isPrevBookAvailable()
+                                ? ""
+                                : " icon-navigator-disabled")
+                        }
+                    ></button>
                 </div>
                 <div className="col-10 col-sm-2">
                     <BookSelector
@@ -45,17 +54,29 @@ export default function Navigator({
                         changeSelectedBook={changeSelectedBook}
                     />
                 </div>
-                <div
-                    className="col-1 col-sm-1 d-flex justify-content-start ps-0"
-                    onClick={nextBook}
-                >
-                    <div className="icon-navigator icon-navigator-right"></div>
+                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                    <button
+                        onClick={nextBook}
+                        className={
+                            "icon-navigator icon-navigator-right" +
+                            (isNextBookAvailable()
+                                ? ""
+                                : " icon-navigator-disabled")
+                        }
+                    ></button>
                 </div>
-                <div
-                    className="col-1 col-sm-1 d-flex justify-content-end pe-0"
-                    onClick={prevChapter}
-                >
-                    <div className="icon-navigator icon-navigator-left"></div>
+                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                    <button
+                        onClick={prevChapter}
+                        className={
+                            "icon-navigator icon-navigator-left" +
+                            (isPrevChapterAvailable()
+                                ? ""
+                                : isPrevBookAvailable()
+                                ? ""
+                                : " icon-navigator-disabled")
+                        }
+                    ></button>
                 </div>
                 <div className="col-10 col-sm-2">
                     <ChapterSelector
@@ -65,11 +86,18 @@ export default function Navigator({
                         changeSelectedChapter={changeSelectedChapter}
                     />
                 </div>
-                <div
-                    className="col-1 col-sm-1 d-flex justify-content-start ps-0"
-                    onClick={nextChapter}
-                >
-                    <div className="icon-navigator icon-navigator-right"></div>
+                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                    <button
+                        onClick={nextChapter}
+                        className={
+                            "icon-navigator icon-navigator-right" +
+                            (isNextChapterAvailable()
+                                ? ""
+                                : isNextBookAvailable()
+                                ? ""
+                                : " icon-navigator-disabled")
+                        }
+                    ></button>
                 </div>
             </div>
         </header>
