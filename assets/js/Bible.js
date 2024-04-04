@@ -44,6 +44,12 @@ class Bible extends Component {
         this.nextBook = this.nextBook.bind(this);
         this.prevChapter = this.prevChapter.bind(this);
         this.nextChapter = this.nextChapter.bind(this);
+        this.isNextChapterAvailable = this.isNextChapterAvailable.bind(this);
+        this.isPrevChapterAvailable = this.isPrevChapterAvailable.bind(this);
+        this.isNextBookAvailable = this.isNextBookAvailable.bind(this);
+        this.isPrevBookAvailable = this.isPrevBookAvailable.bind(this);
+        this.getBookIndex = this.getBookIndex.bind(this);
+        this.getChapterIndex = this.getChapterIndex.bind(this);
     }
 
     /*
@@ -248,63 +254,97 @@ class Bible extends Component {
         this.setState({}, this.loadTranslationsAndBooks);
     }
 
-    nextChapter() {
+    getChapterIndex() {
         // Note: parseInt is here because sometimes selectedChapter is a string.
         //    Probably when chapter is parsed from the URL during first load it become a string
 
-        const index = this.state.chapters.findIndex(
-            (key) => key === parseInt(this.state.selectedChapter)
+        return this.state.chapters.findIndex(
+            (value) => value === parseInt(this.state.selectedChapter)
         );
-
-        if (typeof this.state.chapters[index + 1] === "undefined") {
-            this.nextBook();
-            return;
-        }
-        this.changeSelectedChapter(this.state.chapters[index + 1]);
     }
 
-    prevChapter() {
-        // Note: parseInt is here because sometimes selectedChapter is a string.
-        //    Probably when chapter is parsed from the URL during first load it become a string
-        const index = this.state.chapters.findIndex(
-            (key) => key === parseInt(this.state.selectedChapter)
+    isNextChapterAvailable() {
+        return (
+            typeof this.state.chapters[this.getChapterIndex() + 1] !==
+            "undefined"
         );
-
-        if (index === 0) {
-            this.prevBook();
-            return;
-        }
-
-        this.changeSelectedChapter(this.state.chapters[index - 1]);
     }
 
-    nextBook() {
-        const keys = Object.keys(this.state.books);
+    isPrevChapterAvailable() {
+        return this.getChapterIndex() !== 0;
+    }
 
-        const index = keys.findIndex(
+    getBookIndex() {
+        return Object.keys(this.state.books).findIndex(
+            (bookKey) => bookKey === this.state.selectedBook
+        );
+    }
+
+    isNextBookAvailable() {
+        const index = Object.keys(this.state.books).findIndex(
             (bookKey) => bookKey === this.state.selectedBook
         );
 
         // Note: If the last book is selected one - do nothing
-        if (typeof this.state.structure[keys[index + 1]] === "undefined") {
-            return;
-        }
-
-        this.changeSelectedBook(keys[index + 1]);
+        return (
+            typeof this.state.structure[
+                Object.keys(this.state.books)[this.getBookIndex() + 1]
+            ] !== "undefined"
+        );
     }
 
-    prevBook() {
-        const keys = Object.keys(this.state.books);
-        const index = keys.findIndex(
-            (bookKey) => bookKey === this.state.selectedBook
-        );
+    isPrevBookAvailable() {
+        return this.getBookIndex() !== 0;
+    }
 
-        // Note: If the current book is the first book - do nothing
-        if (index === 0) {
+    nextChapter() {
+        if (this.isNextChapterAvailable()) {
+            this.changeSelectedChapter(
+                this.state.chapters[this.getChapterIndex() + 1]
+            );
+            return;
+        }
+        this.nextBook();
+    }
+
+    prevChapter() {
+        if (this.isPrevChapterAvailable()) {
+            this.changeSelectedChapter(
+                this.state.chapters[this.getChapterIndex() - 1]
+            );
+            return;
+        }
+        this.prevBook(true);
+    }
+
+    nextBook() {
+        if (this.isNextBookAvailable()) {
+            this.changeSelectedBook(
+                Object.keys(this.state.books)[this.getBookIndex() + 1]
+            );
+        }
+    }
+
+    prevBook(startFromLastVerse = false) {
+        if (!this.isPrevBookAvailable()) {
             return;
         }
 
-        this.changeSelectedBook(keys[index - 1]);
+        this.changeSelectedBook(
+            Object.keys(this.state.books)[this.getBookIndex() - 1]
+        );
+        if (startFromLastVerse) {
+            // Note: We are using setTimeout here to wait for setState to be updated
+            // It's not very clean hack but it should work
+            // It might be refactored after this component would be:
+            // - refactored to functional component
+            // - refactored to use hooks and contexts
+            setTimeout(() => {
+                this.changeSelectedChapter(
+                    this.state.chapters[this.state.chapters.length - 1]
+                );
+            }, 100);
+        }
     }
 
     render() {
@@ -372,6 +412,10 @@ class Bible extends Component {
                         nextChapter={this.nextChapter}
                         prevBook={this.prevBook}
                         nextBook={this.nextBook}
+                        isPrevBookAvailable={this.isPrevBookAvailable}
+                        isNextBookAvailable={this.isNextBookAvailable}
+                        isPrevChapterAvailable={this.isPrevChapterAvailable}
+                        isNextChapterAvailable={this.isNextChapterAvailable}
                     />
                     <Reader
                         showVerses={showVerses}
