@@ -5,4 +5,3 @@ public_html/assets
 .phpunit.cache
 yarn-error.log
 .php-cs-fixer.cache
-.DS_Store
