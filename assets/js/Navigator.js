@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import TranslationSelector from "./TranslationSelector";
 import BookSelector from "./BookSelector";
 import ChapterSelector from "./ChapterSelector";
@@ -24,6 +24,10 @@ export default function Navigator({
     isNextChapterAvailable,
     isPrevChapterAvailable,
 }) {
+    const isNextChapterOrBookAvailable =
+        isNextChapterAvailable() || isNextBookAvailable();
+    const isPrevChapterOrBookAvailable =
+        isPrevChapterAvailable() || isPrevBookAvailable();
     return (
         <header className="container sticky-top pt-2 pb-2">
             <div className="row">
@@ -70,9 +74,7 @@ export default function Navigator({
                         onClick={prevChapter}
                         className={
                             "icon-navigator icon-navigator-left" +
-                            (isPrevChapterAvailable()
-                                ? ""
-                                : isPrevBookAvailable()
+                            (isPrevChapterOrBookAvailable
                                 ? ""
                                 : " icon-navigator-disabled")
                         }
@@ -91,9 +93,7 @@ export default function Navigator({
                         onClick={nextChapter}
                         className={
                             "icon-navigator icon-navigator-right" +
-                            (isNextChapterAvailable()
-                                ? ""
-                                : isNextBookAvailable()
+                            (isNextChapterOrBookAvailable
                                 ? ""
                                 : " icon-navigator-disabled")
                         }

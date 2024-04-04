@@ -281,11 +281,6 @@ class Bible extends Component {
     }
 
     isNextBookAvailable() {
-        const index = Object.keys(this.state.books).findIndex(
-            (bookKey) => bookKey === this.state.selectedBook
-        );
-
-        // Note: If the last book is selected one - do nothing
         return (
             typeof this.state.structure[
                 Object.keys(this.state.books)[this.getBookIndex() + 1]
