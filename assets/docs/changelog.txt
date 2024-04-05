@@ -12,6 +12,11 @@ https://rbiblia.toborek.info
 
 Dziennik wydań (od najnowszych):
 
+2024-04-05:
+- dodano przyciski nawigacyjne dla ksiąg oraz rozdziałów,
+- dodano podświetlenie aktualnie zaznaczonego wersetu,
+- przebudowa i wiele poprawek kodu po stronie serwerowej.
+
 2022-12-28:
 - naprawiono błąd uniemożliwiający wyświetlenie strony w przypadku, gdy język przeglądarki ustawiony był na inny niż angielski lub polski.
 
