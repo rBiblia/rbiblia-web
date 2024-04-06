@@ -42,7 +42,7 @@ const TranslationSelector = ({
                         .sort((a, b) => (a.name > b.name ? 1 : -1))
                         .map(({ id, name, date }) => (
                             <option value={id} key={id}>
-                                {`${name} ${date ? `[${date}]` : ""}`}
+                                {name} {date === "" ? "" : `[${date}]`}
                             </option>
                         ))}
                 </optgroup>
