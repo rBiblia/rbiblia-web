@@ -29,7 +29,7 @@ export default function Navigator({
     const isPrevChapterOrBookAvailable =
         isPrevChapterAvailable() || isPrevBookAvailable();
     return (
-        <header className="container sticky-top pt-2 pb-2">
+        <header className="container sticky-top pt-2 pb-2 user-select-none">
             <div className="row">
                 <div className="col-12 col-sm-4">
                     <TranslationSelector

@@ -1,62 +1,54 @@
-import React, { Component } from "react";
-import { injectIntl } from "react-intl";
+import React from "react";
+import { useIntl } from "react-intl";
 
-class TranslationSelector extends Component {
-    constructor(props) {
-        super(props);
+const TranslationSelector = ({
+    translations,
+    selectedTranslation,
+    changeSelectedTranslation,
+}) => {
+    const { locale } = useIntl();
+    const onSelect = (event) => {
+        changeSelectedTranslation(event.target.value);
+    };
 
-        this.onSelect = this.onSelect.bind(this);
-    }
+    const translationList = [];
+    const map = {};
+    const languageNames = new Intl.DisplayNames([locale], {
+        type: "language",
+    });
 
-    onSelect(event) {
-        return this.props.changeSelectedTranslation(event.target.value);
-    }
+    translations.forEach((trans) => {
+        if (!map[trans.language]) {
+            const languageGroup = {
+                languageName: languageNames.of(trans.language),
+                children: [],
+            };
+            map[trans.language] = languageGroup.children;
+            translationList.push(languageGroup);
+        }
 
-    render() {
-        const {
-                translations,
-                selectedTranslation,
-                intl: { locale },
-            } = this.props,
-            translationList = [],
-            map = {},
-            languageNames = new Intl.DisplayNames([locale], {
-                type: "language",
-            });
+        map[trans.language].push(trans);
+    });
 
-        translations.forEach((trans) => {
-            const languageGroup = {};
+    return (
+        <select
+            className="form-control"
+            onChange={onSelect}
+            value={selectedTranslation}
+        >
+            {translationList.map(({ languageName, children }, index) => (
+                <optgroup label={languageName} key={index}>
+                    {children
+                        .sort((a, b) => (a.name > b.name ? 1 : -1))
+                        .map(({ id, name, date }) => (
+                            <option value={id} key={id}>
+                                {`${name} ${date ? `[${date}]` : ""}`}
+                            </option>
+                        ))}
+                </optgroup>
+            ))}
+        </select>
+    );
+};
 
-            if (!map[trans.language]) {
-                map[trans.language] = [];
-                languageGroup.languageName = languageNames.of(trans.language);
-                languageGroup.children = map[trans.language];
-                translationList.push(languageGroup);
-            }
-
-            map[trans.language].push(trans);
-        });
-
-        return (
-            <select
-                className="form-control"
-                onChange={this.onSelect}
-                value={selectedTranslation}
-            >
-                {translationList.map(({ languageName, children }, key) => (
-                    <optgroup label={languageName} key={key}>
-                        {children
-                            .sort((a, b) => (a.name > b.name ? 1 : -1))
-                            .map(({ id, name, date }) => (
-                                <option value={id} key={id}>
-                                    {name} {date === "" ? "" : "[" + date + "]"}
-                                </option>
-                            ))}
-                    </optgroup>
-                ))}
-            </select>
-        );
-    }
-}
-
-export default injectIntl(TranslationSelector);
+export default TranslationSelector;

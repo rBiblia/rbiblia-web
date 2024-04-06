@@ -1,31 +1,28 @@
-import React, { Component } from "react";
+import React from "react";
 import Verse from "./Verse";
 
-export default class Reader extends Component {
-    render() {
-        const { selectedBook, selectedChapter, verses, showVerses } =
-            this.props;
-
-        if (showVerses && verses) {
-            return (
-                <main className="container">
-                    <div className="row">
-                        <div className="col-12">
-                            {Object.entries(verses).map((verse) => (
-                                <Verse
-                                    key={verse[0]}
-                                    bookId={selectedBook}
-                                    chapterId={selectedChapter}
-                                    verseId={verse[0]}
-                                    verseContent={verse[1]}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </main>
-            );
-        }
-
+const Reader = ({ selectedBook, selectedChapter, verses, showVerses }) => {
+    if (!showVerses || !verses) {
         return <main className="container preloader-image" />;
     }
-}
+
+    return (
+        <main className="container">
+            <div className="row">
+                <div className="col-12">
+                    {Object.entries(verses).map(([verseId, verseContent]) => (
+                        <Verse
+                            key={verseId}
+                            bookId={selectedBook}
+                            chapterId={selectedChapter}
+                            verseId={verseId}
+                            verseContent={verseContent}
+                        />
+                    ))}
+                </div>
+            </div>
+        </main>
+    );
+};
+
+export default Reader;
