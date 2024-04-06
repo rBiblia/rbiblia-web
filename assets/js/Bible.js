@@ -19,6 +19,7 @@ class Bible extends Component {
             isStructureLoaded: false,
             showVerses: false,
 
+            // Note: it holds all books, NOT only translation specific
             books: [],
             translations: [],
             structure: [],
@@ -275,7 +276,7 @@ class Bible extends Component {
     }
 
     getBookIndex() {
-        return Object.keys(this.state.books).findIndex(
+        return Object.keys(this.state.structure).findIndex(
             (bookKey) => bookKey === this.state.selectedBook
         );
     }
@@ -283,7 +284,7 @@ class Bible extends Component {
     isNextBookAvailable() {
         return (
             typeof this.state.structure[
-                Object.keys(this.state.books)[this.getBookIndex() + 1]
+                Object.keys(this.state.structure)[this.getBookIndex() + 1]
             ] !== "undefined"
         );
     }
@@ -315,7 +316,7 @@ class Bible extends Component {
     nextBook() {
         if (this.isNextBookAvailable()) {
             this.changeSelectedBook(
-                Object.keys(this.state.books)[this.getBookIndex() + 1]
+                Object.keys(this.state.structure)[this.getBookIndex() + 1]
             );
         }
     }
@@ -326,7 +327,7 @@ class Bible extends Component {
         }
 
         this.changeSelectedBook(
-            Object.keys(this.state.books)[this.getBookIndex() - 1]
+            Object.keys(this.state.structure)[this.getBookIndex() - 1]
         );
         if (startFromLastVerse) {
             // Note: We are using setTimeout here to wait for setState to be updated
