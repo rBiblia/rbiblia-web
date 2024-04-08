@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import TranslationSelector from "./TranslationSelector";
 import BookSelector from "./BookSelector";
 import ChapterSelector from "./ChapterSelector";
+import DirectionalNavigationButton from "./DirectionalNavigationButton";
 
 export default function Navigator({
     translations,
     books,
     structure,
     chapters,
-    isStructureLoaded,
+    isStructureLoading,
     changeSelectedTranslation,
     changeSelectedBook,
     changeSelectedChapter,
@@ -28,6 +29,9 @@ export default function Navigator({
         isNextChapterAvailable() || isNextBookAvailable();
     const isPrevChapterOrBookAvailable =
         isPrevChapterAvailable() || isPrevBookAvailable();
+
+    const handlePrevBook = useCallback(() => prevBook(), [prevBook]);
+
     return (
         <header className="container sticky-top pt-2 pb-2 user-select-none">
             <div className="row">
@@ -39,65 +43,49 @@ export default function Navigator({
                     />
                 </div>
                 <div className="col-1 col-sm-1 d-flex justify-content-end p-0">
-                    <button
-                        onClick={prevBook}
-                        className={
-                            "icon-navigator icon-navigator-left" +
-                            (isPrevBookAvailable()
-                                ? ""
-                                : " icon-navigator-disabled")
-                        }
-                    ></button>
+                    <DirectionalNavigationButton
+                        direction="left"
+                        onClick={handlePrevBook}
+                        disabled={!isPrevBookAvailable()}
+                    />
                 </div>
                 <div className="col-10 col-sm-2">
                     <BookSelector
                         selectedBook={selectedBook}
                         books={books}
                         structure={structure}
-                        isStructureLoaded={isStructureLoaded}
+                        isStructureLoading={isStructureLoading}
                         changeSelectedBook={changeSelectedBook}
                     />
                 </div>
                 <div className="col-1 col-sm-1 d-flex justify-content-start p-0">
-                    <button
+                    <DirectionalNavigationButton
+                        direction="right"
                         onClick={nextBook}
-                        className={
-                            "icon-navigator icon-navigator-right" +
-                            (isNextBookAvailable()
-                                ? ""
-                                : " icon-navigator-disabled")
-                        }
-                    ></button>
+                        disabled={!isNextBookAvailable()}
+                    />
                 </div>
                 <div className="col-1 col-sm-1 d-flex justify-content-end p-0">
-                    <button
+                    <DirectionalNavigationButton
+                        direction="left"
                         onClick={prevChapter}
-                        className={
-                            "icon-navigator icon-navigator-left" +
-                            (isPrevChapterOrBookAvailable
-                                ? ""
-                                : " icon-navigator-disabled")
-                        }
-                    ></button>
+                        disabled={!isPrevChapterOrBookAvailable}
+                    />
                 </div>
                 <div className="col-10 col-sm-2">
                     <ChapterSelector
                         selectedChapter={selectedChapter}
                         chapters={chapters}
-                        isStructureLoaded={isStructureLoaded}
+                        isStructureLoading={isStructureLoading}
                         changeSelectedChapter={changeSelectedChapter}
                     />
                 </div>
                 <div className="col-1 col-sm-1 d-flex justify-content-start p-0">
-                    <button
+                    <DirectionalNavigationButton
+                        direction="right"
                         onClick={nextChapter}
-                        className={
-                            "icon-navigator icon-navigator-right" +
-                            (isNextChapterOrBookAvailable
-                                ? ""
-                                : " icon-navigator-disabled")
-                        }
-                    ></button>
+                        disabled={!isNextChapterOrBookAvailable}
+                    />
                 </div>
             </div>
         </header>

@@ -3,7 +3,7 @@ import { useIntl } from "react-intl";
 
 const ChapterSelector = ({
     chapters,
-    isStructureLoaded,
+    isStructureLoading,
     selectedChapter,
     changeSelectedChapter,
 }) => {
@@ -13,7 +13,7 @@ const ChapterSelector = ({
         changeSelectedChapter(event.target.value);
     };
 
-    if (isStructureLoaded && chapters && chapters.length) {
+    if (!isStructureLoading && chapters && chapters.length) {
         return (
             <select
                 className="form-control"
