@@ -4,7 +4,7 @@ import { useIntl } from "react-intl";
 const BookSelector = ({
     books,
     structure,
-    isStructureLoaded,
+    isStructureLoading,
     selectedBook,
     changeSelectedBook,
 }) => {
@@ -13,7 +13,7 @@ const BookSelector = ({
         changeSelectedBook(event.target.value);
     };
 
-    if (!isStructureLoaded) {
+    if (isStructureLoading) {
         return (
             <select className="form-control selector-disabled">
                 <option>{formatMessage({ id: "bookList" })}</option>

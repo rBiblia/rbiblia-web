@@ -1,132 +1,84 @@
-import React, { Component } from "react";
-import Cookies from "js-cookie";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import StatusBar from "./StatusBar";
 import { injectIntl } from "react-intl";
-import { URL_PREFIX, DEFAULT_BOOK, COOKIE_EXPIRES } from "../consts";
 import getDataFromCurrentPathname from "./getDataFromCurrentPathname";
+import AppError from "./AppError";
+import AppLoading from "./AppLoading";
+import updateHistory from "./updateHistory";
+import getAppropriateBook from "./getAppropriateBook";
 
-class Bible extends Component {
-    constructor(props) {
-        super(props);
+const Bible = ({ intl, setLocale }) => {
+    const [error, setError] = useState(null);
+    const [isBooksLoading, setIsBooksLoading] = useState(true);
+    const [isTranslationsLoading, setIsTranslationsLoading] = useState(true);
+    const [isStructureLoading, setIsStructureLoading] = useState(true);
+    const [showVerses, setShowVerses] = useState(false);
 
-        this.state = {
-            error: null,
+    // Note: It contains all books available - not only translation specific
+    const [books, setBooks] = useState([]);
+    const [translations, setTranslations] = useState([]);
+    const [structure, setStructure] = useState(null);
+    const [verses, setVerses] = useState([]);
+    const [selectedTranslation, setSelectedTranslation] = useState(
+        getDataFromCurrentPathname().translation
+    );
+    const [selectedBook, setSelectedBook] = useState(
+        getDataFromCurrentPathname().book
+    );
+    const [selectedChapter, setSelectedChapter] = useState(
+        getDataFromCurrentPathname().chapter
+    );
 
-            isBooksLoaded: false,
-            isTranslationsLoaded: false,
-            isStructureLoaded: false,
-            showVerses: false,
+    const keepChapterIfPossible = useRef(false);
+    const startFromLastVerse = useRef(false);
 
-            // Note: it holds all books, NOT only translation specific
-            books: [],
-            translations: [],
-            structure: [],
-            chapters: [],
-            verses: [],
+    const chapters =
+        structure && selectedBook && structure[selectedBook]
+            ? structure[selectedBook]
+            : [];
 
-            selectedTranslation: getDataFromCurrentPathname().translation, // default translation
-            selectedBook: getDataFromCurrentPathname().book,
-            selectedChapter: getDataFromCurrentPathname().chapter,
-        };
+    const changeSelectedTranslation = useCallback((newTranslation) => {
+        setShowVerses(false);
+        setIsStructureLoading(true);
+        setSelectedTranslation(newTranslation);
+    }, []);
 
-        this.getAppropriateBook = this.getAppropriateBook.bind(this);
-        this.getAppropriateChapter = this.getAppropriateChapter.bind(this);
-        this.setLocaleAndUpdateHistory =
-            this.setLocaleAndUpdateHistory.bind(this);
-        this.loadTranslationsAndBooks =
-            this.loadTranslationsAndBooks.bind(this);
-        this.changeSelectedTranslation =
-            this.changeSelectedTranslation.bind(this);
-        this.changeSelectedBook = this.changeSelectedBook.bind(this);
-        this.changeSelectedChapter = this.changeSelectedChapter.bind(this);
-        this.prevBook = this.prevBook.bind(this);
-        this.nextBook = this.nextBook.bind(this);
-        this.prevChapter = this.prevChapter.bind(this);
-        this.nextChapter = this.nextChapter.bind(this);
-        this.isNextChapterAvailable = this.isNextChapterAvailable.bind(this);
-        this.isPrevChapterAvailable = this.isPrevChapterAvailable.bind(this);
-        this.isNextBookAvailable = this.isNextBookAvailable.bind(this);
-        this.isPrevBookAvailable = this.isPrevBookAvailable.bind(this);
-        this.getBookIndex = this.getBookIndex.bind(this);
-        this.getChapterIndex = this.getChapterIndex.bind(this);
-    }
+    const setLocaleAndUpdateHistory = (locale) => {
+        const { chapter, book, translation } = getDataFromCurrentPathname();
 
-    /*
-     * The history (url path) should be updated when
-     * the last call is finished and verses are ready to be displayed
-     */
-    updateHistory(language, translation, book, chapter) {
-        Cookies.set("recent_language", language, { expires: COOKIE_EXPIRES });
-        Cookies.set("recent_translation", translation, {
-            expires: COOKIE_EXPIRES,
-        });
-        Cookies.set("recent_book", book, { expires: COOKIE_EXPIRES });
-        Cookies.set("recent_chapter", chapter, { expires: COOKIE_EXPIRES });
+        setLocale(locale);
+        updateHistory(locale, translation, book, chapter);
+    };
 
-        window.history.pushState(
-            {},
-            "",
-            `${URL_PREFIX}/${language}/${translation}/${book}/${chapter}`
-        );
-    }
+    const changeSelectedBook = (newSelectedBook) => {
+        // TODO: to implement this implementation at functional component
+        // if the book is the same as previous, keep the chapter if possible as well
+        //const keepChapterIfPossible = ;
+        keepChapterIfPossible.current = newSelectedBook === selectedBook;
+        setSelectedBook(newSelectedBook);
+    };
 
-    changeSelectedTranslation(selectedTranslation) {
-        this.setState(
-            {
-                showVerses: false,
-                isStructureLoaded: false,
-                selectedTranslation: selectedTranslation,
-            },
-            () => {
-                const {
-                    intl: { locale },
-                } = this.props;
-
-                fetch("/api/" + locale + "/translation/" + selectedTranslation)
-                    .then((res) => res.json())
-                    .then(
-                        (result) => {
-                            this.setState(
-                                {
-                                    isStructureLoaded: true,
-                                    structure: result.data,
-                                },
-                                () => {
-                                    this.changeSelectedBook(
-                                        this.getAppropriateBook()
-                                    );
-                                }
-                            );
-                        },
-                        (error) => {
-                            this.setState({
-                                error,
-                            });
-                        }
-                    );
-            }
-        );
-    }
-
-    getAppropriateBook() {
-        const { structure, selectedBook } = this.state;
-        if (structure[selectedBook]) {
-            return selectedBook;
+    useEffect(() => {
+        if (!structure || chapters.length === 0) {
+            return;
         }
 
-        if (structure[DEFAULT_BOOK]) {
-            return DEFAULT_BOOK;
-        }
+        changeSelectedChapter(
+            getAppropriateChapter(
+                keepChapterIfPossible.current,
+                startFromLastVerse.current
+            )
+        );
+        keepChapterIfPossible.current = false;
+        startFromLastVerse.current = false;
+    }, [selectedBook, structure]);
 
-        // otherwise, get first book
-        return Object.keys(structure)[0];
-    }
-
-    getAppropriateChapter(keepChapterIfPossible) {
-        const { structure, selectedBook, selectedChapter } = this.state;
-
+    const getAppropriateChapter = (
+        keepChapterIfPossible,
+        startFromLastVerse
+    ) => {
         if (
             keepChapterIfPossible &&
             structure[selectedBook].some(
@@ -136,41 +88,24 @@ class Bible extends Component {
             return selectedChapter;
         }
 
+        if (startFromLastVerse) {
+            return structure[selectedBook][structure[selectedBook].length - 1];
+        }
+
         return structure[selectedBook][0];
-    }
+    };
 
-    changeSelectedBook(selectedBook) {
-        // if the book is the same as previous, keep the chapter if possible as well
-        const keepChapterIfPossible = selectedBook === this.state.selectedBook;
+    const changeSelectedChapter = (newSelectedChapter) => {
+        const { locale } = intl;
 
-        this.setState(
-            {
-                selectedBook: selectedBook,
-                chapters: this.state.structure[selectedBook],
-            },
-            () => {
-                this.changeSelectedChapter(
-                    this.getAppropriateChapter(keepChapterIfPossible)
-                );
-            }
-        );
-    }
-
-    changeSelectedChapter(selectedChapter) {
-        const { selectedTranslation, selectedBook } = this.state;
-        const {
-            intl: { locale },
-        } = this.props;
-        this.updateHistory(
+        updateHistory(
             locale,
             selectedTranslation,
             selectedBook,
-            selectedChapter
+            newSelectedChapter
         );
 
-        this.setState({
-            showVerses: false,
-        });
+        setShowVerses(false);
 
         fetch(
             "/api/" +
@@ -180,255 +115,204 @@ class Bible extends Component {
                 "/book/" +
                 selectedBook +
                 "/chapter/" +
-                selectedChapter
+                newSelectedChapter
         )
             .then((res) => res.json())
             .then(
                 (result) => {
-                    this.setState({
-                        showVerses: true,
-                        selectedChapter,
-                        verses: result.data,
-                    });
+                    setSelectedChapter(newSelectedChapter);
+                    setShowVerses(true);
+                    setVerses(result.data);
                 },
                 (error) => {
-                    this.setState({
-                        error,
-                    });
+                    setError(error);
                 }
             );
-    }
+    };
 
-    componentDidMount() {
-        this.loadTranslationsAndBooks();
-    }
+    const loadTranslationsAndBooks = () => {
+        const { locale } = intl;
 
-    loadTranslationsAndBooks() {
-        const {
-            intl: { locale },
-        } = this.props;
+        setIsTranslationsLoading(true);
+        setIsBooksLoading(true);
 
         Promise.all([
-            fetch("/api/" + locale + "/translation")
+            fetch(`/api/${locale}/translation`)
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        this.setState({
-                            isTranslationsLoaded: true,
-                            translations: result.data,
-                        });
+                        setTranslations(result.data);
                     },
                     (error) => {
-                        this.setState({
-                            isTranslationsLoaded: true,
-                            error,
-                        });
+                        setError(error);
                     }
-                ),
-            fetch("/api/" + locale + "/book")
+                )
+                .finally(() => {
+                    setIsTranslationsLoading(false);
+                }),
+            fetch(`/api/${locale}/book`)
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        this.setState({
-                            isBooksLoaded: true,
-                            books: result.data,
-                        });
+                        setBooks(result.data);
                     },
                     (error) => {
-                        this.setState({
-                            isBooksLoaded: true,
-                            error,
-                        });
+                        setError(error);
                     }
-                ),
-        ]).then(() => {
-            this.changeSelectedTranslation(this.state.selectedTranslation);
-        });
-    }
+                )
+                .finally(() => {
+                    setIsBooksLoading(false);
+                }),
+        ]);
+    };
 
-    setLocaleAndUpdateHistory(locale) {
-        const { setLocale } = this.props;
-        const { chapter, book, translation } = getDataFromCurrentPathname();
+    useEffect(() => {
+        if (!isBooksLoading && !isTranslationsLoading) {
+            changeSelectedTranslation(selectedTranslation);
+        }
+    }, [isBooksLoading, isTranslationsLoading]);
 
-        setLocale(locale);
-        this.updateHistory(locale, translation, book, chapter);
-        this.setState({}, this.loadTranslationsAndBooks);
-    }
+    useEffect(() => {
+        loadTranslationsAndBooks();
+    }, [intl.locale]); // Added dependencies based on variables used inside useEffect.
+    // Other useEffect hooks as needed for componentDidUpdate logic
 
-    getChapterIndex() {
-        // Note: parseInt is here because sometimes selectedChapter is a string.
-        //    Probably when chapter is parsed from the URL during first load it become a string
+    // Note: parseInt is here because sometimes selectedChapter is a string.
+    //    Probably when chapter is parsed from the URL during first load it become a string
+    const getChapterIndex = () =>
+        chapters.findIndex((value) => value === parseInt(selectedChapter));
 
-        return this.state.chapters.findIndex(
-            (value) => value === parseInt(this.state.selectedChapter)
-        );
-    }
+    const isNextChapterAvailable = () =>
+        !isStructureLoading &&
+        typeof chapters[getChapterIndex() + 1] !== "undefined";
 
-    isNextChapterAvailable() {
+    const isPrevChapterAvailable = () => {
+        return !isStructureLoading && getChapterIndex() !== 0;
+    };
+
+    const getBookIndex = () =>
+        Object.keys(structure).findIndex((bookKey) => bookKey === selectedBook);
+
+    const isNextBookAvailable = () => {
         return (
-            typeof this.state.chapters[this.getChapterIndex() + 1] !==
-            "undefined"
+            !isStructureLoading &&
+            typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
+                "undefined"
         );
-    }
+    };
 
-    isPrevChapterAvailable() {
-        return this.getChapterIndex() !== 0;
-    }
+    const isPrevBookAvailable = () => {
+        return !isStructureLoading && getBookIndex() !== 0;
+    };
 
-    getBookIndex() {
-        return Object.keys(this.state.structure).findIndex(
-            (bookKey) => bookKey === this.state.selectedBook
-        );
-    }
-
-    isNextBookAvailable() {
-        return (
-            typeof this.state.structure[
-                Object.keys(this.state.structure)[this.getBookIndex() + 1]
-            ] !== "undefined"
-        );
-    }
-
-    isPrevBookAvailable() {
-        return this.getBookIndex() !== 0;
-    }
-
-    nextChapter() {
-        if (this.isNextChapterAvailable()) {
-            this.changeSelectedChapter(
-                this.state.chapters[this.getChapterIndex() + 1]
-            );
+    const nextChapter = () => {
+        if (isNextChapterAvailable()) {
+            changeSelectedChapter(chapters[getChapterIndex() + 1]);
             return;
         }
-        this.nextBook();
-    }
+        nextBook();
+    };
 
-    prevChapter() {
-        if (this.isPrevChapterAvailable()) {
-            this.changeSelectedChapter(
-                this.state.chapters[this.getChapterIndex() - 1]
-            );
-            return;
-        }
-        this.prevBook(true);
-    }
-
-    nextBook() {
-        if (this.isNextBookAvailable()) {
-            this.changeSelectedBook(
-                Object.keys(this.state.structure)[this.getBookIndex() + 1]
-            );
-        }
-    }
-
-    prevBook(startFromLastVerse = false) {
-        if (!this.isPrevBookAvailable()) {
+    const prevChapter = () => {
+        if (isPrevChapterAvailable()) {
+            changeSelectedChapter(chapters[getChapterIndex() - 1]);
             return;
         }
 
-        this.changeSelectedBook(
-            Object.keys(this.state.structure)[this.getBookIndex() - 1]
-        );
-        if (startFromLastVerse) {
-            // Note: We are using setTimeout here to wait for setState to be updated
-            // It's not very clean hack but it should work
-            // It might be refactored after this component would be:
-            // - refactored to functional component
-            // - refactored to use hooks and contexts
-            setTimeout(() => {
-                this.changeSelectedChapter(
-                    this.state.chapters[this.state.chapters.length - 1]
+        prevBook(true);
+    };
+
+    const nextBook = () => {
+        if (isNextBookAvailable()) {
+            setSelectedBook();
+            changeSelectedBook(Object.keys(structure)[getBookIndex() + 1]);
+        }
+    };
+
+    const prevBook = (_startFromLastVerse = false) => {
+        if (!isPrevBookAvailable()) {
+            return;
+        }
+        startFromLastVerse.current = _startFromLastVerse;
+        console.log("startFromLastVerse", startFromLastVerse.current);
+        setSelectedBook(Object.keys(structure)[getBookIndex() - 1]);
+    };
+
+    useEffect(() => {
+        if (startFromLastVerse.current) {
+            startFromLastVerse.current = false;
+        }
+    }, [selectedBook]);
+
+    useEffect(() => {
+        const fetchStructure = async () => {
+            try {
+                const response = await fetch(
+                    `/api/${intl.locale}/translation/${selectedTranslation}`
                 );
-            }, 100);
+                if (!response.ok)
+                    throw new Error("Network response was not ok.");
+                const result = await response.json();
+                setStructure(result.data);
+                setSelectedBook((_selectedBook) =>
+                    getAppropriateBook(result.data, _selectedBook)
+                );
+            } catch (error) {
+                setError(error);
+            } finally {
+                setIsStructureLoading(false);
+            }
+        };
+        if (!isBooksLoading && !isTranslationsLoading && !error) {
+            fetchStructure();
         }
+    }, [isBooksLoading, isTranslationsLoading, selectedTranslation]);
+
+    // Render content
+    if (error) {
+        return <AppError message={error.message} />;
+    }
+    if (isTranslationsLoading || isBooksLoading) {
+        return <AppLoading />;
     }
 
-    render() {
-        const {
-            error,
-            isTranslationsLoaded,
-            isBooksLoaded,
-            isStructureLoaded,
-            showVerses,
-            translations,
-            books,
-            verses,
-            structure,
-            chapters,
-            selectedBook,
-            selectedChapter,
-            selectedTranslation,
-        } = this.state;
-
-        const {
-            intl: { formatMessage },
-        } = this.props;
-
-        if (error) {
-            return (
-                <div className="container app-preloader">
-                    <div className="row">
-                        <div className="col-12 d-flex align-items-center justify-content-center">
-                            {formatMessage({ id: "unexpectedErrorOccurred" })}{" "}
-                            {error.message}
-                        </div>
-                    </div>
-                </div>
-            );
-        } else if (!isTranslationsLoaded || !isBooksLoaded) {
-            return (
-                <div className="container app-preloader">
-                    <div className="row">
-                        <div className="col-12 d-flex align-items-center justify-content-center">
-                            {formatMessage({
-                                id: "preparingApplicationPleaseWait",
-                            })}
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <>
-                    <Navigator
-                        books={books}
-                        translations={translations}
-                        selectedTranslation={selectedTranslation}
-                        selectedChapter={selectedChapter}
-                        selectedBook={selectedBook}
-                        structure={structure}
-                        chapters={chapters}
-                        isStructureLoaded={isStructureLoaded}
-                        changeSelectedTranslation={
-                            this.changeSelectedTranslation
-                        }
-                        changeSelectedBook={this.changeSelectedBook}
-                        changeSelectedChapter={this.changeSelectedChapter}
-                        prevChapter={this.prevChapter}
-                        nextChapter={this.nextChapter}
-                        prevBook={this.prevBook}
-                        nextBook={this.nextBook}
-                        isPrevBookAvailable={this.isPrevBookAvailable}
-                        isNextBookAvailable={this.isNextBookAvailable}
-                        isPrevChapterAvailable={this.isPrevChapterAvailable}
-                        isNextChapterAvailable={this.isNextChapterAvailable}
-                    />
-                    <Reader
-                        showVerses={showVerses}
-                        selectedBook={selectedBook}
-                        selectedChapter={selectedChapter}
-                        verses={verses}
-                    />
-                    <StatusBar
-                        setLocaleAndUpdateHistory={
-                            this.setLocaleAndUpdateHistory
-                        }
-                        translations={translations}
-                    />
-                </>
-            );
-        }
-    }
-}
+    return (
+        <>
+            <Navigator
+                books={books}
+                translations={translations}
+                selectedTranslation={selectedTranslation}
+                selectedChapter={selectedChapter}
+                selectedBook={selectedBook}
+                structure={structure}
+                chapters={chapters}
+                isStructureLoading={isStructureLoading}
+                changeSelectedTranslation={changeSelectedTranslation}
+                changeSelectedBook={changeSelectedBook}
+                changeSelectedChapter={changeSelectedChapter}
+                prevChapter={prevChapter}
+                nextChapter={nextChapter}
+                prevBook={prevBook}
+                nextBook={nextBook}
+                isPrevBookAvailable={isPrevBookAvailable}
+                isNextBookAvailable={isNextBookAvailable}
+                isPrevChapterAvailable={isPrevChapterAvailable}
+                isNextChapterAvailable={isNextChapterAvailable}
+            />
+            <Reader
+                showVerses={showVerses}
+                selectedBook={selectedBook}
+                selectedChapter={selectedChapter}
+                verses={verses}
+            />
+            <StatusBar
+                setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
+                translations={translations}
+            />
+        </>
+    );
+};
 
 export default injectIntl(Bible);
+
+// export default injectIntl(BibleClass);
