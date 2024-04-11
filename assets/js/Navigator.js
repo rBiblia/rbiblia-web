@@ -38,7 +38,7 @@ export default function Navigator({
                         changeSelectedTranslation={changeSelectedTranslation}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                <div className="col-1 col-sm-1 d-flex justify-content-end p-0">
                     <button
                         onClick={prevBook}
                         className={
@@ -58,7 +58,7 @@ export default function Navigator({
                         changeSelectedBook={changeSelectedBook}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                <div className="col-1 col-sm-1 d-flex justify-content-start p-0">
                     <button
                         onClick={nextBook}
                         className={
@@ -69,7 +69,7 @@ export default function Navigator({
                         }
                     ></button>
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-end pe-0">
+                <div className="col-1 col-sm-1 d-flex justify-content-end p-0">
                     <button
                         onClick={prevChapter}
                         className={
@@ -88,7 +88,7 @@ export default function Navigator({
                         changeSelectedChapter={changeSelectedChapter}
                     />
                 </div>
-                <div className="col-1 col-sm-1 d-flex justify-content-start ps-0">
+                <div className="col-1 col-sm-1 d-flex justify-content-start p-0">
                     <button
                         onClick={nextChapter}
                         className={
