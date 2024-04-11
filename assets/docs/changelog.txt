@@ -12,6 +12,10 @@ https://rbiblia.toborek.info
 
 Dziennik wydań (od najnowszych):
 
+2024-04-12:
+- poprawiono wyświetlanie przycisków nawigacyjnych na urządzeniach mobilnych,
+- poprawiono nieprawidłowe działanie przycisków nawigacyjnych w niektórych tłumaczeniach.
+
 2024-04-05:
 - dodano przyciski nawigacyjne dla ksiąg oraz rozdziałów,
 - dodano podświetlenie aktualnie zaznaczonego wersetu,
