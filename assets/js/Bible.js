@@ -311,5 +311,3 @@ const Bible = ({ intl, setLocale }) => {
 };
 
 export default injectIntl(Bible);
-
-// export default injectIntl(BibleClass);
