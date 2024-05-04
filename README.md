@@ -31,7 +31,7 @@ Documentation for the API was created in OpenAPI format and is hosted [here](htt
 
 - [React] add better error handling when dealing with response data (display error message when something will fail)
 - [React] add caching to avoid server querying with every location change (if location was visited then keep it in memory and use it again)
-- [React] all class components might be refactored to functional components
+- [React] implement searching
 
 ## Donations
 
