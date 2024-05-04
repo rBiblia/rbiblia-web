@@ -53,9 +53,6 @@ const Bible = ({ intl, setLocale }) => {
     };
 
     const changeSelectedBook = (newSelectedBook) => {
-        // TODO: to implement this implementation at functional component
-        // if the book is the same as previous, keep the chapter if possible as well
-        //const keepChapterIfPossible = ;
         keepChapterIfPossible.current = newSelectedBook === selectedBook;
         setSelectedBook(newSelectedBook);
     };
