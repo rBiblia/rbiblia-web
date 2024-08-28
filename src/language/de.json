@@ -1,0 +1,1066 @@
+{
+  "messages": {
+    "error_translation_not_found": "Übersetzung nicht gefunden",
+    "error_no_verses_found": "Es wurden keine Verse im ausgewählten Kapitel gefunden",
+    "error_query_limit_exceeded": "Das Nutzungslimit für die aktuelle IP-Adresse ist erschöpft, versuchen Sie es morgen erneut",
+    "error_wrong_ip_address": "Es konnten keine Informationen über die aktuelle IP-Adresse abgerufen werden",
+    "error_database_connection_failed": "Fehler bei der Datenbankverbindung",
+    "error_json_is_malformed": "Der hochgeladene String im JSON-Format ist leer oder enthält Fehler",
+    "error_json_parameter_is_missing": "Der Parameter `%s` wurde nicht gefunden oder ist ungültig"
+  },
+  "aliases": {
+    "gen": {
+      "name": "Genesis (Das 1. Buch Mose)",
+      "group": "ot",
+      "aliases": [
+        "gen",
+        "ge",
+        "gn",
+        "1m",
+        "1mo",
+        "1mos",
+        "1mose",
+        "genesis"
+      ]
+    },
+    "exo": {
+      "name": "Exodus (Das 2. Buch Mose)",
+      "group": "ot",
+      "aliases": [
+        "ex",
+        "exo",
+        "exod",
+        "2m",
+        "2mo",
+        "2mos",
+        "2mose",
+        "exodus"
+      ]
+    },
+    "lev": {
+      "name": "Leviticus (Das 3. Buch Mose)",
+      "group": "ot",
+      "aliases": [
+        "le",
+        "lev",
+        "lv",
+        "levit",
+        "3m",
+        "3mo",
+        "3mos",
+        "3mose",
+        "leviticus"
+      ]
+    },
+    "num": {
+      "name": "Numbers (Das 4. Buch Mose)",
+      "group": "ot",
+      "aliases": [
+        "nu",
+        "num",
+        "nm",
+        "nb",
+        "4m",
+        "4mo",
+        "4mos",
+        "4mose",
+        "numeri"
+      ]
+    },
+    "deu": {
+      "name": "Deuteronomy (Das 5. Buch Mose)",
+      "group": "ot",
+      "aliases": [
+        "dt",
+        "deu",
+        "deut",
+        "5m",
+        "5mo",
+        "5mos",
+        "5mose",
+        "deuteronomy"
+      ]
+    },
+    "jos": {
+      "name": "Das Buch Josua",
+      "group": "ot",
+      "aliases": [
+        "jos",
+        "josua",
+        "josue",
+        "jsh",
+        "joshua"
+      ]
+    },
+    "jdg": {
+      "name": "Das Buch der Richter",
+      "group": "ot",
+      "aliases": [
+        "ri",
+        "rich",
+        "richter",
+        "jdg",
+        "judges"
+      ]
+    },
+    "rut": {
+      "name": "Das Buch Rut",
+      "group": "ot",
+      "aliases": [
+        "ru",
+        "rt",
+        "rut",
+        "ruth"
+      ]
+    },
+    "1sa": {
+      "name": "Das 1. Buch Samuel",
+      "group": "ot",
+      "aliases": [
+        "1sm",
+        "1sa",
+        "1sam",
+        "1samuel"
+      ]
+    },
+    "2sa": {
+      "name": "Das 2. Buch Samuel",
+      "group": "ot",
+      "aliases": [
+        "2sm",
+        "2sa",
+        "2sam",
+        "2samuel"
+      ]
+    },
+    "1ki": {
+      "name": "Das 1. Buch der Könige",
+      "group": "ot",
+      "aliases": [
+        "1kö",
+        "1kön",
+        "1könig",
+        "1könige",
+        "1ki",
+        "1kings"
+      ]
+    },
+    "2ki": {
+      "name": "Das 2. Buch der Könige",
+      "group": "ot",
+      "aliases": [
+        "2kö",
+        "2kön",
+        "2könig",
+        "2könige",
+        "2ki",
+        "2kings"
+      ]
+    },
+    "1ch": {
+      "name": "Das 1. Buch der Chronik",
+      "group": "ot",
+      "aliases": [
+        "1ch",
+        "1chr",
+        "1chro",
+        "Ichron",
+        "1chronik",
+        "1chronicles"
+      ]
+    },
+    "2ch": {
+      "name": "Das 2. Buch der Chronik",
+      "group": "ot",
+      "aliases": [
+        "2ch",
+        "2chr",
+        "2chro",
+        "2chron",
+        "2chronik",
+        "2chronicles"
+      ]
+    },
+    "ezr": {
+      "name": "Das Buch der Esra",
+      "group": "ot",
+      "aliases": [
+        "es",
+        "esra",
+        "ezra",
+        "ez"
+      ]
+    },
+    "neh": {
+      "name": "Das Buch Nehemias",
+      "group": "ot",
+      "aliases": [
+        "ne",
+        "neh",
+        "nehem",
+        "nehemia"
+      ]
+    },
+    "tob": {
+      "name": "Das Buch Tobit (das Buch Tobias)",
+      "aliases": [
+        "to",
+        "tb",
+        "tob",
+        "tobit",
+        "tobias"
+      ]
+    },
+    "jdt": {
+      "name": "Das Buch Judit",
+      "aliases": [
+        "ju",
+        "judit",
+        "jdt",
+        "jdgs",
+        "jud",
+        "judges"
+      ]
+    },
+    "est": {
+      "name": "Das Buch Ester",
+      "group": "ot",
+      "aliases": [
+        "es",
+        "est",
+        "ester",
+        "et",
+        "esther"
+      ]
+    },
+    "1ma": {
+      "name": "Das 1. Buch der Makkabäer",
+      "aliases": [
+        "1ma",
+        "1mak",
+        "1makk",
+        "1makkab",
+        "1makkabäer",
+        "1maccabees",
+        "1mac"
+      ]
+    },
+    "2ma": {
+      "name": "Das 2. Buch der Makkabäer",
+      "aliases": [
+        "2ma",
+        "2mak",
+        "2makk",
+        "2makkab",
+        "2makkabäer",
+        "2maccabees",
+        "2mac"
+      ]
+    },
+    "3ma": {
+      "name": "Das 3. Buch der Makkabäer",
+      "aliases": [
+        "3ma",
+        "3mak",
+        "3makk",
+        "3makkab",
+        "3makkabäer"
+      ]
+    },
+    "4ma": {
+      "name": "Das 4. Buch der Makkabäer",
+      "aliases": [
+        "4ma",
+        "4mak",
+        "4makk",
+        "4makkab",
+        "4makkabäer",
+        "4maccabees",
+        "4mac"
+      ]
+    },
+    "job": {
+      "name": "Das Buch Ijob (Das Buch Hiob)",
+      "group": "ot",
+      "aliases": [
+        "hi",
+        "hio",
+        "hiob",
+        "job"
+      ]
+    },
+    "psa": {
+      "name": "Die Psalmen",
+      "group": "ot",
+      "aliases": [
+        "ps",
+        "psa",
+        "psalm",
+        "psalmen",
+        "psalms"
+      ]
+    },
+    "pro": {
+      "name": "Das Buch der Sprichwörter (Die Sprüche Salomos)",
+      "group": "ot",
+      "aliases": [
+        "sp",
+        "spr",
+        "spüch",
+        "sprüche",
+        "pro",
+        "proverbs"
+      ]
+    },
+    "ecc": {
+      "name": "Das Buch Kohelet (Der Prediger Salomo)",
+      "group": "ot",
+      "aliases": [
+        "pr",
+        "pre",
+        "pred",
+        "prediger",
+        "ko",
+        "koh",
+        "kohe",
+        "kohelet",
+        "qoheleth",
+        "qh"
+      ]
+    },
+    "sol": {
+      "name": "Das Hohelied (Das Hohelied Salomos)",
+      "group": "ot",
+      "aliases": [
+        "ho",
+        "hld",
+        "hohe",
+        "hohelied",
+        "song",
+        "canticles"
+      ]
+    },
+    "wis": {
+      "name": "Das Buch der Weisheit (= Die Weisheit Salomos)",
+      "aliases": [
+        "wei",
+        "weish",
+        "weisheit",
+        "wis",
+        "wisdofsol",
+        "wisdom"
+      ]
+    },
+    "sip": {
+      "name": "Das Buch Jesus Sirach",
+      "aliases": [
+        "si",
+        "sir",
+        "sirach"
+      ]
+    },
+    "sir": {
+      "name": "Die Weisheit des Jesus Sirach",
+      "aliases": [
+        "sir",
+        "sirachweish",
+        "sirwa",
+        "weisheitSirach",
+        "ecclesiasticus",
+        "ecclus"
+      ]
+    },
+    "pss": {
+      "name": "Psalmen Solomons",
+      "aliases": [
+        "pss",
+        "pssa",
+        "psalmensalo",
+        "psalmensalomons",
+        "psalms",
+        "pssal",
+        "pssalomon",
+        "psalmensalomon",
+        "pssol",
+        "pssolomon",
+        "psalmssolomon"
+      ]
+    },
+    "isa": {
+      "name": "Das Buch Jesaja",
+      "group": "ot",
+      "aliases": [
+        "je",
+        "jes",
+        "jesa",
+        "jesaja"
+      ]
+    },
+    "jer": {
+      "name": "Das Buch Jeremia",
+      "group": "ot",
+      "aliases": [
+        "jr",
+        "je",
+        "jer",
+        "jerem",
+        "jeremia"
+      ]
+    },
+    "lam": {
+      "name": "Die Klagelieder des Jeremia",
+      "group": "ot",
+      "aliases": [
+        "lam",
+        "la",
+        "lamentations",
+        "lament",
+        "kl",
+        "kla",
+        "klage",
+        "klagelied",
+        "klagelieder"
+      ]
+    },
+    "bar": {
+      "name": "Das Buch Baruch",
+      "aliases": [
+        "bar",
+        "baruch"
+      ]
+    },
+    "eze": {
+      "name": "Das Buch Ezechiel (Das Buch Hesekiel)",
+      "group": "ot",
+      "aliases": [
+        "ez",
+        "ezekiel",
+        "he",
+        "hes",
+        "hesek",
+        "hesekiel"
+      ]
+    },
+    "dan": {
+      "name": "Das Buch Daniel",
+      "group": "ot",
+      "aliases": [
+        "dan",
+        "dn",
+        "da",
+        "daniel",
+        "dl",
+        "dnl",
+        "dal"
+      ]
+    },
+    "hos": {
+      "name": "Das Buch Hosea",
+      "group": "ot",
+      "aliases": [
+        "hos",
+        "ho",
+        "hosea",
+        "hse",
+        "hs"
+      ]
+    },
+    "joe": {
+      "name": "Das Buch Joel",
+      "group": "ot",
+      "aliases": [
+        "joel",
+        "jl",
+        "joe",
+        "jo"
+      ]
+    },
+    "amo": {
+      "name": "Das Buch Amos",
+      "group": "ot",
+      "aliases": [
+        "amos",
+        "am",
+        "ams",
+        "as",
+        "amo"
+      ]
+    },
+    "oba": {
+      "name": "Das Buch Obadja",
+      "group": "ot",
+      "aliases": [
+        "obad",
+        "ob",
+        "obd",
+        "obdh",
+        "obadiah",
+        "oba",
+        "obadja"
+      ]
+    },
+    "jon": {
+      "name": "Das Buch Jona",
+      "group": "ot",
+      "aliases": [
+        "jonah",
+        "jon",
+        "jnh",
+        "jnh",
+        "jona"
+      ]
+    },
+    "mic": {
+      "name": "Das Buch Micha",
+      "group": "ot",
+      "aliases": [
+        "mic",
+        "micah",
+        "mch",
+        "mc",
+        "mi",
+        "mich",
+        "micha"
+      ]
+    },
+    "nah": {
+      "name": "Das Buch Nahum",
+      "group": "ot",
+      "aliases": [
+        "nah",
+        "na",
+        "nahum",
+        "nh",
+        "nhm"
+      ]
+    },
+    "hab": {
+      "name": "Das Buch Habakuk",
+      "group": "ot",
+      "aliases": [
+        "hab",
+        "habakkuk",
+        "hbk",
+        "hb",
+        "haba",
+        "habak",
+        "habakuk"
+      ]
+    },
+    "zep": {
+      "name": "Das Buch Zefania",
+      "group": "ot",
+      "aliases": [
+        "zeph",
+        "zp",
+        "zephaniah",
+        "ze",
+        "zef",
+        "zefan",
+        "zefania"
+      ]
+    },
+    "hag": {
+      "name": "Das Buch Haggai",
+      "group": "ot",
+      "aliases": [
+        "hag",
+        "haggai",
+        "hg",
+        "hgg",
+        "hagg",
+        "hgi"
+      ]
+    },
+    "zec": {
+      "name": "Das Buch Sacharja",
+      "group": "ot",
+      "aliases": [
+        "zech",
+        "ze",
+        "zechariah",
+        "zechar",
+        "zh",
+        "sh",
+        "sa",
+        "sacha",
+        "sechar",
+        "schr",
+        "schrh",
+        "sacharja"
+      ]
+    },
+    "mal": {
+      "name": "Das Buch Maleachi",
+      "group": "ot",
+      "aliases": [
+        "mal",
+        "ml",
+        "mala",
+        "malachi",
+        "mlch",
+        "mal",
+        "male",
+        "malea",
+        "maleachi"
+      ]
+    },
+    "mat": {
+      "name": "Matthäusevangelium",
+      "group": "nt",
+      "aliases": [
+        "matt",
+        "mt",
+        "matthew",
+        "mat",
+        "mth",
+        "mthw",
+        "m",
+        "matthäus",
+        "matthäusevangelium"
+      ]
+    },
+    "mar": {
+      "name": "Markusevangelium",
+      "group": "nt",
+      "aliases": [
+        "mark",
+        "mrk",
+        "mk",
+        "mr",
+        "markus"
+      ]
+    },
+    "luk": {
+      "name": "Lukasevangelium",
+      "group": "nt",
+      "aliases": [
+        "luke",
+        "lu",
+        "lk",
+        "l",
+        "luka",
+        "lukas"
+      ]
+    },
+    "joh": {
+      "name": "Johannesevangelium",
+      "group": "nt",
+      "aliases": [
+        "john",
+        "jn",
+        "jhn",
+        "joh",
+        "j",
+        "johan",
+        "johann",
+        "johannes",
+        "johannesevangelium"
+      ]
+    },
+    "act": {
+      "name": "Apostelgeschichte",
+      "group": "nt",
+      "aliases": [
+        "acts",
+        "ac",
+        "apge",
+        "ap",
+        "ag",
+        "apg",
+        "apostelge",
+        "apostelgesch",
+        "apostelgeschichte"
+      ]
+    },
+    "rom": {
+      "name": "Römerbrief",
+      "group": "nt",
+      "aliases": [
+        "rom",
+        "ro",
+        "rm",
+        "romans",
+        "rms",
+        "rmns",
+        "rö",
+        "röm",
+        "römer",
+        "römerbrief"
+      ]
+    },
+    "1co": {
+      "name": "1. Korintherbrief",
+      "group": "nt",
+      "aliases": [
+        "1cor",
+        "1c",
+        "1co",
+        "1corinthians",
+        "1kor",
+        "1k",
+        "1ko",
+        "1korint",
+        "1korinther",
+        "1korintherbrief"
+      ]
+    },
+    "2co": {
+      "name": "2. Korintherbrief",
+      "group": "nt",
+      "aliases": [
+        "2cor",
+        "2c",
+        "2co",
+        "2corinthians",
+        "2kor",
+        "2k",
+        "2ko",
+        "2korint",
+        "2korinther",
+        "2korintherbrief"
+      ]
+    },
+    "gal": {
+      "name": "Galaterbrief",
+      "group": "nt",
+      "aliases": [
+        "gal",
+        "ga",
+        "gala",
+        "galatians",
+        "glt",
+        "glater",
+        "galaterbrief"
+      ]
+    },
+    "eph": {
+      "name": "Epheserbrief",
+      "group": "nt",
+      "aliases": [
+        "eph",
+        "ephes",
+        "ephesians",
+        "epheser",
+        "epheserbrief"
+      ]
+    },
+    "phi": {
+      "name": "Philipperbrief",
+      "group": "nt",
+      "aliases": [
+        "phil",
+        "php",
+        "philippians",
+        "philipper",
+        "philipperbreif"
+      ]
+    },
+    "col": {
+      "name": "Kolosserbrief",
+      "group": "nt",
+      "aliases": [
+        "col",
+        "colossians",
+        "kol",
+        "kl",
+        "kolos",
+        "kolosser",
+        "kls",
+        "kolosserbrief"
+      ]
+    },
+    "1th": {
+      "name": "1. Thessalonicherbrief",
+      "group": "nt",
+      "aliases": [
+        "1thess",
+        "1th",
+        "1thes",
+        "1thessalonians",
+        "1th",
+        "1thessa",
+        "1thessalon",
+        "1thessalonicher",
+        "1thessalonicherbrief"
+      ]
+    },
+    "2th": {
+      "name": "2. Thessalonicherbrief",
+      "group": "nt",
+      "aliases": [
+        "2thess",
+        "2th",
+        "2thes",
+        "2thessalonians",
+        "2th",
+        "2tThessa",
+        "2thessalon",
+        "2thessalonicher",
+        "2thessalonicherbrief"
+      ]
+    },
+    "1ti": {
+      "name": "1. Timotheusbrief",
+      "group": "nt",
+      "aliases": [
+        "1tim",
+        "1ti",
+        "1timothy",
+        "1tm",
+        "1tmt",
+        "timotheus",
+        "timotheusbrief",
+        "timot",
+        "timotheusb"
+      ]
+    },
+    "2ti": {
+      "name": "2. Timotheusbrief",
+      "group": "nt",
+      "aliases": [
+        "2tim",
+        "2ti",
+        "2timothy",
+        "2tm",
+        "2tmt",
+        "2timotheus",
+        "2timotheusbrief",
+        "2timot",
+        "2timotheusb"
+      ]
+    },
+    "tit": {
+      "name": "Titusbrief",
+      "group": "nt",
+      "aliases": [
+        "titus",
+        "tit",
+        "tt",
+        "ts",
+        "tts"
+      ]
+    },
+    "phm": {
+      "name": "Philemonbrief",
+      "group": "nt",
+      "aliases": [
+        "philem",
+        "phlm",
+        "phm",
+        "philemon",
+        "phmn",
+        "phlmn",
+        "philemonbrief"
+      ]
+    },
+    "heb": {
+      "name": "Hebräerbrief",
+      "group": "nt",
+      "aliases": [
+        "heb",
+        "hebrews",
+        "hbr",
+        "hebr",
+        "hbs",
+        "hbrs",
+        "Hhebräerbrief",
+        "hebräer"
+      ]
+    },
+    "jam": {
+      "name": "Jakobusbrief",
+      "group": "nt",
+      "aliases": [
+        "james",
+        "jas",
+        "jm",
+        "jms",
+        "jak",
+        "jakobus",
+        "jakobusbrief"
+      ]
+    },
+    "1pe": {
+      "name": "1. Petrusbrief",
+      "group": "nt",
+      "aliases": [
+        "1pet",
+        "1pe",
+        "1pt",
+        "1peter",
+        "1p",
+        "1ptr",
+        "1petr",
+        "1petrusbrief",
+        "1petrus"
+      ]
+    },
+    "2pe": {
+      "name": "2. Petrusbrief",
+      "group": "nt",
+      "aliases": [
+        "2pet",
+        "2pe",
+        "2pt",
+        "2peter",
+        "2p",
+        "2ptr",
+        "2petr",
+        "2petrusbrief",
+        "2petrus"
+      ]
+    },
+    "1jo": {
+      "name": "1. Johannesbrief",
+      "group": "nt",
+      "aliases": [
+        "1john",
+        "1jn",
+        "1jo",
+        "1joh",
+        "1jhn",
+        "1j",
+        "1johannesbrief",
+        "1johannes",
+        "1johan"
+      ]
+    },
+    "2jo": {
+      "name": "2. Johannesbrief",
+      "group": "nt",
+      "aliases": [
+        "2john",
+        "2jn",
+        "2jo",
+        "2joh",
+        "2jhn",
+        "2j",
+        "2johannesbrief",
+        "2johannes",
+        "2johan"
+      ]
+    },
+    "3jo": {
+      "name": "3. Johannesbrief",
+      "group": "nt",
+      "aliases": [
+        "3john",
+        "3jn",
+        "3jo",
+        "3joh",
+        "3jhn",
+        "3j",
+        "3johannesbrief",
+        "3johannes",
+        "3johan"
+      ]
+    },
+    "jud": {
+      "name": "Judasbrief",
+      "group": "nt",
+      "aliases": [
+        "jude",
+        "jud",
+        "jd",
+        "judas",
+        "judasbrief"
+      ]
+    },
+    "rev": {
+      "name": "Offenbarung des Johannes",
+      "group": "nt",
+      "aliases": [
+        "rev",
+        "revelation",
+        "apocalypse",
+        "apoc",
+        "off",
+        "offen",
+        "offenbar",
+        "offenbarung"
+      ]
+    },
+    "epj": {
+      "name": "Jeremiabrief",
+      "aliases": [
+        "epjer",
+        "brjer",
+        "briefjer",
+        "jeremiabrief",
+        "jerbrief",
+        "jerbr"
+      ]
+    },
+    "sus": {
+      "name": "Susanna",
+      "aliases": [
+        "sus",
+        "sussanna"
+      ]
+    },
+    "bel": {
+      "name": "Bel und der Drache",
+      "aliases": [
+        "bel"
+      ]
+    },
+    "pra": {
+      "name": "Gebet des Asarja",
+      "aliases": [
+        "aa",
+        "prazar",
+        "ga",
+        "gebetasarja"
+      ]
+    },
+    "prm": {
+      "name": "Gebet des Manasse",
+      "aliases": [
+        "profman",
+        "prman",
+        "pma",
+        "prayerofmanasses",
+        "mns",
+        "geman",
+        "gebetmanasse",
+        "manasse"
+      ]
+    },
+    "lao": {
+      "name": "Laodizäerbrief (Laodizenerbrief)",
+      "aliases": [
+        "laodiceans",
+        "laod",
+        "eplaod",
+        "epistlaodiceans",
+        "epistlelaodiceans",
+        "epistletolaodiceans",
+        "Laodizäerbrief",
+        "Laodizenerbrief"
+      ]
+    },
+    "3es": {
+      "name": "3 Esdras",
+      "aliases": [
+        "3es",
+        "3esd",
+        "3esdr",
+        "3esdras",
+        "3thesdras",
+        "3esdras"
+      ]
+    },
+    "4es": {
+      "name": "4 Esdras",
+      "aliases": [
+        "4es",
+        "4esd",
+        "4esdr",
+        "4esdras",
+        "4thesdras",
+        "4esdras"
+      ]
+    }
+  }
+}

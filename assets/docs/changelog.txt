@@ -10,7 +10,14 @@ https://github.com/rBiblia/rbiblia-web/graphs/contributors
 Strona domowa rBiblii (wersja dla Windows):
 https://rbiblia.toborek.info
 
+Strona z zasobami dla programistów:
+https://rbiblia.github.io
+
 Dziennik wydań (od najnowszych):
+
+2024-08-29:
+- dodano niemieckie tłumaczenie wraz z przekładami (tłumaczenie zostało przygotowane przez Przemka Sibera ze strony monoteizm.pl, dziękuję),
+- przebudowa i usprawnienie kodu po stronie przeglądarki.
 
 2024-04-12:
 - poprawiono wyświetlanie przycisków nawigacyjnych na urządzeniach mobilnych,

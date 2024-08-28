@@ -7,7 +7,7 @@ import {
 } from "../consts";
 import getDefaultLanguage from "./getDefaultLanguage";
 
-const ACCEPTED_LANGUAGES = ["pl", "en"];
+const ACCEPTED_LANGUAGES = ["pl", "en", "de"];
 
 /**
  * It gets specific resource id with the following priorities:

@@ -7,4 +7,5 @@ export const COOKIE_EXPIRES = 365; // days
 export const LANGUAGES = {
     en: "English (EN)",
     pl: "Polski (PL)",
+    de: "Deutsch (DE)",
 };
