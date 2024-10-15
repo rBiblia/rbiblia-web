@@ -15,6 +15,9 @@ https://rbiblia.github.io
 
 Dziennik wydań (od najnowszych):
 
+2024-10-16:
+- poprawiono zapamiętywanie ostatnio oglądanego rozdziału przy wyborze tłumaczenia.
+
 2024-08-29:
 - dodano niemieckie tłumaczenie wraz z przekładami (tłumaczenie zostało przygotowane przez Przemka Sibera ze strony monoteizm.pl, dziękuję),
 - przebudowa i usprawnienie kodu po stronie przeglądarki.
