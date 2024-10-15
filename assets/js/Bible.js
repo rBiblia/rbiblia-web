@@ -42,6 +42,7 @@ const Bible = ({ intl, setLocale }) => {
     const changeSelectedTranslation = useCallback((newTranslation) => {
         setShowVerses(false);
         setIsStructureLoading(true);
+        keepChapterIfPossible.current = true;
         setSelectedTranslation(newTranslation);
     }, []);
 
@@ -61,7 +62,6 @@ const Bible = ({ intl, setLocale }) => {
         if (!structure || chapters.length === 0) {
             return;
         }
-
         changeSelectedChapter(
             getAppropriateChapter(
                 keepChapterIfPossible.current,
@@ -231,7 +231,7 @@ const Bible = ({ intl, setLocale }) => {
             return;
         }
         startFromLastVerse.current = _startFromLastVerse;
-        console.log("startFromLastVerse", startFromLastVerse.current);
+
         setSelectedBook(Object.keys(structure)[getBookIndex() - 1]);
     };
 
