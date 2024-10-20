@@ -27,6 +27,7 @@ RewriteRule ^favicon\.ico$ /assets/favicon.png [L]
 # remove legacy /b prefix from the path (can be removed at some point later)
 RewriteRule ^b/([a-z]{2})/([a-z0-9_]+)/([a-z0-9]+)/(\d+) /$1/$2/$3/$4 [R=301,QSA,L]
 RewriteRule ^b/([a-z0-9_]+)/([a-z0-9]+)/(\d+) /pl/$1/$2/$3 [R=301,QSA,L]
+RewriteRule ^([a-z0-9_]+)/pl_pubg/([a-z0-9]+)/(\d+) /$1/pl_ubg/$2/$3 [R=301,QSA,L]
 
 RewriteRule ^$ index.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
