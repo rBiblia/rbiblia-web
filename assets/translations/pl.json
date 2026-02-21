@@ -115,5 +115,6 @@
   "chapterComparison": "Porównanie rozdziałów",
   "chapterCompSelectTranslation": "Wybierz tłumaczenie...",
   "chapterCompSelectHint": "Wybierz tłumaczenia do porównania z list rozwijanych powyżej.",
-  "chapterCompError": "Nie udało się załadować rozdziału."
+  "chapterCompError": "Nie udało się załadować rozdziału.",
+  "info": "Informacje"
 }

@@ -116,5 +116,6 @@
   "chapterComparison": "Kapitelvergleich",
   "chapterCompSelectTranslation": "Übersetzung wählen...",
   "chapterCompSelectHint": "Wählen Sie Übersetzungen zum Vergleichen aus den Dropdown-Listen oben.",
-  "chapterCompError": "Kapitel konnte nicht geladen werden."
+  "chapterCompError": "Kapitel konnte nicht geladen werden.",
+  "info": "Info"
 }

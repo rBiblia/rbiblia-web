@@ -116,5 +116,6 @@
   "chapterComparison": "Chapter Comparison",
   "chapterCompSelectTranslation": "Select translation...",
   "chapterCompSelectHint": "Select translations to compare from the dropdowns above.",
-  "chapterCompError": "Failed to load chapter."
+  "chapterCompError": "Failed to load chapter.",
+  "info": "Info"
 }

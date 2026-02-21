@@ -4922,6 +4922,9 @@ header.sticky-top {
 
 .chapter-comp-select {
   flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
   padding: 0.5rem 0.75rem;
   border: 2px solid #ddd;
   border-radius: 10px;

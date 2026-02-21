@@ -4,9 +4,10 @@ import { loadNotes, saveNotes } from "./Notes";
 import useFocusTrap from "./hooks/useFocusTrap";
 import Icon from "./Icon";
 
-const FAVORITE_TRANSLATIONS_STORAGE_KEY = 'rbiblia_favorite_translations';
-const FAVORITE_TRANSLATIONS_UPDATED_EVENT = 'rbiblia:favorite-translations-updated';
-const COMPARISON_DIFF_STRICT_KEY = 'rbiblia_comparison_diff_strict';
+const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
+const FAVORITE_TRANSLATIONS_UPDATED_EVENT =
+    "rbiblia:favorite-translations-updated";
+const COMPARISON_DIFF_STRICT_KEY = "rbiblia_comparison_diff_strict";
 
 const SideMenu = ({ isOpen, onClose, children }) => {
     const { formatMessage } = useIntl();
@@ -18,12 +19,15 @@ const SideMenu = ({ isOpen, onClose, children }) => {
         <>
             {/* Overlay */}
             <div
-                className={`side-menu-overlay ${isOpen ? 'active' : ''}`}
+                className={`side-menu-overlay ${isOpen ? "active" : ""}`}
                 onClick={onClose}
             />
 
             {/* Panel */}
-            <div ref={panelRef} className={`side-menu-panel ${isOpen ? 'open' : ''}`}>
+            <div
+                ref={panelRef}
+                className={`side-menu-panel ${isOpen ? "open" : ""}`}
+            >
                 {children}
             </div>
         </>
@@ -47,33 +51,43 @@ const SideMenuTab = ({ onClick, className = "" }) => {
 
 // Helper functions for settings
 const getComparisonLimit = () => {
-    return parseInt(localStorage.getItem('rbiblia_comparison_limit') || '4', 10);
+    return parseInt(
+        localStorage.getItem("rbiblia_comparison_limit") || "4",
+        10
+    );
 };
 
 const setComparisonLimitValue = (limit) => {
-    localStorage.setItem('rbiblia_comparison_limit', limit.toString());
+    localStorage.setItem("rbiblia_comparison_limit", limit.toString());
 };
 
 const getFavoriteTranslations = () => {
     try {
-        return JSON.parse(localStorage.getItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || '[]');
+        return JSON.parse(
+            localStorage.getItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
+        );
     } catch {
         return [];
     }
 };
 
 const saveFavoriteTranslations = (favorites) => {
-    localStorage.setItem(FAVORITE_TRANSLATIONS_STORAGE_KEY, JSON.stringify(favorites));
-    if (typeof window !== 'undefined') {
+    localStorage.setItem(
+        FAVORITE_TRANSLATIONS_STORAGE_KEY,
+        JSON.stringify(favorites)
+    );
+    if (typeof window !== "undefined") {
         window.dispatchEvent(
-            new CustomEvent(FAVORITE_TRANSLATIONS_UPDATED_EVENT, { detail: favorites })
+            new CustomEvent(FAVORITE_TRANSLATIONS_UPDATED_EVENT, {
+                detail: favorites,
+            })
         );
     }
 };
 
 const isDiffModeStrict = () => {
     try {
-        return localStorage.getItem(COMPARISON_DIFF_STRICT_KEY) === '1';
+        return localStorage.getItem(COMPARISON_DIFF_STRICT_KEY) === "1";
     } catch {
         return false;
     }
@@ -81,7 +95,7 @@ const isDiffModeStrict = () => {
 
 const setDiffModeStrict = (strict) => {
     try {
-        localStorage.setItem(COMPARISON_DIFF_STRICT_KEY, strict ? '1' : '0');
+        localStorage.setItem(COMPARISON_DIFF_STRICT_KEY, strict ? "1" : "0");
     } catch {
         // Ignore storage write failures
     }
@@ -98,15 +112,17 @@ const DisplaySettings = ({
     theme,
     setTheme,
     onClose,
-    onOpenChangelog
+    onOpenChangelog,
 }) => {
     const { formatMessage, locale } = useIntl();
     const fileInputRef = useRef(null);
     const [importStatus, setImportStatus] = useState(null);
     const [comparisonLimit, setComparisonLimit] = useState(getComparisonLimit);
-    const [favoriteTranslations, setFavoriteTranslationsState] = useState(getFavoriteTranslations);
+    const [favoriteTranslations, setFavoriteTranslationsState] = useState(
+        getFavoriteTranslations
+    );
     const [diffStrict, setDiffStrict] = useState(isDiffModeStrict);
-    const [activeTab, setActiveTab] = useState('text');
+    const [activeTab, setActiveTab] = useState("text");
 
     useEffect(() => {
         const handleFavoritesUpdated = (event) => {
@@ -117,29 +133,47 @@ const DisplaySettings = ({
             setFavoriteTranslationsState(getFavoriteTranslations());
         };
 
-        window.addEventListener(FAVORITE_TRANSLATIONS_UPDATED_EVENT, handleFavoritesUpdated);
+        window.addEventListener(
+            FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+            handleFavoritesUpdated
+        );
         return () => {
-            window.removeEventListener(FAVORITE_TRANSLATIONS_UPDATED_EVENT, handleFavoritesUpdated);
+            window.removeEventListener(
+                FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+                handleFavoritesUpdated
+            );
         };
     }, []);
 
     const fontSizes = [
-        { value: 'small', label: 'A', size: '0.9rem' },
-        { value: 'medium', label: 'A', size: '1.15rem' },
-        { value: 'large', label: 'A', size: '1.4rem' },
-        { value: 'xlarge', label: 'A', size: '1.7rem' },
+        { value: "small", label: "A", size: "0.9rem" },
+        { value: "medium", label: "A", size: "1.15rem" },
+        { value: "large", label: "A", size: "1.4rem" },
+        { value: "xlarge", label: "A", size: "1.7rem" },
     ];
 
     const fontFamilies = [
-        { value: 'serif', label: 'Serif', preview: 'Georgia, serif' },
-        { value: 'sans', label: 'Sans', preview: 'Inter, sans-serif' },
-        { value: 'mono', label: 'Mono', preview: 'monospace' },
+        { value: "serif", label: "Serif", preview: "Georgia, serif" },
+        { value: "sans", label: "Sans", preview: "Inter, sans-serif" },
+        { value: "mono", label: "Mono", preview: "monospace" },
     ];
 
     const themes = [
-        { value: 'system', label: formatMessage({ id: 'themeSystem' || 'System' }), icon: '⚙️' },
-        { value: 'light', label: formatMessage({ id: 'themeLight' || 'Light' }), icon: '☀️' },
-        { value: 'dark', label: formatMessage({ id: 'themeDark' || 'Dark' }), icon: '🌙' },
+        {
+            value: "system",
+            label: formatMessage({ id: "themeSystem" || "System" }),
+            icon: "⚙️",
+        },
+        {
+            value: "light",
+            label: formatMessage({ id: "themeLight" || "Light" }),
+            icon: "☀️",
+        },
+        {
+            value: "dark",
+            label: formatMessage({ id: "themeDark" || "Dark" }),
+            icon: "🌙",
+        },
     ];
 
     const comparisonOptions = [2, 3, 4, 5, 6];
@@ -147,30 +181,51 @@ const DisplaySettings = ({
     // Tabs configuration
     const tabs = [
         {
-            id: 'text',
+            id: "text",
             icon: <Icon name="type" />,
-            label: formatMessage({ id: "textSettings" })
+            label: formatMessage({ id: "textSettings" }),
         },
         {
-            id: 'appearance',
+            id: "appearance",
             icon: <Icon name="sun" />,
-            label: formatMessage({ id: "appearance" })
+            label: formatMessage({ id: "appearance" }),
         },
         {
-            id: 'language',
+            id: "language",
             icon: <Icon name="globe" />,
-            label: formatMessage({ id: "language" })
+            label: formatMessage({ id: "language" }),
         },
         {
-            id: 'favorites',
+            id: "favorites",
             icon: <Icon name="star" />,
-            label: formatMessage({ id: "favoriteTranslations" })
+            label: formatMessage({ id: "favoriteTranslations" }),
         },
         {
-            id: 'backup',
+            id: "backup",
             icon: <Icon name="archive" />,
-            label: formatMessage({ id: "notesBackup" })
-        }
+            label: formatMessage({ id: "notesBackup" }),
+        },
+        {
+            id: "info",
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                </svg>
+            ),
+            label: formatMessage({ id: "info", defaultMessage: "Info" }),
+        },
     ];
 
     // Handle comparison limit change
@@ -183,7 +238,7 @@ const DisplaySettings = ({
     // Toggle favorite translation
     const toggleFavorite = (translationId) => {
         const newFavorites = favoriteTranslations.includes(translationId)
-            ? favoriteTranslations.filter(id => id !== translationId)
+            ? favoriteTranslations.filter((id) => id !== translationId)
             : [...favoriteTranslations, translationId];
         setFavoriteTranslationsState(newFavorites);
         saveFavoriteTranslations(newFavorites);
@@ -192,20 +247,26 @@ const DisplaySettings = ({
     // Export notes to a JSON file
     const handleExportNotes = () => {
         const notes = loadNotes();
-        const generalNotes = JSON.parse(localStorage.getItem('rbiblia_general_notes') || '[]');
+        const generalNotes = JSON.parse(
+            localStorage.getItem("rbiblia_general_notes") || "[]"
+        );
 
         const exportData = {
             version: 1,
             exportDate: new Date().toISOString(),
             verseNotes: notes,
-            generalNotes: generalNotes
+            generalNotes: generalNotes,
         };
 
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+            type: "application/json",
+        });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = `rbiblia-notatki-${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `rbiblia-notatki-${
+            new Date().toISOString().split("T")[0]
+        }.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -224,57 +285,78 @@ const DisplaySettings = ({
 
                 // Structure validation
                 if (!importData.verseNotes && !importData.generalNotes) {
-                    throw new Error('Invalid file format');
+                    throw new Error("Invalid file format");
                 }
 
                 // Merge with existing notes
                 const existingNotes = loadNotes();
-                const existingGeneral = JSON.parse(localStorage.getItem('rbiblia_general_notes') || '[]');
+                const existingGeneral = JSON.parse(
+                    localStorage.getItem("rbiblia_general_notes") || "[]"
+                );
 
                 // Merge verse notes (new items overwrite existing ones)
-                const mergedNotes = { ...existingNotes, ...importData.verseNotes };
+                const mergedNotes = {
+                    ...existingNotes,
+                    ...importData.verseNotes,
+                };
                 saveNotes(mergedNotes);
 
                 // Merge general notes (add new items at the beginning, avoiding duplicates)
-                if (importData.generalNotes && Array.isArray(importData.generalNotes)) {
-                    const existingIds = new Set(existingGeneral.map(n => n.id));
-                    const newNotes = importData.generalNotes.filter(n => !existingIds.has(n.id));
+                if (
+                    importData.generalNotes &&
+                    Array.isArray(importData.generalNotes)
+                ) {
+                    const existingIds = new Set(
+                        existingGeneral.map((n) => n.id)
+                    );
+                    const newNotes = importData.generalNotes.filter(
+                        (n) => !existingIds.has(n.id)
+                    );
                     const mergedGeneral = [...newNotes, ...existingGeneral];
-                    localStorage.setItem('rbiblia_general_notes', JSON.stringify(mergedGeneral));
+                    localStorage.setItem(
+                        "rbiblia_general_notes",
+                        JSON.stringify(mergedGeneral)
+                    );
                 }
 
-                setImportStatus('success');
+                setImportStatus("success");
                 setTimeout(() => setImportStatus(null), 3000);
             } catch (err) {
-                console.error('Import error:', err);
-                setImportStatus('error');
+                console.error("Import error:", err);
+                setImportStatus("error");
                 setTimeout(() => setImportStatus(null), 3000);
             }
         };
         reader.readAsText(file);
 
         // Reset input
-        event.target.value = '';
+        event.target.value = "";
     };
 
     // Count total notes
     const getNotesCount = () => {
         const notes = loadNotes();
-        const generalNotes = JSON.parse(localStorage.getItem('rbiblia_general_notes') || '[]');
+        const generalNotes = JSON.parse(
+            localStorage.getItem("rbiblia_general_notes") || "[]"
+        );
         return Object.keys(notes).length + generalNotes.length;
     };
 
     // Filter only favorite translations
-    const favoriteTranslationsList = translations.filter(t => favoriteTranslations.includes(t.id));
+    const favoriteTranslationsList = translations.filter((t) =>
+        favoriteTranslations.includes(t.id)
+    );
 
     return (
         <>
             {/* Side Menu Dock */}
             <div className="side-menu-dock">
-                {tabs.map(tab => (
+                {tabs.map((tab) => (
                     <button
                         key={tab.id}
-                        className={`side-menu-dock-item ${activeTab === tab.id ? 'active' : ''}`}
+                        className={`side-menu-dock-item ${
+                            activeTab === tab.id ? "active" : ""
+                        }`}
                         onClick={() => setActiveTab(tab.id)}
                         title={tab.label}
                     >
@@ -282,12 +364,11 @@ const DisplaySettings = ({
                     </button>
                 ))}
             </div>
-
             {/* Main Content Area */}
             <div className="side-menu-main">
                 <div className="side-menu-header">
                     <h3 className="side-menu-title">
-                        {tabs.find(t => t.id === activeTab)?.label}
+                        {tabs.find((t) => t.id === activeTab)?.label}
                     </h3>
                     {onClose && (
                         <button
@@ -299,11 +380,9 @@ const DisplaySettings = ({
                         </button>
                     )}
                 </div>
-
                 <div className="side-menu-content">
-
                     {/* Text settings tab */}
-                    {activeTab === 'text' && (
+                    {activeTab === "text" && (
                         <div className="side-menu-section animate-slide-up">
                             <h4 className="side-menu-section-title">
                                 {formatMessage({ id: "textSettings" })}
@@ -311,13 +390,21 @@ const DisplaySettings = ({
 
                             {/* Font size setting */}
                             <div className="setting-group stagger-1">
-                                <label className="setting-label">{formatMessage({ id: "fontSize" })}</label>
+                                <label className="setting-label">
+                                    {formatMessage({ id: "fontSize" })}
+                                </label>
                                 <div className="font-size-buttons">
                                     {fontSizes.map((fs) => (
                                         <button
                                             key={fs.value}
-                                            className={`font-size-btn ${fontSize === fs.value ? 'active' : ''}`}
-                                            onClick={() => setFontSize(fs.value)}
+                                            className={`font-size-btn ${
+                                                fontSize === fs.value
+                                                    ? "active"
+                                                    : ""
+                                            }`}
+                                            onClick={() =>
+                                                setFontSize(fs.value)
+                                            }
                                             style={{ fontSize: fs.size }}
                                         >
                                             {fs.label}
@@ -329,14 +416,24 @@ const DisplaySettings = ({
                             {/* Font family setting */}
                             {setFontFamily && (
                                 <div className="setting-group stagger-2">
-                                    <label className="setting-label">{formatMessage({ id: "fontFamily" })}</label>
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "fontFamily" })}
+                                    </label>
                                     <div className="font-family-buttons">
                                         {fontFamilies.map((ff) => (
                                             <button
                                                 key={ff.value}
-                                                className={`font-family-btn ${fontFamily === ff.value ? 'active' : ''}`}
-                                                onClick={() => setFontFamily(ff.value)}
-                                                style={{ fontFamily: ff.preview }}
+                                                className={`font-family-btn ${
+                                                    fontFamily === ff.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setFontFamily(ff.value)
+                                                }
+                                                style={{
+                                                    fontFamily: ff.preview,
+                                                }}
                                             >
                                                 {ff.label}
                                             </button>
@@ -348,7 +445,7 @@ const DisplaySettings = ({
                     )}
 
                     {/* Appearance settings tab */}
-                    {activeTab === 'appearance' && (
+                    {activeTab === "appearance" && (
                         <div className="side-menu-section animate-slide-up">
                             <h4 className="side-menu-section-title">
                                 {formatMessage({ id: "appearance" })}
@@ -357,17 +454,29 @@ const DisplaySettings = ({
                             {/* Theme (Light/Dark/System) */}
                             {setTheme && (
                                 <div className="setting-group stagger-1">
-                                    <label className="setting-label">{formatMessage({ id: "theme" })}</label>
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "theme" })}
+                                    </label>
                                     <div className="setting-tiles-grid">
                                         {themes.map((t) => (
                                             <button
                                                 key={t.value}
-                                                className={`setting-tile ${theme === t.value ? 'active' : ''}`}
-                                                onClick={() => setTheme(t.value)}
+                                                className={`setting-tile ${
+                                                    theme === t.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setTheme(t.value)
+                                                }
                                                 title={t.label}
                                             >
-                                                <span className="tile-icon">{t.icon}</span>
-                                                <span className="tile-label">{t.label}</span>
+                                                <span className="tile-icon">
+                                                    {t.icon}
+                                                </span>
+                                                <span className="tile-label">
+                                                    {t.label}
+                                                </span>
                                             </button>
                                         ))}
                                     </div>
@@ -377,30 +486,36 @@ const DisplaySettings = ({
                     )}
 
                     {/* Language settings tab */}
-                    {activeTab === 'language' && setLocaleAndUpdateHistory && (
+                    {activeTab === "language" && setLocaleAndUpdateHistory && (
                         <div className="side-menu-section animate-slide-up">
                             <h4 className="side-menu-section-title">
                                 {formatMessage({ id: "appLanguage" })}
                             </h4>
 
                             <div className="setting-group stagger-1">
-                                <label className="setting-label">{formatMessage({ id: "selectLanguage" })}</label>
+                                <label className="setting-label">
+                                    {formatMessage({ id: "selectLanguage" })}
+                                </label>
                                 <div className="setting-tiles-grid grid-2">
-                                    {['pl', 'en', 'de'].map(lang => (
+                                    {["pl", "en", "de"].map((lang) => (
                                         <button
                                             key={lang}
-                                            className={`setting-tile ${locale === lang ? 'active' : ''}`}
-                                            onClick={() => setLocaleAndUpdateHistory(lang)}
+                                            className={`setting-tile ${
+                                                locale === lang ? "active" : ""
+                                            }`}
+                                            onClick={() =>
+                                                setLocaleAndUpdateHistory(lang)
+                                            }
                                         >
                                             <span className="tile-icon">
-                                                {lang === 'pl' && "🇵🇱"}
-                                                {lang === 'en' && "🇬🇧"}
-                                                {lang === 'de' && "🇩🇪"}
+                                                {lang === "pl" && "🇵🇱"}
+                                                {lang === "en" && "🇬🇧"}
+                                                {lang === "de" && "🇩🇪"}
                                             </span>
                                             <span className="tile-label">
-                                                {lang === 'pl' && "Polski"}
-                                                {lang === 'en' && "English"}
-                                                {lang === 'de' && "Deutsch"}
+                                                {lang === "pl" && "Polski"}
+                                                {lang === "en" && "English"}
+                                                {lang === "de" && "Deutsch"}
                                             </span>
                                         </button>
                                     ))}
@@ -410,22 +525,36 @@ const DisplaySettings = ({
                     )}
 
                     {/* Favorites tab */}
-                    {activeTab === 'favorites' && (
+                    {activeTab === "favorites" && (
                         <div className="animate-slide-up">
                             {/* Translation comparison section */}
                             <div className="side-menu-section stagger-1">
                                 <h4 className="side-menu-section-title">
-                                    {formatMessage({ id: "comparisonSettings" })}
+                                    {formatMessage({
+                                        id: "comparisonSettings",
+                                    })}
                                 </h4>
 
                                 <div className="setting-group">
-                                    <label className="setting-label">{formatMessage({ id: "comparisonLimit" })}</label>
+                                    <label className="setting-label">
+                                        {formatMessage({
+                                            id: "comparisonLimit",
+                                        })}
+                                    </label>
                                     <div className="comparison-limit-buttons">
                                         {comparisonOptions.map((num) => (
                                             <button
                                                 key={num}
-                                                className={`comparison-limit-btn ${comparisonLimit === num ? 'active' : ''}`}
-                                                onClick={() => handleComparisonLimitChange(num)}
+                                                className={`comparison-limit-btn ${
+                                                    comparisonLimit === num
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handleComparisonLimitChange(
+                                                        num
+                                                    )
+                                                }
                                             >
                                                 {num}
                                             </button>
@@ -434,22 +563,38 @@ const DisplaySettings = ({
                                 </div>
 
                                 <div className="setting-group">
-                                    <label className="setting-label">{formatMessage({ id: "diffMode" })}</label>
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "diffMode" })}
+                                    </label>
                                     <p className="setting-hint mb-2">
                                         {formatMessage({ id: "diffModeHint" })}
                                     </p>
                                     <div className="diff-mode-toggle">
                                         <button
-                                            className={`diff-mode-btn ${!diffStrict ? 'active' : ''}`}
-                                            onClick={() => { setDiffStrict(false); setDiffModeStrict(false); }}
+                                            className={`diff-mode-btn ${
+                                                !diffStrict ? "active" : ""
+                                            }`}
+                                            onClick={() => {
+                                                setDiffStrict(false);
+                                                setDiffModeStrict(false);
+                                            }}
                                         >
-                                            {formatMessage({ id: "diffModeLoose" })}
+                                            {formatMessage({
+                                                id: "diffModeLoose",
+                                            })}
                                         </button>
                                         <button
-                                            className={`diff-mode-btn ${diffStrict ? 'active' : ''}`}
-                                            onClick={() => { setDiffStrict(true); setDiffModeStrict(true); }}
+                                            className={`diff-mode-btn ${
+                                                diffStrict ? "active" : ""
+                                            }`}
+                                            onClick={() => {
+                                                setDiffStrict(true);
+                                                setDiffModeStrict(true);
+                                            }}
                                         >
-                                            {formatMessage({ id: "diffModeStrict" })}
+                                            {formatMessage({
+                                                id: "diffModeStrict",
+                                            })}
                                         </button>
                                     </div>
                                 </div>
@@ -459,16 +604,16 @@ const DisplaySettings = ({
                             <div className="side-menu-section stagger-2">
                                 <div className="d-flex justify-content-between align-items-center mb-2">
                                     <h4 className="side-menu-section-title mb-0">
-                                        {formatMessage({ id: "favoriteTranslations" })}
+                                        {formatMessage({
+                                            id: "favoriteTranslations",
+                                        })}
                                     </h4>
-                                    {/* Counter moved here */}
-                                    <span className="badge bg-light text-dark">
-                                        {formatMessage({ id: "availableTranslationsCounter" })} {translations.length}
-                                    </span>
                                 </div>
 
                                 <p className="setting-hint">
-                                    {formatMessage({ id: "favoriteTranslationsComparisonHint" })}
+                                    {formatMessage({
+                                        id: "favoriteTranslationsComparisonHint",
+                                    })}
                                 </p>
 
                                 {favoriteTranslationsList.length > 0 ? (
@@ -478,8 +623,12 @@ const DisplaySettings = ({
                                                 key={t.id}
                                                 className="favorite-translation-item is-favorite"
                                             >
-                                                <span className="favorite-star">★</span>
-                                                <span className="favorite-name">{t.name}</span>
+                                                <span className="favorite-star">
+                                                    ★
+                                                </span>
+                                                <span className="favorite-name">
+                                                    {t.name}
+                                                </span>
                                                 <button
                                                     className="favorite-remove"
                                                     type="button"
@@ -487,7 +636,9 @@ const DisplaySettings = ({
                                                         e.stopPropagation();
                                                         toggleFavorite(t.id);
                                                     }}
-                                                    title={formatMessage({ id: "removeFromFavorites" })}
+                                                    title={formatMessage({
+                                                        id: "removeFromFavorites",
+                                                    })}
                                                 >
                                                     <Icon name="x" />
                                                 </button>
@@ -497,8 +648,16 @@ const DisplaySettings = ({
                                 ) : (
                                     <div className="no-favorites-hint">
                                         <Icon name="star" />
-                                        <p>{formatMessage({ id: "noFavorites" })}</p>
-                                        <span>{formatMessage({ id: "noFavoritesHint" })}</span>
+                                        <p>
+                                            {formatMessage({
+                                                id: "noFavorites",
+                                            })}
+                                        </p>
+                                        <span>
+                                            {formatMessage({
+                                                id: "noFavoritesHint",
+                                            })}
+                                        </span>
                                     </div>
                                 )}
                             </div>
@@ -506,14 +665,17 @@ const DisplaySettings = ({
                     )}
 
                     {/* Backup tab */}
-                    {activeTab === 'backup' && (
+                    {activeTab === "backup" && (
                         <div className="side-menu-section animate-slide-up">
                             <h4 className="side-menu-section-title">
                                 {formatMessage({ id: "notesBackup" })}
                             </h4>
 
                             <p className="setting-hint stagger-1">
-                                {formatMessage({ id: "notesCount" }, { count: getNotesCount() })}
+                                {formatMessage(
+                                    { id: "notesCount" },
+                                    { count: getNotesCount() }
+                                )}
                             </p>
 
                             <div className="setting-group stagger-2">
@@ -528,7 +690,9 @@ const DisplaySettings = ({
 
                                     <button
                                         className="backup-btn backup-import"
-                                        onClick={() => fileInputRef.current?.click()}
+                                        onClick={() =>
+                                            fileInputRef.current?.click()
+                                        }
                                     >
                                         <Icon name="download" />
                                         {formatMessage({ id: "importNotes" })}
@@ -538,25 +702,17 @@ const DisplaySettings = ({
                                         type="file"
                                         accept=".json"
                                         onChange={handleImportNotes}
-                                        style={{ display: 'none' }}
+                                        style={{ display: "none" }}
                                     />
                                 </div>
-                                {onOpenChangelog && (
-                                    <button
-                                        className="backup-btn backup-changelog mt-2"
-                                        onClick={onOpenChangelog}
-                                    >
-                                        <Icon name="file-text" />
-                                        {formatMessage({ id: "changelogLink" })}
-                                    </button>
-                                )}
 
-                                {importStatus === 'success' && (
+                                {importStatus === "success" && (
                                     <p className="import-status import-success">
-                                        ✓ {formatMessage({ id: "importSuccess" })}
+                                        ✓{" "}
+                                        {formatMessage({ id: "importSuccess" })}
                                     </p>
                                 )}
-                                {importStatus === 'error' && (
+                                {importStatus === "error" && (
                                     <p className="import-status import-error">
                                         ✗ {formatMessage({ id: "importError" })}
                                     </p>
@@ -564,8 +720,42 @@ const DisplaySettings = ({
                             </div>
                         </div>
                     )}
-                </div> {/* end side-menu-content */}
-            </div> {/* end side-menu-main */}
+
+                    {/* Info tab */}
+                    {activeTab === "info" && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({
+                                    id: "info",
+                                    defaultMessage: "Info",
+                                })}
+                            </h4>
+
+                            <div className="setting-group stagger-1">
+                                <span className="badge bg-light text-dark mb-4 d-inline-block">
+                                    {formatMessage({
+                                        id: "availableTranslationsCounter",
+                                    })}{" "}
+                                    {translations.length}
+                                </span>
+
+                                {onOpenChangelog && (
+                                    <button
+                                        className="backup-btn backup-changelog mt-2"
+                                        onClick={onOpenChangelog}
+                                        style={{ width: "100%" }}
+                                    >
+                                        <Icon name="file-text" />
+                                        {formatMessage({ id: "changelogLink" })}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>{" "}
+                {/* end side-menu-content */}
+            </div>{" "}
+            {/* end side-menu-main */}
         </>
     );
 };

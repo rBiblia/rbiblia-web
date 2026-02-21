@@ -25,7 +25,7 @@ import { safeJsonParse } from "./safeJsonParse";
 
 const Bible = ({ intl, setLocale }) => {
     const [error, setError] = useState(null);
-    const [toastError, setToastError] = useState(null);  // Non-blocking error notifications
+    const [toastError, setToastError] = useState(null); // Non-blocking error notifications
     const [isBooksLoading, setIsBooksLoading] = useState(true);
     const [isTranslationsLoading, setIsTranslationsLoading] = useState(true);
     const [isStructureLoading, setIsStructureLoading] = useState(true);
@@ -46,71 +46,80 @@ const Bible = ({ intl, setLocale }) => {
 
     // Note editor state
     const [editingNoteVerse, setEditingNoteVerse] = useState(null);
-    const [notesVersion, setNotesVersion] = useState(0);  // Increment to refresh note indicators
+    const [notesVersion, setNotesVersion] = useState(0); // Increment to refresh note indicators
 
     // Font size (saved to localStorage)
     const [fontSize, setFontSize] = useState(() => {
-        return localStorage.getItem('rbiblia-font-size') || 'medium';
+        return localStorage.getItem("rbiblia-font-size") || "medium";
     });
 
     // Immersive Mode (hide nav on scroll)
     const isNavVisible = useScrollDirection();
 
-
     // Font family (saved to localStorage)
     const [fontFamily, setFontFamily] = useState(() => {
-        return localStorage.getItem('rbiblia-font-family') || 'serif';
+        return localStorage.getItem("rbiblia-font-family") || "serif";
     });
 
     // Save font size to localStorage and apply to CSS variable
     useEffect(() => {
-        localStorage.setItem('rbiblia-font-size', fontSize);
+        localStorage.setItem("rbiblia-font-size", fontSize);
         const sizeMap = {
-            small: '0.9rem',
-            medium: '1.15rem',
-            large: '1.4rem',
-            xlarge: '1.7rem'
+            small: "0.9rem",
+            medium: "1.15rem",
+            large: "1.4rem",
+            xlarge: "1.7rem",
         };
         const numberSizeMap = {
-            small: '0.75rem',
-            medium: '0.85rem',
-            large: '1.05rem',
-            xlarge: '1.25rem'
+            small: "0.9rem",
+            medium: "1.15rem",
+            large: "1.4rem",
+            xlarge: "1.7rem",
         };
-        document.documentElement.style.setProperty('--verse-font-size', sizeMap[fontSize]);
-        document.documentElement.style.setProperty('--verse-number-font-size', numberSizeMap[fontSize]);
+        document.documentElement.style.setProperty(
+            "--verse-font-size",
+            sizeMap[fontSize]
+        );
+        document.documentElement.style.setProperty(
+            "--verse-number-font-size",
+            numberSizeMap[fontSize]
+        );
     }, [fontSize]);
-
-
 
     // Theme State (saved to localStorage)
     // Values: 'system', 'light', 'dark'
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem('rbiblia-theme') || 'system';
+        return localStorage.getItem("rbiblia-theme") || "system";
     });
 
     // Apply Theme Side Effect
     useEffect(() => {
-        localStorage.setItem('rbiblia-theme', theme);
+        localStorage.setItem("rbiblia-theme", theme);
 
         const root = document.documentElement;
-        if (theme === 'system') {
-            root.removeAttribute('data-theme');
+        if (theme === "system") {
+            root.removeAttribute("data-theme");
         } else {
-            root.setAttribute('data-theme', theme);
+            root.setAttribute("data-theme", theme);
         }
     }, [theme]);
 
     // Save font family to localStorage and apply to CSS variable
     useEffect(() => {
-        localStorage.setItem('rbiblia-font-family', fontFamily);
+        localStorage.setItem("rbiblia-font-family", fontFamily);
         const familyMap = {
             serif: 'Georgia, "Times New Roman", serif',
             sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-            mono: '"Fira Code", "Cascadia Code", Consolas, monospace'
+            mono: '"Fira Code", "Cascadia Code", Consolas, monospace',
         };
-        document.documentElement.style.setProperty('--verse-font-family', familyMap[fontFamily]);
-        document.documentElement.style.setProperty('--verse-number-font-family', familyMap[fontFamily]);
+        document.documentElement.style.setProperty(
+            "--verse-font-family",
+            familyMap[fontFamily]
+        );
+        document.documentElement.style.setProperty(
+            "--verse-number-font-family",
+            familyMap[fontFamily]
+        );
     }, [fontFamily]);
 
     // Note: It contains all books available - not only translation specific
@@ -129,11 +138,6 @@ const Bible = ({ intl, setLocale }) => {
     );
 
     useEffect(() => {
-        // If the user enters the homepage (path /), open book selection
-        if (window.location.pathname === "/" || window.location.pathname === "") {
-            setIsSelectionOpen(true);
-        }
-
         const handlePopState = () => {
             const data = getDataFromCurrentPathname();
             setSelectedTranslation(data.translation);
@@ -159,13 +163,16 @@ const Bible = ({ intl, setLocale }) => {
             ? structure[selectedBook]
             : [];
 
-    const changeSelectedTranslation = useCallback((newTranslation) => {
-        setShowVerses(false);
-        setIsStructureLoading(true);
-        keepChapterIfPossible.current = true;
-        versesCache.clearCache();  // Clear cache when translation changes
-        setSelectedTranslation(newTranslation);
-    }, [versesCache]);
+    const changeSelectedTranslation = useCallback(
+        (newTranslation) => {
+            setShowVerses(false);
+            setIsStructureLoading(true);
+            keepChapterIfPossible.current = true;
+            versesCache.clearCache(); // Clear cache when translation changes
+            setSelectedTranslation(newTranslation);
+        },
+        [versesCache]
+    );
 
     const setLocaleAndUpdateHistory = (locale) => {
         const { chapter, book, translation } = getDataFromCurrentPathname();
@@ -224,7 +231,11 @@ const Bible = ({ intl, setLocale }) => {
         );
 
         // Check if data is in cache - if yes, show immediately
-        const isInCache = versesCache.isInCache(selectedTranslation, selectedBook, newSelectedChapter);
+        const isInCache = versesCache.isInCache(
+            selectedTranslation,
+            selectedBook,
+            newSelectedChapter
+        );
 
         if (!isInCache) {
             setShowVerses(false);
@@ -253,7 +264,7 @@ const Bible = ({ intl, setLocale }) => {
             setToastError(
                 error.message || intl.formatMessage({ id: "chapterLoadError" })
             );
-            setShowVerses(true);  // Keep showing previous content
+            setShowVerses(true); // Keep showing previous content
         }
     };
 
@@ -324,7 +335,7 @@ const Bible = ({ intl, setLocale }) => {
         return (
             !isStructureLoading &&
             typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-            "undefined"
+                "undefined"
         );
     };
 
@@ -406,18 +417,18 @@ const Bible = ({ intl, setLocale }) => {
         isWelcomePopupOpen ||
         !!editingNoteVerse;
     useSwipeNavigation(
-        nextChapter,  // Swipe left -> next chapter
-        prevChapter,  // Swipe right -> previous chapter
+        nextChapter, // Swipe left -> next chapter
+        prevChapter, // Swipe right -> previous chapter
         {
             threshold: 80,
-            enabled: !overlaysOpen && showVerses
+            enabled: !overlaysOpen && showVerses,
         }
     );
 
     // Keyboard navigation (Arrow Left/Right) - disabled when overlays are open
     useKeyboardNavigation(
-        prevChapter,    // ArrowLeft  → previous chapter
-        nextChapter,    // ArrowRight → next chapter
+        prevChapter, // ArrowLeft  → previous chapter
+        nextChapter, // ArrowRight → next chapter
         { enabled: !overlaysOpen && showVerses }
     );
 
@@ -425,7 +436,10 @@ const Bible = ({ intl, setLocale }) => {
     if (error) {
         return (
             <AppError
-                message={error.message || intl.formatMessage({ id: "unexpectedErrorOccurred" })}
+                message={
+                    error.message ||
+                    intl.formatMessage({ id: "unexpectedErrorOccurred" })
+                }
                 onRetry={() => {
                     setError(null);
                     loadTranslationsAndBooks();
@@ -492,9 +506,12 @@ const Bible = ({ intl, setLocale }) => {
                     onNavigateVerse={(direction) => {
                         const currentVerse = parseInt(comparedVerse, 10);
                         const maxVerse = Object.keys(verses).length;
-                        if (direction === 'prev' && currentVerse > 1) {
+                        if (direction === "prev" && currentVerse > 1) {
                             setComparedVerse(currentVerse - 1);
-                        } else if (direction === 'next' && currentVerse < maxVerse) {
+                        } else if (
+                            direction === "next" &&
+                            currentVerse < maxVerse
+                        ) {
                             setComparedVerse(currentVerse + 1);
                         }
                     }}
@@ -516,8 +533,12 @@ const Bible = ({ intl, setLocale }) => {
                 onOpenSelection={() => setIsSelectionOpen(true)}
                 onOpenNotes={() => setIsNotesOpen(true)}
                 onOpenSearch={() => setIsSearchOpen(true)}
-                isPrevAvailable={isPrevChapterAvailable() || isPrevBookAvailable()}
-                isNextAvailable={isNextChapterAvailable() || isNextBookAvailable()}
+                isPrevAvailable={
+                    isPrevChapterAvailable() || isPrevBookAvailable()
+                }
+                isNextAvailable={
+                    isNextChapterAvailable() || isNextBookAvailable()
+                }
                 currentBook={books[selectedBook]?.name}
                 currentChapter={selectedChapter}
                 className={isNavVisible ? "" : "nav-hidden-bottom"}
@@ -591,7 +612,7 @@ const Bible = ({ intl, setLocale }) => {
             <NoteEditor
                 isOpen={editingNoteVerse !== null}
                 onClose={() => setEditingNoteVerse(null)}
-                onSave={() => setNotesVersion(v => v + 1)}
+                onSave={() => setNotesVersion((v) => v + 1)}
                 book={selectedBook}
                 chapter={selectedChapter}
                 verse={editingNoteVerse}

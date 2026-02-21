@@ -43,15 +43,45 @@ export default function Navigator({
     const handlePrevChapter = useCallback(() => prevChapter(), [prevChapter]);
 
     return (
-        <header className={`container sticky-top pt-2 pb-2 user-select-none ${className}`}>
+        <header
+            className={`container sticky-top pt-2 pb-2 user-select-none ${className}`}
+        >
             <div className="row align-items-center">
-                <div className="col-12 col-lg-3 translation-col">
+                <div className="col-10 col-lg-3 translation-col pe-1 pe-lg-3">
                     <TranslationSelector
                         selectedTranslation={selectedTranslation}
                         translations={translations}
                         changeSelectedTranslation={changeSelectedTranslation}
                         isLoading={listsLoading}
                     />
+                </div>
+
+                {/* Mobile action button (Chapter Comparison) */}
+                <div className="col-2 d-lg-none d-flex justify-content-end ps-0">
+                    <button
+                        className="nav-action-btn d-flex justify-content-center align-items-center"
+                        onClick={onOpenChapterComparison}
+                        title={formatMessage({ id: "chapterComparison" })}
+                        style={{ width: '44px', height: '44px', borderRadius: '12px' }}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                            <path d="M7 21h10" />
+                            <path d="M12 3v18" />
+                            <path d="M3 7h18" />
+                        </svg>
+                    </button>
                 </div>
 
                 <div className="col-1 d-none d-lg-flex justify-content-center p-0">
@@ -67,7 +97,9 @@ export default function Navigator({
                         className="btn btn-location p-0 w-100"
                         onClick={onOpenSelection}
                         disabled={isStructureLoading}
-                        title={books[selectedBook] ? books[selectedBook].name : ""}
+                        title={
+                            books[selectedBook] ? books[selectedBook].name : ""
+                        }
                     >
                         <span className="location-text">
                             {books[selectedBook]
