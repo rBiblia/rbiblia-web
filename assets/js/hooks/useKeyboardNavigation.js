@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from "react";
 
 /**
  * Custom hook for keyboard navigation between chapters/books
@@ -17,33 +17,44 @@ import { useEffect, useCallback } from 'react';
  * @param {Object}   options
  * @param {boolean}  options.enabled - Master switch (set false when overlays are open)
  */
-const useKeyboardNavigation = (onPrevChapter, onNextChapter, { enabled = true } = {}) => {
-    const handleKeyDown = useCallback((e) => {
-        // Don't intercept when user is typing in an input
-        const activeTag = document.activeElement?.tagName?.toLowerCase();
-        if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
-            return;
-        }
+const useKeyboardNavigation = (
+    onPrevChapter,
+    onNextChapter,
+    { enabled = true } = {}
+) => {
+    const handleKeyDown = useCallback(
+        (e) => {
+            // Don't intercept when user is typing in an input
+            const activeTag = document.activeElement?.tagName?.toLowerCase();
+            if (
+                activeTag === "input" ||
+                activeTag === "textarea" ||
+                activeTag === "select"
+            ) {
+                return;
+            }
 
-        // Don't intercept when an element with a contenteditable attribute is focused
-        if (document.activeElement?.isContentEditable) {
-            return;
-        }
+            // Don't intercept when an element with a contenteditable attribute is focused
+            if (document.activeElement?.isContentEditable) {
+                return;
+            }
 
-        if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            onPrevChapter?.();
-        } else if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            onNextChapter?.();
-        }
-    }, [onPrevChapter, onNextChapter]);
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                onPrevChapter?.();
+            } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                onNextChapter?.();
+            }
+        },
+        [onPrevChapter, onNextChapter]
+    );
 
     useEffect(() => {
         if (!enabled) return;
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, [handleKeyDown, enabled]);
 };
 

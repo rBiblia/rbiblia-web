@@ -86,7 +86,9 @@ const NotesPanel = ({
         if (filter === "current" && selectedBook && selectedChapter) {
             return allNotes.filter(([key]) => {
                 const [book, chapter] = key.split("_");
-                return book === selectedBook && chapter === String(selectedChapter);
+                return (
+                    book === selectedBook && chapter === String(selectedChapter)
+                );
             });
         }
 
@@ -148,7 +150,7 @@ const NotesPanel = ({
         const newNote = {
             id: Date.now(),
             text: newGeneralNote.trim(),
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
         };
 
         const updated = [newNote, ...generalNotes];
@@ -160,7 +162,7 @@ const NotesPanel = ({
 
     // Delete general note
     const deleteGeneralNote = (id) => {
-        const updated = generalNotes.filter(n => n.id !== id);
+        const updated = generalNotes.filter((n) => n.id !== id);
         setGeneralNotes(updated);
         saveGeneralNotes(updated);
     };
@@ -175,13 +177,24 @@ const NotesPanel = ({
     return (
         <>
             {/* Overlay */}
-            <div className={`notes-overlay ${isOpen ? 'active' : ''}`} onClick={onClose} />
+            <div
+                className={`notes-overlay ${isOpen ? "active" : ""}`}
+                onClick={onClose}
+            />
 
             {/* Panel */}
-            <div ref={panelRef} className={`notes-panel ${isOpen ? 'open' : ''}`}>
+            <div
+                ref={panelRef}
+                className={`notes-panel ${isOpen ? "open" : ""}`}
+            >
                 <div className="notes-header">
                     <h3 className="notes-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
@@ -196,13 +209,23 @@ const NotesPanel = ({
                             }}
                             title={formatMessage({ id: "addNote" })}
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                         </button>
                         <button className="notes-close" onClick={onClose}>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
@@ -213,19 +236,25 @@ const NotesPanel = ({
                 {/* Filter tabs */}
                 <div className="notes-filter">
                     <button
-                        className={`notes-filter-btn ${filter === "current" ? "active" : ""}`}
+                        className={`notes-filter-btn ${
+                            filter === "current" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("current")}
                     >
                         {formatMessage({ id: "currentChapter" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${filter === "all" ? "active" : ""}`}
+                        className={`notes-filter-btn ${
+                            filter === "all" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("all")}
                     >
                         {formatMessage({ id: "allNotes" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${filter === "general" ? "active" : ""}`}
+                        className={`notes-filter-btn ${
+                            filter === "general" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("general")}
                     >
                         {formatMessage({ id: "generalNotes" })}
@@ -243,8 +272,12 @@ const NotesPanel = ({
                                     <textarea
                                         className="note-textarea"
                                         value={newGeneralNote}
-                                        onChange={(e) => setNewGeneralNote(e.target.value)}
-                                        placeholder={formatMessage({ id: "writeNote" })}
+                                        onChange={(e) =>
+                                            setNewGeneralNote(e.target.value)
+                                        }
+                                        placeholder={formatMessage({
+                                            id: "writeNote",
+                                        })}
                                         autoFocus
                                         rows={3}
                                     />
@@ -270,13 +303,32 @@ const NotesPanel = ({
 
                             {generalNotes.length === 0 && !isAddingGeneral ? (
                                 <div className="notes-empty">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.5"
+                                    >
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <line
+                                            x1="16"
+                                            y1="13"
+                                            x2="8"
+                                            y2="13"
+                                        ></line>
+                                        <line
+                                            x1="16"
+                                            y1="17"
+                                            x2="8"
+                                            y2="17"
+                                        ></line>
                                     </svg>
-                                    <p>{formatMessage({ id: "noGeneralNotes" })}</p>
+                                    <p>
+                                        {formatMessage({
+                                            id: "noGeneralNotes",
+                                        })}
+                                    </p>
                                     <button
                                         className="notes-empty-add-btn"
                                         onClick={() => setIsAddingGeneral(true)}
@@ -290,20 +342,35 @@ const NotesPanel = ({
                                         <li key={note.id} className="note-item">
                                             <div className="note-header">
                                                 <span className="note-date">
-                                                    {new Date(note.createdAt).toLocaleDateString()}
+                                                    {new Date(
+                                                        note.createdAt
+                                                    ).toLocaleDateString()}
                                                 </span>
                                                 <button
                                                     className="note-action-btn note-action-delete"
-                                                    onClick={() => deleteGeneralNote(note.id)}
-                                                    title={formatMessage({ id: "delete" })}
+                                                    onClick={() =>
+                                                        deleteGeneralNote(
+                                                            note.id
+                                                        )
+                                                    }
+                                                    title={formatMessage({
+                                                        id: "delete",
+                                                    })}
                                                 >
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                    >
                                                         <polyline points="3 6 5 6 21 6"></polyline>
                                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                                     </svg>
                                                 </button>
                                             </div>
-                                            <p className="note-text">{note.text}</p>
+                                            <p className="note-text">
+                                                {note.text}
+                                            </p>
                                         </li>
                                     ))}
                                 </ul>
@@ -316,11 +383,26 @@ const NotesPanel = ({
                         <>
                             {filteredNotes.length === 0 ? (
                                 <div className="notes-empty">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.5"
+                                    >
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <line
+                                            x1="16"
+                                            y1="13"
+                                            x2="8"
+                                            y2="13"
+                                        ></line>
+                                        <line
+                                            x1="16"
+                                            y1="17"
+                                            x2="8"
+                                            y2="17"
+                                        ></line>
                                         <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
                                     <p>{formatMessage({ id: "noNotes" })}</p>
@@ -331,7 +413,8 @@ const NotesPanel = ({
                             ) : (
                                 <ul className="notes-list">
                                     {filteredNotes.map(([key, text]) => {
-                                        const { book, chapter, verse } = parseVerseKey(key);
+                                        const { book, chapter, verse } =
+                                            parseVerseKey(key);
                                         const isEditing = editingNote === key;
 
                                         return (
@@ -339,29 +422,59 @@ const NotesPanel = ({
                                                 <div className="note-header">
                                                     <button
                                                         className="note-reference"
-                                                        onClick={() => handleNavigate(key)}
+                                                        onClick={() =>
+                                                            handleNavigate(key)
+                                                        }
                                                     >
-                                                        {getBookName(book)} {chapter}:{verse}
+                                                        {getBookName(book)}{" "}
+                                                        {chapter}:{verse}
                                                     </button>
                                                     <div className="note-actions">
                                                         {!isEditing && (
                                                             <>
                                                                 <button
                                                                     className="note-action-btn"
-                                                                    onClick={() => startEdit(key, text)}
-                                                                    title={formatMessage({ id: "edit" })}
+                                                                    onClick={() =>
+                                                                        startEdit(
+                                                                            key,
+                                                                            text
+                                                                        )
+                                                                    }
+                                                                    title={formatMessage(
+                                                                        {
+                                                                            id: "edit",
+                                                                        }
+                                                                    )}
                                                                 >
-                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <svg
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="2"
+                                                                    >
                                                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                                     </svg>
                                                                 </button>
                                                                 <button
                                                                     className="note-action-btn note-action-delete"
-                                                                    onClick={() => deleteNote(key)}
-                                                                    title={formatMessage({ id: "delete" })}
+                                                                    onClick={() =>
+                                                                        deleteNote(
+                                                                            key
+                                                                        )
+                                                                    }
+                                                                    title={formatMessage(
+                                                                        {
+                                                                            id: "delete",
+                                                                        }
+                                                                    )}
                                                                 >
-                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <svg
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="2"
+                                                                    >
                                                                         <polyline points="3 6 5 6 21 6"></polyline>
                                                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                                                     </svg>
@@ -376,27 +489,44 @@ const NotesPanel = ({
                                                         <textarea
                                                             className="note-textarea"
                                                             value={editText}
-                                                            onChange={(e) => setEditText(e.target.value)}
+                                                            onChange={(e) =>
+                                                                setEditText(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             autoFocus
                                                             rows={3}
                                                         />
                                                         <div className="note-edit-actions">
                                                             <button
                                                                 className="note-edit-btn note-edit-cancel"
-                                                                onClick={() => setEditingNote(null)}
+                                                                onClick={() =>
+                                                                    setEditingNote(
+                                                                        null
+                                                                    )
+                                                                }
                                                             >
-                                                                {formatMessage({ id: "cancel" })}
+                                                                {formatMessage({
+                                                                    id: "cancel",
+                                                                })}
                                                             </button>
                                                             <button
                                                                 className="note-edit-btn note-edit-save"
-                                                                onClick={saveEdit}
+                                                                onClick={
+                                                                    saveEdit
+                                                                }
                                                             >
-                                                                {formatMessage({ id: "save" })}
+                                                                {formatMessage({
+                                                                    id: "save",
+                                                                })}
                                                             </button>
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <p className="note-text">{text}</p>
+                                                    <p className="note-text">
+                                                        {text}
+                                                    </p>
                                                 )}
                                             </li>
                                         );
@@ -449,20 +579,32 @@ const NoteEditor = ({
         }
 
         saveNotes(notes);
-        onSave?.();  // Notify parent to refresh indicators
+        onSave?.(); // Notify parent to refresh indicators
         onClose();
     };
 
     return (
         <>
-            <div className={`note-editor-overlay ${isOpen ? 'active' : ''}`} onClick={onClose} />
-            <div ref={modalRef} className={`note-editor-modal ${isOpen ? 'open' : ''}`}>
+            <div
+                className={`note-editor-overlay ${isOpen ? "active" : ""}`}
+                onClick={onClose}
+            />
+            <div
+                ref={modalRef}
+                className={`note-editor-modal ${isOpen ? "open" : ""}`}
+            >
                 <div className="note-editor-header">
                     <h4 className="note-editor-title">
-                        {formatMessage({ id: "noteFor" })} {bookName} {chapter}:{verse}
+                        {formatMessage({ id: "noteFor" })} {bookName} {chapter}:
+                        {verse}
                     </h4>
                     <button className="note-editor-close" onClick={onClose}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
@@ -477,10 +619,16 @@ const NoteEditor = ({
                     rows={5}
                 />
                 <div className="note-editor-actions">
-                    <button className="note-editor-btn note-editor-cancel" onClick={onClose}>
+                    <button
+                        className="note-editor-btn note-editor-cancel"
+                        onClick={onClose}
+                    >
                         {formatMessage({ id: "cancel" })}
                     </button>
-                    <button className="note-editor-btn note-editor-save" onClick={handleSave}>
+                    <button
+                        className="note-editor-btn note-editor-save"
+                        onClick={handleSave}
+                    >
                         {formatMessage({ id: "save" })}
                     </button>
                 </div>
@@ -504,4 +652,11 @@ const useHasNote = (book, chapter, verse) => {
     return hasNote;
 };
 
-export { NotesPanel, NoteEditor, useHasNote, loadNotes, saveNotes, getVerseKey };
+export {
+    NotesPanel,
+    NoteEditor,
+    useHasNote,
+    loadNotes,
+    saveNotes,
+    getVerseKey,
+};

@@ -45,7 +45,7 @@ export async function safeJsonParse(response) {
             }
         }
 
-        throw new Error('Invalid server response');
+        throw new Error("Invalid server response");
     }
 }
 

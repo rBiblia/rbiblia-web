@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 /**
  * Custom hook for trapping focus within a modal/panel
  * Implements accessibility best practices for modal dialogs
- * 
+ *
  * @param {boolean} isOpen - Whether the modal is open
  * @param {Function} onClose - Callback to close the modal (triggered by Escape key)
  * @returns {Object} ref - Ref to attach to the container element
@@ -24,40 +24,47 @@ const useFocusTrap = (isOpen, onClose) => {
         // Get all focusable elements
         const getFocusableElements = () => {
             return container.querySelectorAll(
-                'button:not([disabled]), ' +
-                '[href], ' +
-                'input:not([disabled]), ' +
-                'select:not([disabled]), ' +
-                'textarea:not([disabled]), ' +
-                '[tabindex]:not([tabindex="-1"]):not([disabled])'
+                "button:not([disabled]), " +
+                    "[href], " +
+                    "input:not([disabled]), " +
+                    "select:not([disabled]), " +
+                    "textarea:not([disabled]), " +
+                    '[tabindex]:not([tabindex="-1"]):not([disabled])'
             );
         };
 
         const handleKeyDown = (e) => {
             // Handle Escape key
-            if (e.key === 'Escape') {
+            if (e.key === "Escape") {
                 e.preventDefault();
                 onClose?.();
                 return;
             }
 
             // Handle Tab key for focus trapping
-            if (e.key === 'Tab') {
+            if (e.key === "Tab") {
                 const focusableElements = getFocusableElements();
                 if (focusableElements.length === 0) return;
 
                 const firstElement = focusableElements[0];
-                const lastElement = focusableElements[focusableElements.length - 1];
+                const lastElement =
+                    focusableElements[focusableElements.length - 1];
 
                 if (e.shiftKey) {
                     // Shift + Tab: go backwards
-                    if (document.activeElement === firstElement || !container.contains(document.activeElement)) {
+                    if (
+                        document.activeElement === firstElement ||
+                        !container.contains(document.activeElement)
+                    ) {
                         e.preventDefault();
                         lastElement?.focus();
                     }
                 } else {
                     // Tab: go forwards
-                    if (document.activeElement === lastElement || !container.contains(document.activeElement)) {
+                    if (
+                        document.activeElement === lastElement ||
+                        !container.contains(document.activeElement)
+                    ) {
                         e.preventDefault();
                         firstElement?.focus();
                     }
@@ -70,19 +77,23 @@ const useFocusTrap = (isOpen, onClose) => {
             const focusableElements = getFocusableElements();
             // Try to find a close button or first focusable element
             const closeButton = container.querySelector('[class*="close"]');
-            const firstInput = container.querySelector('input, textarea');
-            const targetElement = firstInput || closeButton || focusableElements[0];
+            const firstInput = container.querySelector("input, textarea");
+            const targetElement =
+                firstInput || closeButton || focusableElements[0];
             targetElement?.focus();
         }, 10);
 
-        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             clearTimeout(focusTimer);
-            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener("keydown", handleKeyDown);
 
             // Restore focus to the previously focused element
-            if (previousActiveElement.current && previousActiveElement.current.focus) {
+            if (
+                previousActiveElement.current &&
+                previousActiveElement.current.focus
+            ) {
                 previousActiveElement.current.focus();
             }
         };

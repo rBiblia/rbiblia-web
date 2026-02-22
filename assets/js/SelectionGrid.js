@@ -7,8 +7,8 @@ const SelectionGrid = ({
     structure,
     onSelectChapter,
     initialBook = null,
-    currentBook = null,  // Currently active book to highlight
-    currentChapter = null,  // Currently active chapter to highlight
+    currentBook = null, // Currently active book to highlight
+    currentChapter = null, // Currently active chapter to highlight
     onClose,
 }) => {
     const { formatMessage, locale } = useIntl();
@@ -38,11 +38,18 @@ const SelectionGrid = ({
     const otBooks = Object.keys(structure).filter(
         (id) => books[id] && books[id].group === "ot"
     );
+    const dcBooks = Object.keys(structure).filter(
+        (id) => books[id] && books[id].group === "dc"
+    );
     const ntBooks = Object.keys(structure).filter(
         (id) => books[id] && books[id].group === "nt"
     );
     const otherBooks = Object.keys(structure).filter(
-        (id) => books[id] && books[id].group !== "ot" && books[id].group !== "nt"
+        (id) =>
+            books[id] &&
+            books[id].group !== "ot" &&
+            books[id].group !== "nt" &&
+            books[id].group !== "dc"
     );
 
     const handleBookClick = (bookId) => {
@@ -59,16 +66,22 @@ const SelectionGrid = ({
         if (bookIds.length === 0) return null;
         return (
             <div className="selection-section mb-4">
-                <h3 className="section-title mb-3">{formatMessage({ id: titleId })}</h3>
+                <h3 className="section-title mb-3">
+                    {formatMessage({ id: titleId })}
+                </h3>
                 <div className="grid-container">
                     {bookIds.map((id) => (
                         <div
                             key={id}
-                            className={`tile book-tile ${isMobile ? 'tile-compact' : ''} ${id === currentBook ? 'tile-active' : ''}`}
+                            className={`tile book-tile ${
+                                isMobile ? "tile-compact" : ""
+                            } ${id === currentBook ? "tile-active" : ""}`}
                             onClick={() => handleBookClick(id)}
                             title={books[id].name}
                         >
-                            <span className="tile-text">{getBookDisplayName(id)}</span>
+                            <span className="tile-text">
+                                {getBookDisplayName(id)}
+                            </span>
                         </div>
                     ))}
                 </div>
@@ -83,7 +96,9 @@ const SelectionGrid = ({
                     <h2>
                         {view === "books"
                             ? formatMessage({ id: "selectBook" })
-                            : `${books[selectedBook].name} - ${formatMessage({ id: "selectChapter" })}`}
+                            : `${books[selectedBook].name} - ${formatMessage({
+                                  id: "selectChapter",
+                              })}`}
                     </h2>
                     <div className="d-flex gap-2">
                         {view === "chapters" && (
@@ -94,7 +109,10 @@ const SelectionGrid = ({
                                 {formatMessage({ id: "backToBooks" })}
                             </button>
                         )}
-                        <button className="btn btn-close" onClick={onClose}></button>
+                        <button
+                            className="btn btn-close"
+                            onClick={onClose}
+                        ></button>
                     </div>
                 </div>
 
@@ -102,6 +120,7 @@ const SelectionGrid = ({
                     {view === "books" ? (
                         <>
                             {renderBookGrid(otBooks, "oldTestament")}
+                            {renderBookGrid(dcBooks, "deuterocanonicalBooks")}
                             {renderBookGrid(ntBooks, "newTestament")}
                             {renderBookGrid(otherBooks, "otherBooks")}
                         </>
@@ -110,7 +129,12 @@ const SelectionGrid = ({
                             {structure[selectedBook].map((chapter) => (
                                 <div
                                     key={chapter}
-                                    className={`tile chapter-tile ${selectedBook === currentBook && chapter === currentChapter ? 'tile-active' : ''}`}
+                                    className={`tile chapter-tile ${
+                                        selectedBook === currentBook &&
+                                        chapter === currentChapter
+                                            ? "tile-active"
+                                            : ""
+                                    }`}
                                     onClick={() => handleChapterClick(chapter)}
                                 >
                                     <span className="tile-text">{chapter}</span>

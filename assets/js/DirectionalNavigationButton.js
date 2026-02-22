@@ -9,11 +9,7 @@ function DirectionalNavigationButton({ direction, disabled, ...restProps }) {
     );
 
     return (
-        <button
-            {...restProps}
-            disabled={disabled}
-            className={className}
-        >
+        <button {...restProps} disabled={disabled} className={className}>
             {direction === "left" && <Icon name="chevron-left" />}
             {direction === "right" && <Icon name="chevron-right" />}
         </button>

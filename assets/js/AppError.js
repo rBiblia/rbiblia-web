@@ -14,7 +14,12 @@ function AppError({ message, onRetry, type = "full" }) {
                 <div className="row">
                     <div className="col-12 d-flex flex-column align-items-center justify-content-center">
                         <div className="app-error-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                            >
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="8" x2="12" y2="12"></line>
                                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -25,7 +30,10 @@ function AppError({ message, onRetry, type = "full" }) {
                         </p>
                         <p className="app-error-details">{message}</p>
                         {onRetry && (
-                            <button className="app-error-retry" onClick={onRetry}>
+                            <button
+                                className="app-error-retry"
+                                onClick={onRetry}
+                            >
                                 {formatMessage({ id: "retry" })}
                             </button>
                         )}
@@ -39,7 +47,12 @@ function AppError({ message, onRetry, type = "full" }) {
     return (
         <div className="inline-error">
             <div className="inline-error-content">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="12"></line>
                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -73,7 +86,12 @@ function ErrorToast({ message, onClose, autoHide = 5000 }) {
     return (
         <div className="error-toast">
             <div className="error-toast-content">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="12"></line>
                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -81,7 +99,12 @@ function ErrorToast({ message, onClose, autoHide = 5000 }) {
                 <span>{message}</span>
             </div>
             <button className="error-toast-close" onClick={onClose}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>

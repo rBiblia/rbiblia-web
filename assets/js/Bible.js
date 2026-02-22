@@ -92,6 +92,11 @@ const Bible = ({ intl, setLocale }) => {
         return localStorage.getItem("rbiblia-theme") || "system";
     });
 
+    // Dark mode variant: 'gold' (warm neutral) or 'blue' (slate-blue)
+    const [darkVariant, setDarkVariant] = useState(() => {
+        return localStorage.getItem("rbiblia-dark-variant") || "gold";
+    });
+
     // Apply Theme Side Effect
     useEffect(() => {
         localStorage.setItem("rbiblia-theme", theme);
@@ -103,6 +108,12 @@ const Bible = ({ intl, setLocale }) => {
             root.setAttribute("data-theme", theme);
         }
     }, [theme]);
+
+    // Apply Dark Variant Side Effect
+    useEffect(() => {
+        localStorage.setItem("rbiblia-dark-variant", darkVariant);
+        document.documentElement.setAttribute("data-dark-variant", darkVariant);
+    }, [darkVariant]);
 
     // Save font family to localStorage and apply to CSS variable
     useEffect(() => {
@@ -335,7 +346,7 @@ const Bible = ({ intl, setLocale }) => {
         return (
             !isStructureLoading &&
             typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-                "undefined"
+            "undefined"
         );
     };
 
@@ -603,6 +614,8 @@ const Bible = ({ intl, setLocale }) => {
                     setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
                     theme={theme}
                     setTheme={setTheme}
+                    darkVariant={darkVariant}
+                    setDarkVariant={setDarkVariant}
                     onClose={() => setIsSideMenuOpen(false)}
                     onOpenChangelog={() => setIsChangelogOpen(true)}
                 />

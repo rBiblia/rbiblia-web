@@ -9,6 +9,7 @@
   "oldTestament": "Altes Testament",
   "newTestament": "Neues Testament",
   "otherBooks": "Deuterokanonisch / Andere",
+  "deuterocanonicalBooks": "Deuterokanonische B\u00fccher",
   "selectBook": "Buch auswählen",
   "selectChapter": "Kapitel auswählen",
   "backToBooks": "Zurück zu Büchern",
@@ -89,6 +90,9 @@
   "themeSystem": "System",
   "themeLight": "Hell",
   "themeDark": "Dunkel",
+  "darkModeVariant": "Dunkles Design-Variante",
+  "darkVariantGold": "Goldene Dunkelheit",
+  "darkVariantBlue": "Nachtblau",
   "scopeALL": "Alle",
   "scopeOT": "Altes T.",
   "scopeNT": "Neues T.",
@@ -117,5 +121,11 @@
   "chapterCompSelectTranslation": "Übersetzung wählen...",
   "chapterCompSelectHint": "Wählen Sie Übersetzungen zum Vergleichen aus den Dropdown-Listen oben.",
   "chapterCompError": "Kapitel konnte nicht geladen werden.",
-  "info": "Info"
+  "info": "Info",
+  "usefulLinks": "Nützliche Links",
+  "websiteLink": "Programm-Homepage",
+  "downloadWindowsLink": "rBiblia für Windows herunterladen",
+  "faqLink": "Häufig gestellte Fragen (FAQ)",
+  "contactLink": "Kontakt / Fehler melden",
+  "radioLink": "Radio mit dem Evangelium"
 }

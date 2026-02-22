@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 /**
  * Custom hook for debouncing values
@@ -13,8 +13,8 @@ export const useDebounce = (value, delay, minLength = 0) => {
 
     useEffect(() => {
         // For strings, check minimum length
-        if (typeof value === 'string' && value.length < minLength) {
-            setDebouncedValue('');
+        if (typeof value === "string" && value.length < minLength) {
+            setDebouncedValue("");
             return;
         }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
+import Icon from "./Icon";
 
 const ChangelogModal = ({ isOpen, onClose }) => {
     const { formatMessage } = useIntl();
@@ -19,7 +20,10 @@ const ChangelogModal = ({ isOpen, onClose }) => {
         setLoadError(null);
 
         const loadChangelog = async () => {
-            const paths = ["/assets/changelog.txt", "/assets/docs/changelog.txt"];
+            const paths = [
+                "/assets/changelog.txt",
+                "/assets/docs/changelog.txt",
+            ];
             let lastError = null;
 
             for (const path of paths) {
@@ -46,7 +50,9 @@ const ChangelogModal = ({ isOpen, onClose }) => {
             })
             .catch(() => {
                 if (isActive) {
-                    setLoadError(formatMessage({ id: "unexpectedErrorOccurred" }));
+                    setLoadError(
+                        formatMessage({ id: "unexpectedErrorOccurred" })
+                    );
                 }
             })
             .finally(() => {
@@ -79,7 +85,7 @@ const ChangelogModal = ({ isOpen, onClose }) => {
                         onClick={onClose}
                         aria-label={formatMessage({ id: "close" })}
                     >
-                        x
+                        <Icon name="x" size={20} />
                     </button>
                 </div>
                 <div className="changelog-content">

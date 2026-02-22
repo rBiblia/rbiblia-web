@@ -11,12 +11,18 @@ const SkeletonLoader = ({ lines = 12 }) => {
                             <div className="skeleton-text-container">
                                 <div
                                     className="skeleton-line"
-                                    style={{ width: `${75 + Math.random() * 25}%` }}
+                                    style={{
+                                        width: `${75 + Math.random() * 25}%`,
+                                    }}
                                 ></div>
                                 {index % 3 === 0 && (
                                     <div
                                         className="skeleton-line skeleton-line-short"
-                                        style={{ width: `${40 + Math.random() * 30}%` }}
+                                        style={{
+                                            width: `${
+                                                40 + Math.random() * 30
+                                            }%`,
+                                        }}
                                     ></div>
                                 )}
                             </div>

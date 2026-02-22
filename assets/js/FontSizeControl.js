@@ -18,7 +18,10 @@ const FontSizeControl = () => {
 
     useEffect(() => {
         // Apply font size to verses
-        document.documentElement.style.setProperty("--verse-font-size", `${fontSize}rem`);
+        document.documentElement.style.setProperty(
+            "--verse-font-size",
+            `${fontSize}rem`
+        );
         localStorage.setItem(FONT_SIZE_KEY, fontSize.toString());
     }, [fontSize]);
 
@@ -44,7 +47,12 @@ const FontSizeControl = () => {
                 aria-label="Change font size"
                 title="Change font size"
             >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
                     <path d="M4 7V4h16v3" />
                     <path d="M9 20h6" />
                     <path d="M12 4v16" />

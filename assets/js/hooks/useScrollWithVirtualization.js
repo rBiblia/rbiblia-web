@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef, useMemo } from 'react';
+import { useState, useCallback, useRef, useMemo } from "react";
 
 /**
  * Custom hook for virtual scrolling / lazy loading of list items
  * Provides progressive loading as user scrolls
- * 
+ *
  * @param {Array} items - Full array of items
  * @param {Object} options - Configuration options
  * @param {number} options.initialCount - Initial number of items to show (default: 20)
@@ -42,20 +42,23 @@ const useScrollWithVirtualization = (
 
         // Use requestAnimationFrame for smooth loading
         requestAnimationFrame(() => {
-            setVisibleCount(prev => Math.min(prev + batchSize, items.length));
+            setVisibleCount((prev) => Math.min(prev + batchSize, items.length));
             isLoadingMore.current = false;
         });
     }, [batchSize, items.length, hasMore]);
 
     // Scroll handler
-    const handleScroll = useCallback((e) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.target;
-        const scrollProgress = (scrollTop + clientHeight) / scrollHeight;
+    const handleScroll = useCallback(
+        (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = e.target;
+            const scrollProgress = (scrollTop + clientHeight) / scrollHeight;
 
-        if (scrollProgress >= threshold && hasMore) {
-            loadMore();
-        }
-    }, [threshold, hasMore, loadMore]);
+            if (scrollProgress >= threshold && hasMore) {
+                loadMore();
+            }
+        },
+        [threshold, hasMore, loadMore]
+    );
 
     // Reset visible count
     const reset = useCallback(() => {

@@ -12,7 +12,7 @@ const Verse = memo(function Verse({
     verseId,
     onClick,
     onLongPress,
-    notesVersion = 0  // Increment to force note indicator refresh
+    notesVersion = 0, // Increment to force note indicator refresh
 }) {
     const { formatMessage } = useIntl();
     const [hasNote, setHasNote] = useState(false);
@@ -34,7 +34,8 @@ const Verse = memo(function Verse({
     }, [bookId, chapterId, verseId, notesVersion]);
 
     const isNoteExpandable =
-        noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || noteText.includes("\n");
+        noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+        noteText.includes("\n");
 
     const appLink = `rbiblia://${bookId}/${chapterId}/${verseId}`;
     const appVerse = verseId;
@@ -56,7 +57,10 @@ const Verse = memo(function Verse({
         isLongPress.current = false;
         setIsPressing(true);
         startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        longPressTimer.current = setTimeout(triggerLongPress, LONG_PRESS_DURATION);
+        longPressTimer.current = setTimeout(
+            triggerLongPress,
+            LONG_PRESS_DURATION
+        );
     };
 
     const handleTouchEnd = (e) => {
@@ -94,7 +98,10 @@ const Verse = memo(function Verse({
         setIsPressing(true);
         startPos.current = { x: e.clientX, y: e.clientY };
 
-        longPressTimer.current = setTimeout(triggerLongPress, LONG_PRESS_DURATION);
+        longPressTimer.current = setTimeout(
+            triggerLongPress,
+            LONG_PRESS_DURATION
+        );
     };
 
     const handleMouseUp = (e) => {
@@ -155,14 +162,25 @@ const Verse = memo(function Verse({
     }, []);
 
     return (
-        <div className={`row line ${isPressing ? 'pressing' : ''} ${hasNote ? 'has-note' : ''}`}>
+        <div
+            className={`row line ${isPressing ? "pressing" : ""} ${
+                hasNote ? "has-note" : ""
+            }`}
+        >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <span
-                    className={`add-note-hint ${hasNote ? 'has-note-value' : 'desktop-only'}`}
+                    className={`add-note-hint ${
+                        hasNote ? "has-note-value" : "desktop-only"
+                    }`}
                     title={formatMessage({ id: hasNote ? "edit" : "addNote" })}
                     onClick={openNoteEditor}
                 >
-                    <svg viewBox="0 0 24 24" fill={hasNote ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill={hasNote ? "currentColor" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                    >
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
@@ -186,12 +204,18 @@ const Verse = memo(function Verse({
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                style={{ cursor: 'pointer', userSelect: 'none' }}
+                style={{ cursor: "pointer", userSelect: "none" }}
             >
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
                 {hasNote && (
                     <div className="verse-note-preview-wrap">
-                        <div className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded ? "is-collapsed" : ""}`}>
+                        <div
+                            className={`verse-note-preview ${
+                                isNoteExpandable && !isNoteExpanded
+                                    ? "is-collapsed"
+                                    : ""
+                            }`}
+                        >
                             {noteText}
                         </div>
                         {isNoteExpandable && (
@@ -203,7 +227,11 @@ const Verse = memo(function Verse({
                                     setIsNoteExpanded((value) => !value);
                                 }}
                             >
-                                {formatMessage({ id: isNoteExpanded ? "showLess" : "showMore" })}
+                                {formatMessage({
+                                    id: isNoteExpanded
+                                        ? "showLess"
+                                        : "showMore",
+                                })}
                             </button>
                         )}
                     </div>

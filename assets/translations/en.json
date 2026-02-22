@@ -9,6 +9,7 @@
   "oldTestament": "Old Testament",
   "newTestament": "New Testament",
   "otherBooks": "Deuterocanonical / Other",
+  "deuterocanonicalBooks": "Deuterocanonical books",
   "selectBook": "Select book",
   "selectChapter": "Select chapter",
   "backToBooks": "Back to books",
@@ -89,6 +90,9 @@
   "themeSystem": "System",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "darkModeVariant": "Dark mode variant",
+  "darkVariantGold": "Golden dark",
+  "darkVariantBlue": "Night blue",
   "scopeALL": "All",
   "scopeOT": "Old T.",
   "scopeNT": "New T.",
@@ -117,5 +121,11 @@
   "chapterCompSelectTranslation": "Select translation...",
   "chapterCompSelectHint": "Select translations to compare from the dropdowns above.",
   "chapterCompError": "Failed to load chapter.",
-  "info": "Info"
+  "info": "Info",
+  "usefulLinks": "Useful links",
+  "websiteLink": "Program homepage",
+  "downloadWindowsLink": "Download rBiblia for Windows",
+  "faqLink": "Frequently Asked Questions (FAQ)",
+  "contactLink": "Contact / Report a bug",
+  "radioLink": "Radio with the Gospel"
 }

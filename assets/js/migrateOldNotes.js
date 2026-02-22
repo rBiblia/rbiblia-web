@@ -61,9 +61,7 @@ const migrateOldNotes = () => {
             if (!text || !text.trim()) continue;
 
             // Parse key: "note_verse_{bookId}_{chapterId}_{verseId}"
-            const match = key.match(
-                /^note_verse_([a-z0-9]+)_(\d+)_(\d+)$/
-            );
+            const match = key.match(/^note_verse_([a-z0-9]+)_(\d+)_(\d+)$/);
             if (!match) continue;
 
             const [, bookId, chapterId, verseId] = match;
@@ -81,9 +79,7 @@ const migrateOldNotes = () => {
             if (!text || !text.trim()) continue;
 
             // Parse key: "note_chapter_{bookId}_{chapterId}"
-            const match = key.match(
-                /^note_chapter_([a-z0-9]+)_(\d+)$/
-            );
+            const match = key.match(/^note_chapter_([a-z0-9]+)_(\d+)$/);
             if (!match) continue;
 
             const [, bookId, chapterId] = match;
@@ -98,10 +94,7 @@ const migrateOldNotes = () => {
         }
 
         // Save migrated data
-        localStorage.setItem(
-            "rbiblia_notes",
-            JSON.stringify(existingNotes)
-        );
+        localStorage.setItem("rbiblia_notes", JSON.stringify(existingNotes));
         localStorage.setItem(
             "rbiblia_general_notes",
             JSON.stringify(existingGeneral)

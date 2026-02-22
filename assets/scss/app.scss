@@ -1,6 +1,39 @@
 @import "vars.scss";
 @import "mixins.scss";
 
+// ──── Dark Mode Variant CSS Custom Properties ────
+// Default dark variant: gold (warm neutral with gold accents)
+:root {
+  --dm-bg-base: #1a1a1a;
+  --dm-bg-surface: #242424;
+  --dm-bg-elevated: #2d2d2d;
+  --dm-bg-hover: #363636;
+  --dm-bg-overlay: rgba(18, 18, 18, 0.95);
+  --dm-bg-glass: rgba(30, 30, 30, 0.92);
+  --dm-border: #3d3d3d;
+  --dm-border-subtle: rgba(255, 255, 255, 0.08);
+  --dm-text-primary: #f1f1f1;
+  --dm-text-secondary: #aaa;
+  --dm-text-muted: #777;
+  --dm-accent: #{$rb-header-navigator-arrow};
+}
+
+// Blue variant: modern slate-blue tones
+html[data-dark-variant="blue"] {
+  --dm-bg-base: #0f172a;
+  --dm-bg-surface: #1e293b;
+  --dm-bg-elevated: #334155;
+  --dm-bg-hover: #475569;
+  --dm-bg-overlay: rgba(15, 23, 42, 0.95);
+  --dm-bg-glass: rgba(30, 41, 59, 0.92);
+  --dm-border: #334155;
+  --dm-border-subtle: rgba(148, 163, 184, 0.12);
+  --dm-text-primary: #f1f5f9;
+  --dm-text-secondary: #94a3b8;
+  --dm-text-muted: #64748b;
+  --dm-accent: #60a5fa;
+}
+
 // Typography
 $font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 $font-bible: 'Crimson Text', Georgia, 'Times New Roman', serif;
@@ -618,16 +651,16 @@ footer {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 
   @include dark-mode {
-    background: #1e1e1e;
-    border-color: #333;
-    color: #ccc;
+    background: var(--dm-bg-base);
+    border-color: var(--dm-border);
+    color: var(--dm-text-secondary);
   }
 }
 
 .bg-light {
   @include dark-mode {
-    background-color: #252525 !important;
-    border-color: #444 !important;
+    background-color: var(--dm-bg-surface) !important;
+    border-color: var(--dm-border) !important;
   }
 }
 
@@ -648,9 +681,9 @@ footer {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 
   @include dark-mode {
-    background-color: #333;
-    border-color: #444;
-    color: #eee;
+    background-color: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -1160,8 +1193,8 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(15, 23, 42, 0.82);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
   }
 
@@ -3741,9 +3774,9 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #f1f5f9;
+    background: var(--dm-bg-surface);
+    border-color: var(--dm-border-subtle);
+    color: var(--dm-text-primary);
 
     &:hover {
       border-color: rgba(255, 255, 255, 0.3);
@@ -3792,8 +3825,8 @@ footer {
   animation: fadeIn 0.15s ease;
 
   @include dark-mode {
-    background: rgba(30, 41, 59, 0.98);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--dm-bg-surface);
+    border-color: var(--dm-border-subtle);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
@@ -3811,12 +3844,37 @@ footer {
 }
 
 .translation-group-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0.5rem 1rem;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #888;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  @include dark-mode {
+    &:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  svg {
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  &:hover svg {
+    opacity: 1;
+  }
 }
 
 .translation-item {
@@ -4209,7 +4267,7 @@ footer {
   }
 
   @include dark-mode {
-    background: #111827;
+    background: var(--dm-bg-base);
   }
 }
 
@@ -4221,8 +4279,8 @@ footer {
   border-bottom: 1px solid #e5e7eb;
 
   @include dark-mode {
-    border-bottom-color: #374151;
-    color: #f3f4f6;
+    border-bottom-color: var(--dm-border);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -4233,30 +4291,34 @@ footer {
   color: #111827;
 
   @include dark-mode {
-    color: #f9fafb;
+    color: var(--dm-text-primary);
   }
 }
 
 .changelog-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background: transparent;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1;
+  color: #666;
+  transition: all 0.15s ease;
 
   &:hover {
     background: rgba(0, 0, 0, 0.08);
+    color: #333;
   }
 
   @include dark-mode {
-    color: #e5e7eb;
+    color: #999;
 
     &:hover {
       background: rgba(255, 255, 255, 0.1);
+      color: #ddd;
     }
   }
 }
@@ -4267,7 +4329,7 @@ footer {
   color: #111827;
 
   @include dark-mode {
-    color: #e5e7eb;
+    color: var(--dm-text-secondary);
   }
 }
 
@@ -4301,8 +4363,8 @@ footer {
   z-index: 2660;
 
   @include dark-mode {
-    background: #111827;
-    color: #f3f4f6;
+    background: var(--dm-bg-base);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -4830,7 +4892,7 @@ header.sticky-top {
   animation: fadeIn 0.15s ease-out;
 
   @include dark-mode {
-    background: rgba(18, 18, 18, 0.95);
+    background: var(--dm-bg-overlay);
   }
 }
 
@@ -4941,12 +5003,12 @@ header.sticky-top {
   }
 
   @include dark-mode {
-    background: #2d2d2d;
-    border-color: #444;
-    color: #eee;
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
 
     &:focus {
-      border-color: $rb-header-navigator-arrow;
+      border-color: var(--dm-accent);
     }
   }
 }

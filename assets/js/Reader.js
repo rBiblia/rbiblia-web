@@ -9,7 +9,7 @@ const Reader = ({
     showVerses,
     onVerseClick,
     onVerseLongPress,
-    notesVersion = 0
+    notesVersion = 0,
 }) => {
     if (!showVerses || !verses) {
         return <SkeletonLoader lines={15} />;

@@ -1,21 +1,35 @@
-﻿import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
+﻿import React, {
+    useEffect,
+    useState,
+    useCallback,
+    useMemo,
+    useRef,
+} from "react";
 import { useIntl } from "react-intl";
-import { getComparisonLimit, getFavoriteTranslations, isDiffModeStrict } from "./SideMenu";
+import {
+    getComparisonLimit,
+    getFavoriteTranslations,
+    isDiffModeStrict,
+} from "./SideMenu";
 import { safeJsonParse } from "./safeJsonParse";
 
 const COMPARISON_DIFF_MODE_KEY = "rbiblia-comparison-diff-mode";
-const WORD_SPLIT_PATTERN = /([A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+(?:'[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+)*)/g;
-const WORD_PATTERN = /^[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+(?:'[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+)*$/;
+const WORD_SPLIT_PATTERN =
+    /([A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+(?:'[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+)*)/g;
+const WORD_PATTERN =
+    /^[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+(?:'[A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF]+)*$/;
 
-const normalizeComparisonWord = (word, locale) => word.toLocaleLowerCase(locale);
+const normalizeComparisonWord = (word, locale) =>
+    word.toLocaleLowerCase(locale);
 
-const normalizeText = (text) => text.replaceAll("//", " ").replaceAll("\u2019", "'");
+const normalizeText = (text) =>
+    text.replaceAll("//", " ").replaceAll("\u2019", "'");
 
 const getWordSet = (text, locale) => {
     const words = normalizeText(text)
         .split(WORD_SPLIT_PATTERN)
-        .filter(part => WORD_PATTERN.test(part))
-        .map(word => normalizeComparisonWord(word, locale));
+        .filter((part) => WORD_PATTERN.test(part))
+        .map((word) => normalizeComparisonWord(word, locale));
 
     return new Set(words);
 };
@@ -25,7 +39,9 @@ const getWordSet = (text, locale) => {
  * Words match WORD_PATTERN, everything else is a separator.
  */
 const tokenize = (text) =>
-    normalizeText(text).split(WORD_SPLIT_PATTERN).filter(part => part !== "");
+    normalizeText(text)
+        .split(WORD_SPLIT_PATTERN)
+        .filter((part) => part !== "");
 
 /**
  * Compute LCS-based word diff between a base text and a compare text.
@@ -42,13 +58,19 @@ const computeLcsDiffIndices = (baseText, compareText, locale) => {
 
     baseTokens.forEach((token, idx) => {
         if (WORD_PATTERN.test(token)) {
-            baseWords.push({ word: normalizeComparisonWord(token, locale), idx });
+            baseWords.push({
+                word: normalizeComparisonWord(token, locale),
+                idx,
+            });
         }
     });
 
     compareTokens.forEach((token, idx) => {
         if (WORD_PATTERN.test(token)) {
-            compareWords.push({ word: normalizeComparisonWord(token, locale), idx });
+            compareWords.push({
+                word: normalizeComparisonWord(token, locale),
+                idx,
+            });
         }
     });
 
@@ -103,8 +125,8 @@ const ComparisonGrid = ({
     currentTranslation,
     translations,
     onClose,
-    onNavigateVerse,  // callback(direction) - 'prev' or 'next'
-    totalVerses = 0,  // total verses in chapter for navigation limits
+    onNavigateVerse, // callback(direction) - 'prev' or 'next'
+    totalVerses = 0, // total verses in chapter for navigation limits
 }) => {
     const { formatMessage, locale } = useIntl();
     const comparisonLimit = getComparisonLimit();
@@ -113,9 +135,13 @@ const ComparisonGrid = ({
     // Get favorites that exist in translations (excluding current)
     const getAvailableFavorites = () => {
         return translations
-            .filter(t => t.id !== currentTranslation && favoriteTranslations.includes(t.id))
+            .filter(
+                (t) =>
+                    t.id !== currentTranslation &&
+                    favoriteTranslations.includes(t.id)
+            )
             .slice(0, comparisonLimit)
-            .map(t => t.id);
+            .map((t) => t.id);
     };
 
     // Initialize selected translations with favorites
@@ -123,7 +149,7 @@ const ComparisonGrid = ({
         const favorites = getAvailableFavorites();
         return [
             ...favorites,
-            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill("")
+            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill(""),
         ].slice(0, comparisonLimit);
     });
 
@@ -149,39 +175,44 @@ const ComparisonGrid = ({
     const currentVerseIdRef = useRef(verseId);
 
     // Fetch verse for a translation
-    const fetchTranslationVerse = useCallback((translationId, forVerseId) => {
-        setLoading((prev) => ({ ...prev, [translationId]: true }));
+    const fetchTranslationVerse = useCallback(
+        (translationId, forVerseId) => {
+            setLoading((prev) => ({ ...prev, [translationId]: true }));
 
-        fetch(`/api/${locale}/translation/${translationId}/book/${bookId}/chapter/${chapterId}`)
-            .then((res) => safeJsonParse(res))
-            .then((result) => {
-                // Only update if we're still on the same verse
-                if (currentVerseIdRef.current === forVerseId) {
-                    if (result.data && result.data[forVerseId]) {
-                        setComparedVerses((prev) => ({
-                            ...prev,
-                            [translationId]: result.data[forVerseId],
-                        }));
-                    } else {
+            fetch(
+                `/api/${locale}/translation/${translationId}/book/${bookId}/chapter/${chapterId}`
+            )
+                .then((res) => safeJsonParse(res))
+                .then((result) => {
+                    // Only update if we're still on the same verse
+                    if (currentVerseIdRef.current === forVerseId) {
+                        if (result.data && result.data[forVerseId]) {
+                            setComparedVerses((prev) => ({
+                                ...prev,
+                                [translationId]: result.data[forVerseId],
+                            }));
+                        } else {
+                            setComparedVerses((prev) => ({
+                                ...prev,
+                                [translationId]: null,
+                            }));
+                        }
+                    }
+                })
+                .catch(() => {
+                    if (currentVerseIdRef.current === forVerseId) {
                         setComparedVerses((prev) => ({
                             ...prev,
                             [translationId]: null,
                         }));
                     }
-                }
-            })
-            .catch(() => {
-                if (currentVerseIdRef.current === forVerseId) {
-                    setComparedVerses((prev) => ({
-                        ...prev,
-                        [translationId]: null,
-                    }));
-                }
-            })
-            .finally(() => {
-                setLoading((prev) => ({ ...prev, [translationId]: false }));
-            });
-    }, [locale, bookId, chapterId]);
+                })
+                .finally(() => {
+                    setLoading((prev) => ({ ...prev, [translationId]: false }));
+                });
+        },
+        [locale, bookId, chapterId]
+    );
 
     // Load verses when verseId changes
     useEffect(() => {
@@ -196,7 +227,7 @@ const ComparisonGrid = ({
         fetchTranslationVerse(currentTranslation, verseId);
 
         // Fetch all selected translations
-        selectedTranslations.forEach(id => {
+        selectedTranslations.forEach((id) => {
             if (id) fetchTranslationVerse(id, verseId);
         });
     }, [verseId, bookId, chapterId, currentTranslation, fetchTranslationVerse]);
@@ -206,7 +237,7 @@ const ComparisonGrid = ({
         const favorites = getAvailableFavorites();
         const newSelections = [
             ...favorites,
-            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill("")
+            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill(""),
         ].slice(0, comparisonLimit);
         setSelectedTranslations(newSelections);
     }, [comparisonLimit]);
@@ -218,13 +249,13 @@ const ComparisonGrid = ({
     // Navigation handlers
     const handlePrevVerse = useCallback(() => {
         if (currentVerseNum > 1 && onNavigateVerse) {
-            onNavigateVerse('prev');
+            onNavigateVerse("prev");
         }
     }, [currentVerseNum, onNavigateVerse]);
 
     const handleNextVerse = useCallback(() => {
         if (currentVerseNum < totalVersesNum && onNavigateVerse) {
-            onNavigateVerse('next');
+            onNavigateVerse("next");
         }
     }, [currentVerseNum, totalVersesNum, onNavigateVerse]);
 
@@ -237,7 +268,10 @@ const ComparisonGrid = ({
 
     useEffect(() => {
         try {
-            localStorage.setItem(COMPARISON_DIFF_MODE_KEY, isDiffHighlightEnabled ? "1" : "0");
+            localStorage.setItem(
+                COMPARISON_DIFF_MODE_KEY,
+                isDiffHighlightEnabled ? "1" : "0"
+            );
         } catch {
             // Ignore storage write failures (private mode/quota)
         }
@@ -247,7 +281,7 @@ const ComparisonGrid = ({
 
     const availableComparisonTexts = useMemo(() => {
         const selectedTexts = selectedTranslations
-            .map(id => comparedVerses[id])
+            .map((id) => comparedVerses[id])
             .filter(Boolean);
 
         return primaryText ? [primaryText, ...selectedTexts] : selectedTexts;
@@ -262,8 +296,8 @@ const ComparisonGrid = ({
         }
 
         const wordSets = availableComparisonTexts
-            .map(text => getWordSet(text, locale))
-            .filter(wordSet => wordSet.size > 0);
+            .map((text) => getWordSet(text, locale))
+            .filter((wordSet) => wordSet.size > 0);
 
         if (wordSets.length < 2) {
             return new Set();
@@ -271,9 +305,16 @@ const ComparisonGrid = ({
 
         const [firstSet, ...otherSets] = wordSets;
         return new Set(
-            [...firstSet].filter((word) => otherSets.every(set => set.has(word)))
+            [...firstSet].filter((word) =>
+                otherSets.every((set) => set.has(word))
+            )
         );
-    }, [availableComparisonTexts, canHighlightDifferences, diffStrictMode, locale]);
+    }, [
+        availableComparisonTexts,
+        canHighlightDifferences,
+        diffStrictMode,
+        locale,
+    ]);
 
     // --- STRICT MODE: pairwise LCS diff indices per translation ---
     const strictDiffMap = useMemo(() => {
@@ -286,15 +327,18 @@ const ComparisonGrid = ({
         // Diff for the primary text itself against the first selected translation
         // (primary gets its own diff — words not in LCS vs first selected)
         const firstSelectedText = selectedTranslations
-            .map(id => comparedVerses[id])
+            .map((id) => comparedVerses[id])
             .find(Boolean);
 
         if (firstSelectedText) {
-            map.set(currentTranslation, computeLcsDiffIndices(firstSelectedText, primaryText, locale));
+            map.set(
+                currentTranslation,
+                computeLcsDiffIndices(firstSelectedText, primaryText, locale)
+            );
         }
 
         // Diff for each selected translation against the primary
-        selectedTranslations.forEach(id => {
+        selectedTranslations.forEach((id) => {
             const text = comparedVerses[id];
             if (id && text) {
                 map.set(id, computeLcsDiffIndices(primaryText, text, locale));
@@ -302,29 +346,64 @@ const ComparisonGrid = ({
         });
 
         return map;
-    }, [canHighlightDifferences, comparedVerses, currentTranslation, diffStrictMode, locale, primaryText, selectedTranslations]);
+    }, [
+        canHighlightDifferences,
+        comparedVerses,
+        currentTranslation,
+        diffStrictMode,
+        locale,
+        primaryText,
+        selectedTranslations,
+    ]);
 
-    const renderComparisonText = useCallback((text, translationId) => {
-        const displayText = text.replaceAll("//", "\n").replaceAll("\u2019", "'");
-        if (!isDiffHighlightEnabled || !canHighlightDifferences) {
-            return displayText;
-        }
-
-        const tokens = displayText.split(WORD_SPLIT_PATTERN).filter(part => part !== "");
-
-        if (diffStrictMode) {
-            // STRICT: use pairwise LCS diff indices
-            const diffIndices = strictDiffMap.get(translationId);
-            if (!diffIndices) {
+    const renderComparisonText = useCallback(
+        (text, translationId) => {
+            const displayText = text
+                .replaceAll("//", "\n")
+                .replaceAll("\u2019", "'");
+            if (!isDiffHighlightEnabled || !canHighlightDifferences) {
                 return displayText;
             }
 
+            const tokens = displayText
+                .split(WORD_SPLIT_PATTERN)
+                .filter((part) => part !== "");
+
+            if (diffStrictMode) {
+                // STRICT: use pairwise LCS diff indices
+                const diffIndices = strictDiffMap.get(translationId);
+                if (!diffIndices) {
+                    return displayText;
+                }
+
+                return tokens.map((part, index) => {
+                    if (!WORD_PATTERN.test(part)) {
+                        return part;
+                    }
+
+                    if (!diffIndices.has(index)) {
+                        return part;
+                    }
+
+                    return (
+                        <mark
+                            key={`${translationId}_${index}`}
+                            className="comparison-diff-word"
+                        >
+                            {part}
+                        </mark>
+                    );
+                });
+            }
+
+            // LOOSE: global bag-of-words
             return tokens.map((part, index) => {
                 if (!WORD_PATTERN.test(part)) {
                     return part;
                 }
 
-                if (!diffIndices.has(index)) {
+                const normalizedWord = normalizeComparisonWord(part, locale);
+                if (commonWords.has(normalizedWord)) {
                     return part;
                 }
 
@@ -337,29 +416,16 @@ const ComparisonGrid = ({
                     </mark>
                 );
             });
-        }
-
-        // LOOSE: global bag-of-words
-        return tokens.map((part, index) => {
-            if (!WORD_PATTERN.test(part)) {
-                return part;
-            }
-
-            const normalizedWord = normalizeComparisonWord(part, locale);
-            if (commonWords.has(normalizedWord)) {
-                return part;
-            }
-
-            return (
-                <mark
-                    key={`${translationId}_${index}`}
-                    className="comparison-diff-word"
-                >
-                    {part}
-                </mark>
-            );
-        });
-    }, [canHighlightDifferences, commonWords, diffStrictMode, isDiffHighlightEnabled, locale, strictDiffMap]);
+        },
+        [
+            canHighlightDifferences,
+            commonWords,
+            diffStrictMode,
+            isDiffHighlightEnabled,
+            locale,
+            strictDiffMap,
+        ]
+    );
 
     const isEditableFieldFocused = useCallback(() => {
         const activeTag = document.activeElement?.tagName?.toLowerCase();
@@ -391,18 +457,24 @@ const ComparisonGrid = ({
                 return;
             }
 
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
                 e.preventDefault();
                 handlePrevVerse();
-            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
                 e.preventDefault();
                 handleNextVerse();
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [handlePrevVerse, handleNextVerse, isEditableFieldFocused, onClose, toggleDiffHighlight]);
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [
+        handlePrevVerse,
+        handleNextVerse,
+        isEditableFieldFocused,
+        onClose,
+        toggleDiffHighlight,
+    ]);
 
     // Handle translation selection change for a specific slot
     const handleTranslationChange = (index, translationId) => {
@@ -421,7 +493,8 @@ const ComparisonGrid = ({
             (t, i) => t && i !== currentSlotIndex
         );
         const available = translations.filter(
-            (t) => t.id !== currentTranslation && !usedTranslations.includes(t.id)
+            (t) =>
+                t.id !== currentTranslation && !usedTranslations.includes(t.id)
         );
 
         return available.sort((a, b) => {
@@ -445,33 +518,52 @@ const ComparisonGrid = ({
                     <select
                         className="form-select"
                         value={selectedId}
-                        onChange={(e) => handleTranslationChange(index, e.target.value)}
+                        onChange={(e) =>
+                            handleTranslationChange(index, e.target.value)
+                        }
                     >
-                        <option value="">{formatMessage({ id: "chooseTranslation" })}...</option>
+                        <option value="">
+                            {formatMessage({ id: "chooseTranslation" })}...
+                        </option>
 
-                        {available.filter(t => favoriteTranslations.includes(t.id)).length > 0 && (
-                            <optgroup label={`\u2605 ${formatMessage({ id: "favorites" })}`}>
+                        {available.filter((t) =>
+                            favoriteTranslations.includes(t.id)
+                        ).length > 0 && (
+                            <optgroup
+                                label={`\u2605 ${formatMessage({
+                                    id: "favorites",
+                                })}`}
+                            >
                                 {available
-                                    .filter(t => favoriteTranslations.includes(t.id))
-                                    .map(t => (
+                                    .filter((t) =>
+                                        favoriteTranslations.includes(t.id)
+                                    )
+                                    .map((t) => (
                                         <option key={t.id} value={t.id}>
-                                            {t.name} ({t.language.toUpperCase()})
+                                            {t.name} ({t.language.toUpperCase()}
+                                            )
                                         </option>
-                                    ))
-                                }
+                                    ))}
                             </optgroup>
                         )}
 
-                        {available.filter(t => !favoriteTranslations.includes(t.id)).length > 0 && (
-                            <optgroup label={formatMessage({ id: "allTranslations" })}>
+                        {available.filter(
+                            (t) => !favoriteTranslations.includes(t.id)
+                        ).length > 0 && (
+                            <optgroup
+                                label={formatMessage({ id: "allTranslations" })}
+                            >
                                 {available
-                                    .filter(t => !favoriteTranslations.includes(t.id))
-                                    .map(t => (
+                                    .filter(
+                                        (t) =>
+                                            !favoriteTranslations.includes(t.id)
+                                    )
+                                    .map((t) => (
                                         <option key={t.id} value={t.id}>
-                                            {t.name} ({t.language.toUpperCase()})
+                                            {t.name} ({t.language.toUpperCase()}
+                                            )
                                         </option>
-                                    ))
-                                }
+                                    ))}
                             </optgroup>
                         )}
                     </select>
@@ -480,19 +572,30 @@ const ComparisonGrid = ({
                 {selectedId && (
                     <div className="comparison-box comparison-box-secondary mt-2">
                         <div className="comparison-box-title">
-                            {translations.find(t => t.id === selectedId)?.name}
+                            {
+                                translations.find((t) => t.id === selectedId)
+                                    ?.name
+                            }
                         </div>
                         {loading[selectedId] ? (
                             <div className="comparison-loading">
-                                <div className="spinner-border spinner-border-sm" role="status"></div>
+                                <div
+                                    className="spinner-border spinner-border-sm"
+                                    role="status"
+                                ></div>
                             </div>
                         ) : comparedVerses[selectedId] ? (
                             <p className="comparison-text">
-                                {renderComparisonText(comparedVerses[selectedId], selectedId)}
+                                {renderComparisonText(
+                                    comparedVerses[selectedId],
+                                    selectedId
+                                )}
                             </p>
                         ) : comparedVerses[selectedId] === null ? (
                             <p className="comparison-not-found">
-                                {formatMessage({ id: "verseNotFoundInTranslation" })}
+                                {formatMessage({
+                                    id: "verseNotFoundInTranslation",
+                                })}
                             </p>
                         ) : null}
                     </div>
@@ -503,7 +606,10 @@ const ComparisonGrid = ({
 
     return (
         <div className="selection-overlay comparison-overlay" onClick={onClose}>
-            <div className="selection-content container" onClick={e => e.stopPropagation()}>
+            <div
+                className="selection-content container"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="selection-header d-flex justify-content-between align-items-center mb-4 pt-4">
                     {/* Navigation and title */}
                     <div className="comparison-nav-header">
@@ -513,15 +619,24 @@ const ComparisonGrid = ({
                             disabled={!canGoPrev}
                             title={formatMessage({ id: "previousVerse" })}
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
                                 <polyline points="15 18 9 12 15 6"></polyline>
                             </svg>
                         </button>
 
                         <h2 className="comparison-title">
-                            <span className="comparison-title-full">{bookName}</span>
-                            <span className="comparison-title-sigil">{bookSigil}</span>
-                            {" "}{chapterId}:{verseId}
+                            <span className="comparison-title-full">
+                                {bookName}
+                            </span>
+                            <span className="comparison-title-sigil">
+                                {bookSigil}
+                            </span>{" "}
+                            {chapterId}:{verseId}
                         </h2>
 
                         <button
@@ -530,7 +645,12 @@ const ComparisonGrid = ({
                             disabled={!canGoNext}
                             title={formatMessage({ id: "nextVerse" })}
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg>
                         </button>
@@ -539,16 +659,28 @@ const ComparisonGrid = ({
                     <div className="d-flex align-items-center gap-2">
                         <button
                             type="button"
-                            className={`comparison-diff-toggle ${isDiffHighlightEnabled ? "active" : ""}`}
+                            className={`comparison-diff-toggle ${
+                                isDiffHighlightEnabled ? "active" : ""
+                            }`}
                             onClick={toggleDiffHighlight}
-                            title={formatMessage({ id: "toggleDifferencesKeyboardHint" })}
+                            title={formatMessage({
+                                id: "toggleDifferencesKeyboardHint",
+                            })}
                         >
-                            {formatMessage({ id: isDiffHighlightEnabled ? "hideDifferences" : "showDifferences" })}
+                            {formatMessage({
+                                id: isDiffHighlightEnabled
+                                    ? "hideDifferences"
+                                    : "showDifferences",
+                            })}
                         </button>
                         <span className="comparison-keyboard-hint d-none d-lg-block">
-                            ← → {formatMessage({ id: "navigateVerses" })} • D {formatMessage({ id: "toggleDifferences" })}
+                            ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
+                            {formatMessage({ id: "toggleDifferences" })}
                         </span>
-                        <button className="btn btn-close" onClick={onClose}></button>
+                        <button
+                            className="btn btn-close"
+                            onClick={onClose}
+                        ></button>
                     </div>
                 </div>
 
@@ -557,18 +689,28 @@ const ComparisonGrid = ({
                     <div className="comparison-original mb-4">
                         <div className="comparison-box comparison-box-primary">
                             <div className="comparison-box-title comparison-box-title-primary">
-                                {translations.find(t => t.id === currentTranslation)?.name || currentTranslation}
+                                {translations.find(
+                                    (t) => t.id === currentTranslation
+                                )?.name || currentTranslation}
                                 <span className="comparison-current-badge">
-                                    {formatMessage({ id: "currentTranslation" })}
+                                    {formatMessage({
+                                        id: "currentTranslation",
+                                    })}
                                 </span>
                             </div>
                             {comparedVerses[currentTranslation] ? (
                                 <p className="comparison-text comparison-text-primary">
-                                    {renderComparisonText(comparedVerses[currentTranslation], currentTranslation)}
+                                    {renderComparisonText(
+                                        comparedVerses[currentTranslation],
+                                        currentTranslation
+                                    )}
                                 </p>
                             ) : (
                                 <div className="comparison-loading">
-                                    <div className="spinner-border spinner-border-sm" role="status"></div>
+                                    <div
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                    ></div>
                                 </div>
                             )}
                         </div>
@@ -591,4 +733,3 @@ const ComparisonGrid = ({
 };
 
 export default ComparisonGrid;
-

@@ -44,7 +44,10 @@ const useSwipeNavigation = (
 
             // Only trigger if horizontal swipe is more significant than vertical
             // This prevents accidental swipes when scrolling
-            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+            if (
+                Math.abs(deltaX) > Math.abs(deltaY) &&
+                Math.abs(deltaX) > threshold
+            ) {
                 if (deltaX > 0) {
                     // Swiped left - go to next chapter
                     onSwipeLeft?.();
@@ -62,9 +65,15 @@ const useSwipeNavigation = (
         };
 
         // Add event listeners to the document
-        document.addEventListener("touchstart", handleTouchStart, { passive: true });
-        document.addEventListener("touchmove", handleTouchMove, { passive: true });
-        document.addEventListener("touchend", handleTouchEnd, { passive: true });
+        document.addEventListener("touchstart", handleTouchStart, {
+            passive: true,
+        });
+        document.addEventListener("touchmove", handleTouchMove, {
+            passive: true,
+        });
+        document.addEventListener("touchend", handleTouchEnd, {
+            passive: true,
+        });
 
         return () => {
             document.removeEventListener("touchstart", handleTouchStart);

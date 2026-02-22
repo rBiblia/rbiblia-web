@@ -25,7 +25,11 @@ const BottomNavigation = ({
                 disabled={!isPrevAvailable}
                 aria-label={formatMessage({ id: "previousChapter" })}
             >
-                <Icon className="bottom-nav-icon" name="chevron-left" strokeWidth="2.5" />
+                <Icon
+                    className="bottom-nav-icon"
+                    name="chevron-left"
+                    strokeWidth="2.5"
+                />
             </button>
 
             {/* Notes - left of center */}
@@ -35,7 +39,9 @@ const BottomNavigation = ({
                 aria-label={formatMessage({ id: "notes" })}
             >
                 <Icon className="bottom-nav-icon" name="square-pen" />
-                <span className="bottom-nav-label">{formatMessage({ id: "notes" })}</span>
+                <span className="bottom-nav-label">
+                    {formatMessage({ id: "notes" })}
+                </span>
             </button>
 
             {/* Book selection - center */}
@@ -57,7 +63,9 @@ const BottomNavigation = ({
                 aria-label={formatMessage({ id: "search" })}
             >
                 <Icon className="bottom-nav-icon" name="search" />
-                <span className="bottom-nav-label">{formatMessage({ id: "search" })}</span>
+                <span className="bottom-nav-label">
+                    {formatMessage({ id: "search" })}
+                </span>
             </button>
 
             {/* Right arrow - far right position */}
@@ -67,7 +75,11 @@ const BottomNavigation = ({
                 disabled={!isNextAvailable}
                 aria-label={formatMessage({ id: "nextChapter" })}
             >
-                <Icon className="bottom-nav-icon" name="chevron-right" strokeWidth="2.5" />
+                <Icon
+                    className="bottom-nav-icon"
+                    name="chevron-right"
+                    strokeWidth="2.5"
+                />
             </button>
         </nav>
     );

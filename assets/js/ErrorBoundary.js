@@ -1,5 +1,5 @@
-import React from 'react';
-import { AppError } from './AppError';
+import React from "react";
+import { AppError } from "./AppError";
 
 /**
  * Error Boundary component for catching JavaScript errors in React component tree
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
         this.state = {
             hasError: false,
             error: null,
-            errorInfo: null
+            errorInfo: null,
         };
     }
 
@@ -19,14 +19,14 @@ class ErrorBoundary extends React.Component {
         // Update state so the next render will show the fallback UI
         return {
             hasError: true,
-            error
+            error,
         };
     }
 
     componentDidCatch(error, errorInfo) {
         // Log error details for debugging
-        console.error('ErrorBoundary caught an error:', error);
-        console.error('Error info:', errorInfo);
+        console.error("ErrorBoundary caught an error:", error);
+        console.error("Error info:", errorInfo);
 
         this.setState({ errorInfo });
 
@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component {
         this.setState({
             hasError: false,
             error: null,
-            errorInfo: null
+            errorInfo: null,
         });
 
         // Optionally reload the page for complete reset
@@ -54,14 +54,17 @@ class ErrorBoundary extends React.Component {
             if (this.props.fallback) {
                 return this.props.fallback({
                     error: this.state.error,
-                    retry: this.handleRetry
+                    retry: this.handleRetry,
                 });
             }
 
             // Default fallback UI using AppError component
             return (
                 <AppError
-                    message={this.state.error?.message || 'An unexpected error occurred'}
+                    message={
+                        this.state.error?.message ||
+                        "An unexpected error occurred"
+                    }
                     onRetry={this.handleRetry}
                 />
             );
@@ -84,7 +87,9 @@ export const withErrorBoundary = (WrappedComponent, options = {}) => {
         </ErrorBoundary>
     );
 
-    WithErrorBoundary.displayName = `WithErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+    WithErrorBoundary.displayName = `WithErrorBoundary(${
+        WrappedComponent.displayName || WrappedComponent.name || "Component"
+    })`;
 
     return WithErrorBoundary;
 };

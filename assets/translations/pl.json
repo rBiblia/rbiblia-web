@@ -8,6 +8,8 @@
   "changelogLink": "Zobacz dziennik zmian",
   "oldTestament": "Stary Testament",
   "newTestament": "Nowy Testament",
+  "deuterocanonicalBooks": "Ksi\u0119gi deuterokanoniczne",
+  "otherBooks": "Apokryfy / Inne",
   "selectBook": "Wybierz księgę",
   "selectChapter": "Wybierz rozdział",
   "backToBooks": "Wróć do ksiąg",
@@ -88,6 +90,9 @@
   "themeSystem": "Systemowy",
   "themeLight": "Jasny",
   "themeDark": "Ciemny",
+  "darkModeVariant": "Wariant ciemnego motywu",
+  "darkVariantGold": "Złoty mrok",
+  "darkVariantBlue": "Nocny błękit",
   "scopeALL": "Wszystko",
   "scopeOT": "Stary T.",
   "scopeNT": "Nowy T.",
@@ -116,5 +121,11 @@
   "chapterCompSelectTranslation": "Wybierz tłumaczenie...",
   "chapterCompSelectHint": "Wybierz tłumaczenia do porównania z list rozwijanych powyżej.",
   "chapterCompError": "Nie udało się załadować rozdziału.",
-  "info": "Informacje"
+  "info": "Informacje",
+  "usefulLinks": "Przydatne linki",
+  "websiteLink": "Strona domowa programu",
+  "downloadWindowsLink": "Pobierz rBiblia na Windows",
+  "faqLink": "Najczęściej zadawane pytania (FAQ)",
+  "contactLink": "Kontakt / Zgłoś błąd",
+  "radioLink": "Radio Ewangelią"
 }

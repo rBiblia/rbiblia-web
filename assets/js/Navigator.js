@@ -62,7 +62,11 @@ export default function Navigator({
                         className="nav-action-btn d-flex justify-content-center align-items-center"
                         onClick={onOpenChapterComparison}
                         title={formatMessage({ id: "chapterComparison" })}
-                        style={{ width: '44px', height: '44px', borderRadius: '12px' }}
+                        style={{
+                            width: "44px",
+                            height: "44px",
+                            borderRadius: "12px",
+                        }}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

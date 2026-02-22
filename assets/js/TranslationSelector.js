@@ -12,11 +12,14 @@ const TranslationSelector = ({
     selectedTranslation,
     changeSelectedTranslation,
     isLoading,
+    disabledOptions = [],
+    placeholder = "",
 }) => {
     const { locale, formatMessage } = useIntl();
     const [isOpen, setIsOpen] = useState(false);
     const [favorites, setFavorites] = useState(getFavoriteTranslations());
     const [hoveredId, setHoveredId] = useState(null);
+    const [collapsedGroups, setCollapsedGroups] = useState({});
     const dropdownRef = useRef(null);
 
     const languageNames = new Intl.DisplayNames([locale], {
@@ -26,12 +29,16 @@ const TranslationSelector = ({
     // Close dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(e.target)
+            ) {
                 setIsOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     // Reload favorites when dropdown opens
@@ -50,11 +57,26 @@ const TranslationSelector = ({
             setFavorites(getFavoriteTranslations());
         };
 
-        window.addEventListener(FAVORITE_TRANSLATIONS_UPDATED_EVENT, handleFavoritesUpdated);
+        window.addEventListener(
+            FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+            handleFavoritesUpdated
+        );
         return () => {
-            window.removeEventListener(FAVORITE_TRANSLATIONS_UPDATED_EVENT, handleFavoritesUpdated);
+            window.removeEventListener(
+                FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+                handleFavoritesUpdated
+            );
         };
     }, []);
+
+    const toggleGroup = (e, groupName) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setCollapsedGroups((prev) => ({
+            ...prev,
+            [groupName]: !prev[groupName],
+        }));
+    };
 
     const handleSelect = (id) => {
         changeSelectedTranslation(id);
@@ -64,15 +86,19 @@ const TranslationSelector = ({
     const toggleFavorite = (e, id) => {
         e.stopPropagation();
         const newFavorites = favorites.includes(id)
-            ? favorites.filter(fid => fid !== id)
+            ? favorites.filter((fid) => fid !== id)
             : [...favorites, id];
         setFavorites(newFavorites);
         saveFavoriteTranslations(newFavorites);
     };
 
     // Separate favorites and rest
-    const favoriteTranslations = translations.filter(t => favorites.includes(t.id));
-    const otherTranslations = translations.filter(t => !favorites.includes(t.id));
+    const favoriteTranslations = translations.filter((t) =>
+        favorites.includes(t.id)
+    );
+    const otherTranslations = translations.filter(
+        (t) => !favorites.includes(t.id)
+    );
 
     // Group other translations by language
     const translationList = [];
@@ -90,39 +116,66 @@ const TranslationSelector = ({
         map[trans.language].push(trans);
     });
 
-    const currentTranslation = translations.find(t => t.id === selectedTranslation);
-
-    const renderTranslationItem = (t, showStar = true) => (
-        <div
-            key={t.id}
-            className={`translation-item ${t.id === selectedTranslation ? 'selected' : ''}`}
-            onClick={() => handleSelect(t.id)}
-            onMouseEnter={() => setHoveredId(t.id)}
-            onMouseLeave={() => setHoveredId(null)}
-        >
-            <span className="translation-name">
-                {t.name} {t.date ? `[${t.date}]` : ''}
-            </span>
-            {showStar && (
-                <button
-                    className={`translation-star ${favorites.includes(t.id) ? 'is-favorite' : ''} ${hoveredId === t.id || favorites.includes(t.id) ? 'visible' : ''}`}
-                    onClick={(e) => toggleFavorite(e, t.id)}
-                    title={favorites.includes(t.id) ? formatMessage({ id: "removeFromFavorites" }) : formatMessage({ id: "addToFavorites" })}
-                >
-                    <Icon
-                        name="star"
-                        size={16}
-                        fill={favorites.includes(t.id) ? "currentColor" : "none"}
-                    />
-                </button>
-            )}
-        </div>
+    const currentTranslation = translations.find(
+        (t) => t.id === selectedTranslation
     );
+
+    const renderTranslationItem = (t, showStar = true) => {
+        const isDisabled = disabledOptions.includes(t.id);
+
+        return (
+            <div
+                key={t.id}
+                className={`translation-item ${
+                    t.id === selectedTranslation ? "selected" : ""
+                } ${isDisabled ? "disabled" : ""}`}
+                onClick={() => !isDisabled && handleSelect(t.id)}
+                onMouseEnter={() => !isDisabled && setHoveredId(t.id)}
+                onMouseLeave={() => !isDisabled && setHoveredId(null)}
+                style={
+                    isDisabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
+                }
+            >
+                <span className="translation-name">
+                    {t.name} {t.date ? `[${t.date}]` : ""}
+                </span>
+                {showStar && (
+                    <button
+                        className={`translation-star ${
+                            favorites.includes(t.id) ? "is-favorite" : ""
+                        } ${
+                            hoveredId === t.id || favorites.includes(t.id)
+                                ? "visible"
+                                : ""
+                        }`}
+                        onClick={(e) => toggleFavorite(e, t.id)}
+                        title={
+                            favorites.includes(t.id)
+                                ? formatMessage({ id: "removeFromFavorites" })
+                                : formatMessage({ id: "addToFavorites" })
+                        }
+                    >
+                        <Icon
+                            name="star"
+                            size={16}
+                            fill={
+                                favorites.includes(t.id)
+                                    ? "currentColor"
+                                    : "none"
+                            }
+                        />
+                    </button>
+                )}
+            </div>
+        );
+    };
 
     return (
         <div className="translation-selector" ref={dropdownRef}>
             <button
-                className={`translation-selector-trigger form-control ${isLoading ? 'disabled' : ''}`}
+                className={`translation-selector-trigger form-control ${
+                    isLoading ? "disabled" : ""
+                }`}
                 onClick={() => !isLoading && setIsOpen(!isOpen)}
                 type="button"
                 disabled={isLoading}
@@ -130,11 +183,18 @@ const TranslationSelector = ({
                 <span className="translation-selector-value">
                     {isLoading ? (
                         <span className="d-flex align-items-center gap-2">
-                            <span className="spinner-border spinner-border-sm text-secondary" role="status"></span>
-                            <span>{selectedTranslation}...</span>
+                            <span
+                                className="spinner-border spinner-border-sm text-secondary"
+                                role="status"
+                            ></span>
+                            <span>{selectedTranslation || placeholder}...</span>
                         </span>
+                    ) : currentTranslation ? (
+                        currentTranslation.name
+                    ) : selectedTranslation ? (
+                        selectedTranslation
                     ) : (
-                        currentTranslation ? currentTranslation.name : selectedTranslation
+                        placeholder
                     )}
                 </span>
                 <span className="translation-selector-arrow">
@@ -145,33 +205,85 @@ const TranslationSelector = ({
             {isOpen && (
                 <div className="translation-dropdown">
                     {/* Favorites group */}
-                    {favoriteTranslations.length > 0 && (
-                        <div className="translation-group">
-                            <div className="translation-group-label">
-                                <Icon
-                                    name="star"
-                                    size={14}
-                                    fill="currentColor"
-                                    className="me-2"
-                                    style={{ display: 'inline-block', verticalAlign: 'text-bottom' }}
-                                />
-                                {formatMessage({ id: "favorites" })}
-                            </div>
-                            {favoriteTranslations
-                                .sort((a, b) => a.name.localeCompare(b.name))
-                                .map(t => renderTranslationItem(t))}
-                        </div>
-                    )}
+                    {favoriteTranslations.length > 0 &&
+                        (() => {
+                            const favLabel = formatMessage({ id: "favorites" });
+                            const isFavCollapsed = collapsedGroups[favLabel];
+                            return (
+                                <div className="translation-group">
+                                    <div
+                                        className="translation-group-label"
+                                        onClick={(e) =>
+                                            toggleGroup(e, favLabel)
+                                        }
+                                    >
+                                        <div>
+                                            <Icon
+                                                name="star"
+                                                size={14}
+                                                fill="currentColor"
+                                                className="me-2"
+                                                style={{
+                                                    display: "inline-block",
+                                                    verticalAlign:
+                                                        "text-bottom",
+                                                }}
+                                            />
+                                            {favLabel}
+                                        </div>
+                                        <Icon
+                                            name={
+                                                isFavCollapsed
+                                                    ? "plus"
+                                                    : "minus"
+                                            }
+                                            size={14}
+                                        />
+                                    </div>
+                                    {!isFavCollapsed &&
+                                        favoriteTranslations
+                                            .sort((a, b) =>
+                                                a.name.localeCompare(b.name)
+                                            )
+                                            .map((t) =>
+                                                renderTranslationItem(t)
+                                            )}
+                                </div>
+                            );
+                        })()}
 
                     {/* Other translations grouped by language */}
-                    {translationList.map(({ languageName, children }, index) => (
-                        <div className="translation-group" key={index}>
-                            <div className="translation-group-label">{languageName}</div>
-                            {children
-                                .sort((a, b) => a.name.localeCompare(b.name))
-                                .map(t => renderTranslationItem(t))}
-                        </div>
-                    ))}
+                    {translationList.map(
+                        ({ languageName, children }, index) => {
+                            const isCollapsed = collapsedGroups[languageName];
+                            return (
+                                <div className="translation-group" key={index}>
+                                    <div
+                                        className="translation-group-label"
+                                        onClick={(e) =>
+                                            toggleGroup(e, languageName)
+                                        }
+                                    >
+                                        {languageName}
+                                        <Icon
+                                            name={
+                                                isCollapsed ? "plus" : "minus"
+                                            }
+                                            size={14}
+                                        />
+                                    </div>
+                                    {!isCollapsed &&
+                                        children
+                                            .sort((a, b) =>
+                                                a.name.localeCompare(b.name)
+                                            )
+                                            .map((t) =>
+                                                renderTranslationItem(t)
+                                            )}
+                                </div>
+                            );
+                        }
+                    )}
                 </div>
             )}
         </div>

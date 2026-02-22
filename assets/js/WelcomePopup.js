@@ -38,16 +38,22 @@ const WelcomePopup = ({ isOpen, onClose }) => {
     return (
         <>
             <div className="welcome-popup-overlay" onClick={onClose} />
-            <div ref={popupRef} className="welcome-popup-modal" role="dialog" aria-modal="true">
+            <div
+                ref={popupRef}
+                className="welcome-popup-modal"
+                role="dialog"
+                aria-modal="true"
+            >
                 <h3 className="welcome-popup-title">Witamy w rBiblia Web</h3>
                 <p className="welcome-popup-text">
-                    Przeglądasz właśnie webową wersję aplikacji rBiblia. Wersja przeglądarkowa
-                    zapewnia szybki dostęp do treści, jednak pełny zestaw możliwości programu
-                    dostępny jest w wydaniu desktopowym.
+                    Przeglądasz właśnie webową wersję aplikacji rBiblia. Wersja
+                    przeglądarkowa zapewnia szybki dostęp do treści, jednak
+                    pełny zestaw możliwości programu dostępny jest w wydaniu
+                    desktopowym.
                 </p>
                 <p className="welcome-popup-text">
-                    Aby korzystać ze wszystkich funkcji rBiblia, zachęcamy do pobrania wersji
-                    komputerowej.
+                    Aby korzystać ze wszystkich funkcji rBiblia, zachęcamy do
+                    pobrania wersji komputerowej.
                 </p>
 
                 <label className="welcome-popup-checkbox">

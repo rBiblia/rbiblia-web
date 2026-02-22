@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 /**
  * Custom hook to detect scroll direction and toggle visibility of navigation elements.
  * Returns true if navigation should be visible, false otherwise.
- * 
+ *
  * @param {Object} options Configuration options
  * @param {number} options.threshold Minimum scroll difference to trigger change
  * @param {number} options.topThreshold Distance from top where nav is always visible
