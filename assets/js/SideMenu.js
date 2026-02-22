@@ -266,8 +266,9 @@ const DisplaySettings = ({
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `rbiblia-notatki-${new Date().toISOString().split("T")[0]
-            }.json`;
+        a.download = `rbiblia-notatki-${
+            new Date().toISOString().split("T")[0]
+        }.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -355,8 +356,9 @@ const DisplaySettings = ({
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
-                        className={`side-menu-dock-item ${activeTab === tab.id ? "active" : ""
-                            }`}
+                        className={`side-menu-dock-item ${
+                            activeTab === tab.id ? "active" : ""
+                        }`}
                         onClick={() => setActiveTab(tab.id)}
                         title={tab.label}
                     >
@@ -397,10 +399,11 @@ const DisplaySettings = ({
                                     {fontSizes.map((fs) => (
                                         <button
                                             key={fs.value}
-                                            className={`font-size-btn ${fontSize === fs.value
-                                                ? "active"
-                                                : ""
-                                                }`}
+                                            className={`font-size-btn ${
+                                                fontSize === fs.value
+                                                    ? "active"
+                                                    : ""
+                                            }`}
                                             onClick={() =>
                                                 setFontSize(fs.value)
                                             }
@@ -422,10 +425,11 @@ const DisplaySettings = ({
                                         {fontFamilies.map((ff) => (
                                             <button
                                                 key={ff.value}
-                                                className={`font-family-btn ${fontFamily === ff.value
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`font-family-btn ${
+                                                    fontFamily === ff.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setFontFamily(ff.value)
                                                 }
@@ -459,10 +463,11 @@ const DisplaySettings = ({
                                         {themes.map((t) => (
                                             <button
                                                 key={t.value}
-                                                className={`setting-tile ${theme === t.value
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`setting-tile ${
+                                                    theme === t.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setTheme(t.value)
                                                 }
@@ -481,35 +486,72 @@ const DisplaySettings = ({
                             )}
 
                             {/* Dark mode variant */}
-                            {setDarkVariant && (theme === "dark" || theme === "system") && (
-                                <div className="setting-group stagger-2">
-                                    <label className="setting-label">
-                                        {formatMessage({ id: "darkModeVariant", defaultMessage: "Wariant ciemnego motywu" })}
-                                    </label>
-                                    <div className="setting-tiles-grid grid-2">
-                                        <button
-                                            className={`setting-tile ${darkVariant === "gold" ? "active" : ""}`}
-                                            onClick={() => setDarkVariant("gold")}
-                                            title={formatMessage({ id: "darkVariantGold", defaultMessage: "Złoty mrok" })}
-                                        >
-                                            <span className="tile-icon">🌑</span>
-                                            <span className="tile-label">
-                                                {formatMessage({ id: "darkVariantGold", defaultMessage: "Złoty mrok" })}
-                                            </span>
-                                        </button>
-                                        <button
-                                            className={`setting-tile ${darkVariant === "blue" ? "active" : ""}`}
-                                            onClick={() => setDarkVariant("blue")}
-                                            title={formatMessage({ id: "darkVariantBlue", defaultMessage: "Nocny błękit" })}
-                                        >
-                                            <span className="tile-icon">🌌</span>
-                                            <span className="tile-label">
-                                                {formatMessage({ id: "darkVariantBlue", defaultMessage: "Nocny błękit" })}
-                                            </span>
-                                        </button>
+                            {setDarkVariant &&
+                                (theme === "dark" || theme === "system") && (
+                                    <div className="setting-group stagger-2">
+                                        <label className="setting-label">
+                                            {formatMessage({
+                                                id: "darkModeVariant",
+                                                defaultMessage:
+                                                    "Wariant ciemnego motywu",
+                                            })}
+                                        </label>
+                                        <div className="setting-tiles-grid grid-2">
+                                            <button
+                                                className={`setting-tile ${
+                                                    darkVariant === "gold"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setDarkVariant("gold")
+                                                }
+                                                title={formatMessage({
+                                                    id: "darkVariantGold",
+                                                    defaultMessage:
+                                                        "Złoty mrok",
+                                                })}
+                                            >
+                                                <span className="tile-icon">
+                                                    🌑
+                                                </span>
+                                                <span className="tile-label">
+                                                    {formatMessage({
+                                                        id: "darkVariantGold",
+                                                        defaultMessage:
+                                                            "Złoty mrok",
+                                                    })}
+                                                </span>
+                                            </button>
+                                            <button
+                                                className={`setting-tile ${
+                                                    darkVariant === "blue"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setDarkVariant("blue")
+                                                }
+                                                title={formatMessage({
+                                                    id: "darkVariantBlue",
+                                                    defaultMessage:
+                                                        "Nocny błękit",
+                                                })}
+                                            >
+                                                <span className="tile-icon">
+                                                    🌌
+                                                </span>
+                                                <span className="tile-label">
+                                                    {formatMessage({
+                                                        id: "darkVariantBlue",
+                                                        defaultMessage:
+                                                            "Nocny błękit",
+                                                    })}
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
                         </div>
                     )}
 
@@ -528,8 +570,9 @@ const DisplaySettings = ({
                                     {["pl", "en", "de"].map((lang) => (
                                         <button
                                             key={lang}
-                                            className={`setting-tile ${locale === lang ? "active" : ""
-                                                }`}
+                                            className={`setting-tile ${
+                                                locale === lang ? "active" : ""
+                                            }`}
                                             onClick={() =>
                                                 setLocaleAndUpdateHistory(lang)
                                             }
@@ -572,10 +615,11 @@ const DisplaySettings = ({
                                         {comparisonOptions.map((num) => (
                                             <button
                                                 key={num}
-                                                className={`comparison-limit-btn ${comparisonLimit === num
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`comparison-limit-btn ${
+                                                    comparisonLimit === num
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     handleComparisonLimitChange(
                                                         num
@@ -597,8 +641,9 @@ const DisplaySettings = ({
                                     </p>
                                     <div className="diff-mode-toggle">
                                         <button
-                                            className={`diff-mode-btn ${!diffStrict ? "active" : ""
-                                                }`}
+                                            className={`diff-mode-btn ${
+                                                !diffStrict ? "active" : ""
+                                            }`}
                                             onClick={() => {
                                                 setDiffStrict(false);
                                                 setDiffModeStrict(false);
@@ -609,8 +654,9 @@ const DisplaySettings = ({
                                             })}
                                         </button>
                                         <button
-                                            className={`diff-mode-btn ${diffStrict ? "active" : ""
-                                                }`}
+                                            className={`diff-mode-btn ${
+                                                diffStrict ? "active" : ""
+                                            }`}
                                             onClick={() => {
                                                 setDiffStrict(true);
                                                 setDiffModeStrict(true);

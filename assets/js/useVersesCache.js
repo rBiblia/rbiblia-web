@@ -35,29 +35,25 @@ const useVersesCache = (locale) => {
             }
 
             // Fetch from API
-            try {
-                const response = await fetch(
-                    `/api/${locale}/translation/${translation}/book/${book}/chapter/${chapter}`
-                );
-                const result = await safeJsonParse(response);
+            const response = await fetch(
+                `/api/${locale}/translation/${translation}/book/${book}/chapter/${chapter}`
+            );
+            const result = await safeJsonParse(response);
 
-                // Save to cache
-                if (result.data) {
-                    // Remove oldest items if cache is full
-                    if (cacheRef.current.size >= MAX_CACHE_SIZE) {
-                        const firstKey = cacheRef.current.keys().next().value;
-                        cacheRef.current.delete(firstKey);
-                    }
-                    cacheRef.current.set(cacheKey, result.data);
+            // Save to cache
+            if (result.data) {
+                // Remove oldest items if cache is full
+                if (cacheRef.current.size >= MAX_CACHE_SIZE) {
+                    const firstKey = cacheRef.current.keys().next().value;
+                    cacheRef.current.delete(firstKey);
                 }
-
-                return {
-                    data: result.data,
-                    fromCache: false,
-                };
-            } catch (error) {
-                throw error;
+                cacheRef.current.set(cacheKey, result.data);
             }
+
+            return {
+                data: result.data,
+                fromCache: false,
+            };
         },
         [locale, getCacheKey]
     );
