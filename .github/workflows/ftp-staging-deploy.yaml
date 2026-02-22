@@ -1,0 +1,81 @@
+name: ftp staging deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  ftp-deploy:
+    name: Deploy to FTP Staging Server running on ${{ matrix.operating-system }} / PHP v${{ matrix.php-versions }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['8.2']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install Composer dependencies
+        run: composer install -o --no-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "16"
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install Node.js dependencies
+        run: yarn install
+
+      - name: Compile assets
+        run: yarn encore production
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Deploy via FTPS with lftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" <<EOF
+          set ftp:passive-mode on
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate no
+          set net:max-retries 3
+          set net:timeout 20
+
+          mirror -R \
+            --verbose \
+            --only-newer \
+            --parallel=4 \
+            --ignore-time \
+            src/ /src/
+
+          mirror -R \
+            --verbose \
+            --only-newer \
+            --parallel=4 \
+            --ignore-time \
+            public_html/ /public_html/
+
+          bye
+          EOF
