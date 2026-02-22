@@ -661,11 +661,10 @@ const SearchPanel = ({
                                     <li
                                         key={`${suggestion.type}-${suggestion.text}`}
                                         id={`suggestion-${index}`}
-                                        className={`search-suggestion-item ${
-                                            index === selectedSuggestionIndex
+                                        className={`search-suggestion-item ${index === selectedSuggestionIndex
                                                 ? "active"
                                                 : ""
-                                        }`}
+                                            }`}
                                         role="option"
                                         aria-selected={
                                             index === selectedSuggestionIndex
@@ -687,15 +686,15 @@ const SearchPanel = ({
                                         <span className="suggestion-type-label">
                                             {suggestion.type === "history"
                                                 ? formatMessage({
-                                                      id: "suggestionHistory",
-                                                  })
+                                                    id: "suggestionHistory",
+                                                })
                                                 : suggestion.type === "book"
-                                                ? formatMessage({
-                                                      id: "suggestionBook",
-                                                  })
-                                                : formatMessage({
-                                                      id: "suggestionPhrase",
-                                                  })}
+                                                    ? formatMessage({
+                                                        id: "suggestionBook",
+                                                    })
+                                                    : formatMessage({
+                                                        id: "suggestionPhrase",
+                                                    })}
                                         </span>
                                     </li>
                                 ))}
@@ -717,9 +716,8 @@ const SearchPanel = ({
                         {Object.values(SEARCH_SCOPE).map((scope) => (
                             <button
                                 key={scope}
-                                className={`scope-toggle-btn ${
-                                    searchScope === scope ? "active" : ""
-                                }`}
+                                className={`scope-toggle-btn ${searchScope === scope ? "active" : ""
+                                    }`}
                                 onClick={() => setSearchScope(scope)}
                             >
                                 {formatMessage({ id: `scope${scope}` })}

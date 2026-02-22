@@ -15,38 +15,50 @@
  * @throws {Error} If response is not ok or JSON cannot be extracted
  */
 export async function safeJsonParse(response) {
-    if (!response.ok) {
-        throw new Error(`Server error (${response.status})`);
-    }
-
+    const isOk = response.ok;
     const text = await response.text();
 
+    let parsedJson = null;
+
     try {
-        return JSON.parse(text);
+        parsedJson = JSON.parse(text);
     } catch (parseError) {
         // Try to extract valid JSON from the beginning of the response
         // This handles cases where PHP appends warnings/notices after JSON output
         const jsonMatch = text.match(/^(\{[\s\S]*\})\s*[^}\s]/);
         if (jsonMatch) {
             try {
-                return JSON.parse(jsonMatch[1]);
+                parsedJson = JSON.parse(jsonMatch[1]);
             } catch {
                 // Fall through to error
             }
         }
 
-        // Try matching a complete JSON object at the start
-        const simpleMatch = text.match(/^(\{[^]*?\})(?:\s*<|$)/);
-        if (simpleMatch) {
-            try {
-                return JSON.parse(simpleMatch[1]);
-            } catch {
-                // Fall through to error
+        if (!parsedJson) {
+            // Try matching a complete JSON object at the start
+            const simpleMatch = text.match(/^(\{[^]*?\})(?:\s*<|$)/);
+            if (simpleMatch) {
+                try {
+                    parsedJson = JSON.parse(simpleMatch[1]);
+                } catch {
+                    // Fall through to error
+                }
             }
         }
 
-        throw new Error("Invalid server response");
+        if (!parsedJson && isOk) {
+            throw new Error("Invalid server response");
+        }
     }
+
+    if (!isOk) {
+        if (parsedJson && parsedJson.message) {
+            throw new Error(parsedJson.message);
+        }
+        throw new Error(`Server error (${response.status})`);
+    }
+
+    return parsedJson;
 }
 
 /**

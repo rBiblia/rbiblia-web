@@ -521,7 +521,7 @@ footer {
   @include fluid-text(1.2rem, 1.5rem);
 
   @include dark-mode {
-    color: #eee;
+    color: var(--dm-text-primary);
   }
 }
 
@@ -568,18 +568,18 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--dm-bg-surface);
+    border-color: var(--dm-border-subtle);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
     &:hover {
-      background: rgba(51, 65, 85, 0.95);
-      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--dm-bg-hover);
+      border-color: var(--dm-accent);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .tile-text {
-      color: #f1f5f9;
+      color: var(--dm-text-primary);
     }
   }
 }
@@ -1857,7 +1857,9 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(15, 23, 42, 0.85);
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
   }
 
   @media (max-width: 575px) {
@@ -1895,7 +1897,7 @@ footer {
   }
 
   @include dark-mode {
-    color: #eee;
+    color: var(--dm-text-primary);
   }
 }
 
@@ -2133,9 +2135,9 @@ footer {
   }
 
   @include dark-mode {
-    background: #2d2d2d;
-    border-color: #444;
-    color: #eee;
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -2275,8 +2277,8 @@ footer {
   }
 
   @include dark-mode {
-    background: #2d2d2d;
-    color: #eee;
+    background: var(--dm-bg-elevated);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -2520,7 +2522,9 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(15, 23, 42, 0.85);
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
   }
 
   @media (max-width: 575px) {
@@ -2558,7 +2562,7 @@ footer {
   }
 
   @include dark-mode {
-    color: #eee;
+    color: var(--dm-text-primary);
   }
 }
 
@@ -2680,17 +2684,17 @@ footer {
   }
 
   @include dark-mode {
-    background: #2d2d2d;
-    border-color: #444;
-    color: #eee;
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
 
     &:focus {
-      background: #333;
-      border-color: $rb-header-navigator-arrow;
+      background: var(--dm-bg-hover);
+      border-color: var(--dm-accent);
     }
 
     &::placeholder {
-      color: #777;
+      color: var(--dm-text-muted);
     }
   }
 }
@@ -2755,8 +2759,8 @@ footer {
   animation: suggestionsIn 0.15s ease-out;
 
   @include dark-mode {
-    background: #2a2a2a;
-    border-color: #444;
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 }
@@ -4219,7 +4223,9 @@ footer {
   }
 
   @include dark-mode {
-    background: rgba(15, 23, 42, 0.85);
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
   }
 
   @media (max-width: 575px) {
@@ -4551,7 +4557,7 @@ header.sticky-top {
   .note-editor-modal,
   .comparison-overlay {
     animation: none !important;
-    transition: opacity 0.01ms !important, visibility 0.01ms !important;
+    transition: opacity 0s !important, visibility 0s !important;
   }
 
   // Immediate state changes instead of animations

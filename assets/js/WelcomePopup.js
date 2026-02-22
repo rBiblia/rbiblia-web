@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useFocusTrap from "./hooks/useFocusTrap";
 
 const WELCOME_POPUP_DISABLED_KEY = "rbiblia_disable_welcome_popup";
-const DESKTOP_DOWNLOAD_URL = "#";
+const DESKTOP_DOWNLOAD_URL = "https://api.toborek.info/download/rbib261.exe";
 
 const isWelcomePopupDisabled = () =>
     localStorage.getItem(WELCOME_POPUP_DISABLED_KEY) === "1";

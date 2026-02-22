@@ -163,15 +163,13 @@ const Verse = memo(function Verse({
 
     return (
         <div
-            className={`row line ${isPressing ? "pressing" : ""} ${
-                hasNote ? "has-note" : ""
-            }`}
+            className={`row line ${isPressing ? "pressing" : ""} ${hasNote ? "has-note" : ""
+                }`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <span
-                    className={`add-note-hint ${
-                        hasNote ? "has-note-value" : "desktop-only"
-                    }`}
+                    className={`add-note-hint ${hasNote ? "has-note-value" : "desktop-only"
+                        }`}
                     title={formatMessage({ id: hasNote ? "edit" : "addNote" })}
                     onClick={openNoteEditor}
                 >
@@ -190,7 +188,7 @@ const Verse = memo(function Verse({
                     title={formatMessage({ id: "linkOpenInRBibliaApp" })}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {appVerse}
+                    {chapterId}:{verseId}
                 </a>
             </div>
             <div
@@ -210,11 +208,10 @@ const Verse = memo(function Verse({
                 {hasNote && (
                     <div className="verse-note-preview-wrap">
                         <div
-                            className={`verse-note-preview ${
-                                isNoteExpandable && !isNoteExpanded
+                            className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
                                     ? "is-collapsed"
                                     : ""
-                            }`}
+                                }`}
                         >
                             {noteText}
                         </div>

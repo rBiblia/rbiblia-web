@@ -310,19 +310,19 @@ const ChapterComparison = ({
                                             <th className="chapter-comp-th-text">
                                                 {translationA
                                                     ? translations.find(
-                                                          (t) =>
-                                                              t.id ===
-                                                              translationA
-                                                      )?.name || translationA
+                                                        (t) =>
+                                                            t.id ===
+                                                            translationA
+                                                    )?.name || translationA
                                                     : "—"}
                                             </th>
                                             <th className="chapter-comp-th-text">
                                                 {translationB
                                                     ? translations.find(
-                                                          (t) =>
-                                                              t.id ===
-                                                              translationB
-                                                      )?.name || translationB
+                                                        (t) =>
+                                                            t.id ===
+                                                            translationB
+                                                    )?.name || translationB
                                                     : "—"}
                                             </th>
                                         </tr>
@@ -334,7 +334,7 @@ const ChapterComparison = ({
                                                 className="chapter-comp-row"
                                             >
                                                 <td className="chapter-comp-verse-num">
-                                                    {v}
+                                                    {chapterId}:{v}
                                                 </td>
                                                 <td className="chapter-comp-verse-text chapter-comp-side-a">
                                                     {renderVerseText(
@@ -359,7 +359,7 @@ const ChapterComparison = ({
                                             className="chapter-comp-mobile-verse"
                                         >
                                             <div className="chapter-comp-mobile-num">
-                                                {v}
+                                                {chapterId}:{v}
                                             </div>
                                             <div className="chapter-comp-mobile-texts">
                                                 {translationA && (
