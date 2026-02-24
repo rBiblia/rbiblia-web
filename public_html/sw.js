@@ -8,7 +8,7 @@
  *   - Images: Cache-first with network fallback
  */
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const STATIC_CACHE = `rbiblia-static-${CACHE_VERSION}`;
 const API_CACHE = `rbiblia-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `rbiblia-images-${CACHE_VERSION}`;
@@ -85,6 +85,12 @@ self.addEventListener("fetch", (event) => {
     // API requests → Network-first
     if (url.pathname.startsWith("/api/")) {
         event.respondWith(networkFirst(request, API_CACHE));
+        return;
+    }
+
+    // Keep sprite fresh to avoid stale icon symbols
+    if (url.pathname === "/assets/icons/sprite.svg") {
+        event.respondWith(networkFirst(request, STATIC_CACHE));
         return;
     }
 
@@ -205,3 +211,4 @@ function isStaticAsset(pathname) {
 function isImage(pathname) {
     return /\.(png|jpe?g|gif|webp|ico)(\?.*)?$/i.test(pathname);
 }
+
