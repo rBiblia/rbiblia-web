@@ -20,10 +20,10 @@ class SearchController
         $this->createDatabaseConnection($settings);
     }
 
-    public function query(string $language): void
+    public function query(string $language, ?string $inputStream = null): void
     {
         try {
-            $inputStream = file_get_contents('php://input');
+            $inputStream = $inputStream ?? file_get_contents('php://input');
             $searchQuery = (new SearchQueryProvider($language, $inputStream))->getSearchQuery();
         } catch (\InvalidArgumentException $e) {
             $this->setErrorResponse($e->getMessage());

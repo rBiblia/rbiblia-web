@@ -16,10 +16,14 @@ class BookControllerTest extends TestCase
 
     public function testIfGetBookListReturnsSomeBooks(): void
     {
-        $this->bookController->getBookList('en');
-
         $this->expectOutputRegex('(habak)');
         $this->expectOutputRegex('(colossians)');
         $this->expectOutputRegex('(philemon)');
+
+        try {
+            $this->bookController->getBookList('en');
+        } catch (\RuntimeException $e) {
+            $this->assertSame('Response sent', $e->getMessage());
+        }
     }
 }
