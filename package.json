@@ -1,7 +1,8 @@
 {
   "scripts": {
     "dev": "yarn encore dev --watch",
-    "eslint": "eslint assets --fix"
+    "eslint": "eslint assets --fix",
+    "test": "node tests/runAll.js"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.24.1",

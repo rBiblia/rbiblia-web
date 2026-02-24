@@ -2,7 +2,7 @@
   "messages": {
     "error_translation_not_found": "Translation not found",
     "error_no_verses_found": "No verses found in a given chapter",
-    "error_query_limit_exceeded": "Query limit for IP address exceeded, try tomorrow",
+    "error_query_limit_exceeded": "You've reached the read limit. It's great to have you here, come back tomorrow!",
     "error_wrong_ip_address": "Cannot determine IP address of the user",
     "error_database_connection_failed": "Database connection failed",
     "error_json_is_malformed": "Submitted JSON string is empty or is malformed",
@@ -264,6 +264,7 @@
     },
     "tob": {
       "name": "Tobit",
+      "group": "dc",
       "aliases": [
         "tob",
         "tb",
@@ -272,6 +273,7 @@
     },
     "jdt": {
       "name": "Judith",
+      "group": "dc",
       "aliases": [
         "jth",
         "jdt",
@@ -292,6 +294,7 @@
     },
     "1ma": {
       "name": "1 Maccabees",
+      "group": "dc",
       "aliases": [
         "1macc",
         "1mac",
@@ -302,6 +305,7 @@
     },
     "2ma": {
       "name": "2 Maccabees",
+      "group": "dc",
       "aliases": [
         "2macc",
         "2mac",
@@ -394,6 +398,7 @@
     },
     "wis": {
       "name": "Wisdom of Solomon",
+      "group": "dc",
       "aliases": [
         "wisdofsol",
         "wis",
@@ -409,6 +414,7 @@
     },
     "sir": {
       "name": "Wisdom of Sirach",
+      "group": "dc",
       "aliases": [
         "sir",
         "sirach",
@@ -464,6 +470,7 @@
     },
     "bar": {
       "name": "Baruch",
+      "group": "dc",
       "aliases": [
         "bar",
         "baruch"

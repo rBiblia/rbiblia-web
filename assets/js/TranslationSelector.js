@@ -1,23 +1,110 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useIntl } from "react-intl";
+import {
+    FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+    getFavoriteTranslations,
+    saveFavoriteTranslations,
+} from "./SideMenu";
+import Icon from "./Icon";
 
 const TranslationSelector = ({
     translations,
     selectedTranslation,
     changeSelectedTranslation,
+    isLoading,
+    disabledOptions = [],
+    placeholder = "",
 }) => {
-    const { locale } = useIntl();
-    const onSelect = (event) => {
-        changeSelectedTranslation(event.target.value);
-    };
+    const { locale, formatMessage } = useIntl();
+    const [isOpen, setIsOpen] = useState(false);
+    const [favorites, setFavorites] = useState(getFavoriteTranslations());
+    const [hoveredId, setHoveredId] = useState(null);
+    const [collapsedGroups, setCollapsedGroups] = useState({});
+    const dropdownRef = useRef(null);
 
-    const translationList = [];
-    const map = {};
     const languageNames = new Intl.DisplayNames([locale], {
         type: "language",
     });
 
-    translations.forEach((trans) => {
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(e.target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    // Reload favorites when dropdown opens
+    useEffect(() => {
+        if (isOpen) {
+            setFavorites(getFavoriteTranslations());
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        const handleFavoritesUpdated = (event) => {
+            if (Array.isArray(event.detail)) {
+                setFavorites(event.detail);
+                return;
+            }
+            setFavorites(getFavoriteTranslations());
+        };
+
+        window.addEventListener(
+            FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+            handleFavoritesUpdated
+        );
+        return () => {
+            window.removeEventListener(
+                FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+                handleFavoritesUpdated
+            );
+        };
+    }, []);
+
+    const toggleGroup = (e, groupName) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setCollapsedGroups((prev) => ({
+            ...prev,
+            [groupName]: !prev[groupName],
+        }));
+    };
+
+    const handleSelect = (id) => {
+        changeSelectedTranslation(id);
+        setIsOpen(false);
+    };
+
+    const toggleFavorite = (e, id) => {
+        e.stopPropagation();
+        const newFavorites = favorites.includes(id)
+            ? favorites.filter((fid) => fid !== id)
+            : [...favorites, id];
+        setFavorites(newFavorites);
+        saveFavoriteTranslations(newFavorites);
+    };
+
+    // Separate favorites and rest
+    const favoriteTranslations = translations.filter((t) =>
+        favorites.includes(t.id)
+    );
+    const otherTranslations = translations.filter(
+        (t) => !favorites.includes(t.id)
+    );
+
+    // Group other translations by language
+    const translationList = [];
+    const map = {};
+
+    otherTranslations.forEach((trans) => {
         if (!map[trans.language]) {
             const languageGroup = {
                 languageName: languageNames.of(trans.language),
@@ -26,28 +113,180 @@ const TranslationSelector = ({
             map[trans.language] = languageGroup.children;
             translationList.push(languageGroup);
         }
-
         map[trans.language].push(trans);
     });
 
+    const currentTranslation = translations.find(
+        (t) => t.id === selectedTranslation
+    );
+
+    const renderTranslationItem = (t, showStar = true) => {
+        const isDisabled = disabledOptions.includes(t.id);
+
+        return (
+            <div
+                key={t.id}
+                className={`translation-item ${
+                    t.id === selectedTranslation ? "selected" : ""
+                } ${isDisabled ? "disabled" : ""}`}
+                onClick={() => !isDisabled && handleSelect(t.id)}
+                onMouseEnter={() => !isDisabled && setHoveredId(t.id)}
+                onMouseLeave={() => !isDisabled && setHoveredId(null)}
+                style={
+                    isDisabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
+                }
+            >
+                <span className="translation-name">
+                    {t.name} {t.date ? `[${t.date}]` : ""}
+                </span>
+                {showStar && (
+                    <button
+                        className={`translation-star ${
+                            favorites.includes(t.id) ? "is-favorite" : ""
+                        } ${
+                            hoveredId === t.id || favorites.includes(t.id)
+                                ? "visible"
+                                : ""
+                        }`}
+                        onClick={(e) => toggleFavorite(e, t.id)}
+                        title={
+                            favorites.includes(t.id)
+                                ? formatMessage({ id: "removeFromFavorites" })
+                                : formatMessage({ id: "addToFavorites" })
+                        }
+                    >
+                        <Icon
+                            name="star"
+                            size={16}
+                            fill={
+                                favorites.includes(t.id)
+                                    ? "currentColor"
+                                    : "none"
+                            }
+                        />
+                    </button>
+                )}
+            </div>
+        );
+    };
+
     return (
-        <select
-            className="form-control"
-            onChange={onSelect}
-            value={selectedTranslation}
-        >
-            {translationList.map(({ languageName, children }, index) => (
-                <optgroup label={languageName} key={index}>
-                    {children
-                        .sort((a, b) => (a.name > b.name ? 1 : -1))
-                        .map(({ id, name, date }) => (
-                            <option value={id} key={id}>
-                                {name} {date === "" ? "" : `[${date}]`}
-                            </option>
-                        ))}
-                </optgroup>
-            ))}
-        </select>
+        <div className="translation-selector" ref={dropdownRef}>
+            <button
+                className={`translation-selector-trigger form-control ${
+                    isLoading ? "disabled" : ""
+                }`}
+                onClick={() => !isLoading && setIsOpen(!isOpen)}
+                type="button"
+                disabled={isLoading}
+            >
+                <span className="translation-selector-value">
+                    {isLoading ? (
+                        <span className="d-flex align-items-center gap-2">
+                            <span
+                                className="spinner-border spinner-border-sm text-secondary"
+                                role="status"
+                            ></span>
+                            <span>{selectedTranslation || placeholder}...</span>
+                        </span>
+                    ) : currentTranslation ? (
+                        currentTranslation.name
+                    ) : selectedTranslation ? (
+                        selectedTranslation
+                    ) : (
+                        placeholder
+                    )}
+                </span>
+                <span className="translation-selector-arrow">
+                    <Icon name="chevron-down" size={20} />
+                </span>
+            </button>
+
+            {isOpen && (
+                <div className="translation-dropdown">
+                    {/* Favorites group */}
+                    {favoriteTranslations.length > 0 &&
+                        (() => {
+                            const favLabel = formatMessage({ id: "favorites" });
+                            const isFavCollapsed = collapsedGroups[favLabel];
+                            return (
+                                <div className="translation-group">
+                                    <div
+                                        className="translation-group-label"
+                                        onClick={(e) =>
+                                            toggleGroup(e, favLabel)
+                                        }
+                                    >
+                                        <div>
+                                            <Icon
+                                                name="star"
+                                                size={14}
+                                                fill="currentColor"
+                                                className="me-2"
+                                                style={{
+                                                    display: "inline-block",
+                                                    verticalAlign:
+                                                        "text-bottom",
+                                                }}
+                                            />
+                                            {favLabel}
+                                        </div>
+                                        <Icon
+                                            name={
+                                                isFavCollapsed
+                                                    ? "plus"
+                                                    : "minus"
+                                            }
+                                            size={14}
+                                        />
+                                    </div>
+                                    {!isFavCollapsed &&
+                                        favoriteTranslations
+                                            .sort((a, b) =>
+                                                a.name.localeCompare(b.name)
+                                            )
+                                            .map((t) =>
+                                                renderTranslationItem(t)
+                                            )}
+                                </div>
+                            );
+                        })()}
+
+                    {/* Other translations grouped by language */}
+                    {translationList.map(
+                        ({ languageName, children }, index) => {
+                            const isCollapsed = collapsedGroups[languageName];
+                            return (
+                                <div className="translation-group" key={index}>
+                                    <div
+                                        className="translation-group-label"
+                                        onClick={(e) =>
+                                            toggleGroup(e, languageName)
+                                        }
+                                    >
+                                        {languageName}
+                                        <Icon
+                                            name={
+                                                isCollapsed ? "plus" : "minus"
+                                            }
+                                            size={14}
+                                        />
+                                    </div>
+                                    {!isCollapsed &&
+                                        children
+                                            .sort((a, b) =>
+                                                a.name.localeCompare(b.name)
+                                            )
+                                            .map((t) =>
+                                                renderTranslationItem(t)
+                                            )}
+                                </div>
+                            );
+                        }
+                    )}
+                </div>
+            )}
+        </div>
     );
 };
 

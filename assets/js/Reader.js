@@ -1,9 +1,19 @@
 import React from "react";
 import Verse from "./Verse";
+import SkeletonLoader from "./SkeletonLoader";
 
-const Reader = ({ selectedBook, selectedChapter, verses, showVerses }) => {
+const Reader = ({
+    selectedBook,
+    selectedChapter,
+    verses,
+    showVerses,
+    onVerseClick,
+    onVerseLongPress,
+    notesVersion = 0,
+    highlightedVerse = null,
+}) => {
     if (!showVerses || !verses) {
-        return <main className="container preloader-image" />;
+        return <SkeletonLoader lines={15} />;
     }
 
     return (
@@ -17,6 +27,10 @@ const Reader = ({ selectedBook, selectedChapter, verses, showVerses }) => {
                             chapterId={selectedChapter}
                             verseId={verseId}
                             verseContent={verseContent}
+                            onClick={() => onVerseClick(verseId)}
+                            onLongPress={() => onVerseLongPress?.(verseId)}
+                            notesVersion={notesVersion}
+                            isHighlighted={highlightedVerse === verseId}
                         />
                     ))}
                 </div>

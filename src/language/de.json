@@ -2,7 +2,7 @@
   "messages": {
     "error_translation_not_found": "Übersetzung nicht gefunden",
     "error_no_verses_found": "Es wurden keine Verse im ausgewählten Kapitel gefunden",
-    "error_query_limit_exceeded": "Das Nutzungslimit für die aktuelle IP-Adresse ist erschöpft, versuchen Sie es morgen erneut",
+    "error_query_limit_exceeded": "Sie haben das Leselimit erreicht. Schön, dass Sie hier sind, kommen Sie morgen wieder!",
     "error_wrong_ip_address": "Es konnten keine Informationen über die aktuelle IP-Adresse abgerufen werden",
     "error_database_connection_failed": "Fehler bei der Datenbankverbindung",
     "error_json_is_malformed": "Der hochgeladene String im JSON-Format ist leer oder enthält Fehler",
@@ -203,6 +203,7 @@
     },
     "tob": {
       "name": "Das Buch Tobit (das Buch Tobias)",
+      "group": "dc",
       "aliases": [
         "to",
         "tb",
@@ -213,6 +214,7 @@
     },
     "jdt": {
       "name": "Das Buch Judit",
+      "group": "dc",
       "aliases": [
         "ju",
         "judit",
@@ -235,6 +237,7 @@
     },
     "1ma": {
       "name": "Das 1. Buch der Makkabäer",
+      "group": "dc",
       "aliases": [
         "1ma",
         "1mak",
@@ -247,6 +250,7 @@
     },
     "2ma": {
       "name": "Das 2. Buch der Makkabäer",
+      "group": "dc",
       "aliases": [
         "2ma",
         "2mak",
@@ -342,6 +346,7 @@
     },
     "wis": {
       "name": "Das Buch der Weisheit (= Die Weisheit Salomos)",
+      "group": "dc",
       "aliases": [
         "wei",
         "weish",
@@ -361,6 +366,7 @@
     },
     "sir": {
       "name": "Die Weisheit des Jesus Sirach",
+      "group": "dc",
       "aliases": [
         "sir",
         "sirachweish",
@@ -424,6 +430,7 @@
     },
     "bar": {
       "name": "Das Buch Baruch",
+      "group": "dc",
       "aliases": [
         "bar",
         "baruch"

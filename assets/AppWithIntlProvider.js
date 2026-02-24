@@ -5,6 +5,7 @@ import en from "./translations/en.json";
 import de from "./translations/de.json";
 
 import Bible from "./js/Bible";
+import ErrorBoundary from "./js/ErrorBoundary";
 import getDataFromCurrentPathname from "./js/getDataFromCurrentPathname";
 
 const translations = {
@@ -18,7 +19,9 @@ export default function AppWithIntlProvider() {
 
     return (
         <IntlProvider locale={locale} messages={translations[locale]}>
-            <Bible setLocale={setLocale} />
+            <ErrorBoundary>
+                <Bible setLocale={setLocale} />
+            </ErrorBoundary>
         </IntlProvider>
     );
 }

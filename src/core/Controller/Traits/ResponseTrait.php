@@ -9,11 +9,13 @@ trait ResponseTrait
 
     private array $response = [];
 
-    public function renderResponse(): void
+    public function renderResponse(): never
     {
         header('Content-Type: application/json');
 
         echo json_encode($this->response, \JSON_THROW_ON_ERROR);
+
+        exit;
     }
 
     private function setResponse(array $response = []): void

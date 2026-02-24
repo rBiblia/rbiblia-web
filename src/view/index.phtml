@@ -4,18 +4,47 @@
         <title>rBiblia Web</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="robots" content="noindex, follow">
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="description" content="rBiblia Web – czytaj Biblię online, porównuj tłumaczenia i rób notatki.">
+
+        <!-- PWA -->
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#2563eb">
+        <meta name="mobile-web-app-capable" content="yes">
+
+        <!-- Apple PWA support -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="rBiblia">
+
+        <!-- Styles -->
         <link href="/assets/app.css?<?= $cssTimestamp ?>" rel="stylesheet">
+
+        <!-- Icons -->
         <link rel="icon" sizes="192x192" href="/assets/icon_192x192.png">
         <link rel="icon" sizes="128x128" href="/assets/icon_128x128.png">
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon_180x180.png">
+        <link rel="apple-touch-icon" sizes="512x512" href="/assets/icon_512x512.png">
         <link rel="shortcut icon" href="/assets/favicon.png">
     </head>
     <body>
         <div id="root"></div>
         <script src="/assets/app.js?<?= $jsTimestamp ?>"></script>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                        // Check for updates periodically
+                        setInterval(function() { reg.update(); }, 60 * 60 * 1000);
+                    }).catch(function(err) {
+                        console.warn('[SW] Registration failed:', err);
+                    });
+                });
+            }
+        </script>
         <?= (isset($matomo) ? $matomo : '<!-- the Matomo code will be placed here only in prod env -->').PHP_EOL ?>
     </body>
 </html>
+

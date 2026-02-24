@@ -1,0 +1,152 @@
+@use "sass:math";
+
+@mixin gpu-accelerate {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translateZ(0); // Trigger GPU layer
+}
+
+@mixin glassmorphism-panel($opacity: 0.85, $blur: 16px) {
+    background: rgba(255, 255, 255, $opacity);
+    backdrop-filter: blur($blur);
+    -webkit-backdrop-filter: blur($blur);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+    @include dark-mode {
+        background: var(--dm-bg-glass);
+        border-color: var(--dm-border-subtle);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+@mixin interactive-scale($scale: 0.96) {
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+
+    &:active:not(:disabled) {
+        transform: scale($scale);
+    }
+}
+
+@mixin smooth-entrance-slide-up($delay: 0s) {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) $delay forwards;
+}
+
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Fluid Typography Mixin
+// Uses clamp() to scale text smoothly between min and max viewports
+@mixin fluid-text($min-size, $max-size, $min-vw: 320px, $max-vw: 1200px) {
+    font-size: $min-size;
+
+    // Note: We use a simplified clamp here for compatibility
+    // Ideally: clamp(min, val, max)
+    @media screen and (min-width: $min-vw) {
+        font-size: calc(#{$min-size} + #{strip-unit($max-size - $min-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+    }
+
+    @media screen and (min-width: $max-vw) {
+        font-size: $max-size;
+    }
+}
+
+@function strip-unit($number) {
+    @if type-of($number)=='number' and not unitless($number) {
+        @return math.div($number, ($number * 0 + 1));
+    }
+
+    @return $number;
+}
+
+// Improved focus ring for accessibility
+@mixin focus-ring {
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(162, 134, 93, 0.4); // Gold-ish color with opacity
+    }
+}
+
+// Theme Mixin to handle System/Light/Dark logic
+@mixin dark-mode {
+    @if & {
+
+        // Nested context
+        @media (prefers-color-scheme: dark) {
+            html:not([data-theme='light']) & {
+                @content;
+            }
+        }
+
+        html[data-theme='dark'] & {
+            @content;
+        }
+    }
+
+    @else {
+
+        // Root context
+        @media (prefers-color-scheme: dark) {
+            html:not([data-theme='light']) {
+                @content;
+            }
+        }
+
+        html[data-theme='dark'] {
+            @content;
+        }
+    }
+}
+
+// Reduced Motion Support - respects user preference
+@mixin reduced-motion {
+    @media (prefers-reduced-motion: reduce) {
+        @content;
+    }
+}
+
+// Mixin for touch target minimum size (accessibility)
+@mixin min-touch-target($size: 44px) {
+    min-width: $size;
+    min-height: $size;
+}
+
+@mixin premium-modal($max-width: 500px) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -45%) scale(0.95);
+    width: 90%;
+    max-width: $max-width;
+    @include glassmorphism-panel(0.9, 30px);
+    z-index: 3000;
+    border-radius: 28px;
+    padding: 2.2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    @include dark-mode {
+        background: var(--dm-bg-glass);
+        border-color: var(--dm-border-subtle);
+    }
+}

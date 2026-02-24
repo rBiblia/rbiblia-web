@@ -1,20 +1,137 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
-import StatusBar from "./StatusBar";
 import { injectIntl } from "react-intl";
 import getDataFromCurrentPathname from "./getDataFromCurrentPathname";
-import AppError from "./AppError";
+import { AppError, ErrorToast } from "./AppError";
 import AppLoading from "./AppLoading";
 import updateHistory from "./updateHistory";
 import getAppropriateBook from "./getAppropriateBook";
+import SelectionGrid from "./SelectionGrid";
+import ComparisonGrid from "./ComparisonGrid";
+import BottomNavigation from "./BottomNavigation";
+import useSwipeNavigation from "./useSwipeNavigation";
+import { SideMenu, SideMenuTab, DisplaySettings } from "./SideMenu";
+import { NotesPanel, NoteEditor } from "./Notes";
+import SearchPanel from "./SearchPanel";
+import ChapterComparison from "./ChapterComparison";
+import ChangelogModal from "./ChangelogModal";
+import WelcomePopup, { isWelcomePopupDisabled } from "./WelcomePopup";
+import useVersesCache from "./useVersesCache";
+import useScrollDirection from "./useScrollDirection";
+import { useKeyboardNavigation } from "./hooks";
+import { safeJsonParse } from "./safeJsonParse";
 
 const Bible = ({ intl, setLocale }) => {
     const [error, setError] = useState(null);
+    const [toastError, setToastError] = useState(null); // Non-blocking error notifications
     const [isBooksLoading, setIsBooksLoading] = useState(true);
     const [isTranslationsLoading, setIsTranslationsLoading] = useState(true);
     const [isStructureLoading, setIsStructureLoading] = useState(true);
     const [showVerses, setShowVerses] = useState(false);
+    const [isSelectionOpen, setIsSelectionOpen] = useState(false);
+    const [comparedVerse, setComparedVerse] = useState(null);
+
+    // Verses cache for faster loading
+    const versesCache = useVersesCache(intl.locale);
+
+    // Side menu states
+    const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+    const [isNotesOpen, setIsNotesOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+    const [isWelcomePopupOpen, setIsWelcomePopupOpen] = useState(false);
+    const [isChapterCompOpen, setIsChapterCompOpen] = useState(false);
+
+    // Note editor state
+    const [editingNoteVerse, setEditingNoteVerse] = useState(null);
+    const [notesVersion, setNotesVersion] = useState(0); // Increment to refresh note indicators
+
+    // Font size (saved to localStorage)
+    const [fontSize, setFontSize] = useState(() => {
+        return localStorage.getItem("rbiblia-font-size") || "medium";
+    });
+
+    // Immersive Mode (hide nav on scroll)
+    const isNavVisible = useScrollDirection();
+
+    // Font family (saved to localStorage)
+    const [fontFamily, setFontFamily] = useState(() => {
+        return localStorage.getItem("rbiblia-font-family") || "serif";
+    });
+
+    // Save font size to localStorage and apply to CSS variable
+    useEffect(() => {
+        localStorage.setItem("rbiblia-font-size", fontSize);
+        const sizeMap = {
+            small: "0.9rem",
+            medium: "1.15rem",
+            large: "1.4rem",
+            xlarge: "1.7rem",
+        };
+        const numberSizeMap = {
+            small: "0.9rem",
+            medium: "1.15rem",
+            large: "1.4rem",
+            xlarge: "1.7rem",
+        };
+        document.documentElement.style.setProperty(
+            "--verse-font-size",
+            sizeMap[fontSize]
+        );
+        document.documentElement.style.setProperty(
+            "--verse-number-font-size",
+            numberSizeMap[fontSize]
+        );
+    }, [fontSize]);
+
+    // Theme State (saved to localStorage)
+    // Values: 'system', 'light', 'dark'
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("rbiblia-theme") || "system";
+    });
+
+    // Dark mode variant: 'gold' (warm neutral) or 'blue' (slate-blue)
+    const [darkVariant, setDarkVariant] = useState(() => {
+        return localStorage.getItem("rbiblia-dark-variant") || "gold";
+    });
+
+    // Apply Theme Side Effect
+    useEffect(() => {
+        localStorage.setItem("rbiblia-theme", theme);
+
+        const root = document.documentElement;
+        if (theme === "system") {
+            root.removeAttribute("data-theme");
+        } else {
+            root.setAttribute("data-theme", theme);
+        }
+    }, [theme]);
+
+    // Apply Dark Variant Side Effect
+    useEffect(() => {
+        localStorage.setItem("rbiblia-dark-variant", darkVariant);
+        document.documentElement.setAttribute("data-dark-variant", darkVariant);
+    }, [darkVariant]);
+
+    // Save font family to localStorage and apply to CSS variable
+    useEffect(() => {
+        localStorage.setItem("rbiblia-font-family", fontFamily);
+        const familyMap = {
+            serif: 'Georgia, "Times New Roman", serif',
+            sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            mono: '"Fira Code", "Cascadia Code", Consolas, monospace',
+        };
+        document.documentElement.style.setProperty(
+            "--verse-font-family",
+            familyMap[fontFamily]
+        );
+        document.documentElement.style.setProperty(
+            "--verse-number-font-family",
+            familyMap[fontFamily]
+        );
+    }, [fontFamily]);
 
     // Note: It contains all books available - not only translation specific
     const [books, setBooks] = useState([]);
@@ -30,6 +147,25 @@ const Bible = ({ intl, setLocale }) => {
     const [selectedChapter, setSelectedChapter] = useState(
         getDataFromCurrentPathname().chapter
     );
+    const [highlightedVerse, setHighlightedVerse] = useState(null);
+
+    useEffect(() => {
+        const handlePopState = () => {
+            const data = getDataFromCurrentPathname();
+            setSelectedTranslation(data.translation);
+            setSelectedBook(data.book);
+            setSelectedChapter(data.chapter);
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, []);
+
+    useEffect(() => {
+        if (!isWelcomePopupDisabled()) {
+            setIsWelcomePopupOpen(true);
+        }
+    }, []);
 
     const keepChapterIfPossible = useRef(false);
     const startFromLastVerse = useRef(false);
@@ -39,12 +175,16 @@ const Bible = ({ intl, setLocale }) => {
             ? structure[selectedBook]
             : [];
 
-    const changeSelectedTranslation = useCallback((newTranslation) => {
-        setShowVerses(false);
-        setIsStructureLoading(true);
-        keepChapterIfPossible.current = true;
-        setSelectedTranslation(newTranslation);
-    }, []);
+    const changeSelectedTranslation = useCallback(
+        (newTranslation) => {
+            setShowVerses(false);
+            setIsStructureLoading(true);
+            keepChapterIfPossible.current = true;
+            versesCache.clearCache(); // Clear cache when translation changes
+            setSelectedTranslation(newTranslation);
+        },
+        [versesCache]
+    );
 
     const setLocaleAndUpdateHistory = (locale) => {
         const { chapter, book, translation } = getDataFromCurrentPathname();
@@ -92,7 +232,7 @@ const Bible = ({ intl, setLocale }) => {
         return structure[selectedBook][0];
     };
 
-    const changeSelectedChapter = (newSelectedChapter) => {
+    const changeSelectedChapter = async (newSelectedChapter) => {
         const { locale } = intl;
 
         updateHistory(
@@ -102,29 +242,42 @@ const Bible = ({ intl, setLocale }) => {
             newSelectedChapter
         );
 
-        setShowVerses(false);
+        // Check if data is in cache - if yes, show immediately
+        const isInCache = versesCache.isInCache(
+            selectedTranslation,
+            selectedBook,
+            newSelectedChapter
+        );
 
-        fetch(
-            "/api/" +
-                locale +
-                "/translation/" +
-                selectedTranslation +
-                "/book/" +
-                selectedBook +
-                "/chapter/" +
+        if (!isInCache) {
+            setShowVerses(false);
+        }
+
+        try {
+            const result = await versesCache.getVerses(
+                selectedTranslation,
+                selectedBook,
                 newSelectedChapter
-        )
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    setSelectedChapter(newSelectedChapter);
-                    setShowVerses(true);
-                    setVerses(result.data);
-                },
-                (error) => {
-                    setError(error);
-                }
             );
+
+            setSelectedChapter(newSelectedChapter);
+            setVerses(result.data);
+            setShowVerses(true);
+
+            // Prefetch next and previous chapters in the background
+            versesCache.prefetchAdjacent(
+                selectedTranslation,
+                selectedBook,
+                newSelectedChapter,
+                structure
+            );
+        } catch (error) {
+            // Use toast for chapter loading errors (non-blocking)
+            setToastError(
+                error.message || intl.formatMessage({ id: "chapterLoadError" })
+            );
+            setShowVerses(true); // Keep showing previous content
+        }
     };
 
     const loadTranslationsAndBooks = () => {
@@ -135,7 +288,7 @@ const Bible = ({ intl, setLocale }) => {
 
         Promise.all([
             fetch(`/api/${locale}/translation`)
-                .then((res) => res.json())
+                .then((res) => safeJsonParse(res))
                 .then(
                     (result) => {
                         setTranslations(result.data);
@@ -148,7 +301,7 @@ const Bible = ({ intl, setLocale }) => {
                     setIsTranslationsLoading(false);
                 }),
             fetch(`/api/${locale}/book`)
-                .then((res) => res.json())
+                .then((res) => safeJsonParse(res))
                 .then(
                     (result) => {
                         setBooks(result.data);
@@ -241,6 +394,7 @@ const Bible = ({ intl, setLocale }) => {
         }
     }, [selectedBook]);
 
+    // Start critical fetches immediately on mount/change, independent of lists
     useEffect(() => {
         const fetchStructure = async () => {
             try {
@@ -249,7 +403,7 @@ const Bible = ({ intl, setLocale }) => {
                 );
                 if (!response.ok)
                     throw new Error("Network response was not ok.");
-                const result = await response.json();
+                const result = await safeJsonParse(response);
                 setStructure(result.data);
                 setSelectedBook((_selectedBook) =>
                     getAppropriateBook(result.data, _selectedBook)
@@ -260,18 +414,69 @@ const Bible = ({ intl, setLocale }) => {
                 setIsStructureLoading(false);
             }
         };
-        if (!isBooksLoading && !isTranslationsLoading && !error) {
-            fetchStructure();
+        // Fetch structure immediately when translation changes or locale changes
+        fetchStructure();
+    }, [selectedTranslation, intl.locale]);
+
+    // Swipe navigation - disabled when overlays are open
+    const overlaysOpen =
+        isSelectionOpen ||
+        !!comparedVerse ||
+        isSideMenuOpen ||
+        isNotesOpen ||
+        isSearchOpen ||
+        isChangelogOpen ||
+        isWelcomePopupOpen ||
+        !!editingNoteVerse;
+    useSwipeNavigation(
+        nextChapter, // Swipe left -> next chapter
+        prevChapter, // Swipe right -> previous chapter
+        {
+            threshold: 80,
+            enabled: !overlaysOpen && showVerses,
         }
-    }, [isBooksLoading, isTranslationsLoading, selectedTranslation]);
+    );
+
+    // Keyboard navigation (Arrow Left/Right) - disabled when overlays are open
+    useKeyboardNavigation(
+        prevChapter, // ArrowLeft  → previous chapter
+        nextChapter, // ArrowRight → next chapter
+        { enabled: !overlaysOpen && showVerses }
+    );
+
+    const handleNavigateToVerse = useCallback(
+        (book, chapter, verse) => {
+            changeSelectedBook(book);
+            changeSelectedChapter(chapter);
+
+            if (verse) {
+                const verseId = String(verse);
+                setHighlightedVerse(verseId);
+                setTimeout(() => {
+                    setHighlightedVerse(null);
+                }, 3000);
+            }
+        },
+        [changeSelectedBook, changeSelectedChapter]
+    );
 
     // Render content
     if (error) {
-        return <AppError message={error.message} />;
+        return (
+            <AppError
+                message={
+                    error.message ||
+                    intl.formatMessage({ id: "unexpectedErrorOccurred" })
+                }
+                onRetry={() => {
+                    setError(null);
+                    loadTranslationsAndBooks();
+                }}
+            />
+        );
     }
-    if (isTranslationsLoading || isBooksLoading) {
-        return <AppLoading />;
-    }
+    // Note: removed full-App loading block to allow render while lists load
+    // if (isTranslationsLoading || isBooksLoading) { ... }
 
     return (
         <>
@@ -284,6 +489,7 @@ const Bible = ({ intl, setLocale }) => {
                 structure={structure}
                 chapters={chapters}
                 isStructureLoading={isStructureLoading}
+                listsLoading={isTranslationsLoading || isBooksLoading}
                 changeSelectedTranslation={changeSelectedTranslation}
                 changeSelectedBook={changeSelectedBook}
                 changeSelectedChapter={changeSelectedChapter}
@@ -295,17 +501,164 @@ const Bible = ({ intl, setLocale }) => {
                 isNextBookAvailable={isNextBookAvailable}
                 isPrevChapterAvailable={isPrevChapterAvailable}
                 isNextChapterAvailable={isNextChapterAvailable}
+                onOpenSelection={() => setIsSelectionOpen(true)}
+                onOpenNotes={() => setIsNotesOpen(true)}
+                onOpenSearch={() => setIsSearchOpen(true)}
+                onOpenSettings={() => setIsSideMenuOpen(true)}
+                onOpenChapterComparison={() => setIsChapterCompOpen(true)}
+                className={isNavVisible ? "" : "nav-hidden-header"}
             />
+            {isSelectionOpen && (
+                <SelectionGrid
+                    books={books}
+                    structure={structure}
+                    currentBook={selectedBook}
+                    currentChapter={selectedChapter}
+                    onSelectChapter={(book, chapter) => {
+                        changeSelectedBook(book);
+                        changeSelectedChapter(chapter);
+                    }}
+                    onClose={() => setIsSelectionOpen(false)}
+                />
+            )}
+            {comparedVerse && (
+                <ComparisonGrid
+                    verseId={comparedVerse}
+                    bookId={selectedBook}
+                    bookName={books[selectedBook]?.name}
+                    bookSigil={getSigla(selectedBook, intl.locale)}
+                    chapterId={selectedChapter}
+                    translations={translations}
+                    currentTranslation={selectedTranslation}
+                    totalVerses={Object.keys(verses).length}
+                    onNavigateVerse={(direction) => {
+                        const currentVerse = parseInt(comparedVerse, 10);
+                        const maxVerse = Object.keys(verses).length;
+                        if (direction === "prev" && currentVerse > 1) {
+                            setComparedVerse(currentVerse - 1);
+                        } else if (
+                            direction === "next" &&
+                            currentVerse < maxVerse
+                        ) {
+                            setComparedVerse(currentVerse + 1);
+                        }
+                    }}
+                    onClose={() => setComparedVerse(null)}
+                />
+            )}
             <Reader
                 showVerses={showVerses}
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 verses={verses}
+                onVerseClick={(verseId) => setComparedVerse(verseId)}
+                onVerseLongPress={(verseId) => setEditingNoteVerse(verseId)}
+                notesVersion={notesVersion}
+                highlightedVerse={highlightedVerse}
             />
-            <StatusBar
-                setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
+            <BottomNavigation
+                onPrevChapter={prevChapter}
+                onNextChapter={nextChapter}
+                onOpenSelection={() => setIsSelectionOpen(true)}
+                onOpenNotes={() => setIsNotesOpen(true)}
+                onOpenSearch={() => setIsSearchOpen(true)}
+                isPrevAvailable={
+                    isPrevChapterAvailable() || isPrevBookAvailable()
+                }
+                isNextAvailable={
+                    isNextChapterAvailable() || isNextBookAvailable()
+                }
+                currentBook={books[selectedBook]?.name}
+                currentChapter={selectedChapter}
+                className={isNavVisible ? "" : "nav-hidden-bottom"}
+            />
+            {/* Notes Panel */}
+            <NotesPanel
+                isOpen={isNotesOpen}
+                onClose={() => setIsNotesOpen(false)}
+                selectedBook={selectedBook}
+                selectedChapter={selectedChapter}
+                books={books}
+                onNavigateToVerse={handleNavigateToVerse}
+            />
+
+            {/* Search Panel */}
+            <SearchPanel
+                isOpen={isSearchOpen}
+                onClose={() => setIsSearchOpen(false)}
+                selectedTranslation={selectedTranslation}
+                books={books}
+                onNavigateToVerse={handleNavigateToVerse}
+            />
+
+            {/* Chapter Comparison */}
+            <ChapterComparison
+                isOpen={isChapterCompOpen}
+                onClose={() => setIsChapterCompOpen(false)}
+                bookId={selectedBook}
+                bookName={books[selectedBook]?.name}
+                chapterId={selectedChapter}
                 translations={translations}
+                currentTranslation={selectedTranslation}
+                structure={structure}
+                books={books}
+                onNavigateChapter={(book, chapter) => {
+                    changeSelectedBook(book);
+                    changeSelectedChapter(chapter);
+                }}
             />
+
+            {/* Side tab and menu */}
+            <SideMenuTab
+                onClick={() => setIsSideMenuOpen(true)}
+                className={isNavVisible ? "" : "nav-hidden-fab"}
+            />
+            <SideMenu
+                isOpen={isSideMenuOpen}
+                onClose={() => setIsSideMenuOpen(false)}
+            >
+                <DisplaySettings
+                    fontSize={fontSize}
+                    setFontSize={setFontSize}
+                    fontFamily={fontFamily}
+                    setFontFamily={setFontFamily}
+                    translations={translations}
+                    setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
+                    theme={theme}
+                    setTheme={setTheme}
+                    darkVariant={darkVariant}
+                    setDarkVariant={setDarkVariant}
+                    onClose={() => setIsSideMenuOpen(false)}
+                    onOpenChangelog={() => setIsChangelogOpen(true)}
+                />
+            </SideMenu>
+
+            {/* Note Editor */}
+            <NoteEditor
+                isOpen={editingNoteVerse !== null}
+                onClose={() => setEditingNoteVerse(null)}
+                onSave={() => setNotesVersion((v) => v + 1)}
+                book={selectedBook}
+                chapter={selectedChapter}
+                verse={editingNoteVerse}
+                bookName={books[selectedBook]?.name}
+            />
+            <ChangelogModal
+                isOpen={isChangelogOpen}
+                onClose={() => setIsChangelogOpen(false)}
+            />
+            <WelcomePopup
+                isOpen={isWelcomePopupOpen}
+                onClose={() => setIsWelcomePopupOpen(false)}
+            />
+
+            {/* Toast for non-blocking errors */}
+            {toastError && (
+                <ErrorToast
+                    message={toastError}
+                    onClose={() => setToastError(null)}
+                />
+            )}
         </>
     );
 };

@@ -2,7 +2,7 @@
   "messages": {
     "error_translation_not_found": "Tłumaczenie nie zostało odnalezione",
     "error_no_verses_found": "Nie znaleziono żadnych wersetów w wybranym rozdziale",
-    "error_query_limit_exceeded": "Limit użyteczności dla aktualnego adresu IP został wyczerpany, spróbuj ponownie jutro",
+    "error_query_limit_exceeded": "Osiągnąłeś limit odczytów. Miło, że z nami jesteś, wpadnij do nas jutro!",
     "error_wrong_ip_address": "Nie można uzyskać informacji o aktualnym adresie IP",
     "error_database_connection_failed": "Błąd łączenia z bazą danych",
     "error_json_is_malformed": "Przesłany ciąg w formacie JSON jest pusty lub zawiera błędy",
@@ -240,6 +240,7 @@
     },
     "tob": {
       "name": "Tobiasza",
+      "group": "dc",
       "aliases": [
         "tob",
         "69"
@@ -247,6 +248,7 @@
     },
     "jdt": {
       "name": "Judyty",
+      "group": "dc",
       "aliases": [
         "jdt",
         "67"
@@ -267,6 +269,7 @@
     },
     "1ma": {
       "name": "1 Machabejska",
+      "group": "dc",
       "aliases": [
         "ma1",
         "72"
@@ -274,6 +277,7 @@
     },
     "2ma": {
       "name": "2 Machabejska",
+      "group": "dc",
       "aliases": [
         "ma2",
         "73"
@@ -363,6 +367,7 @@
     },
     "wis": {
       "name": "Mądrości",
+      "group": "dc",
       "aliases": [
         "wis",
         "68"
@@ -376,6 +381,7 @@
     },
     "sir": {
       "name": "Mądrość Syracha",
+      "group": "dc",
       "aliases": [
         "sir",
         "70"
@@ -430,6 +436,7 @@
     },
     "bar": {
       "name": "Barucha",
+      "group": "dc",
       "aliases": [
         "bar",
         "71"

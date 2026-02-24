@@ -1,0 +1,935 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useIntl } from "react-intl";
+import { loadNotes, saveNotes } from "./Notes";
+import useFocusTrap from "./hooks/useFocusTrap";
+import Icon from "./Icon";
+
+const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
+const FAVORITE_TRANSLATIONS_UPDATED_EVENT =
+    "rbiblia:favorite-translations-updated";
+const COMPARISON_DIFF_STRICT_KEY = "rbiblia_comparison_diff_strict";
+
+const SideMenu = ({ isOpen, onClose, children }) => {
+    const { formatMessage } = useIntl();
+
+    // Focus trap for keyboard navigation
+    const panelRef = useFocusTrap(isOpen, onClose);
+
+    return (
+        <>
+            {/* Overlay */}
+            <div
+                className={`side-menu-overlay ${isOpen ? "active" : ""}`}
+                onClick={onClose}
+            />
+
+            {/* Panel */}
+            <div
+                ref={panelRef}
+                className={`side-menu-panel ${isOpen ? "open" : ""}`}
+            >
+                {children}
+            </div>
+        </>
+    );
+};
+
+// Sticky tab button on the right edge - lower on the screen
+const SideMenuTab = ({ onClick, className = "" }) => {
+    const { formatMessage } = useIntl();
+
+    return (
+        <button
+            className={`side-menu-tab ${className}`}
+            onClick={onClick}
+            aria-label={formatMessage({ id: "openMenu" })}
+        >
+            <Icon name="settings" />
+        </button>
+    );
+};
+
+// Helper functions for settings
+const getComparisonLimit = () => {
+    return parseInt(
+        localStorage.getItem("rbiblia_comparison_limit") || "4",
+        10
+    );
+};
+
+const setComparisonLimitValue = (limit) => {
+    localStorage.setItem("rbiblia_comparison_limit", limit.toString());
+};
+
+const getFavoriteTranslations = () => {
+    try {
+        return JSON.parse(
+            localStorage.getItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
+        );
+    } catch {
+        return [];
+    }
+};
+
+const saveFavoriteTranslations = (favorites) => {
+    localStorage.setItem(
+        FAVORITE_TRANSLATIONS_STORAGE_KEY,
+        JSON.stringify(favorites)
+    );
+    if (typeof window !== "undefined") {
+        window.dispatchEvent(
+            new CustomEvent(FAVORITE_TRANSLATIONS_UPDATED_EVENT, {
+                detail: favorites,
+            })
+        );
+    }
+};
+
+const isDiffModeStrict = () => {
+    try {
+        return localStorage.getItem(COMPARISON_DIFF_STRICT_KEY) === "1";
+    } catch {
+        return false;
+    }
+};
+
+const setDiffModeStrict = (strict) => {
+    try {
+        localStorage.setItem(COMPARISON_DIFF_STRICT_KEY, strict ? "1" : "0");
+    } catch {
+        // Ignore storage write failures
+    }
+};
+
+// Settings section with tabs
+const DisplaySettings = ({
+    fontSize,
+    setFontSize,
+    fontFamily,
+    setFontFamily,
+    translations = [],
+    setLocaleAndUpdateHistory,
+    theme,
+    setTheme,
+    darkVariant,
+    setDarkVariant,
+    onClose,
+    onOpenChangelog,
+}) => {
+    const { formatMessage, locale } = useIntl();
+    const fileInputRef = useRef(null);
+    const [importStatus, setImportStatus] = useState(null);
+    const [comparisonLimit, setComparisonLimit] = useState(getComparisonLimit);
+    const [favoriteTranslations, setFavoriteTranslationsState] = useState(
+        getFavoriteTranslations
+    );
+    const [diffStrict, setDiffStrict] = useState(isDiffModeStrict);
+    const [activeTab, setActiveTab] = useState("text");
+
+    useEffect(() => {
+        const handleFavoritesUpdated = (event) => {
+            if (Array.isArray(event.detail)) {
+                setFavoriteTranslationsState(event.detail);
+                return;
+            }
+            setFavoriteTranslationsState(getFavoriteTranslations());
+        };
+
+        window.addEventListener(
+            FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+            handleFavoritesUpdated
+        );
+        return () => {
+            window.removeEventListener(
+                FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+                handleFavoritesUpdated
+            );
+        };
+    }, []);
+
+    const fontSizes = [
+        { value: "small", label: "A", size: "0.9rem" },
+        { value: "medium", label: "A", size: "1.15rem" },
+        { value: "large", label: "A", size: "1.4rem" },
+        { value: "xlarge", label: "A", size: "1.7rem" },
+    ];
+
+    const fontFamilies = [
+        { value: "serif", label: "Serif", preview: "Georgia, serif" },
+        { value: "sans", label: "Sans", preview: "Inter, sans-serif" },
+        { value: "mono", label: "Mono", preview: "monospace" },
+    ];
+
+    const themes = [
+        {
+            value: "system",
+            label: formatMessage({ id: "themeSystem" || "System" }),
+            icon: "⚙️",
+        },
+        {
+            value: "light",
+            label: formatMessage({ id: "themeLight" || "Light" }),
+            icon: "☀️",
+        },
+        {
+            value: "dark",
+            label: formatMessage({ id: "themeDark" || "Dark" }),
+            icon: "🌙",
+        },
+    ];
+
+    const comparisonOptions = [2, 3, 4, 5, 6];
+
+    // Tabs configuration
+    const tabs = [
+        {
+            id: "text",
+            icon: <Icon name="type" />,
+            label: formatMessage({ id: "textSettings" }),
+        },
+        {
+            id: "appearance",
+            icon: <Icon name="sun" />,
+            label: formatMessage({ id: "appearance" }),
+        },
+        {
+            id: "language",
+            icon: <Icon name="globe" />,
+            label: formatMessage({ id: "language" }),
+        },
+        {
+            id: "favorites",
+            icon: <Icon name="star" />,
+            label: formatMessage({ id: "favoriteTranslations" }),
+        },
+        {
+            id: "backup",
+            icon: <Icon name="archive" />,
+            label: formatMessage({ id: "notesBackup" }),
+        },
+        {
+            id: "info",
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                </svg>
+            ),
+            label: formatMessage({ id: "info", defaultMessage: "Info" }),
+        },
+    ];
+
+    // Handle comparison limit change
+    const comparisonLimitValue = comparisonLimit;
+    const handleComparisonLimitChange = (limit) => {
+        setComparisonLimit(limit);
+        setComparisonLimitValue(limit);
+    };
+
+    // Toggle favorite translation
+    const toggleFavorite = (translationId) => {
+        const newFavorites = favoriteTranslations.includes(translationId)
+            ? favoriteTranslations.filter((id) => id !== translationId)
+            : [...favoriteTranslations, translationId];
+        setFavoriteTranslationsState(newFavorites);
+        saveFavoriteTranslations(newFavorites);
+    };
+
+    // Export notes to a JSON file
+    const handleExportNotes = () => {
+        const notes = loadNotes();
+        const generalNotes = JSON.parse(
+            localStorage.getItem("rbiblia_general_notes") || "[]"
+        );
+
+        const exportData = {
+            version: 1,
+            exportDate: new Date().toISOString(),
+            verseNotes: notes,
+            generalNotes: generalNotes,
+        };
+
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+            type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `rbiblia-notatki-${
+            new Date().toISOString().split("T")[0]
+        }.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    // Import notes from a JSON file
+    const handleImportNotes = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importData = JSON.parse(e.target.result);
+
+                // Structure validation
+                if (!importData.verseNotes && !importData.generalNotes) {
+                    throw new Error("Invalid file format");
+                }
+
+                // Merge with existing notes
+                const existingNotes = loadNotes();
+                const existingGeneral = JSON.parse(
+                    localStorage.getItem("rbiblia_general_notes") || "[]"
+                );
+
+                // Merge verse notes (new items overwrite existing ones)
+                const mergedNotes = {
+                    ...existingNotes,
+                    ...importData.verseNotes,
+                };
+                saveNotes(mergedNotes);
+
+                // Merge general notes (add new items at the beginning, avoiding duplicates)
+                if (
+                    importData.generalNotes &&
+                    Array.isArray(importData.generalNotes)
+                ) {
+                    const existingIds = new Set(
+                        existingGeneral.map((n) => n.id)
+                    );
+                    const newNotes = importData.generalNotes.filter(
+                        (n) => !existingIds.has(n.id)
+                    );
+                    const mergedGeneral = [...newNotes, ...existingGeneral];
+                    localStorage.setItem(
+                        "rbiblia_general_notes",
+                        JSON.stringify(mergedGeneral)
+                    );
+                }
+
+                setImportStatus("success");
+                setTimeout(() => setImportStatus(null), 3000);
+            } catch (err) {
+                console.error("Import error:", err);
+                setImportStatus("error");
+                setTimeout(() => setImportStatus(null), 3000);
+            }
+        };
+        reader.readAsText(file);
+
+        // Reset input
+        event.target.value = "";
+    };
+
+    // Count total notes
+    const getNotesCount = () => {
+        const notes = loadNotes();
+        const generalNotes = JSON.parse(
+            localStorage.getItem("rbiblia_general_notes") || "[]"
+        );
+        return Object.keys(notes).length + generalNotes.length;
+    };
+
+    // Filter only favorite translations
+    const favoriteTranslationsList = translations.filter((t) =>
+        favoriteTranslations.includes(t.id)
+    );
+
+    return (
+        <>
+            {/* Side Menu Dock */}
+            <div className="side-menu-dock">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        className={`side-menu-dock-item ${
+                            activeTab === tab.id ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab(tab.id)}
+                        title={tab.label}
+                    >
+                        {tab.icon}
+                    </button>
+                ))}
+            </div>
+            {/* Main Content Area */}
+            <div className="side-menu-main">
+                <div className="side-menu-header">
+                    <h3 className="side-menu-title">
+                        {tabs.find((t) => t.id === activeTab)?.label}
+                    </h3>
+                    {onClose && (
+                        <button
+                            className="side-menu-close"
+                            onClick={onClose}
+                            aria-label={formatMessage({ id: "close" })}
+                        >
+                            <Icon name="x" />
+                        </button>
+                    )}
+                </div>
+                <div className="side-menu-content">
+                    {/* Text settings tab */}
+                    {activeTab === "text" && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({ id: "textSettings" })}
+                            </h4>
+
+                            {/* Font size setting */}
+                            <div className="setting-group stagger-1">
+                                <label className="setting-label">
+                                    {formatMessage({ id: "fontSize" })}
+                                </label>
+                                <div className="font-size-buttons">
+                                    {fontSizes.map((fs) => (
+                                        <button
+                                            key={fs.value}
+                                            className={`font-size-btn ${
+                                                fontSize === fs.value
+                                                    ? "active"
+                                                    : ""
+                                            }`}
+                                            onClick={() =>
+                                                setFontSize(fs.value)
+                                            }
+                                            style={{ fontSize: fs.size }}
+                                        >
+                                            {fs.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Font family setting */}
+                            {setFontFamily && (
+                                <div className="setting-group stagger-2">
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "fontFamily" })}
+                                    </label>
+                                    <div className="font-family-buttons">
+                                        {fontFamilies.map((ff) => (
+                                            <button
+                                                key={ff.value}
+                                                className={`font-family-btn ${
+                                                    fontFamily === ff.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setFontFamily(ff.value)
+                                                }
+                                                style={{
+                                                    fontFamily: ff.preview,
+                                                }}
+                                            >
+                                                {ff.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Appearance settings tab */}
+                    {activeTab === "appearance" && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({ id: "appearance" })}
+                            </h4>
+
+                            {/* Theme (Light/Dark/System) */}
+                            {setTheme && (
+                                <div className="setting-group stagger-1">
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "theme" })}
+                                    </label>
+                                    <div className="setting-tiles-grid">
+                                        {themes.map((t) => (
+                                            <button
+                                                key={t.value}
+                                                className={`setting-tile ${
+                                                    theme === t.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setTheme(t.value)
+                                                }
+                                                title={t.label}
+                                            >
+                                                <span className="tile-icon">
+                                                    {t.icon}
+                                                </span>
+                                                <span className="tile-label">
+                                                    {t.label}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Dark mode variant */}
+                            {setDarkVariant &&
+                                (theme === "dark" || theme === "system") && (
+                                    <div className="setting-group stagger-2">
+                                        <label className="setting-label">
+                                            {formatMessage({
+                                                id: "darkModeVariant",
+                                                defaultMessage:
+                                                    "Wariant ciemnego motywu",
+                                            })}
+                                        </label>
+                                        <div className="setting-tiles-grid grid-2">
+                                            <button
+                                                className={`setting-tile ${
+                                                    darkVariant === "gold"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setDarkVariant("gold")
+                                                }
+                                                title={formatMessage({
+                                                    id: "darkVariantGold",
+                                                    defaultMessage:
+                                                        "Złoty mrok",
+                                                })}
+                                            >
+                                                <span className="tile-icon">
+                                                    🌑
+                                                </span>
+                                                <span className="tile-label">
+                                                    {formatMessage({
+                                                        id: "darkVariantGold",
+                                                        defaultMessage:
+                                                            "Złoty mrok",
+                                                    })}
+                                                </span>
+                                            </button>
+                                            <button
+                                                className={`setting-tile ${
+                                                    darkVariant === "blue"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    setDarkVariant("blue")
+                                                }
+                                                title={formatMessage({
+                                                    id: "darkVariantBlue",
+                                                    defaultMessage:
+                                                        "Nocny błękit",
+                                                })}
+                                            >
+                                                <span className="tile-icon">
+                                                    🌌
+                                                </span>
+                                                <span className="tile-label">
+                                                    {formatMessage({
+                                                        id: "darkVariantBlue",
+                                                        defaultMessage:
+                                                            "Nocny błękit",
+                                                    })}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                        </div>
+                    )}
+
+                    {/* Language settings tab */}
+                    {activeTab === "language" && setLocaleAndUpdateHistory && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({ id: "appLanguage" })}
+                            </h4>
+
+                            <div className="setting-group stagger-1">
+                                <label className="setting-label">
+                                    {formatMessage({ id: "selectLanguage" })}
+                                </label>
+                                <div className="setting-tiles-grid grid-2">
+                                    {["pl", "en", "de"].map((lang) => (
+                                        <button
+                                            key={lang}
+                                            className={`setting-tile ${
+                                                locale === lang ? "active" : ""
+                                            }`}
+                                            onClick={() =>
+                                                setLocaleAndUpdateHistory(lang)
+                                            }
+                                        >
+                                            <span className="tile-icon">
+                                                {lang === "pl" && "🇵🇱"}
+                                                {lang === "en" && "🇬🇧"}
+                                                {lang === "de" && "🇩🇪"}
+                                            </span>
+                                            <span className="tile-label">
+                                                {lang === "pl" && "Polski"}
+                                                {lang === "en" && "English"}
+                                                {lang === "de" && "Deutsch"}
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Favorites tab */}
+                    {activeTab === "favorites" && (
+                        <div className="animate-slide-up">
+                            {/* Translation comparison section */}
+                            <div className="side-menu-section stagger-1">
+                                <h4 className="side-menu-section-title">
+                                    {formatMessage({
+                                        id: "comparisonSettings",
+                                    })}
+                                </h4>
+
+                                <div className="setting-group">
+                                    <label className="setting-label">
+                                        {formatMessage({
+                                            id: "comparisonLimit",
+                                        })}
+                                    </label>
+                                    <div className="comparison-limit-buttons">
+                                        {comparisonOptions.map((num) => (
+                                            <button
+                                                key={num}
+                                                className={`comparison-limit-btn ${
+                                                    comparisonLimit === num
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handleComparisonLimitChange(
+                                                        num
+                                                    )
+                                                }
+                                            >
+                                                {num}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="setting-group">
+                                    <label className="setting-label">
+                                        {formatMessage({ id: "diffMode" })}
+                                    </label>
+                                    <p className="setting-hint mb-2">
+                                        {formatMessage({ id: "diffModeHint" })}
+                                    </p>
+                                    <div className="diff-mode-toggle">
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                !diffStrict ? "active" : ""
+                                            }`}
+                                            onClick={() => {
+                                                setDiffStrict(false);
+                                                setDiffModeStrict(false);
+                                            }}
+                                        >
+                                            {formatMessage({
+                                                id: "diffModeLoose",
+                                            })}
+                                        </button>
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                diffStrict ? "active" : ""
+                                            }`}
+                                            onClick={() => {
+                                                setDiffStrict(true);
+                                                setDiffModeStrict(true);
+                                            }}
+                                        >
+                                            {formatMessage({
+                                                id: "diffModeStrict",
+                                            })}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Favorite translations list */}
+                            <div className="side-menu-section stagger-2">
+                                <div className="d-flex justify-content-between align-items-center mb-2">
+                                    <h4 className="side-menu-section-title mb-0">
+                                        {formatMessage({
+                                            id: "favoriteTranslations",
+                                        })}
+                                    </h4>
+                                </div>
+
+                                <p className="setting-hint">
+                                    {formatMessage({
+                                        id: "favoriteTranslationsComparisonHint",
+                                    })}
+                                </p>
+
+                                {favoriteTranslationsList.length > 0 ? (
+                                    <div className="favorite-translations-list">
+                                        {favoriteTranslationsList.map((t) => (
+                                            <div
+                                                key={t.id}
+                                                className="favorite-translation-item is-favorite"
+                                            >
+                                                <span className="favorite-star">
+                                                    ★
+                                                </span>
+                                                <span className="favorite-name">
+                                                    {t.name}
+                                                </span>
+                                                <button
+                                                    className="favorite-remove"
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(t.id);
+                                                    }}
+                                                    title={formatMessage({
+                                                        id: "removeFromFavorites",
+                                                    })}
+                                                >
+                                                    <Icon name="x" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="no-favorites-hint">
+                                        <Icon name="star" />
+                                        <p>
+                                            {formatMessage({
+                                                id: "noFavorites",
+                                            })}
+                                        </p>
+                                        <span>
+                                            {formatMessage({
+                                                id: "noFavoritesHint",
+                                            })}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Backup tab */}
+                    {activeTab === "backup" && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({ id: "notesBackup" })}
+                            </h4>
+
+                            <p className="setting-hint stagger-1">
+                                {formatMessage(
+                                    { id: "notesCount" },
+                                    { count: getNotesCount() }
+                                )}
+                            </p>
+
+                            <div className="setting-group stagger-2">
+                                <div className="notes-backup-buttons">
+                                    <button
+                                        className="backup-btn backup-export"
+                                        onClick={handleExportNotes}
+                                    >
+                                        <Icon name="upload" />
+                                        {formatMessage({ id: "exportNotes" })}
+                                    </button>
+
+                                    <button
+                                        className="backup-btn backup-import"
+                                        onClick={() =>
+                                            fileInputRef.current?.click()
+                                        }
+                                    >
+                                        <Icon name="download" />
+                                        {formatMessage({ id: "importNotes" })}
+                                    </button>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept=".json"
+                                        onChange={handleImportNotes}
+                                        style={{ display: "none" }}
+                                    />
+                                </div>
+
+                                {importStatus === "success" && (
+                                    <p className="import-status import-success">
+                                        ✓{" "}
+                                        {formatMessage({ id: "importSuccess" })}
+                                    </p>
+                                )}
+                                {importStatus === "error" && (
+                                    <p className="import-status import-error">
+                                        ✗ {formatMessage({ id: "importError" })}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Info tab */}
+                    {activeTab === "info" && (
+                        <div className="side-menu-section animate-slide-up">
+                            <h4 className="side-menu-section-title">
+                                {formatMessage({
+                                    id: "info",
+                                    defaultMessage: "Info",
+                                })}
+                            </h4>
+
+                            <div className="setting-group stagger-1">
+                                <span className="badge bg-light text-dark mb-4 d-inline-block">
+                                    {formatMessage({
+                                        id: "availableTranslationsCounter",
+                                    })}{" "}
+                                    {translations.length}
+                                </span>
+
+                                {onOpenChangelog && (
+                                    <button
+                                        className="backup-btn backup-changelog mt-2"
+                                        onClick={onOpenChangelog}
+                                        style={{ width: "100%" }}
+                                    >
+                                        <Icon name="file-text" />
+                                        {formatMessage({ id: "changelogLink" })}
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="setting-group stagger-2">
+                                <h5 className="setting-label mb-3">
+                                    {formatMessage({
+                                        id: "usefulLinks",
+                                        defaultMessage: "Przydatne linki",
+                                    })}
+                                </h5>
+                                <div className="d-flex flex-column gap-2 mb-4">
+                                    <a
+                                        href="https://rbiblia.toborek.info/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
+                                        style={{
+                                            borderRadius: "10px",
+                                            padding: "0.6rem 1rem",
+                                        }}
+                                    >
+                                        <Icon name="globe" size={18} />
+                                        {formatMessage({
+                                            id: "websiteLink",
+                                            defaultMessage:
+                                                "Strona domowa programu",
+                                        })}
+                                    </a>
+                                    <a
+                                        href="https://api.toborek.info/download/rbib261.exe"
+                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
+                                        style={{
+                                            borderRadius: "10px",
+                                            padding: "0.6rem 1rem",
+                                        }}
+                                    >
+                                        <Icon name="download" size={18} />
+                                        {formatMessage({
+                                            id: "downloadWindowsLink",
+                                            defaultMessage:
+                                                "Pobierz rBiblia na Windows",
+                                        })}
+                                    </a>
+                                    <a
+                                        href="https://rbiblia.toborek.info/faq/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
+                                        style={{
+                                            borderRadius: "10px",
+                                            padding: "0.6rem 1rem",
+                                        }}
+                                    >
+                                        <Icon name="help-circle" size={18} />
+                                        {formatMessage({
+                                            id: "faqLink",
+                                            defaultMessage:
+                                                "Najczęściej zadawane pytania (FAQ)",
+                                        })}
+                                    </a>
+                                    <a
+                                        href="https://kontakt.toborek.info"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
+                                        style={{
+                                            borderRadius: "10px",
+                                            padding: "0.6rem 1rem",
+                                        }}
+                                    >
+                                        <Icon name="mail" size={18} />
+                                        {formatMessage({
+                                            id: "contactLink",
+                                            defaultMessage:
+                                                "Kontakt / Zgłoś błąd",
+                                        })}
+                                    </a>
+                                    <a
+                                        href="https://radio.toborek.info"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
+                                        style={{
+                                            borderRadius: "10px",
+                                            padding: "0.6rem 1rem",
+                                        }}
+                                    >
+                                        <Icon name="radio" size={18} />
+                                        {formatMessage({
+                                            id: "radioLink",
+                                            defaultMessage: "Radio Ewangelią",
+                                        })}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>{" "}
+                {/* end side-menu-content */}
+            </div>{" "}
+            {/* end side-menu-main */}
+        </>
+    );
+};
+
+export {
+    SideMenu,
+    SideMenuTab,
+    DisplaySettings,
+    getComparisonLimit,
+    getFavoriteTranslations,
+    saveFavoriteTranslations,
+    isDiffModeStrict,
+    FAVORITE_TRANSLATIONS_UPDATED_EVENT,
+};
