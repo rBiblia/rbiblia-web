@@ -5002,6 +5002,17 @@ header.sticky-top {
   border-bottom: 1px solid #e5e7eb;
   flex-shrink: 0;
 
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+
+    .chapter-comp-vs {
+      align-self: center;
+      margin: -0.25rem 0;
+    }
+  }
+
   @include dark-mode {
     border-color: #333;
   }
