@@ -662,15 +662,17 @@ const SearchPanel = ({
                                         key={`${suggestion.type}-${suggestion.text}`}
                                         id={`suggestion-${index}`}
                                         className={`search-suggestion-item ${index === selectedSuggestionIndex
-                                                ? "active"
-                                                : ""
+                                            ? "active"
+                                            : ""
                                             }`}
                                         role="option"
                                         aria-selected={
                                             index === selectedSuggestionIndex
                                         }
                                         onMouseDown={(e) => {
-                                            e.preventDefault(); // Prevent input blur
+                                            e.preventDefault(); // Prevent input blur on desktop
+                                        }}
+                                        onClick={() => {
                                             selectSuggestion(suggestion);
                                         }}
                                         onMouseEnter={() =>

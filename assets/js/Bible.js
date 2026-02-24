@@ -147,6 +147,7 @@ const Bible = ({ intl, setLocale }) => {
     const [selectedChapter, setSelectedChapter] = useState(
         getDataFromCurrentPathname().chapter
     );
+    const [highlightedVerse, setHighlightedVerse] = useState(null);
 
     useEffect(() => {
         const handlePopState = () => {
@@ -346,7 +347,7 @@ const Bible = ({ intl, setLocale }) => {
         return (
             !isStructureLoading &&
             typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-                "undefined"
+            "undefined"
         );
     };
 
@@ -443,6 +444,22 @@ const Bible = ({ intl, setLocale }) => {
         { enabled: !overlaysOpen && showVerses }
     );
 
+    const handleNavigateToVerse = useCallback(
+        (book, chapter, verse) => {
+            changeSelectedBook(book);
+            changeSelectedChapter(chapter);
+
+            if (verse) {
+                const verseId = String(verse);
+                setHighlightedVerse(verseId);
+                setTimeout(() => {
+                    setHighlightedVerse(null);
+                }, 3000);
+            }
+        },
+        [changeSelectedBook, changeSelectedChapter]
+    );
+
     // Render content
     if (error) {
         return (
@@ -537,6 +554,7 @@ const Bible = ({ intl, setLocale }) => {
                 onVerseClick={(verseId) => setComparedVerse(verseId)}
                 onVerseLongPress={(verseId) => setEditingNoteVerse(verseId)}
                 notesVersion={notesVersion}
+                highlightedVerse={highlightedVerse}
             />
             <BottomNavigation
                 onPrevChapter={prevChapter}
@@ -561,10 +579,7 @@ const Bible = ({ intl, setLocale }) => {
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 books={books}
-                onNavigateToVerse={(book, chapter, verse) => {
-                    changeSelectedBook(book);
-                    changeSelectedChapter(chapter);
-                }}
+                onNavigateToVerse={handleNavigateToVerse}
             />
 
             {/* Search Panel */}
@@ -573,10 +588,7 @@ const Bible = ({ intl, setLocale }) => {
                 onClose={() => setIsSearchOpen(false)}
                 selectedTranslation={selectedTranslation}
                 books={books}
-                onNavigateToVerse={(book, chapter, verse) => {
-                    changeSelectedBook(book);
-                    changeSelectedChapter(chapter);
-                }}
+                onNavigateToVerse={handleNavigateToVerse}
             />
 
             {/* Chapter Comparison */}

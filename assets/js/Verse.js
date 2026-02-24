@@ -13,6 +13,7 @@ const Verse = memo(function Verse({
     onClick,
     onLongPress,
     notesVersion = 0, // Increment to force note indicator refresh
+    isHighlighted = false,
 }) {
     const { formatMessage } = useIntl();
     const [hasNote, setHasNote] = useState(false);
@@ -22,6 +23,17 @@ const Verse = memo(function Verse({
     const longPressTimer = useRef(null);
     const isLongPress = useRef(false);
     const startPos = useRef({ x: 0, y: 0 });
+    const verseRef = useRef(null);
+
+    // Scroll into view when highlighted
+    useEffect(() => {
+        if (isHighlighted && verseRef.current) {
+            verseRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }
+    }, [isHighlighted]);
 
     // Check if this verse has a note
     useEffect(() => {
@@ -163,8 +175,8 @@ const Verse = memo(function Verse({
 
     return (
         <div
-            className={`row line ${isPressing ? "pressing" : ""} ${hasNote ? "has-note" : ""
-                }`}
+            ref={verseRef}
+            className={`row line ${isPressing ? "pressing" : ""} ${hasNote ? "has-note" : ""} ${isHighlighted ? "highlighted" : ""}`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <span
@@ -209,8 +221,8 @@ const Verse = memo(function Verse({
                     <div className="verse-note-preview-wrap">
                         <div
                             className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
-                                    ? "is-collapsed"
-                                    : ""
+                                ? "is-collapsed"
+                                : ""
                                 }`}
                         >
                             {noteText}

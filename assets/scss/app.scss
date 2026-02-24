@@ -167,6 +167,25 @@ main {
         transition: background 0.15s ease;
       }
 
+      // Highlighted verse (e.g. from search)
+      &.highlighted {
+        animation: highlightFadeOut 3s ease forwards;
+      }
+
+      @keyframes highlightFadeOut {
+        0% {
+          background: rgba($rb-header-navigator-arrow, 0.25);
+        }
+
+        70% {
+          background: rgba($rb-header-navigator-arrow, 0.15);
+        }
+
+        100% {
+          background: transparent;
+        }
+      }
+
       // Verse with note
       &.has-note {
         position: relative;

@@ -10,6 +10,7 @@ const Reader = ({
     onVerseClick,
     onVerseLongPress,
     notesVersion = 0,
+    highlightedVerse = null,
 }) => {
     if (!showVerses || !verses) {
         return <SkeletonLoader lines={15} />;
@@ -29,6 +30,7 @@ const Reader = ({
                             onClick={() => onVerseClick(verseId)}
                             onLongPress={() => onVerseLongPress?.(verseId)}
                             notesVersion={notesVersion}
+                            isHighlighted={highlightedVerse === verseId}
                         />
                     ))}
                 </div>
