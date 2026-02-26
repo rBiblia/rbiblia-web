@@ -1,0 +1,511 @@
+// Typography
+$font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-bible: 'Crimson Text', Georgia, 'Times New Roman', serif;
+
+@mixin rb-border {
+  border-left: 1px solid $rb-border-color;
+  border-right: 1px solid $rb-border-color;
+}
+
+// Brighter close button
+.btn-close {
+  opacity: 0.7;
+  filter: brightness(1.2);
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @include dark-mode {
+    filter: invert(1) brightness(1.5);
+  }
+
+  @include interactive-scale;
+}
+
+@mixin rb-border-clean {
+  border-left: 0;
+  border-right: 0;
+}
+
+/* required to show drop down cursor for select box in FF */
+.form-control {
+  -moz-appearance: button;
+  appearance: button;
+}
+
+.btn-location {
+  background: transparent;
+  border: none;
+  color: #333;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+  outline: none !important;
+  box-shadow: none !important;
+
+  &:hover {
+    color: $rb-header-navigator-arrow-hover;
+  }
+
+  .location-text {
+    border-bottom: 2px dashed $rb-header-navigator-arrow;
+    @include fluid-text(1rem, 1.3rem);
+  }
+}
+
+.icon-expand {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 6px solid;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  opacity: 0.6;
+}
+
+.selector-disabled {
+  pointer-events: none;
+}
+
+.app-preloader {
+  height: 100vh;
+
+  .row {
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+#root,
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: $font-ui;
+  // Previously hardcoded 1rem
+  @include fluid-text(1rem, 1.125rem);
+  background: url("../images/background.jpg");
+  background-size: 84px 83px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  @include rb-border;
+  padding-bottom: 31px;
+  min-height: calc(100vh - 53px);
+  background: $rb-background-color;
+
+  .row {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+
+    &:nth-child(even) {
+      background: $rb-verse-even-color;
+    }
+
+    .verse {
+      white-space: pre-wrap;
+      font-family: var(--verse-font-family, $font-bible);
+      font-size: var(--verse-font-size, 1.15rem);
+      line-height: 1.85;
+      letter-spacing: 0.01em;
+      color: #2c2c2c;
+      padding: 0.5rem 0;
+    }
+
+    .line {
+      &:hover {
+        background: $rb-verse-line-hover;
+      }
+
+      // Long-press animation
+      &.pressing {
+        background: rgba($rb-header-navigator-arrow, 0.1);
+        transition: background 0.15s ease;
+      }
+
+      // Highlighted verse (e.g. from search)
+      &.highlighted {
+        animation: highlightFadeOut 3s ease forwards;
+      }
+
+      @keyframes highlightFadeOut {
+        0% {
+          background: rgba($rb-header-navigator-arrow, 0.25);
+        }
+
+        70% {
+          background: rgba($rb-header-navigator-arrow, 0.15);
+        }
+
+        100% {
+          background: transparent;
+        }
+      }
+
+      // Verse with note
+      &.has-note {
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: $rb-header-navigator-arrow;
+          border-radius: 0 2px 2px 0;
+        }
+      }
+
+      &:hover .verse-actions {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+    }
+
+
+
+    // Verse number cell with floating action buttons
+    .verse-number-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .verse-actions {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        padding: 4px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.15s ease;
+        z-index: 10;
+        pointer-events: none;
+
+        @include dark-mode {
+          background: var(--dm-bg-elevated);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .verse-action-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: all 0.15s ease;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+
+        &:hover {
+          background: rgba($rb-header-navigator-arrow, 0.12);
+          color: $rb-header-navigator-arrow;
+          transform: scale(1.1);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+
+        @include dark-mode {
+          color: #aaa;
+
+          &:hover {
+            background: rgba($rb-header-navigator-arrow, 0.2);
+            color: var(--dm-accent);
+          }
+        }
+      }
+
+      .verse-action-note.has-note-value {
+        color: $rb-header-navigator-arrow;
+        opacity: 0.8;
+      }
+    }
+
+    .verse-note-preview-wrap {
+      margin-top: 0.35rem;
+    }
+
+    .verse-note-preview {
+      margin-top: 0.35rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      border-radius: 0;
+      font-family: $font-ui;
+      font-size: 0.82rem;
+      font-style: italic;
+      line-height: 1.45;
+      color: #6b7280;
+      white-space: pre-line;
+
+      @include dark-mode {
+        background: transparent;
+        color: #9ca3af;
+      }
+
+      &.is-collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .verse-note-toggle {
+      margin-top: 0.25rem;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: $rb-header-navigator-arrow;
+      font-family: $font-ui;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  a {
+    text-decoration: none;
+    font-family: var(--verse-number-font-family, $font-ui);
+    font-size: var(--verse-number-font-size, 0.85rem);
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+
+    &:link,
+    &:visited {
+      color: $rb-verse-link-color;
+    }
+
+    &:hover {
+      color: $rb-verse-hover-color;
+      opacity: 1;
+    }
+  }
+}
+
+header,
+footer>.container {
+  @include rb-border;
+}
+
+header {
+  background: $rb-header-background-color;
+
+  .icon-navigator {
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: $rb-header-navigator-arrow;
+    border: none;
+    padding: 0;
+    margin-top: 0.2em;
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover,
+    &:focus {
+      color: $rb-header-navigator-arrow-hover;
+      background: transparent;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      color: $rb-header-navigator-arrow-active;
+      transform: scale(0.95);
+    }
+  }
+
+  .icon-navigator-disabled {
+    color: $rb-header-navigator-arrow-disabled;
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $rb-header-navigator-arrow-disabled;
+      background: transparent;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .translation-col {
+      flex: 0 0 auto;
+      width: calc(25% + 40px);
+    }
+
+    .location-col {
+      flex: 0 0 auto;
+      width: calc(33.333333% - 40px);
+    }
+  }
+}
+
+// Immersive Mode styles
+header {
+  transition: transform 0.3s ease-in-out;
+
+  &.nav-hidden-header {
+    transform: translateY(-100%);
+  }
+}
+
+// Desktop Navigation Action Buttons
+.nav-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: rgba($rb-header-navigator-arrow, 0.1);
+  color: $rb-header-navigator-arrow;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include interactive-scale;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: $rb-header-navigator-arrow;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  overflow-y: hidden;
+  width: 100%;
+
+  &>.container {
+    background: $rb-footer-background-color;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+  }
+
+  a {
+
+    &:link,
+    &:visited {
+      color: $rb-footer-link-color;
+    }
+
+    &:hover {
+      color: $rb-footer-hover-color;
+    }
+  }
+}
+
+.preloader-image {
+  height: 100%;
+  position: relative;
+
+  &:before {
+    width: 6em;
+    height: 6em;
+    content: "";
+    position: absolute;
+    top: calc(50% - 3em);
+    left: calc(50% - 3em);
+    display: inline-block;
+    overflow: hidden;
+    transform-origin: 46% 54%;
+    animation: preloader-image-spin 1s linear infinite;
+    background: url("../images/preloader.svg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes preloader-image-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  header {
+    &.pb-2 {
+      padding-bottom: 0 !important;
+    }
+
+    .row {
+      padding-left: 0.7em;
+      padding-right: 0.7em;
+
+      .col-12 {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    div:not(:last-child) {
+      select {
+        margin-bottom: 1em;
+      }
+    }
+  }
+
+  header,
+  footer>.container,
+  main {
+    @include rb-border-clean;
+  }
+
+  main {
+    min-height: calc(100vh - 162px);
+  }
+}

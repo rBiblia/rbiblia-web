@@ -9,6 +9,7 @@ const Reader = ({
     showVerses,
     onVerseClick,
     onVerseLongPress,
+    onVerseCompare,
     notesVersion = 0,
     highlightedVerse = null,
 }) => {
@@ -29,6 +30,7 @@ const Reader = ({
                             verseContent={verseContent}
                             onClick={() => onVerseClick(verseId)}
                             onLongPress={() => onVerseLongPress?.(verseId)}
+                            onCompare={() => onVerseCompare?.(verseId)}
                             notesVersion={notesVersion}
                             isHighlighted={highlightedVerse === verseId}
                         />

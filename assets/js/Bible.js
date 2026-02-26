@@ -347,7 +347,7 @@ const Bible = ({ intl, setLocale }) => {
         return (
             !isStructureLoading &&
             typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-                "undefined"
+            "undefined"
         );
     };
 
@@ -553,6 +553,7 @@ const Bible = ({ intl, setLocale }) => {
                 verses={verses}
                 onVerseClick={(verseId) => setComparedVerse(verseId)}
                 onVerseLongPress={(verseId) => setEditingNoteVerse(verseId)}
+                onVerseCompare={(verseId) => setComparedVerse(verseId)}
                 notesVersion={notesVersion}
                 highlightedVerse={highlightedVerse}
             />

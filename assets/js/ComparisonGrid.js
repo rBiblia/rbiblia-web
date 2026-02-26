@@ -12,6 +12,8 @@ import {
     isDiffModeStrict,
 } from "./SideMenu";
 import { safeJsonParse } from "./safeJsonParse";
+import TranslationSelector from "./TranslationSelector";
+import useSwipeNavigation from "./useSwipeNavigation";
 
 const COMPARISON_DIFF_MODE_KEY = "rbiblia-comparison-diff-mode";
 const WORD_SPLIT_PATTERN =
@@ -476,6 +478,16 @@ const ComparisonGrid = ({
         toggleDiffHighlight,
     ]);
 
+    // Swipe navigation for touch devices
+    useSwipeNavigation(
+        handleNextVerse,  // Swipe left  → next verse
+        handlePrevVerse,  // Swipe right → previous verse
+        {
+            threshold: 60,
+            enabled: true,
+        }
+    );
+
     // Handle translation selection change for a specific slot
     const handleTranslationChange = (index, translationId) => {
         const newSelections = [...selectedTranslations];
@@ -510,63 +522,25 @@ const ComparisonGrid = ({
     const renderTranslationSelector = (index) => {
         const available = getAvailableTranslations(index);
         const selectedId = selectedTranslations[index];
+        const usedTranslations = selectedTranslations.filter(
+            (t, i) => t && i !== index
+        );
+        const disabledIds = [currentTranslation, ...usedTranslations];
 
         return (
             <div key={index} className="comparison-slot mb-4">
                 <div className="comparison-slot-header">
                     <span className="comparison-slot-number">{index + 1}</span>
-                    <select
-                        className="form-select"
-                        value={selectedId}
-                        onChange={(e) =>
-                            handleTranslationChange(index, e.target.value)
+                    <TranslationSelector
+                        translations={translations}
+                        selectedTranslation={selectedId}
+                        changeSelectedTranslation={(id) =>
+                            handleTranslationChange(index, id)
                         }
-                    >
-                        <option value="">
-                            {formatMessage({ id: "chooseTranslation" })}...
-                        </option>
-
-                        {available.filter((t) =>
-                            favoriteTranslations.includes(t.id)
-                        ).length > 0 && (
-                            <optgroup
-                                label={`\u2605 ${formatMessage({
-                                    id: "favorites",
-                                })}`}
-                            >
-                                {available
-                                    .filter((t) =>
-                                        favoriteTranslations.includes(t.id)
-                                    )
-                                    .map((t) => (
-                                        <option key={t.id} value={t.id}>
-                                            {t.name} ({t.language.toUpperCase()}
-                                            )
-                                        </option>
-                                    ))}
-                            </optgroup>
-                        )}
-
-                        {available.filter(
-                            (t) => !favoriteTranslations.includes(t.id)
-                        ).length > 0 && (
-                            <optgroup
-                                label={formatMessage({ id: "allTranslations" })}
-                            >
-                                {available
-                                    .filter(
-                                        (t) =>
-                                            !favoriteTranslations.includes(t.id)
-                                    )
-                                    .map((t) => (
-                                        <option key={t.id} value={t.id}>
-                                            {t.name} ({t.language.toUpperCase()}
-                                            )
-                                        </option>
-                                    ))}
-                            </optgroup>
-                        )}
-                    </select>
+                        isLoading={false}
+                        disabledOptions={disabledIds}
+                        placeholder={formatMessage({ id: "chooseTranslation" })}
+                    />
                 </div>
 
                 {selectedId && (
@@ -657,22 +631,23 @@ const ComparisonGrid = ({
                     </div>
 
                     <div className="d-flex align-items-center gap-2">
-                        <button
-                            type="button"
-                            className={`comparison-diff-toggle ${
-                                isDiffHighlightEnabled ? "active" : ""
-                            }`}
-                            onClick={toggleDiffHighlight}
+                        <label
+                            className="rb-switch"
                             title={formatMessage({
                                 id: "toggleDifferencesKeyboardHint",
                             })}
                         >
-                            {formatMessage({
-                                id: isDiffHighlightEnabled
-                                    ? "hideDifferences"
-                                    : "showDifferences",
-                            })}
-                        </button>
+                            <input
+                                type="checkbox"
+                                checked={isDiffHighlightEnabled}
+                                onChange={toggleDiffHighlight}
+                            />
+                            <span className="rb-switch-slider">
+                                <span className="rb-switch-text">
+                                    {formatMessage({ id: "toggleDifferences" })}
+                                </span>
+                            </span>
+                        </label>
                         <span className="comparison-keyboard-hint d-none d-lg-block">
                             ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
                             {formatMessage({ id: "toggleDifferences" })}

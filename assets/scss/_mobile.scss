@@ -1,0 +1,857 @@
+// ---------------------------------------------------------
+// MOBILE IMPROVEMENTS
+// ---------------------------------------------------------
+
+// 1. Touch Targets - Ensure minimum 44px for all interactive elements
+// ---------------------------------------------------------
+
+// Fix undersized touch targets
+.note-action-btn {
+  @include min-touch-target(44px);
+  width: 44px;
+  height: 44px;
+}
+
+.search-clear-btn {
+  @include min-touch-target(44px);
+  width: 44px;
+  height: 44px;
+  right: 0.25rem;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.note-editor-close {
+  @include min-touch-target(44px);
+  width: 44px;
+  height: 44px;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.notes-close,
+.search-close,
+.side-menu-close {
+  @include min-touch-target(44px);
+}
+
+.favorite-remove {
+  @include min-touch-target(44px);
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.translation-star {
+  @include min-touch-target(44px);
+  width: 44px;
+  height: 44px;
+}
+
+// 2. Safe Area Support - Full notch/home indicator support
+// ---------------------------------------------------------
+
+.side-menu-panel,
+.notes-panel,
+.search-panel {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+}
+
+.selection-overlay {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.bottom-nav {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+header.sticky-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+}
+
+// 3. Reduced Motion Support - Accessibility
+// ---------------------------------------------------------
+
+@include reduced-motion {
+
+  // Disable all animations
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  // Disable specific animations
+  .selection-overlay,
+  .notes-panel,
+  .search-panel,
+  .side-menu-panel,
+  .note-editor-modal,
+  .comparison-overlay {
+    animation: none !important;
+    transition: opacity 0s !important, visibility 0s !important;
+  }
+
+  // Immediate state changes instead of animations
+  .side-menu-panel.open,
+  .notes-panel.open,
+  .search-panel.open,
+  .note-editor-modal.open {
+    transform: none;
+    transition: none !important;
+  }
+
+  // Disable shimmer on skeleton loaders
+  .skeleton-verse-number,
+  .skeleton-line {
+    animation: none !important;
+    background: #e8e8e8 !important;
+  }
+
+  // Disable hover effects that cause motion
+  .tile:hover,
+  .search-result-item:hover,
+  .note-item:hover,
+  .favorite-translation-item:hover {
+    transform: none !important;
+  }
+}
+
+// Dark mode skeleton fix for reduced motion
+@include dark-mode {
+  @include reduced-motion {
+
+    .skeleton-verse-number,
+    .skeleton-line {
+      background: #333 !important;
+    }
+  }
+}
+
+// 4. Landscape Mode Optimization
+// ---------------------------------------------------------
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+
+  // Compact bottom navigation in landscape
+  .bottom-nav {
+    padding: 0.25rem 0;
+    padding-bottom: calc(0.25rem + env(safe-area-inset-bottom, 0px));
+
+    .bottom-nav-btn {
+      flex-direction: row;
+      gap: 0.5rem;
+      padding: 0.4rem 0.75rem;
+    }
+
+    .bottom-nav-label {
+      display: none;
+    }
+
+    .bottom-nav-btn-center {
+      padding: 0.4rem 1rem;
+    }
+
+    .bottom-nav-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // Compact header
+  header.sticky-top {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  // Full-width side panels in landscape on small screens
+  .side-menu-panel,
+  .notes-panel,
+  .search-panel {
+    max-height: 100vh;
+    width: 50%;
+    max-width: 400px;
+
+    @media (max-width: 767px) {
+      width: calc(100% - 24px);
+    }
+  }
+
+  // Reduce main content bottom padding
+  main {
+    padding-bottom: 60px !important;
+  }
+
+  // Compact verse lines
+  .row .verse {
+    line-height: 1.6;
+    padding: 0.3rem 0;
+  }
+}
+
+// 5. Pull-to-Refresh Indicator
+// ---------------------------------------------------------
+
+.pull-to-refresh-indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  transition: transform 0.2s ease;
+  z-index: 10;
+
+  &.pulling {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  &.refreshing {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.pull-indicator-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba($rb-header-navigator-arrow, 0.2);
+  border-top-color: $rb-header-navigator-arrow;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.pull-indicator-arrow {
+  width: 24px;
+  height: 24px;
+  color: $rb-header-navigator-arrow;
+  transition: transform 0.2s ease;
+
+  &.ready {
+    transform: rotate(180deg);
+  }
+}
+
+// 6. Skeleton Loader Improvements for Notes/Search
+// ---------------------------------------------------------
+
+.notes-skeleton,
+.search-skeleton {
+  padding: 1rem;
+}
+
+.skeleton-note-item {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.skeleton-note-header {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-badge {
+  width: 80px;
+  height: 24px;
+  background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+
+  @include dark-mode {
+    background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+    background-size: 200% 100%;
+  }
+}
+
+.skeleton-note-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// 7. Load More Indicator
+// ---------------------------------------------------------
+
+.load-more-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #888;
+  font-size: 0.85rem;
+  gap: 0.5rem;
+
+  .load-more-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba($rb-header-navigator-arrow, 0.2);
+    border-top-color: $rb-header-navigator-arrow;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+.load-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  background: transparent;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+    color: $rb-header-navigator-arrow;
+    background: rgba($rb-header-navigator-arrow, 0.05);
+  }
+
+  @include dark-mode {
+    border-color: #444;
+    color: #aaa;
+
+    &:hover {
+      border-color: $rb-header-navigator-arrow;
+      color: $rb-header-navigator-arrow;
+    }
+  }
+}
+
+// 8. Touch Feedback Improvements
+// ---------------------------------------------------------
+
+// Better visual feedback for touch interactions
+@media (hover: none) and (pointer: coarse) {
+
+  // Touch devices get larger hit areas
+  .tile {
+    min-height: 54px;
+  }
+
+  .chapter-tile {
+    min-height: 50px;
+  }
+
+  // Active state is more prominent
+  .bottom-nav-btn:active:not(:disabled),
+  .nav-action-btn:active:not(:disabled),
+  .setting-tile:active,
+  .tile:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+
+  // Remove hover effects that don't apply to touch
+  .tile:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  // Increase tap target for verse numbers
+  .verse-number-cell a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include min-touch-target(44px);
+  }
+
+  // Hide floating action buttons on touch devices (use long-press instead)
+  .verse-actions {
+    display: none !important;
+  }
+}
+
+// 9. High Contrast Mode Support
+// ---------------------------------------------------------
+
+@media (prefers-contrast: high) {
+
+  .tile,
+  .setting-tile,
+  .search-result-item,
+  .note-item {
+    border-width: 2px;
+    border-color: currentColor;
+  }
+
+  .bottom-nav-btn,
+  .nav-action-btn {
+    border: 2px solid currentColor;
+  }
+
+  .search-input,
+  .note-textarea,
+  .note-editor-textarea {
+    border-width: 2px;
+  }
+}
+
+// 10. Focus Visible Styles (Keyboard Navigation)
+// ---------------------------------------------------------
+
+// Apply focus ring to interactive elements
+.bottom-nav-btn:focus-visible,
+.nav-action-btn:focus-visible,
+.tile:focus-visible,
+.setting-tile:focus-visible,
+.notes-filter-btn:focus-visible,
+.scope-toggle-btn:focus-visible,
+// ─── Chapter Comparison (styles are below) ─────────────────
+.chapter-comp-nav-btn:focus-visible,
+.chapter-comp-close:focus-visible,
+.side-menu-dock-item:focus-visible,
+.settings-tab:focus-visible,
+.search-result-item:focus-visible,
+.comparison-nav-btn:focus-visible {
+  @include focus-ring;
+}
+
+.chapter-comp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+
+  @include dark-mode {
+    background: var(--dm-bg-overlay);
+  }
+}
+
+.chapter-comp-panel {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+.chapter-comp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+
+  @include dark-mode {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.chapter-comp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chapter-comp-icon {
+  color: $rb-header-navigator-arrow;
+}
+
+.chapter-comp-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: $font-ui;
+}
+
+.chapter-comp-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+    color: #333;
+  }
+
+  @include dark-mode {
+    color: #999;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ddd;
+    }
+  }
+}
+
+// Translation selectors row
+.chapter-comp-selectors {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+
+    .chapter-comp-vs {
+      align-self: center;
+      margin: -0.25rem 0;
+    }
+  }
+
+  @include dark-mode {
+    border-color: #333;
+  }
+}
+
+.chapter-comp-select {
+  flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-family: $font-ui;
+  background: #f8f9fa;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $rb-header-navigator-arrow;
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
+
+    &:focus {
+      border-color: var(--dm-accent);
+    }
+  }
+}
+
+.chapter-comp-vs {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+// Chapter navigation
+.chapter-comp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+
+  @include dark-mode {
+    border-color: #333;
+  }
+}
+
+.chapter-comp-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.6rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-family: $font-ui;
+  color: $rb-header-navigator-arrow;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba($rb-header-navigator-arrow, 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}
+
+.chapter-comp-nav-current {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  font-family: $font-ui;
+
+  @include dark-mode {
+    color: #ddd;
+  }
+}
+
+// Body (scrollable)
+.chapter-comp-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+// Empty / loading / error states
+.chapter-comp-empty,
+.chapter-comp-loading,
+.chapter-comp-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #888;
+  gap: 0.75rem;
+
+  svg {
+    opacity: 0.3;
+  }
+
+  p {
+    font-size: 0.92rem;
+    font-family: $font-ui;
+    margin: 0;
+  }
+}
+
+.chapter-comp-error {
+  color: #dc3545;
+}
+
+// ── Desktop: Side-by-side table ──
+.chapter-comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.chapter-comp-th-num {
+  width: 42px;
+  text-align: center;
+  padding: 0.6rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #aaa;
+  border-bottom: 2px solid #e5e7eb;
+  font-family: $font-ui;
+
+  @include dark-mode {
+    border-color: #333;
+    color: #666;
+  }
+}
+
+.chapter-comp-th-text {
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $rb-header-navigator-arrow;
+  border-bottom: 2px solid #e5e7eb;
+  font-family: $font-ui;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &:last-child {
+    border-left: 1px solid #e5e7eb;
+
+    @include dark-mode {
+      border-left-color: #333;
+    }
+  }
+
+  @include dark-mode {
+    border-bottom-color: #333;
+  }
+}
+
+.chapter-comp-row {
+  &:nth-child(even) {
+    background: rgba(0, 0, 0, 0.015);
+
+    @include dark-mode {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  }
+
+  &:hover {
+    background: rgba($rb-header-navigator-arrow, 0.03);
+
+    @include dark-mode {
+      background: rgba($rb-header-navigator-arrow, 0.06);
+    }
+  }
+}
+
+.chapter-comp-verse-num {
+  text-align: center;
+  padding: 0.65rem 0.4rem;
+  font-size: var(--verse-number-font-size, 0.85rem);
+  font-family: var(--verse-number-font-family, inherit);
+  font-weight: 600;
+  color: $rb-header-navigator-arrow;
+  opacity: 0.7;
+  vertical-align: top;
+}
+
+.chapter-comp-verse-text {
+  padding: 0.65rem 0.85rem;
+  font-size: var(--verse-font-size, 1.15rem);
+  font-family: var(--verse-font-family, inherit);
+  line-height: 1.65;
+  vertical-align: top;
+  color: #333;
+
+  @include dark-mode {
+    color: #ddd;
+  }
+}
+
+.chapter-comp-side-b {
+  border-left: 1px solid #e5e7eb;
+
+  @include dark-mode {
+    border-left-color: #333;
+  }
+}
+
+.chapter-comp-no-verse {
+  color: #ccc;
+  font-style: italic;
+
+  @include dark-mode {
+    color: #555;
+  }
+}
+
+// ── Mobile: Interleaved ──
+.chapter-comp-mobile {
+  padding: 0.5rem 0;
+}
+
+.chapter-comp-mobile-verse {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+
+  @include dark-mode {
+    border-bottom-color: #2a2a2a;
+  }
+}
+
+.chapter-comp-mobile-num {
+  flex-shrink: 0;
+  width: 28px;
+  font-size: var(--verse-number-font-size, 0.85rem);
+  font-family: var(--verse-number-font-family, inherit);
+  font-weight: 700;
+  color: $rb-header-navigator-arrow;
+  opacity: 0.7;
+  padding-top: 0.1rem;
+  text-align: center;
+}
+
+.chapter-comp-mobile-texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chapter-comp-mobile-a {
+  font-size: var(--verse-font-size, 1.15rem);
+  font-family: var(--verse-font-family, inherit);
+  line-height: 1.55;
+  color: #333;
+
+  @include dark-mode {
+    color: #ddd;
+  }
+}
+
+.chapter-comp-mobile-b {
+  font-size: calc(var(--verse-font-size, 1.15rem) * 0.94);
+  font-family: var(--verse-font-family, inherit);
+  font-style: italic;
+  line-height: 1.5;
+  color: #666;
+  padding-left: 0.5rem;
+  border-left: 2px solid rgba($rb-header-navigator-arrow, 0.25);
+
+  @include dark-mode {
+    color: #999;
+    border-left-color: rgba($rb-header-navigator-arrow, 0.35);
+  }
+}
+
+
+// Remove default outline when custom focus is applied
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  @include focus-ring;
+}

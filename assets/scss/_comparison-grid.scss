@@ -1,0 +1,106 @@
+// ---------------------------------------------------------
+// Comparison Grid Styles
+// ---------------------------------------------------------
+
+.comparison-overlay {
+  .translations-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+.comparison-card {
+  display: flex;
+  flex-direction: column;
+
+  .tile {
+    min-height: 80px;
+
+    &.active {
+      background: $rb-header-navigator-arrow;
+      border-color: darken($rb-header-navigator-arrow, 10%);
+
+      .tile-text {
+        color: white;
+      }
+
+      small {
+        color: rgba(255, 255, 255, 0.8) !important;
+      }
+    }
+  }
+}
+
+.comparison-text-box {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  font-style: italic;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+
+  @include dark-mode {
+    background: var(--dm-bg-base);
+    border-color: var(--dm-border);
+    color: var(--dm-text-secondary);
+  }
+}
+
+.bg-light {
+  @include dark-mode {
+    background-color: var(--dm-bg-surface) !important;
+    border-color: var(--dm-border) !important;
+  }
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+
+  @include dark-mode {
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  }
+}
+
+.form-select-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  @include dark-mode {
+    background-color: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
+  }
+}
+
+.border-primary {
+  border-width: 2px !important;
+  border-color: $rb-header-navigator-arrow !important;
+}
+
+.text-primary {
+  color: darken($rb-header-navigator-arrow, 10%) !important;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.italic {
+  font-style: italic;
+}

@@ -1,0 +1,664 @@
+// ---------------------------------------------------------
+// Notes Panel Styles
+// ---------------------------------------------------------
+
+.notes-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2500;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s step-end;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0s step-start;
+  }
+}
+
+.notes-panel {
+  position: fixed;
+  top: 12px;
+  bottom: 12px;
+  right: 12px;
+  width: 420px;
+  max-width: calc(100% - 24px);
+  @include glassmorphism-panel(0.85, 25px);
+  @include gpu-accelerate;
+  z-index: 2600;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+
+  transform: translateX(calc(100% + 20px));
+  visibility: hidden;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s step-end;
+
+  &.open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s step-start;
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 575px) {
+    width: calc(100% - 24px);
+  }
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+
+  @include dark-mode {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.notes-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $rb-header-navigator-arrow;
+  }
+
+  @include dark-mode {
+    color: var(--dm-text-primary);
+  }
+}
+
+.notes-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  @include dark-mode {
+    color: #aaa;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.notes-filter {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notes-filter-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+  }
+
+  &.active {
+    border-color: $rb-header-navigator-arrow;
+    background: $rb-header-navigator-arrow;
+    color: white;
+  }
+
+  @include dark-mode {
+    border-color: #444;
+    color: #aaa;
+
+    &.active {
+      background: $rb-header-navigator-arrow;
+      border-color: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+.notes-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.notes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #888;
+  padding: 2rem;
+
+  svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.3;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.notes-empty-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-item {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.05);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.note-reference {
+  background: $rb-header-navigator-arrow;
+  color: white;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: darken($rb-header-navigator-arrow, 10%);
+    transform: translateY(-1px);
+  }
+}
+
+.note-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.note-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  &.note-action-delete:hover {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+  }
+
+  @include dark-mode {
+    color: #aaa;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.note-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #444;
+  white-space: pre-wrap;
+
+  @include dark-mode {
+    color: #ccc;
+  }
+}
+
+.note-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.note-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+
+  &:focus {
+    outline: none;
+    border-color: $rb-header-navigator-arrow;
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
+  }
+}
+
+.note-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.note-edit-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.note-edit-cancel {
+  background: #eee;
+  color: #666;
+
+  &:hover {
+    background: #ddd;
+  }
+
+  @include dark-mode {
+    background: #444;
+    color: #ccc;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+.note-edit-save {
+  background: $rb-header-navigator-arrow;
+  color: white;
+
+  &:hover {
+    background: darken($rb-header-navigator-arrow, 10%);
+  }
+}
+
+// Note Editor Modal
+.note-editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2500;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s step-end;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0s step-start;
+  }
+}
+
+.note-editor-modal {
+  @include premium-modal(500px);
+}
+
+.note-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  @include dark-mode {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.note-editor-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+
+  @include dark-mode {
+    color: #eee;
+  }
+}
+
+.note-editor-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  @include dark-mode {
+    color: #aaa;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.note-editor-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: none;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  min-height: 150px;
+
+  &:focus {
+    outline: none;
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-elevated);
+    color: var(--dm-text-primary);
+  }
+}
+
+.note-editor-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  justify-content: flex-end;
+
+  @include dark-mode {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.note-editor-btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.note-editor-cancel {
+  background: #eee;
+  color: #666;
+
+  &:hover {
+    background: #ddd;
+  }
+
+  @include dark-mode {
+    background: #444;
+    color: #ccc;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+.note-editor-save {
+  background: $rb-header-navigator-arrow;
+  color: white;
+
+  &:hover {
+    background: darken($rb-header-navigator-arrow, 10%);
+  }
+}
+
+// ---------------------------------------------------------
+// Active Tile (current book highlighting)
+// ---------------------------------------------------------
+
+.tile-active {
+  background: $rb-header-navigator-arrow !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.4);
+  transform: scale(1.05);
+
+  .tile-text {
+    color: white !important;
+  }
+}
+
+// ---------------------------------------------------------
+// Font Family Buttons
+// ---------------------------------------------------------
+
+.font-family-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.font-family-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+    background: rgba($rb-header-navigator-arrow, 0.05);
+  }
+
+  &.active {
+    border-color: $rb-header-navigator-arrow;
+    background: $rb-header-navigator-arrow;
+    color: white;
+  }
+
+  @include dark-mode {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #ddd;
+
+    &:hover {
+      border-color: $rb-header-navigator-arrow;
+    }
+
+    &.active {
+      background: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+// ---------------------------------------------------------
+// Notes Header Actions
+// ---------------------------------------------------------
+
+.notes-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notes-add-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: $rb-header-navigator-arrow;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: darken($rb-header-navigator-arrow, 10%);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.notes-empty-add-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background: $rb-header-navigator-arrow;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: darken($rb-header-navigator-arrow, 10%);
+  }
+}
+
+.note-date {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.note-add-form {
+  border: 2px dashed #ddd;
+  background: rgba($rb-header-navigator-arrow, 0.02);
+
+  @include dark-mode {
+    border-color: #444;
+  }
+}
