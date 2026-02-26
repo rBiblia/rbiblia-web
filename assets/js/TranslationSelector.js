@@ -126,9 +126,8 @@ const TranslationSelector = ({
         return (
             <div
                 key={t.id}
-                className={`translation-item ${
-                    t.id === selectedTranslation ? "selected" : ""
-                } ${isDisabled ? "disabled" : ""}`}
+                className={`translation-item ${t.id === selectedTranslation ? "selected" : ""
+                    } ${isDisabled ? "disabled" : ""}`}
                 onClick={() => !isDisabled && handleSelect(t.id)}
                 onMouseEnter={() => !isDisabled && setHoveredId(t.id)}
                 onMouseLeave={() => !isDisabled && setHoveredId(null)}
@@ -141,13 +140,11 @@ const TranslationSelector = ({
                 </span>
                 {showStar && (
                     <button
-                        className={`translation-star ${
-                            favorites.includes(t.id) ? "is-favorite" : ""
-                        } ${
-                            hoveredId === t.id || favorites.includes(t.id)
+                        className={`translation-star ${favorites.includes(t.id) ? "is-favorite" : ""
+                            } ${hoveredId === t.id || favorites.includes(t.id)
                                 ? "visible"
                                 : ""
-                        }`}
+                            }`}
                         onClick={(e) => toggleFavorite(e, t.id)}
                         title={
                             favorites.includes(t.id)
@@ -173,9 +170,8 @@ const TranslationSelector = ({
     return (
         <div className="translation-selector" ref={dropdownRef}>
             <button
-                className={`translation-selector-trigger form-control ${
-                    isLoading ? "disabled" : ""
-                }`}
+                className={`translation-selector-trigger form-control ${isLoading ? "disabled" : ""
+                    }`}
                 onClick={() => !isLoading && setIsOpen(!isOpen)}
                 type="button"
                 disabled={isLoading}
@@ -234,10 +230,11 @@ const TranslationSelector = ({
                                         <Icon
                                             name={
                                                 isFavCollapsed
-                                                    ? "plus"
-                                                    : "minus"
+                                                    ? "chevron-right"
+                                                    : "chevron-down"
                                             }
                                             size={14}
+                                            className="translation-group-chevron"
                                         />
                                     </div>
                                     {!isFavCollapsed &&
@@ -267,9 +264,12 @@ const TranslationSelector = ({
                                         {languageName}
                                         <Icon
                                             name={
-                                                isCollapsed ? "plus" : "minus"
+                                                isCollapsed
+                                                    ? "chevron-right"
+                                                    : "chevron-down"
                                             }
                                             size={14}
+                                            className="translation-group-chevron"
                                         />
                                     </div>
                                     {!isCollapsed &&

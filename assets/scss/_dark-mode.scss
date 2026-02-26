@@ -1,0 +1,32 @@
+// ──── Dark Mode Variant CSS Custom Properties ────
+// Default dark variant: gold (warm neutral with gold accents)
+:root {
+  --dm-bg-base: #1a1a1a;
+  --dm-bg-surface: #242424;
+  --dm-bg-elevated: #2d2d2d;
+  --dm-bg-hover: #363636;
+  --dm-bg-overlay: rgba(18, 18, 18, 0.95);
+  --dm-bg-glass: rgba(30, 30, 30, 0.92);
+  --dm-border: #3d3d3d;
+  --dm-border-subtle: rgba(255, 255, 255, 0.08);
+  --dm-text-primary: #f1f1f1;
+  --dm-text-secondary: #aaa;
+  --dm-text-muted: #777;
+  --dm-accent: #{$rb-header-navigator-arrow};
+}
+
+// Blue variant: modern slate-blue tones
+html[data-dark-variant="blue"] {
+  --dm-bg-base: #0f172a;
+  --dm-bg-surface: #1e293b;
+  --dm-bg-elevated: #334155;
+  --dm-bg-hover: #475569;
+  --dm-bg-overlay: rgba(15, 23, 42, 0.95);
+  --dm-bg-glass: rgba(30, 41, 59, 0.92);
+  --dm-border: #334155;
+  --dm-border-subtle: rgba(148, 163, 184, 0.12);
+  --dm-text-primary: #f1f5f9;
+  --dm-text-secondary: #94a3b8;
+  --dm-text-muted: #64748b;
+  --dm-accent: #60a5fa;
+}

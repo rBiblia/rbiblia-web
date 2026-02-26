@@ -1,0 +1,485 @@
+// Comparison Modal Styles
+.comparison-overlay {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  @include dark-mode {
+    background: rgba(18, 18, 18, 0.85);
+  }
+
+  .selection-content {
+    max-width: 960px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+
+    @media (max-width: 575px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
+.comparison-box {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  @include dark-mode {
+    background: #252525;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background: #2a2a2a;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+.comparison-box-primary {
+  border: 2px solid $rb-header-navigator-arrow;
+  background: rgba($rb-header-navigator-arrow, 0.03);
+
+  @include dark-mode {
+    background: rgba($rb-header-navigator-arrow, 0.08);
+  }
+}
+
+.comparison-box-secondary {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  @include dark-mode {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.comparison-box-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  @include dark-mode {
+    color: #777;
+  }
+}
+
+.comparison-box-title-primary {
+  color: $rb-header-navigator-arrow;
+}
+
+.comparison-current-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  background: $rb-header-navigator-arrow;
+  color: white;
+}
+
+.comparison-text {
+  font-family: $font-bible;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin: 0;
+  color: #2c2c2c;
+  white-space: pre-wrap;
+
+  @include dark-mode {
+    color: #e5e5e5;
+  }
+}
+
+.comparison-text-primary {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.comparison-not-found {
+  font-style: italic;
+  color: #a0a0a0;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.comparison-loading {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+  color: $rb-header-navigator-arrow;
+}
+
+.comparison-divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  gap: 1.5rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.08), transparent);
+
+    @include dark-mode {
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+    }
+  }
+
+  span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+.comparison-selectors {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.comparison-slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.comparison-slot-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+
+  .translation-selector {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.comparison-slot-number {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #777;
+  flex-shrink: 0;
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+  }
+}
+
+.comparison-slot select {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: $rb-header-navigator-arrow;
+    box-shadow: 0 0 0 4px rgba($rb-header-navigator-arrow, 0.1);
+  }
+
+  @include dark-mode {
+    background: #333;
+    border-color: #444;
+    color: #eee;
+  }
+}
+
+// Comparison navigation header
+.comparison-nav-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.comparison-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+
+  @include dark-mode {
+    color: #fff;
+  }
+}
+
+.comparison-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(0, 0, 0, 0.04);
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+  }
+
+  &:hover:not(:disabled) {
+    background: $rb-header-navigator-arrow;
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba($rb-header-navigator-arrow, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.08);
+    color: #aaa;
+
+    &:hover:not(:disabled) {
+      background: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+.comparison-keyboard-hint {
+  font-size: 0.75rem;
+  color: #999;
+  padding: 0.25rem 0.5rem;
+  background: #f3f4f6;
+  border-radius: 4px;
+
+  @include dark-mode {
+    background: #333;
+    color: #777;
+  }
+}
+
+.rb-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .rb-switch-slider {
+    position: relative;
+    width: 106px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+  }
+
+  .rb-switch-text {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #777;
+    transition: all 0.3s ease;
+    z-index: 1;
+    margin-left: 18px;
+  }
+
+  input:checked+.rb-switch-slider {
+    background: $rb-header-navigator-arrow;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba($rb-header-navigator-arrow, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    &::before {
+      transform: translateX(74px);
+    }
+
+    .rb-switch-text {
+      color: white;
+      margin-left: -18px;
+    }
+  }
+
+  &:hover .rb-switch-slider {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  input:checked:hover+.rb-switch-slider {
+    background: darken($rb-header-navigator-arrow, 4%);
+    box-shadow: 0 6px 14px rgba($rb-header-navigator-arrow, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  @include dark-mode {
+    .rb-switch-slider {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+
+      &::before {
+        background: #e0e0e0;
+      }
+    }
+
+    .rb-switch-text {
+      color: #999;
+    }
+
+    input:checked+.rb-switch-slider {
+      background: $rb-header-navigator-arrow;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+
+      &::before {
+        background: #fff;
+      }
+
+      .rb-switch-text {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.comparison-diff-word {
+  background: rgba(245, 158, 11, 0.28);
+  color: inherit;
+  border-radius: 4px;
+  padding: 0.06rem 0.1rem;
+}
+
+// Diff mode toggle (Loose / Strict) in SideMenu
+.diff-mode-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid #e0e0e0;
+
+  @include dark-mode {
+    border-color: #444;
+  }
+}
+
+.diff-mode-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:first-child {
+    border-right: 1.5px solid #e0e0e0;
+
+    @include dark-mode {
+      border-right-color: #444;
+    }
+  }
+
+  &:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.04);
+
+    @include dark-mode {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &.active {
+    background: $rb-header-navigator-arrow;
+    color: #fff;
+    font-weight: 700;
+  }
+}
+
+.comparison-title-book {
+  font-weight: 500;
+  color: $rb-header-navigator-arrow;
+}
+
+// Responsive Book Name (Full vs Sigil)
+.comparison-title-full {
+  display: inline;
+
+  @media (max-width: 767px) {
+    font-size: 0.85em;
+  }
+
+  @media (max-width: 420px) {
+    display: none;
+  }
+}
+
+.comparison-title-sigil {
+  display: none;
+
+  @media (max-width: 420px) {
+    display: inline;
+  }
+}
+
+// Spacing between toggle and close button
+.comparison-overlay .selection-header>.d-flex {
+  gap: 0.75rem !important;
+}

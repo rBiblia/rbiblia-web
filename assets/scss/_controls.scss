@@ -1,0 +1,183 @@
+// ---------------------------------------------------------
+// Compact Tiles for Mobile Sigla
+// ---------------------------------------------------------
+
+.tile-compact {
+  padding: 10px 5px;
+  min-width: 55px;
+
+  .tile-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+}
+
+// Smaller grid on mobile for sigla
+@media (max-width: 767.98px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+}
+
+// ---------------------------------------------------------
+// Font Size Control
+// ---------------------------------------------------------
+
+.font-size-control {
+  position: fixed;
+  bottom: 90px;
+  right: 15px;
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+
+  @media (min-width: 992px) {
+    bottom: 50px;
+  }
+}
+
+.font-size-toggle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #555;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @include dark-mode {
+    background: #333;
+    color: #ddd;
+  }
+}
+
+.font-size-panel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  border-radius: 24px;
+  padding: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.2s ease-out;
+
+  @include dark-mode {
+    background: #333;
+  }
+}
+
+.font-size-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #444;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @include dark-mode {
+    color: #ddd;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.font-size-value {
+  min-width: 48px;
+  height: 32px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #666;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #eee;
+    border-color: #ccc;
+  }
+
+  @include dark-mode {
+    background: #444;
+    border-color: #555;
+    color: #ccc;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ---------------------------------------------------------
+// Swipe Hint Animation (Optional visual feedback)
+// ---------------------------------------------------------
+
+.swipe-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+
+  &.visible {
+    opacity: 1;
+  }
+}

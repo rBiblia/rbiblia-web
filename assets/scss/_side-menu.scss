@@ -1,0 +1,716 @@
+// ---------------------------------------------------------
+// Side Menu Styles
+// ---------------------------------------------------------
+
+// Sticky tab button on the right edge - shifted lower
+.side-menu-tab {
+  position: fixed;
+  right: 0;
+  top: 70%; // Lower on the screen
+  transform: translateY(-50%);
+  z-index: 1100;
+  width: 36px;
+  height: 70px;
+  background: $rb-header-navigator-arrow;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+  color: white;
+  opacity: 0.85;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    width: 44px;
+    opacity: 1;
+    background: darken($rb-header-navigator-arrow, 8%);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  // Even lower on mobile
+  @media (max-width: 991.98px) {
+    top: auto;
+    bottom: 110px; // Above bottom navigation
+    transform: none;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  // Hide on desktop - header buttons are used instead
+  @media (min-width: 992px) {
+    display: none;
+  }
+}
+
+// Overlay
+.side-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Sliding panel (SideMenu)
+.side-menu-panel {
+  position: fixed;
+  top: 12px;
+  bottom: 12px;
+  right: 12px;
+  width: 380px;
+  max-width: calc(100% - 24px);
+  @include glassmorphism-panel(0.75, 25px);
+  @include gpu-accelerate;
+  z-index: 2100;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+
+  // High performance transition
+  transform: translateX(calc(100% + 20px));
+  visibility: hidden;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s step-end;
+
+  &.open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s step-start;
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-glass);
+    border-color: var(--dm-border-subtle);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 575px) {
+    width: calc(100% - 24px);
+  }
+}
+
+// Side Menu Dock (Navigation)
+.side-menu-dock {
+  width: 64px;
+  background: rgba(0, 0, 0, 0.03);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 0.75rem;
+  flex-shrink: 0;
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.03);
+    border-right-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.side-menu-dock-item {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  @include interactive-scale(0.92);
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.2;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #444;
+  }
+
+  &.active {
+    background: $rb-header-navigator-arrow;
+    color: white;
+    box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.3);
+  }
+
+  @include dark-mode {
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #eee;
+    }
+
+    &.active {
+      color: white;
+    }
+  }
+}
+
+.side-menu-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.side-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.side-menu-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+
+  @include dark-mode {
+    color: #eee;
+  }
+}
+
+.side-menu-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #333;
+  }
+
+  @include dark-mode {
+    color: #aaa;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #eee;
+    }
+  }
+}
+
+.side-menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+
+  @include dark-mode {
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.side-menu-section {
+  margin-bottom: 1.5rem;
+}
+
+// Tile System
+.setting-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  margin-top: 0.5rem;
+
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.setting-tile {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #444;
+  font-weight: 500;
+  text-align: center;
+  position: relative;
+  @include interactive-scale;
+
+  .tile-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .tile-label {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  &:hover {
+    border-color: rgba($rb-header-navigator-arrow, 0.4);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  &.active {
+    background: white;
+    border-color: $rb-header-navigator-arrow;
+    border-width: 2px;
+    color: $rb-header-navigator-arrow;
+    box-shadow: 0 8px 16px rgba($rb-header-navigator-arrow, 0.12);
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 0.6rem;
+      background: $rb-header-navigator-arrow;
+      color: white;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba($rb-header-navigator-arrow, 0.5);
+    }
+
+    &.active {
+      background: rgba($rb-header-navigator-arrow, 0.15);
+      border-color: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+.side-menu-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 1rem;
+
+  @include dark-mode {
+    color: #777;
+  }
+}
+
+.setting-group {
+  margin-bottom: 1rem;
+}
+
+.setting-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 0.75rem;
+
+  @include dark-mode {
+    color: #bbb;
+  }
+}
+
+.font-size-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 0.5rem;
+}
+
+.font-size-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #444;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  @include interactive-scale;
+
+  &:hover {
+    border-color: rgba($rb-header-navigator-arrow, 0.4);
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  &.active {
+    border-color: $rb-header-navigator-arrow;
+    background: $rb-header-navigator-arrow;
+    color: white;
+    box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.25);
+  }
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba($rb-header-navigator-arrow, 0.5);
+    }
+
+    &.active {
+      background: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+// Hint text in settings
+.setting-hint {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.75rem;
+
+  @include dark-mode {
+    color: #999;
+  }
+}
+
+// Notes backup buttons
+.notes-backup-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.backup-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 2px solid;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.backup-export {
+  background: rgba($rb-header-navigator-arrow, 0.1);
+  border-color: $rb-header-navigator-arrow;
+  color: $rb-header-navigator-arrow;
+
+  &:hover {
+    background: $rb-header-navigator-arrow;
+    color: white;
+  }
+}
+
+.backup-import {
+  background: white;
+  border-color: #ddd;
+  color: #555;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+    background: rgba($rb-header-navigator-arrow, 0.05);
+    color: $rb-header-navigator-arrow;
+  }
+
+  @include dark-mode {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #ccc;
+
+    &:hover {
+      border-color: $rb-header-navigator-arrow;
+      color: $rb-header-navigator-arrow;
+    }
+  }
+}
+
+.backup-changelog {
+  width: 100%;
+  justify-content: center;
+  background: white;
+  border-color: #ddd;
+  color: #555;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+    background: rgba($rb-header-navigator-arrow, 0.05);
+    color: $rb-header-navigator-arrow;
+  }
+
+  @include dark-mode {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #ccc;
+
+    &:hover {
+      border-color: $rb-header-navigator-arrow;
+      color: $rb-header-navigator-arrow;
+    }
+  }
+}
+
+.import-status {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.import-success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.import-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+// Comparison limit buttons
+.comparison-limit-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.comparison-limit-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: $rb-header-navigator-arrow;
+    background: rgba($rb-header-navigator-arrow, 0.05);
+  }
+
+  &.active {
+    border-color: $rb-header-navigator-arrow;
+    background: $rb-header-navigator-arrow;
+    color: white;
+  }
+
+  @include dark-mode {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #ddd;
+
+    &:hover {
+      border-color: $rb-header-navigator-arrow;
+    }
+
+    &.active {
+      background: $rb-header-navigator-arrow;
+      color: white;
+    }
+  }
+}
+
+// Favorite translations list
+.favorite-translations-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  @include dark-mode {
+    border-color: #444;
+  }
+}
+
+.favorite-translation-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #eee;
+  border-radius: 8px;
+  margin: 4px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba($rb-header-navigator-arrow, 0.08);
+    transform: translateX(4px);
+  }
+
+  &.is-favorite {
+    background: rgba($rb-header-navigator-arrow, 0.04);
+    border: 1px solid rgba($rb-header-navigator-arrow, 0.1);
+
+    .favorite-star {
+      color: #fbbf24;
+    }
+  }
+
+  .favorite-star {
+    font-size: 1.25rem;
+    color: #ccc;
+    transition: color 0.15s ease;
+  }
+
+  .favorite-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+  }
+
+  @include dark-mode {
+    border-bottom-color: #333;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &.is-favorite {
+      background: rgba($rb-header-navigator-arrow, 0.15);
+      border-color: rgba($rb-header-navigator-arrow, 0.2);
+    }
+
+    .favorite-star {
+      color: #555;
+    }
+
+    &.is-favorite .favorite-star {
+      color: #fbbf24;
+    }
+
+    .favorite-name {
+      color: #ddd;
+    }
+  }
+}
+
+// Style for "bottom-nav-btn-primary" instead of "bottom-nav-btn-center"
+.bottom-nav-btn-primary {
+  color: $rb-header-navigator-arrow;
+
+  .bottom-nav-icon {
+    stroke-width: 2.5;
+  }
+
+  &:hover:not(:disabled) {
+    color: darken($rb-header-navigator-arrow, 10%);
+  }
+}
+
+// Coming soon placeholder
+.coming-soon-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #888;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+// ---------------------------------------------------------
+// Bottom Nav Arrow Buttons
+// ---------------------------------------------------------
+
+.bottom-nav-arrow {
+  min-width: 50px;
+  padding: 0.5rem;
+
+  .bottom-nav-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
