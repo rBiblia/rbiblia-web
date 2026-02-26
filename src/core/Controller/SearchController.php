@@ -23,7 +23,7 @@ class SearchController
     public function query(string $language, ?string $inputStream = null): void
     {
         try {
-            $inputStream = $inputStream ?? file_get_contents('php://input');
+            $inputStream ??= file_get_contents('php://input');
             $searchQuery = (new SearchQueryProvider($language, $inputStream))->getSearchQuery();
         } catch (\InvalidArgumentException $e) {
             $this->setErrorResponse($e->getMessage());

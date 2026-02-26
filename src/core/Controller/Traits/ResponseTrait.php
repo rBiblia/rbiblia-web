@@ -15,7 +15,7 @@ trait ResponseTrait
 
         echo json_encode($this->response, \JSON_THROW_ON_ERROR);
 
-        if (defined('IS_PHPUNIT')) {
+        if (\defined('IS_PHPUNIT')) {
             throw new \RuntimeException('Response sent');
         }
 

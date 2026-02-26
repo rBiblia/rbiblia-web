@@ -32,7 +32,7 @@ class SearchControllerTest extends TestCase
 
     public function testQueryReturnsResults(): void
     {
-        $inputStream = json_encode(['translation' => 'en_kjv', 'query' => 'God heaven']);
+        $inputStream = json_encode(['translation' => 'en_kjv', 'query' => 'God heaven']) ?: null;
 
         $this->expectOutputRegex('(In the beginning God)');
 
@@ -58,7 +58,7 @@ class SearchControllerTest extends TestCase
 
     public function testQueryEmptyWordsReturnsNoResults(): void
     {
-        $inputStream = json_encode(['translation' => 'en_kjv', 'query' => '   ']);
+        $inputStream = json_encode(['translation' => 'en_kjv', 'query' => '   ']) ?: null;
 
         $this->expectOutputRegex('("results":\[\])');
 
@@ -71,7 +71,7 @@ class SearchControllerTest extends TestCase
 
     public function testQueryDatabaseErrorReturnsErrorResponse(): void
     {
-        $inputStream = json_encode(['translation' => 'en_nonexistent', 'query' => 'God']);
+        $inputStream = json_encode(['translation' => 'en_nonexistent', 'query' => 'God'])  ?: null;
 
         $this->expectOutputRegex('("code":404)');
 
