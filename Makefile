@@ -25,6 +25,7 @@ help:
 	$(call list_item, "rector", "fix PHP deprecations using rector tool")
 	$(call list_item, "phpstan", "analyse PHP code structure using phpstan tool")
 	$(call list_item, "test", "run PHP test suite")
+	$(call list_item, "test-js", "run JS test suite")
 	@printf "\n"
 .PHONY:
 
@@ -92,4 +93,8 @@ phpstan:
 
 test:
 	@docker exec -t ${APP_IMAGE_NAME} src/vendor/bin/phpunit
+.PHONY:
+
+test-js:
+	@docker exec -t ${APP_IMAGE_NAME} yarn test
 .PHONY:
