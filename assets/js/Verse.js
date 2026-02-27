@@ -183,15 +183,20 @@ const Verse = memo(function Verse({
     return (
         <div
             ref={verseRef}
-            className={`row line ${isPressing ? "pressing" : ""} ${hasNote ? "has-note" : ""
-                } ${isHighlighted ? "highlighted" : ""}`}
+            className={`row line ${isPressing ? "pressing" : ""} ${
+                hasNote ? "has-note" : ""
+            } ${isHighlighted ? "highlighted" : ""}`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <div className="verse-actions">
                     <button
                         type="button"
-                        className={`verse-action-btn verse-action-note ${hasNote ? "has-note-value" : ""}`}
-                        title={formatMessage({ id: hasNote ? "edit" : "addNote" })}
+                        className={`verse-action-btn verse-action-note ${
+                            hasNote ? "has-note-value" : ""
+                        }`}
+                        title={formatMessage({
+                            id: hasNote ? "edit" : "addNote",
+                        })}
                         onClick={openNoteEditor}
                     >
                         <svg
@@ -248,10 +253,11 @@ const Verse = memo(function Verse({
                 {hasNote && (
                     <div className="verse-note-preview-wrap">
                         <div
-                            className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
-                                ? "is-collapsed"
-                                : ""
-                                }`}
+                            className={`verse-note-preview ${
+                                isNoteExpandable && !isNoteExpanded
+                                    ? "is-collapsed"
+                                    : ""
+                            }`}
                         >
                             {noteText}
                         </div>

@@ -347,7 +347,7 @@ const Bible = ({ intl, setLocale }) => {
         return (
             !isStructureLoading &&
             typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-            "undefined"
+                "undefined"
         );
     };
 

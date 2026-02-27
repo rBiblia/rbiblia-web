@@ -480,8 +480,8 @@ const ComparisonGrid = ({
 
     // Swipe navigation for touch devices
     useSwipeNavigation(
-        handleNextVerse,  // Swipe left  → next verse
-        handlePrevVerse,  // Swipe right → previous verse
+        handleNextVerse, // Swipe left  → next verse
+        handlePrevVerse, // Swipe right → previous verse
         {
             threshold: 60,
             enabled: true,
