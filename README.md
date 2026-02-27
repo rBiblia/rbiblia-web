@@ -5,6 +5,7 @@
 ![rector](https://github.com/rbiblia/rbiblia-web/actions/workflows/rector.yaml/badge.svg)
 ![lint](https://github.com/rbiblia/rbiblia-web/actions/workflows/lint.yaml/badge.svg)
 ![phpunit](https://github.com/rbiblia/rbiblia-web/actions/workflows/phpunit.yaml/badge.svg)
+![js-tests](https://github.com/rbiblia/rbiblia-web/actions/workflows/js-tests.yaml/badge.svg)
 ![sonarcloud](https://github.com/rbiblia/rbiblia-web/actions/workflows/sonarcloud.yaml/badge.svg)
 
 Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://web.rbiblia.toborek.info](https://web.rbiblia.toborek.info).
@@ -26,12 +27,6 @@ App was created using PHP v8.2 on the backend with support of ReactJS v17 on the
 ## API Specification
 
 Documentation for the API was created in OpenAPI format and is hosted [here](https://rbiblia.github.io/rbiblia-web/api).
-
-## Todo's
-
-- [React] add better error handling when dealing with response data (display error message when something will fail)
-- [React] add caching to avoid server querying with every location change (if location was visited then keep it in memory and use it again)
-- [React] implement searching
 
 ## Donations
 
