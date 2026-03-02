@@ -662,9 +662,8 @@ const Bible = ({ intl, setLocale }) => {
                 bookName={books[selectedBook]?.name}
                 translationId={selectedTranslation}
                 translationName={
-                    translations?.find?.(
-                        (t) => t.id === selectedTranslation
-                    )?.name || selectedTranslation
+                    translations?.find?.((t) => t.id === selectedTranslation)
+                        ?.name || selectedTranslation
                 }
             />
             <ChangelogModal

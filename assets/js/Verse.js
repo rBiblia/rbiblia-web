@@ -215,15 +215,17 @@ const Verse = memo(function Verse({
     return (
         <div
             ref={verseRef}
-            className={`row line ${isPressing ? "pressing" : ""} ${hasAnyNote ? "has-note" : ""
-                } ${isHighlighted ? "highlighted" : ""}`}
+            className={`row line ${isPressing ? "pressing" : ""} ${
+                hasAnyNote ? "has-note" : ""
+            } ${isHighlighted ? "highlighted" : ""}`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <div className="verse-actions">
                     <button
                         type="button"
-                        className={`verse-action-btn verse-action-note ${hasAnyNote ? "has-note-value" : ""
-                            }`}
+                        className={`verse-action-btn verse-action-note ${
+                            hasAnyNote ? "has-note-value" : ""
+                        }`}
                         title={formatMessage({
                             id: hasAnyNote ? "edit" : "addNote",
                         })}
@@ -284,10 +286,11 @@ const Verse = memo(function Verse({
                     <div className="verse-note-preview-wrap">
                         {hasNote && (
                             <div
-                                className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
+                                className={`verse-note-preview ${
+                                    isNoteExpandable && !isNoteExpanded
                                         ? "is-collapsed"
                                         : ""
-                                    }`}
+                                }`}
                             >
                                 {hasTranslationNote && (
                                     <span className="verse-note-label verse-note-label-global">
@@ -301,10 +304,11 @@ const Verse = memo(function Verse({
                         )}
                         {hasTranslationNote && (
                             <div
-                                className={`verse-note-preview verse-note-preview-translation ${isNoteExpandable && !isNoteExpanded
+                                className={`verse-note-preview verse-note-preview-translation ${
+                                    isNoteExpandable && !isNoteExpanded
                                         ? "is-collapsed"
                                         : ""
-                                    }`}
+                                }`}
                             >
                                 {hasNote && (
                                     <span className="verse-note-label verse-note-label-translation">
