@@ -382,7 +382,7 @@
 
 // Immersive Mode - Bottom Navigation Transition
 .bottom-nav {
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.nav-hidden-bottom {
     transform: translateY(100%);
@@ -391,7 +391,7 @@
 
 // Immersive Mode - Side Menu Tab (FAB) Transition
 .side-menu-tab {
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.nav-hidden-fab {
     transform: scale(0);
@@ -474,12 +474,14 @@
 
   transform: translateX(calc(100% + 20px));
   visibility: hidden;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s step-end;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.45s step-end;
 
   &.open {
     transform: translateX(0);
     visibility: visible;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s step-start;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s step-start;
   }
 
   @include dark-mode {

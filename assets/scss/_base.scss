@@ -1,6 +1,6 @@
 // Typography
-$font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-$font-bible: 'Crimson Text', Georgia, 'Times New Roman', serif;
+$font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$font-bible: "Crimson Text", Georgia, "Times New Roman", serif;
 
 @mixin rb-border {
   border-left: 1px solid $rb-border-color;
@@ -155,7 +155,7 @@ main {
         position: relative;
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           left: 0;
           top: 0;
@@ -172,8 +172,6 @@ main {
         pointer-events: auto;
       }
     }
-
-
 
     // Verse number cell with floating action buttons
     .verse-number-cell {
@@ -193,7 +191,8 @@ main {
         padding: 4px;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
+          0 1px 3px rgba(0, 0, 0, 0.08);
         opacity: 0;
         visibility: hidden;
         transition: all 0.15s ease;
@@ -202,7 +201,8 @@ main {
 
         @include dark-mode {
           background: var(--dm-bg-elevated);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4),
+            0 1px 3px rgba(0, 0, 0, 0.2);
         }
       }
 
@@ -320,7 +320,7 @@ main {
 }
 
 header,
-footer>.container {
+footer > .container {
   @include rb-border;
 }
 
@@ -432,14 +432,13 @@ footer {
   overflow-y: hidden;
   width: 100%;
 
-  &>.container {
+  & > .container {
     background: $rb-footer-background-color;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
   }
 
   a {
-
     &:link,
     &:visited {
       color: $rb-footer-link-color;
@@ -466,7 +465,8 @@ footer {
     overflow: hidden;
     transform-origin: 46% 54%;
     animation: preloader-image-spin 1s linear infinite;
-    background: url("../images/preloader.svg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("../images/preloader.svg") no-repeat scroll 0 0
+      rgba(0, 0, 0, 0);
   }
 }
 
@@ -500,7 +500,7 @@ footer {
   }
 
   header,
-  footer>.container,
+  footer > .container,
   main {
     @include rb-border-clean;
   }

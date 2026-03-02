@@ -42,12 +42,14 @@
 
   transform: translateX(calc(100% + 20px));
   visibility: hidden;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s step-end;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.45s step-end;
 
   &.open {
     transform: translateX(0);
     visibility: visible;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s step-start;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s step-start;
   }
 
   @include dark-mode {
@@ -652,7 +654,7 @@
     line-height: 1.4;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       top: 0.4rem;
