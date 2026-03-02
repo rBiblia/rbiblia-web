@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "rbiblia",
+        "projectKey": "rBiblia_rbiblia-web"
+    }
+}

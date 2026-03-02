@@ -95,12 +95,14 @@
   // High performance transition
   transform: translateX(calc(100% + 20px));
   visibility: hidden;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s step-end;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.45s step-end;
 
   &.open {
     transform: translateX(0);
     visibility: visible;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s step-start;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s step-start;
   }
 
   @include dark-mode {
@@ -313,7 +315,7 @@
     box-shadow: 0 8px 16px rgba($rb-header-navigator-arrow, 0.12);
 
     &::after {
-      content: '✓';
+      content: "✓";
       position: absolute;
       top: 6px;
       right: 8px;

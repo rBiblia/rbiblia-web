@@ -83,7 +83,6 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @include reduced-motion {
-
   // Disable all animations
   *,
   *::before,
@@ -133,7 +132,6 @@ header.sticky-top {
 // Dark mode skeleton fix for reduced motion
 @include dark-mode {
   @include reduced-motion {
-
     .skeleton-verse-number,
     .skeleton-line {
       background: #333 !important;
@@ -145,7 +143,6 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @media screen and (orientation: landscape) and (max-height: 500px) {
-
   // Compact bottom navigation in landscape
   .bottom-nav {
     padding: 0.25rem 0;
@@ -351,7 +348,6 @@ header.sticky-top {
 
 // Better visual feedback for touch interactions
 @media (hover: none) and (pointer: coarse) {
-
   // Touch devices get larger hit areas
   .tile {
     min-height: 54px;
@@ -394,7 +390,6 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @media (prefers-contrast: high) {
-
   .tile,
   .setting-tile,
   .search-result-item,
@@ -844,7 +839,6 @@ header.sticky-top {
     border-left-color: rgba($rb-header-navigator-arrow, 0.35);
   }
 }
-
 
 // Remove default outline when custom focus is applied
 button:focus-visible,

@@ -631,23 +631,6 @@ const ComparisonGrid = ({
                     </div>
 
                     <div className="d-flex align-items-center gap-2">
-                        <label
-                            className="rb-switch"
-                            title={formatMessage({
-                                id: "toggleDifferencesKeyboardHint",
-                            })}
-                        >
-                            <input
-                                type="checkbox"
-                                checked={isDiffHighlightEnabled}
-                                onChange={toggleDiffHighlight}
-                            />
-                            <span className="rb-switch-slider">
-                                <span className="rb-switch-text">
-                                    {formatMessage({ id: "toggleDifferences" })}
-                                </span>
-                            </span>
-                        </label>
                         <span className="comparison-keyboard-hint d-none d-lg-block">
                             ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
                             {formatMessage({ id: "toggleDifferences" })}
@@ -663,15 +646,36 @@ const ComparisonGrid = ({
                     {/* Original verse */}
                     <div className="comparison-original mb-4">
                         <div className="comparison-box comparison-box-primary">
-                            <div className="comparison-box-title comparison-box-title-primary">
-                                {translations.find(
-                                    (t) => t.id === currentTranslation
-                                )?.name || currentTranslation}
-                                <span className="comparison-current-badge">
-                                    {formatMessage({
-                                        id: "currentTranslation",
+                            <div className="comparison-box-header">
+                                <div className="comparison-box-title comparison-box-title-primary">
+                                    {translations.find(
+                                        (t) => t.id === currentTranslation
+                                    )?.name || currentTranslation}
+                                    <span className="comparison-current-badge">
+                                        {formatMessage({
+                                            id: "currentTranslation",
+                                        })}
+                                    </span>
+                                </div>
+                                <label
+                                    className="rb-switch"
+                                    title={formatMessage({
+                                        id: "toggleDifferencesKeyboardHint",
                                     })}
-                                </span>
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={isDiffHighlightEnabled}
+                                        onChange={toggleDiffHighlight}
+                                    />
+                                    <span className="rb-switch-slider">
+                                        <span className="rb-switch-text">
+                                            {formatMessage({
+                                                id: "toggleDifferences",
+                                            })}
+                                        </span>
+                                    </span>
+                                </label>
                             </div>
                             {comparedVerses[currentTranslation] ? (
                                 <p className="comparison-text comparison-text-primary">
