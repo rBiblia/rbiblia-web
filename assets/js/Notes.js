@@ -492,22 +492,25 @@ const NotesPanel = ({
                 {/* Filter tabs */}
                 <div className="notes-filter">
                     <button
-                        className={`notes-filter-btn ${filter === "current" ? "active" : ""
-                            }`}
+                        className={`notes-filter-btn ${
+                            filter === "current" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("current")}
                     >
                         {formatMessage({ id: "currentChapter" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${filter === "all" ? "active" : ""
-                            }`}
+                        className={`notes-filter-btn ${
+                            filter === "all" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("all")}
                     >
                         {formatMessage({ id: "allNotes" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${filter === "general" ? "active" : ""
-                            }`}
+                        className={`notes-filter-btn ${
+                            filter === "general" ? "active" : ""
+                        }`}
                         onClick={() => setFilter("general")}
                     >
                         {formatMessage({ id: "generalNotes" })}
@@ -742,20 +745,21 @@ const NotesPanel = ({
                                                                 {verse}
                                                             </button>
                                                             <span
-                                                                className={`note-type-badge ${type ===
+                                                                className={`note-type-badge ${
+                                                                    type ===
                                                                     "translation"
-                                                                    ? "note-type-translation"
-                                                                    : "note-type-global"
-                                                                    }`}
+                                                                        ? "note-type-translation"
+                                                                        : "note-type-global"
+                                                                }`}
                                                             >
                                                                 {type ===
-                                                                    "translation"
+                                                                "translation"
                                                                     ? translationId
                                                                     : formatMessage(
-                                                                        {
-                                                                            id: "noteGlobal",
-                                                                        }
-                                                                    )}
+                                                                          {
+                                                                              id: "noteGlobal",
+                                                                          }
+                                                                      )}
                                                             </span>
                                                         </div>
                                                         <div className="note-actions">
@@ -977,7 +981,9 @@ const NoteEditor = ({
                 {/* Tabs for global vs translation note */}
                 <div className="note-editor-tabs">
                     <button
-                        className={`note-editor-tab ${activeTab === "global" ? "active" : ""}`}
+                        className={`note-editor-tab ${
+                            activeTab === "global" ? "active" : ""
+                        }`}
                         onClick={() => setActiveTab("global")}
                     >
                         <svg
@@ -997,7 +1003,9 @@ const NoteEditor = ({
                     </button>
                     {translationId && (
                         <button
-                            className={`note-editor-tab ${activeTab === "translation" ? "active" : ""}`}
+                            className={`note-editor-tab ${
+                                activeTab === "translation" ? "active" : ""
+                            }`}
                             onClick={() => setActiveTab("translation")}
                         >
                             <svg

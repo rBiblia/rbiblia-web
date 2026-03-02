@@ -11,7 +11,6 @@ const FAVORITE_TRANSLATIONS_UPDATED_EVENT =
 const COMPARISON_DIFF_STRICT_KEY = "rbiblia_comparison_diff_strict";
 
 const SideMenu = ({ isOpen, onClose, children }) => {
-
     // Focus trap for keyboard navigation
     const panelRef = useFocusTrap(isOpen, onClose);
 
@@ -89,8 +88,8 @@ const saveFavoriteTranslations = (favorites) => {
         FAVORITE_TRANSLATIONS_STORAGE_KEY,
         JSON.stringify(favorites)
     );
-    if (globalThis.window !== undefined) {
-        globalThis.dispatchEvent(
+    if (typeof window !== "undefined") {
+        window.dispatchEvent(
             new CustomEvent(FAVORITE_TRANSLATIONS_UPDATED_EVENT, {
                 detail: favorites,
             })
@@ -147,12 +146,12 @@ const DisplaySettings = ({
             setFavoriteTranslations(getFavoriteTranslations());
         };
 
-        globalThis.addEventListener(
+        window.addEventListener(
             FAVORITE_TRANSLATIONS_UPDATED_EVENT,
             handleFavoritesUpdated
         );
         return () => {
-            globalThis.removeEventListener(
+            window.removeEventListener(
                 FAVORITE_TRANSLATIONS_UPDATED_EVENT,
                 handleFavoritesUpdated
             );
@@ -175,7 +174,10 @@ const DisplaySettings = ({
     const themes = [
         {
             value: "system",
-            label: formatMessage({ id: "themeSystem", defaultMessage: "System" }),
+            label: formatMessage({
+                id: "themeSystem",
+                defaultMessage: "System",
+            }),
             icon: "⚙️",
         },
         {
@@ -253,8 +255,6 @@ const DisplaySettings = ({
         saveFavoriteTranslations(newFavorites);
     };
 
-
-
     // Filter only favorite translations
     const favoriteTranslationsList = translations.filter((t) =>
         favoriteTranslations.includes(t.id)
@@ -267,8 +267,9 @@ const DisplaySettings = ({
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
-                        className={`side-menu-dock-item ${activeTab === tab.id ? "active" : ""
-                            }`}
+                        className={`side-menu-dock-item ${
+                            activeTab === tab.id ? "active" : ""
+                        }`}
                         onClick={() => setActiveTab(tab.id)}
                         title={tab.label}
                     >
@@ -309,10 +310,11 @@ const DisplaySettings = ({
                                     {fontSizes.map((fs) => (
                                         <button
                                             key={fs.value}
-                                            className={`font-size-btn ${fontSize === fs.value
-                                                ? "active"
-                                                : ""
-                                                }`}
+                                            className={`font-size-btn ${
+                                                fontSize === fs.value
+                                                    ? "active"
+                                                    : ""
+                                            }`}
                                             onClick={() =>
                                                 setFontSize(fs.value)
                                             }
@@ -334,10 +336,11 @@ const DisplaySettings = ({
                                         {fontFamilies.map((ff) => (
                                             <button
                                                 key={ff.value}
-                                                className={`font-family-btn ${fontFamily === ff.value
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`font-family-btn ${
+                                                    fontFamily === ff.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setFontFamily(ff.value)
                                                 }
@@ -371,10 +374,11 @@ const DisplaySettings = ({
                                         {themes.map((t) => (
                                             <button
                                                 key={t.value}
-                                                className={`setting-tile ${theme === t.value
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`setting-tile ${
+                                                    theme === t.value
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setTheme(t.value)
                                                 }
@@ -405,10 +409,11 @@ const DisplaySettings = ({
                                         </label>
                                         <div className="setting-tiles-grid grid-2">
                                             <button
-                                                className={`setting-tile ${darkVariant === "gold"
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`setting-tile ${
+                                                    darkVariant === "gold"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setDarkVariant("gold")
                                                 }
@@ -430,10 +435,11 @@ const DisplaySettings = ({
                                                 </span>
                                             </button>
                                             <button
-                                                className={`setting-tile ${darkVariant === "blue"
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`setting-tile ${
+                                                    darkVariant === "blue"
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     setDarkVariant("blue")
                                                 }
@@ -475,8 +481,9 @@ const DisplaySettings = ({
                                     {["pl", "en", "de"].map((lang) => (
                                         <button
                                             key={lang}
-                                            className={`setting-tile ${locale === lang ? "active" : ""
-                                                }`}
+                                            className={`setting-tile ${
+                                                locale === lang ? "active" : ""
+                                            }`}
                                             onClick={() =>
                                                 setLocaleAndUpdateHistory(lang)
                                             }
@@ -519,10 +526,11 @@ const DisplaySettings = ({
                                         {comparisonOptions.map((num) => (
                                             <button
                                                 key={num}
-                                                className={`comparison-limit-btn ${comparisonLimit === num
-                                                    ? "active"
-                                                    : ""
-                                                    }`}
+                                                className={`comparison-limit-btn ${
+                                                    comparisonLimit === num
+                                                        ? "active"
+                                                        : ""
+                                                }`}
                                                 onClick={() =>
                                                     handleComparisonLimitChange(
                                                         num
@@ -544,8 +552,9 @@ const DisplaySettings = ({
                                     </p>
                                     <div className="diff-mode-toggle">
                                         <button
-                                            className={`diff-mode-btn ${diffStrict ? "" : "active"
-                                                }`}
+                                            className={`diff-mode-btn ${
+                                                diffStrict ? "" : "active"
+                                            }`}
                                             onClick={() => {
                                                 setDiffStrict(false);
                                                 setDiffModeStrict(false);
@@ -556,8 +565,9 @@ const DisplaySettings = ({
                                             })}
                                         </button>
                                         <button
-                                            className={`diff-mode-btn ${diffStrict ? "active" : ""
-                                                }`}
+                                            className={`diff-mode-btn ${
+                                                diffStrict ? "active" : ""
+                                            }`}
                                             onClick={() => {
                                                 setDiffStrict(true);
                                                 setDiffModeStrict(true);
@@ -634,7 +644,6 @@ const DisplaySettings = ({
                             </div>
                         </div>
                     )}
-
 
                     {/* Info tab */}
                     {activeTab === "info" && (
