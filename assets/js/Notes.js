@@ -4,11 +4,27 @@ import useFocusTrap from "./hooks/useFocusTrap";
 
 const NOTES_STORAGE_KEY = "rbiblia_notes";
 const GENERAL_NOTES_KEY = "rbiblia_general_notes";
+const TRANSLATION_NOTES_KEY = "rbiblia_translation_notes";
 
 /**
  * Get verse key for storage
  */
 const getVerseKey = (book, chapter, verse) => `${book}_${chapter}_${verse}`;
+
+/**
+ * Get translation-specific verse key for storage
+ */
+const getTranslationVerseKey = (translationId, book, chapter, verse) =>
+    `${translationId}:${book}_${chapter}_${verse}`;
+
+/**
+ * Parse a translation verse key back to its components
+ */
+const parseTranslationVerseKey = (key) => {
+    const [translationId, rest] = key.split(":");
+    const [book, chapter, verse] = rest.split("_");
+    return { translationId, book, chapter, verse };
+};
 
 /**
  * Load all notes from localStorage
@@ -49,6 +65,158 @@ const saveGeneralNotes = (notes) => {
 };
 
 /**
+ * Load translation-specific notes from localStorage
+ */
+const loadTranslationNotes = () => {
+    try {
+        const saved = localStorage.getItem(TRANSLATION_NOTES_KEY);
+        return saved ? JSON.parse(saved) : {};
+    } catch {
+        return {};
+    }
+};
+
+/**
+ * Save translation-specific notes to localStorage
+ */
+const saveTranslationNotes = (notes) => {
+    localStorage.setItem(TRANSLATION_NOTES_KEY, JSON.stringify(notes));
+};
+
+/**
+ * Export all notes to rBiblia-compatible XML format
+ */
+const exportNotesXml = () => {
+    const globalNotes = loadNotes();
+    const translationNotes = loadTranslationNotes();
+
+    // Group translation notes by translationId
+    const byTranslation = {};
+    for (const [key, text] of Object.entries(translationNotes)) {
+        const { translationId, book, chapter, verse } =
+            parseTranslationVerseKey(key);
+        if (!byTranslation[translationId]) {
+            byTranslation[translationId] = [];
+        }
+        byTranslation[translationId].push({ book, chapter, verse, text });
+    }
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<notes app="rBiblia">\n';
+
+    // Global notes (translation without id)
+    const globalEntries = Object.entries(globalNotes);
+    if (globalEntries.length > 0) {
+        xml += "  <translation>\n";
+        for (const [key, text] of globalEntries) {
+            const [book, chapter, verse] = key.split("_");
+            const escapedText = escapeXml(text);
+            xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapedText}</note>\n`;
+        }
+        xml += "  </translation>\n";
+    }
+
+    // Translation-specific notes
+    for (const [translationId, notes] of Object.entries(byTranslation)) {
+        xml += `  <translation id="${escapeXml(translationId)}">\n`;
+        for (const { book, chapter, verse, text } of notes) {
+            const escapedText = escapeXml(text);
+            xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapedText}</note>\n`;
+        }
+        xml += "  </translation>\n";
+    }
+
+    xml += "</notes>\n";
+    return xml;
+};
+
+/**
+ * Escape special XML characters
+ */
+const escapeXml = (str) =>
+    str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+
+/**
+ * Import notes from rBiblia-compatible XML format
+ * Merges with existing notes (imported overwrite existing on conflict)
+ */
+const importNotesXml = (xmlString) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlString, "text/xml");
+
+    const errorNode = doc.querySelector("parsererror");
+    if (errorNode) {
+        throw new Error("Invalid XML format");
+    }
+
+    const notesRoot = doc.querySelector("notes");
+    if (!notesRoot) {
+        throw new Error("Missing <notes> root element");
+    }
+
+    const globalNotes = loadNotes();
+    const translationNotes = loadTranslationNotes();
+
+    const translationElements = notesRoot.querySelectorAll("translation");
+
+    for (const translationEl of translationElements) {
+        const translationId = translationEl.getAttribute("id");
+        const noteElements = translationEl.querySelectorAll("note");
+
+        for (const noteEl of noteElements) {
+            const book = noteEl.getAttribute("book");
+            const chapter = noteEl.getAttribute("chapter");
+            const verse = noteEl.getAttribute("verse");
+            const text = noteEl.textContent.trim();
+
+            if (!book || !chapter || !verse || !text) continue;
+
+            if (translationId) {
+                // Translation-specific note
+                const key = getTranslationVerseKey(
+                    translationId,
+                    book,
+                    chapter,
+                    verse
+                );
+                translationNotes[key] = text;
+            } else {
+                // Global note
+                const key = getVerseKey(book, chapter, verse);
+                globalNotes[key] = text;
+            }
+        }
+    }
+
+    saveNotes(globalNotes);
+    saveTranslationNotes(translationNotes);
+
+    return {
+        globalCount: Object.keys(globalNotes).length,
+        translationCount: Object.keys(translationNotes).length,
+    };
+};
+
+/**
+ * Download a string as a file
+ */
+const downloadFile = (content, filename, mimeType) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+};
+
+/**
  * Notes Panel - displays all notes or notes for current chapter
  */
 const NotesPanel = ({
@@ -56,17 +224,20 @@ const NotesPanel = ({
     onClose,
     selectedBook,
     selectedChapter,
+    selectedTranslation,
     books,
     onNavigateToVerse,
 }) => {
     const { formatMessage } = useIntl();
     const [notes, setNotes] = useState({});
+    const [translationNotes, setTranslationNotes] = useState({});
     const [generalNotes, setGeneralNotes] = useState([]);
     const [filter, setFilter] = useState("current"); // "current" | "all" | "general"
     const [editingNote, setEditingNote] = useState(null);
     const [editText, setEditText] = useState("");
     const [isAddingGeneral, setIsAddingGeneral] = useState(false);
     const [newGeneralNote, setNewGeneralNote] = useState("");
+    const [importMessage, setImportMessage] = useState(null);
 
     // Focus trap for keyboard navigation
     const panelRef = useFocusTrap(isOpen, onClose);
@@ -75,20 +246,45 @@ const NotesPanel = ({
     useEffect(() => {
         if (isOpen) {
             setNotes(loadNotes());
+            setTranslationNotes(loadTranslationNotes());
             setGeneralNotes(loadGeneralNotes());
+            setImportMessage(null);
         }
     }, [isOpen]);
 
-    // Get filtered notes
+    // Get filtered notes — returns array of [key, text, type] where type is "global" or "translation"
     const getFilteredNotes = () => {
-        const allNotes = Object.entries(notes);
+        const allGlobal = Object.entries(notes).map(([key, text]) => [
+            key,
+            text,
+            "global",
+            null,
+        ]);
+
+        const allTranslation = Object.entries(translationNotes).map(
+            ([key, text]) => {
+                const { translationId } = parseTranslationVerseKey(key);
+                return [key, text, "translation", translationId];
+            }
+        );
+
+        const combined = [...allGlobal, ...allTranslation];
 
         if (filter === "current" && selectedBook && selectedChapter) {
-            return allNotes.filter(([key]) => {
-                const [book, chapter] = key.split("_");
-                return (
-                    book === selectedBook && chapter === String(selectedChapter)
-                );
+            return combined.filter(([key, , type]) => {
+                if (type === "global") {
+                    const [book, chapter] = key.split("_");
+                    return (
+                        book === selectedBook &&
+                        chapter === String(selectedChapter)
+                    );
+                } else {
+                    const { book, chapter } = parseTranslationVerseKey(key);
+                    return (
+                        book === selectedBook &&
+                        chapter === String(selectedChapter)
+                    );
+                }
             });
         }
 
@@ -96,15 +292,18 @@ const NotesPanel = ({
             return [];
         }
 
-        return allNotes;
+        return combined;
     };
 
     const filteredNotes = getFilteredNotes();
 
-    // Parse verse key
-    const parseVerseKey = (key) => {
+    // Parse verse key (handles both global and translation keys)
+    const parseNoteKey = (key, type) => {
+        if (type === "translation") {
+            return parseTranslationVerseKey(key);
+        }
         const [book, chapter, verse] = key.split("_");
-        return { book, chapter, verse };
+        return { book, chapter, verse, translationId: null };
     };
 
     // Get book name
@@ -119,28 +318,46 @@ const NotesPanel = ({
     };
 
     // Save edit
-    const saveEdit = () => {
+    const saveEdit = (type) => {
         if (!editingNote) return;
 
-        const updatedNotes = { ...notes };
-        if (editText.trim()) {
-            updatedNotes[editingNote] = editText.trim();
+        if (type === "translation") {
+            const updatedNotes = { ...translationNotes };
+            if (editText.trim()) {
+                updatedNotes[editingNote] = editText.trim();
+            } else {
+                delete updatedNotes[editingNote];
+            }
+            setTranslationNotes(updatedNotes);
+            saveTranslationNotes(updatedNotes);
         } else {
-            delete updatedNotes[editingNote];
+            const updatedNotes = { ...notes };
+            if (editText.trim()) {
+                updatedNotes[editingNote] = editText.trim();
+            } else {
+                delete updatedNotes[editingNote];
+            }
+            setNotes(updatedNotes);
+            saveNotes(updatedNotes);
         }
 
-        setNotes(updatedNotes);
-        saveNotes(updatedNotes);
         setEditingNote(null);
         setEditText("");
     };
 
     // Delete note
-    const deleteNote = (key) => {
-        const updatedNotes = { ...notes };
-        delete updatedNotes[key];
-        setNotes(updatedNotes);
-        saveNotes(updatedNotes);
+    const deleteNote = (key, type) => {
+        if (type === "translation") {
+            const updatedNotes = { ...translationNotes };
+            delete updatedNotes[key];
+            setTranslationNotes(updatedNotes);
+            saveTranslationNotes(updatedNotes);
+        } else {
+            const updatedNotes = { ...notes };
+            delete updatedNotes[key];
+            setNotes(updatedNotes);
+            saveNotes(updatedNotes);
+        }
     };
 
     // Add general note
@@ -168,10 +385,49 @@ const NotesPanel = ({
     };
 
     // Navigate to verse
-    const handleNavigate = (key) => {
-        const { book, chapter, verse } = parseVerseKey(key);
+    const handleNavigate = (key, type) => {
+        const { book, chapter, verse } = parseNoteKey(key, type);
         onNavigateToVerse?.(book, parseInt(chapter), parseInt(verse));
         onClose();
+    };
+
+    // XML Export
+    const handleExportXml = () => {
+        const xml = exportNotesXml();
+        const date = new Date().toISOString().slice(0, 10);
+        downloadFile(xml, `rbiblia-notes-${date}.xml`, "application/xml");
+    };
+
+    // XML Import
+    const handleImportXml = () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".xml";
+        input.onchange = (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    importNotesXml(ev.target.result);
+                    // Reload notes
+                    setNotes(loadNotes());
+                    setTranslationNotes(loadTranslationNotes());
+                    setImportMessage({
+                        type: "success",
+                        text: formatMessage({ id: "importXmlSuccess" }),
+                    });
+                } catch {
+                    setImportMessage({
+                        type: "error",
+                        text: formatMessage({ id: "importXmlError" }),
+                    });
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
     };
 
     return (
@@ -236,30 +492,74 @@ const NotesPanel = ({
                 {/* Filter tabs */}
                 <div className="notes-filter">
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "current" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "current" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("current")}
                     >
                         {formatMessage({ id: "currentChapter" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "all" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "all" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("all")}
                     >
                         {formatMessage({ id: "allNotes" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "general" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "general" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("general")}
                     >
                         {formatMessage({ id: "generalNotes" })}
                     </button>
                 </div>
+
+                {/* XML Export/Import bar */}
+                <div className="notes-xml-bar">
+                    <button
+                        className="notes-xml-btn"
+                        onClick={handleExportXml}
+                        title={formatMessage({ id: "exportXml" })}
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        {formatMessage({ id: "exportXml" })}
+                    </button>
+                    <button
+                        className="notes-xml-btn"
+                        onClick={handleImportXml}
+                        title={formatMessage({ id: "importXml" })}
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        {formatMessage({ id: "importXml" })}
+                    </button>
+                </div>
+
+                {/* Import status message */}
+                {importMessage && (
+                    <div
+                        className={`notes-import-message notes-import-${importMessage.type}`}
+                    >
+                        {importMessage.text}
+                    </div>
+                )}
 
                 {/* Notes content */}
                 <div className="notes-content">
@@ -378,7 +678,7 @@ const NotesPanel = ({
                         </>
                     )}
 
-                    {/* Verse notes */}
+                    {/* Verse notes (global + translation-specific) */}
                     {filter !== "general" && (
                         <>
                             {filteredNotes.length === 0 ? (
@@ -412,125 +712,162 @@ const NotesPanel = ({
                                 </div>
                             ) : (
                                 <ul className="notes-list">
-                                    {filteredNotes.map(([key, text]) => {
-                                        const { book, chapter, verse } =
-                                            parseVerseKey(key);
-                                        const isEditing = editingNote === key;
+                                    {filteredNotes.map(
+                                        ([key, text, type, translationId]) => {
+                                            const { book, chapter, verse } =
+                                                parseNoteKey(key, type);
+                                            const isEditing =
+                                                editingNote === key;
 
-                                        return (
-                                            <li key={key} className="note-item">
-                                                <div className="note-header">
-                                                    <button
-                                                        className="note-reference"
-                                                        onClick={() =>
-                                                            handleNavigate(key)
-                                                        }
-                                                    >
-                                                        {getBookName(book)}{" "}
-                                                        {chapter}:{verse}
-                                                    </button>
-                                                    <div className="note-actions">
-                                                        {!isEditing && (
-                                                            <>
-                                                                <button
-                                                                    className="note-action-btn"
-                                                                    onClick={() =>
-                                                                        startEdit(
-                                                                            key,
-                                                                            text
-                                                                        )
-                                                                    }
-                                                                    title={formatMessage(
-                                                                        {
-                                                                            id: "edit",
-                                                                        }
-                                                                    )}
-                                                                >
-                                                                    <svg
-                                                                        viewBox="0 0 24 24"
-                                                                        fill="none"
-                                                                        stroke="currentColor"
-                                                                        strokeWidth="2"
-                                                                    >
-                                                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                                    </svg>
-                                                                </button>
-                                                                <button
-                                                                    className="note-action-btn note-action-delete"
-                                                                    onClick={() =>
-                                                                        deleteNote(
-                                                                            key
-                                                                        )
-                                                                    }
-                                                                    title={formatMessage(
-                                                                        {
-                                                                            id: "delete",
-                                                                        }
-                                                                    )}
-                                                                >
-                                                                    <svg
-                                                                        viewBox="0 0 24 24"
-                                                                        fill="none"
-                                                                        stroke="currentColor"
-                                                                        strokeWidth="2"
-                                                                    >
-                                                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                                    </svg>
-                                                                </button>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {isEditing ? (
-                                                    <div className="note-edit">
-                                                        <textarea
-                                                            className="note-textarea"
-                                                            value={editText}
-                                                            onChange={(e) =>
-                                                                setEditText(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            autoFocus
-                                                            rows={3}
-                                                        />
-                                                        <div className="note-edit-actions">
+                                            return (
+                                                <li
+                                                    key={key}
+                                                    className="note-item"
+                                                >
+                                                    <div className="note-header">
+                                                        <div className="note-header-left">
                                                             <button
-                                                                className="note-edit-btn note-edit-cancel"
+                                                                className="note-reference"
                                                                 onClick={() =>
-                                                                    setEditingNote(
-                                                                        null
+                                                                    handleNavigate(
+                                                                        key,
+                                                                        type
                                                                     )
                                                                 }
                                                             >
-                                                                {formatMessage({
-                                                                    id: "cancel",
-                                                                })}
+                                                                {getBookName(
+                                                                    book
+                                                                )}{" "}
+                                                                {chapter}:
+                                                                {verse}
                                                             </button>
-                                                            <button
-                                                                className="note-edit-btn note-edit-save"
-                                                                onClick={
-                                                                    saveEdit
-                                                                }
+                                                            <span
+                                                                className={`note-type-badge ${type ===
+                                                                    "translation"
+                                                                    ? "note-type-translation"
+                                                                    : "note-type-global"
+                                                                    }`}
                                                             >
-                                                                {formatMessage({
-                                                                    id: "save",
-                                                                })}
-                                                            </button>
+                                                                {type ===
+                                                                    "translation"
+                                                                    ? translationId
+                                                                    : formatMessage(
+                                                                        {
+                                                                            id: "noteGlobal",
+                                                                        }
+                                                                    )}
+                                                            </span>
+                                                        </div>
+                                                        <div className="note-actions">
+                                                            {!isEditing && (
+                                                                <>
+                                                                    <button
+                                                                        className="note-action-btn"
+                                                                        onClick={() =>
+                                                                            startEdit(
+                                                                                key,
+                                                                                text
+                                                                            )
+                                                                        }
+                                                                        title={formatMessage(
+                                                                            {
+                                                                                id: "edit",
+                                                                            }
+                                                                        )}
+                                                                    >
+                                                                        <svg
+                                                                            viewBox="0 0 24 24"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2"
+                                                                        >
+                                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                    <button
+                                                                        className="note-action-btn note-action-delete"
+                                                                        onClick={() =>
+                                                                            deleteNote(
+                                                                                key,
+                                                                                type
+                                                                            )
+                                                                        }
+                                                                        title={formatMessage(
+                                                                            {
+                                                                                id: "delete",
+                                                                            }
+                                                                        )}
+                                                                    >
+                                                                        <svg
+                                                                            viewBox="0 0 24 24"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2"
+                                                                        >
+                                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                        </svg>
+                                                                    </button>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>
-                                                ) : (
-                                                    <p className="note-text">
-                                                        {text}
-                                                    </p>
-                                                )}
-                                            </li>
-                                        );
-                                    })}
+
+                                                    {isEditing ? (
+                                                        <div className="note-edit">
+                                                            <textarea
+                                                                className="note-textarea"
+                                                                value={editText}
+                                                                onChange={(e) =>
+                                                                    setEditText(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                autoFocus
+                                                                rows={3}
+                                                            />
+                                                            <div className="note-edit-actions">
+                                                                <button
+                                                                    className="note-edit-btn note-edit-cancel"
+                                                                    onClick={() =>
+                                                                        setEditingNote(
+                                                                            null
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {formatMessage(
+                                                                        {
+                                                                            id: "cancel",
+                                                                        }
+                                                                    )}
+                                                                </button>
+                                                                <button
+                                                                    className="note-edit-btn note-edit-save"
+                                                                    onClick={() =>
+                                                                        saveEdit(
+                                                                            type
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {formatMessage(
+                                                                        {
+                                                                            id: "save",
+                                                                        }
+                                                                    )}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <p className="note-text">
+                                                            {text}
+                                                        </p>
+                                                    )}
+                                                </li>
+                                            );
+                                        }
+                                    )}
                                 </ul>
                             )}
                         </>
@@ -543,6 +880,7 @@ const NotesPanel = ({
 
 /**
  * Note Editor Modal - for adding/editing a note on a specific verse
+ * Now supports both global and translation-specific notes via tabs
  */
 const NoteEditor = ({
     isOpen,
@@ -552,36 +890,61 @@ const NoteEditor = ({
     chapter,
     verse,
     bookName,
+    translationId,
+    translationName,
 }) => {
     const { formatMessage } = useIntl();
-    const [text, setText] = useState("");
+    const [globalText, setGlobalText] = useState("");
+    const [translationText, setTranslationText] = useState("");
+    const [activeTab, setActiveTab] = useState("global"); // "global" | "translation"
     const verseKey = getVerseKey(book, chapter, verse);
+    const translationVerseKey = translationId
+        ? getTranslationVerseKey(translationId, book, chapter, verse)
+        : null;
 
     // Focus trap for keyboard navigation
     const modalRef = useFocusTrap(isOpen, onClose);
 
-    // Load existing note
+    // Load existing notes
     useEffect(() => {
         if (isOpen) {
             const notes = loadNotes();
-            setText(notes[verseKey] || "");
+            setGlobalText(notes[verseKey] || "");
+
+            if (translationVerseKey) {
+                const tNotes = loadTranslationNotes();
+                setTranslationText(tNotes[translationVerseKey] || "");
+            }
         }
-    }, [isOpen, verseKey]);
+    }, [isOpen, verseKey, translationVerseKey]);
 
     // Save note
     const handleSave = () => {
+        // Save global note
         const notes = loadNotes();
-
-        if (text.trim()) {
-            notes[verseKey] = text.trim();
+        if (globalText.trim()) {
+            notes[verseKey] = globalText.trim();
         } else {
             delete notes[verseKey];
         }
-
         saveNotes(notes);
+
+        // Save translation-specific note
+        if (translationVerseKey) {
+            const tNotes = loadTranslationNotes();
+            if (translationText.trim()) {
+                tNotes[translationVerseKey] = translationText.trim();
+            } else {
+                delete tNotes[translationVerseKey];
+            }
+            saveTranslationNotes(tNotes);
+        }
+
         onSave?.(); // Notify parent to refresh indicators
         onClose();
     };
+
+    const displayTranslationName = translationName || translationId || "";
 
     return (
         <>
@@ -610,14 +973,74 @@ const NoteEditor = ({
                         </svg>
                     </button>
                 </div>
-                <textarea
-                    className="note-editor-textarea"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder={formatMessage({ id: "writeNote" })}
-                    autoFocus
-                    rows={5}
-                />
+
+                {/* Tabs for global vs translation note */}
+                <div className="note-editor-tabs">
+                    <button
+                        className={`note-editor-tab ${activeTab === "global" ? "active" : ""}`}
+                        onClick={() => setActiveTab("global")}
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        {formatMessage({ id: "noteGlobal" })}
+                        {globalText.trim() && (
+                            <span className="note-editor-tab-dot" />
+                        )}
+                    </button>
+                    {translationId && (
+                        <button
+                            className={`note-editor-tab ${activeTab === "translation" ? "active" : ""}`}
+                            onClick={() => setActiveTab("translation")}
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            {formatMessage({ id: "translationNote" })}
+                            {translationText.trim() && (
+                                <span className="note-editor-tab-dot" />
+                            )}
+                        </button>
+                    )}
+                </div>
+
+                {/* Tab content */}
+                {activeTab === "global" ? (
+                    <textarea
+                        className="note-editor-textarea"
+                        value={globalText}
+                        onChange={(e) => setGlobalText(e.target.value)}
+                        placeholder={formatMessage({ id: "writeNote" })}
+                        autoFocus
+                        rows={5}
+                    />
+                ) : (
+                    <textarea
+                        className="note-editor-textarea"
+                        value={translationText}
+                        onChange={(e) => setTranslationText(e.target.value)}
+                        placeholder={formatMessage(
+                            { id: "noteForTranslation" },
+                            { translation: displayTranslationName }
+                        )}
+                        autoFocus
+                        rows={5}
+                    />
+                )}
+
                 <div className="note-editor-actions">
                     <button
                         className="note-editor-btn note-editor-cancel"
@@ -659,4 +1082,10 @@ export {
     loadNotes,
     saveNotes,
     getVerseKey,
+    loadTranslationNotes,
+    saveTranslationNotes,
+    getTranslationVerseKey,
+    parseTranslationVerseKey,
+    exportNotesXml,
+    importNotesXml,
 };

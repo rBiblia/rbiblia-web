@@ -5,6 +5,7 @@ import SkeletonLoader from "./SkeletonLoader";
 const Reader = ({
     selectedBook,
     selectedChapter,
+    selectedTranslation,
     verses,
     showVerses,
     onVerseClick,
@@ -27,6 +28,7 @@ const Reader = ({
                             bookId={selectedBook}
                             chapterId={selectedChapter}
                             verseId={verseId}
+                            translationId={selectedTranslation}
                             verseContent={verseContent}
                             onClick={() => onVerseClick(verseId)}
                             onLongPress={() => onVerseLongPress?.(verseId)}

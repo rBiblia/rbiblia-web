@@ -1,11 +1,12 @@
+/* global globalThis */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import { injectIntl } from "react-intl";
 import getDataFromCurrentPathname from "./getDataFromCurrentPathname";
+import PropTypes from "prop-types";
 import { AppError, ErrorToast } from "./AppError";
-import AppLoading from "./AppLoading";
 import updateHistory from "./updateHistory";
 import getAppropriateBook from "./getAppropriateBook";
 import SelectionGrid from "./SelectionGrid";
@@ -103,16 +104,16 @@ const Bible = ({ intl, setLocale }) => {
 
         const root = document.documentElement;
         if (theme === "system") {
-            root.removeAttribute("data-theme");
+            delete root.dataset.theme;
         } else {
-            root.setAttribute("data-theme", theme);
+            root.dataset.theme = theme;
         }
     }, [theme]);
 
     // Apply Dark Variant Side Effect
     useEffect(() => {
         localStorage.setItem("rbiblia-dark-variant", darkVariant);
-        document.documentElement.setAttribute("data-dark-variant", darkVariant);
+        document.documentElement.dataset.darkVariant = darkVariant;
     }, [darkVariant]);
 
     // Save font family to localStorage and apply to CSS variable
@@ -157,8 +158,8 @@ const Bible = ({ intl, setLocale }) => {
             setSelectedChapter(data.chapter);
         };
 
-        window.addEventListener("popstate", handlePopState);
-        return () => window.removeEventListener("popstate", handlePopState);
+        globalThis.addEventListener("popstate", handlePopState);
+        return () => globalThis.removeEventListener("popstate", handlePopState);
     }, []);
 
     useEffect(() => {
@@ -232,20 +233,21 @@ const Bible = ({ intl, setLocale }) => {
         return structure[selectedBook][0];
     };
 
-    const changeSelectedChapter = async (newSelectedChapter) => {
+    const changeSelectedChapter = async (newSelectedChapter, bookOverride) => {
         const { locale } = intl;
+        const effectiveBook = bookOverride || selectedBook;
 
         updateHistory(
             locale,
             selectedTranslation,
-            selectedBook,
+            effectiveBook,
             newSelectedChapter
         );
 
         // Check if data is in cache - if yes, show immediately
         const isInCache = versesCache.isInCache(
             selectedTranslation,
-            selectedBook,
+            effectiveBook,
             newSelectedChapter
         );
 
@@ -256,7 +258,7 @@ const Bible = ({ intl, setLocale }) => {
         try {
             const result = await versesCache.getVerses(
                 selectedTranslation,
-                selectedBook,
+                effectiveBook,
                 newSelectedChapter
             );
 
@@ -267,7 +269,7 @@ const Bible = ({ intl, setLocale }) => {
             // Prefetch next and previous chapters in the background
             versesCache.prefetchAdjacent(
                 selectedTranslation,
-                selectedBook,
+                effectiveBook,
                 newSelectedChapter,
                 structure
             );
@@ -279,6 +281,25 @@ const Bible = ({ intl, setLocale }) => {
             setShowVerses(true); // Keep showing previous content
         }
     };
+
+    /**
+     * Navigate to a specific book and chapter atomically.
+     * This avoids the race condition where changeSelectedBook triggers
+     * a useEffect that recalculates the chapter independently.
+     */
+    const navigateToBookAndChapter = useCallback(
+        (book, chapter) => {
+            // Set keepChapterIfPossible so the useEffect on [selectedBook, structure]
+            // keeps the chapter we're explicitly navigating to.
+            // We also set selectedChapter synchronously so that getAppropriateChapter
+            // sees the correct chapter value when useEffect fires.
+            keepChapterIfPossible.current = true;
+            setSelectedChapter(chapter);
+            setSelectedBook(book);
+            changeSelectedChapter(chapter, book);
+        },
+        [changeSelectedChapter]
+    );
 
     const loadTranslationsAndBooks = () => {
         const { locale } = intl;
@@ -327,27 +348,24 @@ const Bible = ({ intl, setLocale }) => {
     }, [intl.locale]); // Added dependencies based on variables used inside useEffect.
     // Other useEffect hooks as needed for componentDidUpdate logic
 
-    // Note: parseInt is here because sometimes selectedChapter is a string.
+    // Note: Number.parseInt is here because sometimes selectedChapter is a string.
     //    Probably when chapter is parsed from the URL during first load it become a string
     const getChapterIndex = () =>
-        chapters.findIndex((value) => value === parseInt(selectedChapter));
+        chapters.indexOf(Number.parseInt(selectedChapter, 10));
 
     const isNextChapterAvailable = () =>
-        !isStructureLoading &&
-        typeof chapters[getChapterIndex() + 1] !== "undefined";
+        !isStructureLoading && chapters[getChapterIndex() + 1] !== undefined;
 
     const isPrevChapterAvailable = () => {
         return !isStructureLoading && getChapterIndex() !== 0;
     };
 
-    const getBookIndex = () =>
-        Object.keys(structure).findIndex((bookKey) => bookKey === selectedBook);
+    const getBookIndex = () => Object.keys(structure).indexOf(selectedBook);
 
     const isNextBookAvailable = () => {
         return (
             !isStructureLoading &&
-            typeof structure[Object.keys(structure)[getBookIndex() + 1]] !==
-                "undefined"
+            structure[Object.keys(structure)[getBookIndex() + 1]] !== undefined
         );
     };
 
@@ -446,8 +464,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const handleNavigateToVerse = useCallback(
         (book, chapter, verse) => {
-            changeSelectedBook(book);
-            changeSelectedChapter(chapter);
+            navigateToBookAndChapter(book, chapter);
 
             if (verse) {
                 const verseId = String(verse);
@@ -457,7 +474,7 @@ const Bible = ({ intl, setLocale }) => {
                 }, 3000);
             }
         },
-        [changeSelectedBook, changeSelectedChapter]
+        [navigateToBookAndChapter]
     );
 
     // Render content
@@ -515,8 +532,7 @@ const Bible = ({ intl, setLocale }) => {
                     currentBook={selectedBook}
                     currentChapter={selectedChapter}
                     onSelectChapter={(book, chapter) => {
-                        changeSelectedBook(book);
-                        changeSelectedChapter(chapter);
+                        navigateToBookAndChapter(book, chapter);
                     }}
                     onClose={() => setIsSelectionOpen(false)}
                 />
@@ -532,7 +548,7 @@ const Bible = ({ intl, setLocale }) => {
                     currentTranslation={selectedTranslation}
                     totalVerses={Object.keys(verses).length}
                     onNavigateVerse={(direction) => {
-                        const currentVerse = parseInt(comparedVerse, 10);
+                        const currentVerse = Number.parseInt(comparedVerse, 10);
                         const maxVerse = Object.keys(verses).length;
                         if (direction === "prev" && currentVerse > 1) {
                             setComparedVerse(currentVerse - 1);
@@ -550,6 +566,7 @@ const Bible = ({ intl, setLocale }) => {
                 showVerses={showVerses}
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
+                selectedTranslation={selectedTranslation}
                 verses={verses}
                 onVerseClick={(verseId) => setComparedVerse(verseId)}
                 onVerseLongPress={(verseId) => setEditingNoteVerse(verseId)}
@@ -579,6 +596,7 @@ const Bible = ({ intl, setLocale }) => {
                 onClose={() => setIsNotesOpen(false)}
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
+                selectedTranslation={selectedTranslation}
                 books={books}
                 onNavigateToVerse={handleNavigateToVerse}
             />
@@ -604,8 +622,7 @@ const Bible = ({ intl, setLocale }) => {
                 structure={structure}
                 books={books}
                 onNavigateChapter={(book, chapter) => {
-                    changeSelectedBook(book);
-                    changeSelectedChapter(chapter);
+                    navigateToBookAndChapter(book, chapter);
                 }}
             />
 
@@ -643,6 +660,12 @@ const Bible = ({ intl, setLocale }) => {
                 chapter={selectedChapter}
                 verse={editingNoteVerse}
                 bookName={books[selectedBook]?.name}
+                translationId={selectedTranslation}
+                translationName={
+                    translations?.find?.(
+                        (t) => t.id === selectedTranslation
+                    )?.name || selectedTranslation
+                }
             />
             <ChangelogModal
                 isOpen={isChangelogOpen}
@@ -662,6 +685,14 @@ const Bible = ({ intl, setLocale }) => {
             )}
         </>
     );
+};
+
+Bible.propTypes = {
+    intl: PropTypes.shape({
+        locale: PropTypes.string.isRequired,
+        formatMessage: PropTypes.func.isRequired,
+    }).isRequired,
+    setLocale: PropTypes.func.isRequired,
 };
 
 export default injectIntl(Bible);

@@ -1,6 +1,11 @@
 import React, { useRef, useState, useEffect, memo } from "react";
 import { useIntl } from "react-intl";
-import { loadNotes, getVerseKey } from "./Notes";
+import {
+    loadNotes,
+    getVerseKey,
+    loadTranslationNotes,
+    getTranslationVerseKey,
+} from "./Notes";
 
 const LONG_PRESS_DURATION = 500; // ms
 const NOTE_PREVIEW_TOGGLE_THRESHOLD = 80;
@@ -10,6 +15,7 @@ const Verse = memo(function Verse({
     bookId,
     chapterId,
     verseId,
+    translationId,
     onClick,
     onLongPress,
     onCompare,
@@ -19,6 +25,8 @@ const Verse = memo(function Verse({
     const { formatMessage } = useIntl();
     const [hasNote, setHasNote] = useState(false);
     const [noteText, setNoteText] = useState("");
+    const [hasTranslationNote, setHasTranslationNote] = useState(false);
+    const [translationNoteText, setTranslationNoteText] = useState("");
     const [isNoteExpanded, setIsNoteExpanded] = useState(false);
     const [isPressing, setIsPressing] = useState(false);
     const longPressTimer = useRef(null);
@@ -36,7 +44,7 @@ const Verse = memo(function Verse({
         }
     }, [isHighlighted]);
 
-    // Check if this verse has a note
+    // Check if this verse has a global note
     useEffect(() => {
         const notes = loadNotes();
         const key = getVerseKey(bookId, chapterId, verseId);
@@ -46,9 +54,33 @@ const Verse = memo(function Verse({
         setIsNoteExpanded(false);
     }, [bookId, chapterId, verseId, notesVersion]);
 
+    // Check if this verse has a translation-specific note
+    useEffect(() => {
+        if (!translationId) {
+            setHasTranslationNote(false);
+            setTranslationNoteText("");
+            return;
+        }
+        const tNotes = loadTranslationNotes();
+        const tKey = getTranslationVerseKey(
+            translationId,
+            bookId,
+            chapterId,
+            verseId
+        );
+        const tNote = (tNotes[tKey] || "").trim();
+        setHasTranslationNote(!!tNote);
+        setTranslationNoteText(tNote);
+    }, [bookId, chapterId, verseId, translationId, notesVersion]);
+
+    const hasAnyNote = hasNote || hasTranslationNote;
+    const combinedNoteText = [noteText, translationNoteText]
+        .filter(Boolean)
+        .join("\n");
+
     const isNoteExpandable =
-        noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
-        noteText.includes("\n");
+        combinedNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+        combinedNoteText.includes("\n");
 
     const appLink = `bib://${bookId}${chapterId}:${verseId}`;
 
@@ -183,19 +215,17 @@ const Verse = memo(function Verse({
     return (
         <div
             ref={verseRef}
-            className={`row line ${isPressing ? "pressing" : ""} ${
-                hasNote ? "has-note" : ""
-            } ${isHighlighted ? "highlighted" : ""}`}
+            className={`row line ${isPressing ? "pressing" : ""} ${hasAnyNote ? "has-note" : ""
+                } ${isHighlighted ? "highlighted" : ""}`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <div className="verse-actions">
                     <button
                         type="button"
-                        className={`verse-action-btn verse-action-note ${
-                            hasNote ? "has-note-value" : ""
-                        }`}
+                        className={`verse-action-btn verse-action-note ${hasAnyNote ? "has-note-value" : ""
+                            }`}
                         title={formatMessage({
-                            id: hasNote ? "edit" : "addNote",
+                            id: hasAnyNote ? "edit" : "addNote",
                         })}
                         onClick={openNoteEditor}
                     >
@@ -250,17 +280,40 @@ const Verse = memo(function Verse({
                 style={{ userSelect: "none" }}
             >
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
-                {hasNote && (
+                {hasAnyNote && (
                     <div className="verse-note-preview-wrap">
-                        <div
-                            className={`verse-note-preview ${
-                                isNoteExpandable && !isNoteExpanded
-                                    ? "is-collapsed"
-                                    : ""
-                            }`}
-                        >
-                            {noteText}
-                        </div>
+                        {hasNote && (
+                            <div
+                                className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
+                                        ? "is-collapsed"
+                                        : ""
+                                    }`}
+                            >
+                                {hasTranslationNote && (
+                                    <span className="verse-note-label verse-note-label-global">
+                                        {formatMessage({
+                                            id: "noteGlobal",
+                                        })}
+                                    </span>
+                                )}
+                                {noteText}
+                            </div>
+                        )}
+                        {hasTranslationNote && (
+                            <div
+                                className={`verse-note-preview verse-note-preview-translation ${isNoteExpandable && !isNoteExpanded
+                                        ? "is-collapsed"
+                                        : ""
+                                    }`}
+                            >
+                                {hasNote && (
+                                    <span className="verse-note-label verse-note-label-translation">
+                                        {translationId}
+                                    </span>
+                                )}
+                                {translationNoteText}
+                            </div>
+                        )}
                         {isNoteExpandable && (
                             <button
                                 type="button"
