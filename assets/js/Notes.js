@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
 
@@ -134,11 +135,11 @@ const exportNotesXml = () => {
  */
 const escapeXml = (str) =>
     str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&apos;");
 
 /**
  * Import notes from rBiblia-compatible XML format
@@ -212,7 +213,7 @@ const downloadFile = (content, filename, mimeType) => {
     a.download = filename;
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    a.remove();
     URL.revokeObjectURL(url);
 };
 
@@ -225,9 +226,16 @@ const NotesPanel = ({
     selectedBook,
     selectedChapter,
     selectedTranslation,
+    translations = [],
     books,
     onNavigateToVerse,
 }) => {
+    // Helper: resolve translationId to human-readable name
+    const getTranslationName = (id) => {
+        if (!id) return null;
+        const found = translations.find((t) => t.id === id);
+        return found ? found.name : id;
+    };
     const { formatMessage } = useIntl();
     const [notes, setNotes] = useState({});
     const [translationNotes, setTranslationNotes] = useState({});
@@ -387,7 +395,11 @@ const NotesPanel = ({
     // Navigate to verse
     const handleNavigate = (key, type) => {
         const { book, chapter, verse } = parseNoteKey(key, type);
-        onNavigateToVerse?.(book, parseInt(chapter), parseInt(verse));
+        onNavigateToVerse?.(
+            book,
+            Number.parseInt(chapter, 10),
+            Number.parseInt(verse, 10)
+        );
         onClose();
     };
 
@@ -407,10 +419,9 @@ const NotesPanel = ({
             const file = e.target.files?.[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = (ev) => {
+            file.text().then((text) => {
                 try {
-                    importNotesXml(ev.target.result);
+                    importNotesXml(text);
                     // Reload notes
                     setNotes(loadNotes());
                     setTranslationNotes(loadTranslationNotes());
@@ -424,8 +435,7 @@ const NotesPanel = ({
                         text: formatMessage({ id: "importXmlError" }),
                     });
                 }
-            };
-            reader.readAsText(file);
+            });
         };
         input.click();
     };
@@ -436,6 +446,12 @@ const NotesPanel = ({
             <div
                 className={`notes-overlay ${isOpen ? "active" : ""}`}
                 onClick={onClose}
+                role="presentation"
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        onClose();
+                    }
+                }}
             />
 
             {/* Panel */}
@@ -492,25 +508,22 @@ const NotesPanel = ({
                 {/* Filter tabs */}
                 <div className="notes-filter">
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "current" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "current" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("current")}
                     >
                         {formatMessage({ id: "currentChapter" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "all" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "all" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("all")}
                     >
                         {formatMessage({ id: "allNotes" })}
                     </button>
                     <button
-                        className={`notes-filter-btn ${
-                            filter === "general" ? "active" : ""
-                        }`}
+                        className={`notes-filter-btn ${filter === "general" ? "active" : ""
+                            }`}
                         onClick={() => setFilter("general")}
                     >
                         {formatMessage({ id: "generalNotes" })}
@@ -745,21 +758,20 @@ const NotesPanel = ({
                                                                 {verse}
                                                             </button>
                                                             <span
-                                                                className={`note-type-badge ${
-                                                                    type ===
+                                                                className={`note-type-badge ${type ===
                                                                     "translation"
-                                                                        ? "note-type-translation"
-                                                                        : "note-type-global"
-                                                                }`}
+                                                                    ? "note-type-translation"
+                                                                    : "note-type-global"
+                                                                    }`}
                                                             >
                                                                 {type ===
-                                                                "translation"
-                                                                    ? translationId
+                                                                    "translation"
+                                                                    ? getTranslationName(translationId)
                                                                     : formatMessage(
-                                                                          {
-                                                                              id: "noteGlobal",
-                                                                          }
-                                                                      )}
+                                                                        {
+                                                                            id: "noteGlobal",
+                                                                        }
+                                                                    )}
                                                             </span>
                                                         </div>
                                                         <div className="note-actions">
@@ -882,6 +894,26 @@ const NotesPanel = ({
     );
 };
 
+NotesPanel.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    selectedBook: PropTypes.string,
+    selectedChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    selectedTranslation: PropTypes.string,
+    translations: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        })
+    ),
+    books: PropTypes.objectOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    onNavigateToVerse: PropTypes.func.isRequired,
+};
+
 /**
  * Note Editor Modal - for adding/editing a note on a specific verse
  * Now supports both global and translation-specific notes via tabs
@@ -955,6 +987,12 @@ const NoteEditor = ({
             <div
                 className={`note-editor-overlay ${isOpen ? "active" : ""}`}
                 onClick={onClose}
+                role="presentation"
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        onClose();
+                    }
+                }}
             />
             <div
                 ref={modalRef}
@@ -981,9 +1019,8 @@ const NoteEditor = ({
                 {/* Tabs for global vs translation note */}
                 <div className="note-editor-tabs">
                     <button
-                        className={`note-editor-tab ${
-                            activeTab === "global" ? "active" : ""
-                        }`}
+                        className={`note-editor-tab ${activeTab === "global" ? "active" : ""
+                            }`}
                         onClick={() => setActiveTab("global")}
                     >
                         <svg
@@ -1003,9 +1040,8 @@ const NoteEditor = ({
                     </button>
                     {translationId && (
                         <button
-                            className={`note-editor-tab ${
-                                activeTab === "translation" ? "active" : ""
-                            }`}
+                            className={`note-editor-tab ${activeTab === "translation" ? "active" : ""
+                                }`}
                             onClick={() => setActiveTab("translation")}
                         >
                             <svg
@@ -1066,6 +1102,18 @@ const NoteEditor = ({
             </div>
         </>
     );
+};
+
+NoteEditor.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+    book: PropTypes.string,
+    chapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    verse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    bookName: PropTypes.string,
+    translationId: PropTypes.string,
+    translationName: PropTypes.string,
 };
 
 /**

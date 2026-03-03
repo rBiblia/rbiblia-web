@@ -54,46 +54,75 @@ function testAppLinkFormat() {
 function testNotePreviewThreshold() {
   const NOTE_PREVIEW_TOGGLE_THRESHOLD = 80;
 
-  const isNoteExpandable = (noteText) =>
-    noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || noteText.includes("\n");
+  // New logic: checks each note text individually
+  const isNoteExpandable = (noteText, translationNoteText) => {
+    const hasNote = !!noteText;
+    const hasTranslationNote = !!translationNoteText;
+    return (
+      (hasNote &&
+        (noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+          noteText.includes("\n"))) ||
+      (hasTranslationNote &&
+        (translationNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+          translationNoteText.includes("\n")))
+    );
+  };
 
-  // Short note — not expandable
+  // Short single note — not expandable
   console.assert(
-    isNoteExpandable("Short note") === false,
-    "Short note should NOT be expandable"
+    isNoteExpandable("Short note", "") === false,
+    "Short single note should NOT be expandable"
   );
 
   // Exactly at threshold — not expandable
   const exactText = "a".repeat(80);
   console.assert(
-    isNoteExpandable(exactText) === false,
+    isNoteExpandable(exactText, "") === false,
     "Note at exactly 80 chars should NOT be expandable"
   );
 
   // One char over threshold — expandable
   const overText = "a".repeat(81);
   console.assert(
-    isNoteExpandable(overText) === true,
+    isNoteExpandable(overText, "") === true,
     "Note at 81 chars should be expandable"
   );
 
   // Long note — expandable
   const longNote = "a".repeat(200);
   console.assert(
-    isNoteExpandable(longNote) === true,
+    isNoteExpandable(longNote, "") === true,
     "Long note (200 chars) should be expandable"
   );
 
-  // Multi-line note (short but has newline) — expandable
+  // Multi-line single note — expandable
   console.assert(
-    isNoteExpandable("Line 1\nLine 2") === true,
+    isNoteExpandable("Line 1\nLine 2", "") === true,
     "Multi-line note should be expandable regardless of length"
   );
 
   // Empty note — not expandable
   console.assert(
-    isNoteExpandable("") === false,
+    isNoteExpandable("", "") === false,
     "Empty note should NOT be expandable"
+  );
+
+  // Two short notes together — NOT expandable (separator \n should not trigger)
+  console.assert(
+    isNoteExpandable("Amen", "notatka dla tłumaczenia") === false,
+    "Two short notes combined should NOT be expandable (separator \\n fix)"
+  );
+
+  // Short global + long translation — expandable (translation is long)
+  console.assert(
+    isNoteExpandable("Amen", "a".repeat(81)) === true,
+    "Short global + long translation note should be expandable"
+  );
+
+  // Short global + multiline translation — expandable
+  console.assert(
+    isNoteExpandable("Amen", "Line 1\nLine 2") === true,
+    "Short global + multiline translation note should be expandable"
   );
 
   console.log("✓ Note preview threshold tests passed");

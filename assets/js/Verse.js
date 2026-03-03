@@ -1,11 +1,7 @@
-import React, { useRef, useState, useEffect, memo } from "react";
+import React, { useRef, useState, useEffect, useMemo, memo } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
-import {
-    loadNotes,
-    getVerseKey,
-    loadTranslationNotes,
-    getTranslationVerseKey,
-} from "./Notes";
+import { getVerseKey, getTranslationVerseKey } from "./Notes";
 
 const LONG_PRESS_DURATION = 500; // ms
 const NOTE_PREVIEW_TOGGLE_THRESHOLD = 80;
@@ -16,23 +12,55 @@ const Verse = memo(function Verse({
     chapterId,
     verseId,
     translationId,
-    onClick,
-    onLongPress,
-    onCompare,
+    translationName,
+    onVerseClick,
+    onVerseLongPress,
+    onVerseCompare,
     notesVersion = 0, // Increment to force note indicator refresh
     isHighlighted = false,
+    allNotes = {},
+    allTranslationNotes = {},
 }) {
     const { formatMessage } = useIntl();
-    const [hasNote, setHasNote] = useState(false);
-    const [noteText, setNoteText] = useState("");
-    const [hasTranslationNote, setHasTranslationNote] = useState(false);
-    const [translationNoteText, setTranslationNoteText] = useState("");
     const [isNoteExpanded, setIsNoteExpanded] = useState(false);
-    const [isPressing, setIsPressing] = useState(false);
+    const isPressing = useRef(false);
     const longPressTimer = useRef(null);
     const isLongPress = useRef(false);
     const startPos = useRef({ x: 0, y: 0 });
     const verseRef = useRef(null);
+
+    // Derive note state from pre-loaded notes (no localStorage reads)
+    const noteKey = getVerseKey(bookId, chapterId, verseId);
+    const noteText = useMemo(
+        () => (allNotes[noteKey] || "").trim(),
+        [allNotes, noteKey]
+    );
+    const hasNote = !!noteText;
+
+    const tKey = translationId
+        ? getTranslationVerseKey(translationId, bookId, chapterId, verseId)
+        : null;
+    const translationNoteText = useMemo(
+        () => (tKey ? (allTranslationNotes[tKey] || "").trim() : ""),
+        [allTranslationNotes, tKey]
+    );
+    const hasTranslationNote = !!translationNoteText;
+
+    // Reset expansion when verse changes
+    useEffect(() => {
+        setIsNoteExpanded(false);
+    }, [bookId, chapterId, verseId, notesVersion]);
+
+    const hasAnyNote = hasNote || hasTranslationNote;
+    const combinedNoteText = [noteText, translationNoteText]
+        .filter(Boolean)
+        .join("\n");
+
+    const isNoteExpandable =
+        (hasNote && (noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || noteText.includes("\n"))) ||
+        (hasTranslationNote && (translationNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || translationNoteText.includes("\n")));
+
+    const appLink = `bib://${bookId}${chapterId}:${verseId}`;
 
     // Scroll into view when highlighted
     useEffect(() => {
@@ -44,69 +72,35 @@ const Verse = memo(function Verse({
         }
     }, [isHighlighted]);
 
-    // Check if this verse has a global note
-    useEffect(() => {
-        const notes = loadNotes();
-        const key = getVerseKey(bookId, chapterId, verseId);
-        const currentNote = (notes[key] || "").trim();
-        setHasNote(!!currentNote);
-        setNoteText(currentNote);
-        setIsNoteExpanded(false);
-    }, [bookId, chapterId, verseId, notesVersion]);
-
-    // Check if this verse has a translation-specific note
-    useEffect(() => {
-        if (!translationId) {
-            setHasTranslationNote(false);
-            setTranslationNoteText("");
-            return;
-        }
-        const tNotes = loadTranslationNotes();
-        const tKey = getTranslationVerseKey(
-            translationId,
-            bookId,
-            chapterId,
-            verseId
-        );
-        const tNote = (tNotes[tKey] || "").trim();
-        setHasTranslationNote(!!tNote);
-        setTranslationNoteText(tNote);
-    }, [bookId, chapterId, verseId, translationId, notesVersion]);
-
-    const hasAnyNote = hasNote || hasTranslationNote;
-    const combinedNoteText = [noteText, translationNoteText]
-        .filter(Boolean)
-        .join("\n");
-
-    const isNoteExpandable =
-        combinedNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
-        combinedNoteText.includes("\n");
-
-    const appLink = `bib://${bookId}${chapterId}:${verseId}`;
-
     const openNoteEditor = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        onLongPress?.(verseId);
+        onVerseLongPress?.(verseId);
     };
 
     const openComparison = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        onCompare?.(verseId);
+        onVerseCompare?.(verseId);
+    };
+
+    // Helper: toggle pressing class directly on DOM (avoids React re-render)
+    const setPressingClass = (pressing) => {
+        isPressing.current = pressing;
+        verseRef.current?.classList.toggle("pressing", pressing);
     };
 
     // Trigger long press action
     const triggerLongPress = () => {
         isLongPress.current = true;
-        setIsPressing(false);
-        onLongPress?.(verseId);
+        setPressingClass(false);
+        onVerseLongPress?.(verseId);
     };
 
     // Touch events for mobile
     const handleTouchStart = (e) => {
         isLongPress.current = false;
-        setIsPressing(true);
+        setPressingClass(true);
         startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         longPressTimer.current = setTimeout(
             triggerLongPress,
@@ -115,7 +109,7 @@ const Verse = memo(function Verse({
     };
 
     const handleTouchEnd = (e) => {
-        setIsPressing(false);
+        setPressingClass(false);
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current);
             longPressTimer.current = null;
@@ -132,7 +126,7 @@ const Verse = memo(function Verse({
         const dx = Math.abs(touch.clientX - startPos.current.x);
         const dy = Math.abs(touch.clientY - startPos.current.y);
         if (dx > 10 || dy > 10) {
-            setIsPressing(false);
+            setPressingClass(false);
             if (longPressTimer.current) {
                 clearTimeout(longPressTimer.current);
                 longPressTimer.current = null;
@@ -146,7 +140,7 @@ const Verse = memo(function Verse({
         if (e.button !== 0) return;
 
         isLongPress.current = false;
-        setIsPressing(true);
+        setPressingClass(true);
         startPos.current = { x: e.clientX, y: e.clientY };
 
         longPressTimer.current = setTimeout(
@@ -155,29 +149,24 @@ const Verse = memo(function Verse({
         );
     };
 
-    const handleMouseUp = () => {
-        setIsPressing(false);
+    const cancelLongPress = () => {
+        setPressingClass(false);
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current);
             longPressTimer.current = null;
         }
     };
 
-    const handleMouseLeave = () => {
-        setIsPressing(false);
-        if (longPressTimer.current) {
-            clearTimeout(longPressTimer.current);
-            longPressTimer.current = null;
-        }
-    };
+    const handleMouseUp = cancelLongPress;
+    const handleMouseLeave = cancelLongPress;
 
     const handleMouseMove = (e) => {
         // Cancel long press if mouse moves more than 10px
-        if (!isPressing) return;
+        if (!isPressing.current) return;
         const dx = Math.abs(e.clientX - startPos.current.x);
         const dy = Math.abs(e.clientY - startPos.current.y);
         if (dx > 10 || dy > 10) {
-            setIsPressing(false);
+            setPressingClass(false);
             if (longPressTimer.current) {
                 clearTimeout(longPressTimer.current);
                 longPressTimer.current = null;
@@ -193,12 +182,12 @@ const Verse = memo(function Verse({
             e.stopPropagation();
             return;
         }
-        onClick?.(e);
+        onVerseClick?.(verseId);
     };
 
     // Prevent context menu on long press
     const handleContextMenu = (e) => {
-        if (isPressing || isLongPress.current) {
+        if (isPressing.current || isLongPress.current) {
             e.preventDefault();
         }
     };
@@ -215,17 +204,15 @@ const Verse = memo(function Verse({
     return (
         <div
             ref={verseRef}
-            className={`row line ${isPressing ? "pressing" : ""} ${
-                hasAnyNote ? "has-note" : ""
-            } ${isHighlighted ? "highlighted" : ""}`}
+            className={`row line ${hasAnyNote ? "has-note" : ""} ${isHighlighted ? "highlighted" : ""
+                }`}
         >
             <div className="col-2 col-lg-1 verse-number-cell">
                 <div className="verse-actions">
                     <button
                         type="button"
-                        className={`verse-action-btn verse-action-note ${
-                            hasAnyNote ? "has-note-value" : ""
-                        }`}
+                        className={`verse-action-btn verse-action-note ${hasAnyNote ? "has-note-value" : ""
+                            }`}
                         title={formatMessage({
                             id: hasAnyNote ? "edit" : "addNote",
                         })}
@@ -279,6 +266,13 @@ const Verse = memo(function Verse({
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        handleClick(e);
+                    }
+                }}
+                role="button"
+                tabIndex={0}
                 style={{ userSelect: "none" }}
             >
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
@@ -286,11 +280,10 @@ const Verse = memo(function Verse({
                     <div className="verse-note-preview-wrap">
                         {hasNote && (
                             <div
-                                className={`verse-note-preview ${
-                                    isNoteExpandable && !isNoteExpanded
-                                        ? "is-collapsed"
-                                        : ""
-                                }`}
+                                className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
+                                    ? "is-collapsed"
+                                    : ""
+                                    }`}
                             >
                                 {hasTranslationNote && (
                                     <span className="verse-note-label verse-note-label-global">
@@ -304,15 +297,14 @@ const Verse = memo(function Verse({
                         )}
                         {hasTranslationNote && (
                             <div
-                                className={`verse-note-preview verse-note-preview-translation ${
-                                    isNoteExpandable && !isNoteExpanded
-                                        ? "is-collapsed"
-                                        : ""
-                                }`}
+                                className={`verse-note-preview verse-note-preview-translation ${isNoteExpandable && !isNoteExpanded
+                                    ? "is-collapsed"
+                                    : ""
+                                    }`}
                             >
                                 {hasNote && (
                                     <span className="verse-note-label verse-note-label-translation">
-                                        {translationId}
+                                        {translationName || translationId}
                                     </span>
                                 )}
                                 {translationNoteText}
@@ -340,5 +332,23 @@ const Verse = memo(function Verse({
         </div>
     );
 });
+
+Verse.propTypes = {
+    verseContent: PropTypes.string.isRequired,
+    bookId: PropTypes.string.isRequired,
+    chapterId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+    verseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+    translationId: PropTypes.string,
+    translationName: PropTypes.string,
+    onVerseClick: PropTypes.func,
+    onVerseLongPress: PropTypes.func,
+    onVerseCompare: PropTypes.func,
+    notesVersion: PropTypes.number,
+    isHighlighted: PropTypes.bool,
+    allNotes: PropTypes.object,
+    allTranslationNotes: PropTypes.object,
+};
 
 export default Verse;

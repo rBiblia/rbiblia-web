@@ -126,6 +126,7 @@
   "suggestionBook": "Buch",
   "suggestionPhrase": "Beliebt",
   "chapterComparison": "Kapitelvergleich",
+  "chapterComparisonShort": "Vergleich",
   "chapterCompSelectTranslation": "Übersetzung wählen...",
   "chapterCompSelectHint": "Wählen Sie Übersetzungen zum Vergleichen aus den Dropdown-Listen oben.",
   "chapterCompError": "Kapitel konnte nicht geladen werden.",

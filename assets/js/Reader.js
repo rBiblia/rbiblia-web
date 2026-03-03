@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Verse from "./Verse";
 import SkeletonLoader from "./SkeletonLoader";
 
@@ -6,6 +7,7 @@ const Reader = ({
     selectedBook,
     selectedChapter,
     selectedTranslation,
+    translationName,
     verses,
     showVerses,
     onVerseClick,
@@ -13,6 +15,8 @@ const Reader = ({
     onVerseCompare,
     notesVersion = 0,
     highlightedVerse = null,
+    allNotes = {},
+    allTranslationNotes = {},
 }) => {
     if (!showVerses || !verses) {
         return <SkeletonLoader lines={15} />;
@@ -29,18 +33,37 @@ const Reader = ({
                             chapterId={selectedChapter}
                             verseId={verseId}
                             translationId={selectedTranslation}
+                            translationName={translationName}
                             verseContent={verseContent}
-                            onClick={() => onVerseClick(verseId)}
-                            onLongPress={() => onVerseLongPress?.(verseId)}
-                            onCompare={() => onVerseCompare?.(verseId)}
+                            onVerseClick={onVerseClick}
+                            onVerseLongPress={onVerseLongPress}
+                            onVerseCompare={onVerseCompare}
                             notesVersion={notesVersion}
                             isHighlighted={highlightedVerse === verseId}
+                            allNotes={allNotes}
+                            allTranslationNotes={allTranslationNotes}
                         />
                     ))}
                 </div>
             </div>
         </main>
     );
+};
+
+Reader.propTypes = {
+    selectedBook: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    selectedChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    selectedTranslation: PropTypes.string,
+    translationName: PropTypes.string,
+    verses: PropTypes.objectOf(PropTypes.string),
+    showVerses: PropTypes.bool,
+    onVerseClick: PropTypes.func.isRequired,
+    onVerseLongPress: PropTypes.func,
+    onVerseCompare: PropTypes.func,
+    notesVersion: PropTypes.number,
+    highlightedVerse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    allNotes: PropTypes.object,
+    allTranslationNotes: PropTypes.object,
 };
 
 export default Reader;
