@@ -1,3 +1,4 @@
+/* global globalThis */
 import { useRef, useCallback } from "react";
 import { safeJsonParse } from "./safeJsonParse";
 
@@ -146,8 +147,11 @@ const useVersesCache = (locale) => {
 };
 
 // Polyfill for requestIdleCallback (Safari)
-if (typeof window !== "undefined" && !window.requestIdleCallback) {
-    window.requestIdleCallback = (cb, options) => {
+if (
+    typeof globalThis !== "undefined" &&
+    typeof globalThis.requestIdleCallback !== "function"
+) {
+    globalThis.requestIdleCallback = (cb, options) => {
         const timeout = options?.timeout || 1000;
         return setTimeout(() => {
             cb({
@@ -156,7 +160,7 @@ if (typeof window !== "undefined" && !window.requestIdleCallback) {
             });
         }, Math.min(100, timeout));
     };
-    window.cancelIdleCallback = (id) => clearTimeout(id);
+    globalThis.cancelIdleCallback = (id) => clearTimeout(id);
 }
 
 export default useVersesCache;

@@ -52,7 +52,7 @@ function testGetTranslationVerseKey() {
   );
   console.assert(
     getTranslationVerseKey("pl_pns_2018", "1co", 13, 4) ===
-    "pl_pns_2018:1co_13_4",
+      "pl_pns_2018:1co_13_4",
     "getTranslationVerseKey should handle complex translation IDs"
   );
   console.log("✓ getTranslationVerseKey tests passed");
@@ -188,10 +188,7 @@ function testTranslationNotes() {
     loaded["pl_pns_2018:gen_4_6"] === "Notatka PNŚ 2018",
     "Should load second translation note"
   );
-  console.assert(
-    Object.keys(loaded).length === 2,
-    "Should have correct count"
-  );
+  console.assert(Object.keys(loaded).length === 2, "Should have correct count");
 
   console.log("✓ Translation notes storage tests passed");
 }
@@ -253,11 +250,11 @@ function testNotesImportMerge() {
 function testXmlEscaping() {
   const escapeXml = (str) =>
     str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&apos;");
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&apos;");
 
   console.assert(
     escapeXml("Hello & World") === "Hello &amp; World",
@@ -286,11 +283,11 @@ function testXmlEscaping() {
 function testXmlExportStructure() {
   const escapeXml = (str) =>
     str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&apos;");
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&apos;");
 
   const globalNotes = { gen_4_7: "Global note" };
   const translationNotes = {
@@ -305,7 +302,9 @@ function testXmlExportStructure() {
   xml += "  <translation>\n";
   for (const [key, text] of Object.entries(globalNotes)) {
     const [book, chapter, verse] = key.split("_");
-    xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapeXml(text)}</note>\n`;
+    xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapeXml(
+      text
+    )}</note>\n`;
   }
   xml += "  </translation>\n";
 
@@ -321,7 +320,9 @@ function testXmlExportStructure() {
   for (const [translationId, notes] of Object.entries(byTranslation)) {
     xml += `  <translation id="${escapeXml(translationId)}">\n`;
     for (const { book, chapter, verse, text } of notes) {
-      xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapeXml(text)}</note>\n`;
+      xml += `    <note book="${book}" chapter="${chapter}" verse="${verse}">${escapeXml(
+        text
+      )}</note>\n`;
     }
     xml += "  </translation>\n";
   }
@@ -455,6 +456,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (typeof globalThis.window !== "undefined") {
   runAllTests();
 }

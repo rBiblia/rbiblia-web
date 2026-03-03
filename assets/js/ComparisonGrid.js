@@ -1,10 +1,12 @@
-﻿import React, {
+﻿/* global globalThis */
+import React, {
     useEffect,
     useState,
     useCallback,
     useMemo,
     useRef,
 } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import {
     getComparisonLimit,
@@ -80,7 +82,7 @@ const computeLcsDiffIndices = (baseText, compareText, locale) => {
     const n = compareWords.length;
 
     // Build LCS DP table
-    const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
     for (let i = 1; i <= m; i++) {
         for (let j = 1; j <= n; j++) {
             if (baseWords[i - 1].word === compareWords[j - 1].word) {
@@ -151,7 +153,9 @@ const ComparisonGrid = ({
         const favorites = getAvailableFavorites();
         return [
             ...favorites,
-            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill(""),
+            ...new Array(Math.max(0, comparisonLimit - favorites.length)).fill(
+                ""
+            ),
         ].slice(0, comparisonLimit);
     });
 
@@ -188,7 +192,7 @@ const ComparisonGrid = ({
                 .then((result) => {
                     // Only update if we're still on the same verse
                     if (currentVerseIdRef.current === forVerseId) {
-                        if (result.data && result.data[forVerseId]) {
+                        if (result?.data?.[forVerseId]) {
                             setComparedVerses((prev) => ({
                                 ...prev,
                                 [translationId]: result.data[forVerseId],
@@ -239,14 +243,16 @@ const ComparisonGrid = ({
         const favorites = getAvailableFavorites();
         const newSelections = [
             ...favorites,
-            ...Array(Math.max(0, comparisonLimit - favorites.length)).fill(""),
+            ...new Array(Math.max(0, comparisonLimit - favorites.length)).fill(
+                ""
+            ),
         ].slice(0, comparisonLimit);
         setSelectedTranslations(newSelections);
     }, [comparisonLimit]);
 
     // Convert to integers for comparison
-    const currentVerseNum = parseInt(verseId, 10);
-    const totalVersesNum = parseInt(totalVerses, 10);
+    const currentVerseNum = Number.parseInt(verseId, 10);
+    const totalVersesNum = Number.parseInt(totalVerses, 10);
 
     // Navigation handlers
     const handlePrevVerse = useCallback(() => {
@@ -468,8 +474,8 @@ const ComparisonGrid = ({
             }
         };
 
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
+        globalThis.addEventListener("keydown", handleKeyDown);
+        return () => globalThis.removeEventListener("keydown", handleKeyDown);
     }, [
         handlePrevVerse,
         handleNextVerse,
@@ -499,28 +505,8 @@ const ComparisonGrid = ({
         }
     };
 
-    // Get available translations for a specific selector
-    const getAvailableTranslations = (currentSlotIndex) => {
-        const usedTranslations = selectedTranslations.filter(
-            (t, i) => t && i !== currentSlotIndex
-        );
-        const available = translations.filter(
-            (t) =>
-                t.id !== currentTranslation && !usedTranslations.includes(t.id)
-        );
-
-        return available.sort((a, b) => {
-            const aIsFav = favoriteTranslations.includes(a.id);
-            const bIsFav = favoriteTranslations.includes(b.id);
-            if (aIsFav && !bIsFav) return -1;
-            if (!aIsFav && bIsFav) return 1;
-            return a.name.localeCompare(b.name);
-        });
-    };
-
     // Render translation selector
     const renderTranslationSelector = (index) => {
-        const available = getAvailableTranslations(index);
         const selectedId = selectedTranslations[index];
         const usedTranslations = selectedTranslations.filter(
             (t, i) => t && i !== index
@@ -543,46 +529,69 @@ const ComparisonGrid = ({
                     />
                 </div>
 
-                {selectedId && (
-                    <div className="comparison-box comparison-box-secondary mt-2">
-                        <div className="comparison-box-title">
-                            {
-                                translations.find((t) => t.id === selectedId)
-                                    ?.name
-                            }
-                        </div>
-                        {loading[selectedId] ? (
-                            <div className="comparison-loading">
-                                <div
-                                    className="spinner-border spinner-border-sm"
-                                    role="status"
-                                ></div>
+                {selectedId &&
+                    (() => {
+                        let content = null;
+                        if (loading[selectedId]) {
+                            content = (
+                                <div className="comparison-loading">
+                                    <output className="spinner-border spinner-border-sm"></output>
+                                </div>
+                            );
+                        } else if (comparedVerses[selectedId]) {
+                            content = (
+                                <p className="comparison-text">
+                                    {renderComparisonText(
+                                        comparedVerses[selectedId],
+                                        selectedId
+                                    )}
+                                </p>
+                            );
+                        } else if (comparedVerses[selectedId] === null) {
+                            content = (
+                                <p className="comparison-not-found">
+                                    {formatMessage({
+                                        id: "verseNotFoundInTranslation",
+                                    })}
+                                </p>
+                            );
+                        }
+
+                        return (
+                            <div className="comparison-box comparison-box-secondary mt-2">
+                                <div className="comparison-box-title">
+                                    {
+                                        translations.find(
+                                            (t) => t.id === selectedId
+                                        )?.name
+                                    }
+                                </div>
+                                {content}
                             </div>
-                        ) : comparedVerses[selectedId] ? (
-                            <p className="comparison-text">
-                                {renderComparisonText(
-                                    comparedVerses[selectedId],
-                                    selectedId
-                                )}
-                            </p>
-                        ) : comparedVerses[selectedId] === null ? (
-                            <p className="comparison-not-found">
-                                {formatMessage({
-                                    id: "verseNotFoundInTranslation",
-                                })}
-                            </p>
-                        ) : null}
-                    </div>
-                )}
+                        );
+                    })()}
             </div>
         );
     };
 
     return (
-        <div className="selection-overlay comparison-overlay" onClick={onClose}>
+        <div
+            className="selection-overlay comparison-overlay"
+            onClick={onClose}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    onClose();
+                }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={formatMessage({ id: "close" })}
+        >
             <div
                 className="selection-content container"
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+                role="presentation"
             >
                 <div className="selection-header d-flex justify-content-between align-items-center mb-4 pt-4">
                     {/* Navigation and title */}
@@ -663,13 +672,21 @@ const ComparisonGrid = ({
                                         id: "toggleDifferencesKeyboardHint",
                                     })}
                                 >
+                                    <span className="visually-hidden">
+                                        {formatMessage({
+                                            id: "toggleDifferences",
+                                        })}
+                                    </span>
                                     <input
                                         type="checkbox"
                                         checked={isDiffHighlightEnabled}
                                         onChange={toggleDiffHighlight}
                                     />
                                     <span className="rb-switch-slider">
-                                        <span className="rb-switch-text">
+                                        <span
+                                            className="rb-switch-text"
+                                            aria-hidden="true"
+                                        >
                                             {formatMessage({
                                                 id: "toggleDifferences",
                                             })}
@@ -686,10 +703,7 @@ const ComparisonGrid = ({
                                 </p>
                             ) : (
                                 <div className="comparison-loading">
-                                    <div
-                                        className="spinner-border spinner-border-sm"
-                                        role="status"
-                                    ></div>
+                                    <output className="spinner-border spinner-border-sm"></output>
                                 </div>
                             )}
                         </div>
@@ -709,6 +723,25 @@ const ComparisonGrid = ({
             </div>
         </div>
     );
+};
+
+ComparisonGrid.propTypes = {
+    verseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
+    bookId: PropTypes.number.isRequired,
+    bookName: PropTypes.string.isRequired,
+    bookSigil: PropTypes.string.isRequired,
+    chapterId: PropTypes.number.isRequired,
+    currentTranslation: PropTypes.string.isRequired,
+    translations: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    onClose: PropTypes.func.isRequired,
+    onNavigateVerse: PropTypes.func.isRequired,
+    totalVerses: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default ComparisonGrid;

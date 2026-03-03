@@ -16,11 +16,18 @@ const SelectionGrid = ({
     const [selectedBook, setSelectedBook] = useState(initialBook);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-    // Update isMobile on window resize
+    // Update isMobile on window resize (debounced)
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        let timer;
+        const handleResize = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => setIsMobile(window.innerWidth < 768), 150);
+        };
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
     /**

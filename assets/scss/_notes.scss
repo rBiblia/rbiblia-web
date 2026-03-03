@@ -285,7 +285,7 @@
 
   &.note-action-delete:hover {
     background: rgba(220, 53, 69, 0.1);
-    color: #dc3545;
+    color: #c82333;
   }
 
   @include dark-mode {
@@ -702,7 +702,7 @@
   }
 
   &:hover {
-    color: #555;
+    color: #333;
     background: rgba(0, 0, 0, 0.02);
   }
 
@@ -716,7 +716,7 @@
     color: #999;
 
     &:hover {
-      color: #ccc;
+      color: #fff;
       background: rgba(255, 255, 255, 0.03);
     }
 
@@ -759,11 +759,11 @@
 
 .note-type-global {
   background: rgba(108, 117, 125, 0.12);
-  color: #6c757d;
+  color: #495057;
 
   @include dark-mode {
     background: rgba(108, 117, 125, 0.25);
-    color: #adb5bd;
+    color: #f8f9fa;
   }
 }
 
@@ -843,21 +843,21 @@
 
 .notes-import-success {
   background: rgba(40, 167, 69, 0.1);
-  color: #28a745;
+  color: #1e7e34;
 
   @include dark-mode {
     background: rgba(40, 167, 69, 0.2);
-    color: #4caf50;
+    color: #81c784;
   }
 }
 
 .notes-import-error {
   background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
+  color: #c82333;
 
   @include dark-mode {
     background: rgba(220, 53, 69, 0.2);
-    color: #ef5350;
+    color: #ffcdd2;
   }
 }
 
@@ -879,11 +879,11 @@
 
 .verse-note-label-global {
   background: rgba(108, 117, 125, 0.15);
-  color: #6c757d;
+  color: #495057;
 
   @include dark-mode {
     background: rgba(108, 117, 125, 0.3);
-    color: #adb5bd;
+    color: #f8f9fa;
   }
 }
 

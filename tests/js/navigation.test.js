@@ -208,7 +208,7 @@ function testRaceConditionScenario() {
   };
 
   let selectedBook = "gen";
-  let selectedChapter = 5;
+
   const apiCalls = [];
 
   // Simulated fixed changeSelectedChapter with bookOverride
@@ -226,7 +226,6 @@ function testRaceConditionScenario() {
 
   // Fixed: navigateToBookAndChapter passes book override
   const navigateToBookAndChapter = (book, chapter) => {
-    selectedChapter = chapter;
     selectedBook = book;
     changeSelectedChapter(chapter, book);
   };
@@ -249,7 +248,6 @@ function testRaceConditionWithSameBook() {
   // When the user selects a different chapter in the SAME book,
   // navigateToBookAndChapter should still work correctly
   let selectedBook = "gen";
-  let selectedChapter = 3;
   const apiCalls = [];
 
   const changeSelectedChapter = (chapter, bookOverride) => {
@@ -258,7 +256,6 @@ function testRaceConditionWithSameBook() {
   };
 
   const navigateToBookAndChapter = (book, chapter) => {
-    selectedChapter = chapter;
     selectedBook = book;
     changeSelectedChapter(chapter, book);
   };
@@ -268,7 +265,6 @@ function testRaceConditionWithSameBook() {
   console.assert(apiCalls[0].book === "gen", "Should use gen");
   console.assert(apiCalls[0].chapter === 10, "Should use chapter 10");
   console.assert(selectedBook === "gen", "Book should remain gen");
-  console.assert(selectedChapter === 10, "Chapter should be 10");
 
   console.log("✓ Race condition with same book: works correctly");
 }
@@ -502,6 +498,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (typeof globalThis.window !== "undefined") {
   runAllTests();
 }
