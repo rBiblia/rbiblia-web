@@ -56,12 +56,12 @@ export default function Navigator({
                     />
                 </div>
 
-                {/* Mobile action button (Chapter Comparison) */}
+                {/* Mobile action button (Search) */}
                 <div className="col-2 d-lg-none d-flex justify-content-end ps-0">
                     <button
                         className="nav-action-btn d-flex justify-content-center align-items-center"
-                        onClick={onOpenChapterComparison}
-                        title={formatMessage({ id: "chapterComparison" })}
+                        onClick={onOpenSearch}
+                        title={formatMessage({ id: "search" })}
                         style={{
                             width: "44px",
                             height: "44px",
@@ -79,11 +79,8 @@ export default function Navigator({
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         >
-                            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-                            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-                            <path d="M7 21h10" />
-                            <path d="M12 3v18" />
-                            <path d="M3 7h18" />
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
                         </svg>
                     </button>
                 </div>

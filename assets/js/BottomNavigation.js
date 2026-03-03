@@ -7,7 +7,7 @@ const BottomNavigation = ({
     onNextChapter,
     onOpenSelection,
     onOpenNotes,
-    onOpenSearch,
+    onOpenChapterComparison,
     isPrevAvailable,
     isNextAvailable,
     currentBook,
@@ -56,15 +56,30 @@ const BottomNavigation = ({
                 </span>
             </button>
 
-            {/* Search - right of center */}
+            {/* Chapter Comparison - right of center */}
             <button
                 className="bottom-nav-btn"
-                onClick={onOpenSearch}
-                aria-label={formatMessage({ id: "search" })}
+                onClick={onOpenChapterComparison}
+                aria-label={formatMessage({ id: "chapterComparison" })}
             >
-                <Icon className="bottom-nav-icon" name="search" />
+                <svg
+                    className="bottom-nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                    <path d="M7 21h10" />
+                    <path d="M12 3v18" />
+                    <path d="M3 7h18" />
+                </svg>
                 <span className="bottom-nav-label">
-                    {formatMessage({ id: "search" })}
+                    {formatMessage({ id: "chapterComparisonShort" })}
                 </span>
             </button>
 

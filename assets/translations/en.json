@@ -126,6 +126,7 @@
   "suggestionBook": "book",
   "suggestionPhrase": "popular",
   "chapterComparison": "Chapter Comparison",
+  "chapterComparisonShort": "Compare",
   "chapterCompSelectTranslation": "Select translation...",
   "chapterCompSelectHint": "Select translations to compare from the dropdowns above.",
   "chapterCompError": "Failed to load chapter.",

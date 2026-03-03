@@ -1,5 +1,11 @@
 /* global globalThis */
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
@@ -14,7 +20,12 @@ import ComparisonGrid from "./ComparisonGrid";
 import BottomNavigation from "./BottomNavigation";
 import useSwipeNavigation from "./useSwipeNavigation";
 import { SideMenu, SideMenuTab, DisplaySettings } from "./SideMenu";
-import { NotesPanel, NoteEditor } from "./Notes";
+import {
+    NotesPanel,
+    NoteEditor,
+    loadNotes,
+    loadTranslationNotes,
+} from "./Notes";
 import SearchPanel from "./SearchPanel";
 import ChapterComparison from "./ChapterComparison";
 import ChangelogModal from "./ChangelogModal";
@@ -135,10 +146,10 @@ const Bible = ({ intl, setLocale }) => {
     }, [fontFamily]);
 
     // Note: It contains all books available - not only translation specific
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState({});
     const [translations, setTranslations] = useState([]);
     const [structure, setStructure] = useState(null);
-    const [verses, setVerses] = useState([]);
+    const [verses, setVerses] = useState({});
     const [selectedTranslation, setSelectedTranslation] = useState(
         getDataFromCurrentPathname().translation
     );
@@ -155,7 +166,8 @@ const Bible = ({ intl, setLocale }) => {
             const data = getDataFromCurrentPathname();
             setSelectedTranslation(data.translation);
             setSelectedBook(data.book);
-            setSelectedChapter(data.chapter);
+            // Use changeSelectedChapter (not raw setter) so verses are actually fetched
+            changeSelectedChapter(data.chapter, data.book);
         };
 
         globalThis.addEventListener("popstate", handlePopState);
@@ -392,7 +404,6 @@ const Bible = ({ intl, setLocale }) => {
 
     const nextBook = () => {
         if (isNextBookAvailable()) {
-            setSelectedBook();
             changeSelectedBook(Object.keys(structure)[getBookIndex() + 1]);
         }
     };
@@ -405,12 +416,6 @@ const Bible = ({ intl, setLocale }) => {
 
         setSelectedBook(Object.keys(structure)[getBookIndex() - 1]);
     };
-
-    useEffect(() => {
-        if (startFromLastVerse.current) {
-            startFromLastVerse.current = false;
-        }
-    }, [selectedBook]);
 
     // Start critical fetches immediately on mount/change, independent of lists
     useEffect(() => {
@@ -460,6 +465,27 @@ const Bible = ({ intl, setLocale }) => {
         prevChapter, // ArrowLeft  → previous chapter
         nextChapter, // ArrowRight → next chapter
         { enabled: !overlaysOpen && showVerses }
+    );
+
+    // Load notes ONCE (not per-verse) — passed down to Reader → Verse
+    const allNotes = useMemo(() => loadNotes(), [notesVersion]);
+    const allTranslationNotes = useMemo(
+        () => loadTranslationNotes(),
+        [notesVersion]
+    );
+
+    // Stable callbacks for Reader → Verse (prevents memo breakage)
+    const handleVerseClick = useCallback(
+        (verseId) => setComparedVerse(verseId),
+        []
+    );
+    const handleVerseLongPress = useCallback(
+        (verseId) => setEditingNoteVerse(verseId),
+        []
+    );
+    const handleVerseCompare = useCallback(
+        (verseId) => setComparedVerse(verseId),
+        []
     );
 
     const handleNavigateToVerse = useCallback(
@@ -567,26 +593,32 @@ const Bible = ({ intl, setLocale }) => {
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 selectedTranslation={selectedTranslation}
+                translationName={
+                    translations?.find?.((t) => t.id === selectedTranslation)
+                        ?.name || selectedTranslation
+                }
                 verses={verses}
-                onVerseClick={(verseId) => setComparedVerse(verseId)}
-                onVerseLongPress={(verseId) => setEditingNoteVerse(verseId)}
-                onVerseCompare={(verseId) => setComparedVerse(verseId)}
+                onVerseClick={handleVerseClick}
+                onVerseLongPress={handleVerseLongPress}
+                onVerseCompare={handleVerseCompare}
                 notesVersion={notesVersion}
                 highlightedVerse={highlightedVerse}
+                allNotes={allNotes}
+                allTranslationNotes={allTranslationNotes}
             />
             <BottomNavigation
                 onPrevChapter={prevChapter}
                 onNextChapter={nextChapter}
                 onOpenSelection={() => setIsSelectionOpen(true)}
                 onOpenNotes={() => setIsNotesOpen(true)}
-                onOpenSearch={() => setIsSearchOpen(true)}
+                onOpenChapterComparison={() => setIsChapterCompOpen(true)}
                 isPrevAvailable={
                     isPrevChapterAvailable() || isPrevBookAvailable()
                 }
                 isNextAvailable={
                     isNextChapterAvailable() || isNextBookAvailable()
                 }
-                currentBook={books[selectedBook]?.name}
+                currentBook={getSigla(selectedBook, intl.locale)}
                 currentChapter={selectedChapter}
                 className={isNavVisible ? "" : "nav-hidden-bottom"}
             />
@@ -597,6 +629,7 @@ const Bible = ({ intl, setLocale }) => {
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 selectedTranslation={selectedTranslation}
+                translations={translations}
                 books={books}
                 onNavigateToVerse={handleNavigateToVerse}
             />

@@ -126,6 +126,7 @@
   "suggestionBook": "księga",
   "suggestionPhrase": "popularne",
   "chapterComparison": "Porównanie rozdziałów",
+  "chapterComparisonShort": "Porównaj",
   "chapterCompSelectTranslation": "Wybierz tłumaczenie...",
   "chapterCompSelectHint": "Wybierz tłumaczenia do porównania z list rozwijanych powyżej.",
   "chapterCompError": "Nie udało się załadować rozdziału.",

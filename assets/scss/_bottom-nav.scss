@@ -7,8 +7,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   align-items: center;
   @include glassmorphism-panel(0.9, 12px);
   border-top: 1px solid rgba(0, 0, 0, 0.05); // Subtler border
@@ -32,13 +32,12 @@
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   background: transparent;
   border: none;
   color: #555;
   cursor: pointer;
-  cursor: pointer;
-  min-width: 70px;
+  width: 100%;
   border-radius: 12px;
   @include interactive-scale(0.92);
 
