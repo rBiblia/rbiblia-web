@@ -11,6 +11,13 @@ const useSwipeNavigation = (
     onSwipeRight,
     { threshold = 50, enabled = true } = {}
 ) => {
+    // Store callbacks in refs so event listeners don't need to be re-attached
+    // when callbacks change (avoids listener churn on every render)
+    const onSwipeLeftRef = useRef(onSwipeLeft);
+    const onSwipeRightRef = useRef(onSwipeRight);
+    onSwipeLeftRef.current = onSwipeLeft;
+    onSwipeRightRef.current = onSwipeRight;
+
     const touchStartX = useRef(null);
     const touchStartY = useRef(null);
     const touchEndX = useRef(null);
@@ -50,10 +57,10 @@ const useSwipeNavigation = (
             ) {
                 if (deltaX > 0) {
                     // Swiped left - go to next chapter
-                    onSwipeLeft?.();
+                    onSwipeLeftRef.current?.();
                 } else {
                     // Swiped right - go to previous chapter
-                    onSwipeRight?.();
+                    onSwipeRightRef.current?.();
                 }
             }
 
@@ -80,7 +87,7 @@ const useSwipeNavigation = (
             document.removeEventListener("touchmove", handleTouchMove);
             document.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [onSwipeLeft, onSwipeRight, threshold, enabled]);
+    }, [threshold, enabled]); // Callbacks removed from deps — stored in refs
 };
 
 export default useSwipeNavigation;
