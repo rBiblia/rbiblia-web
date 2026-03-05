@@ -83,6 +83,7 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @include reduced-motion {
+
   // Disable all animations
   *,
   *::before,
@@ -132,6 +133,7 @@ header.sticky-top {
 // Dark mode skeleton fix for reduced motion
 @include dark-mode {
   @include reduced-motion {
+
     .skeleton-verse-number,
     .skeleton-line {
       background: #333 !important;
@@ -143,6 +145,7 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @media screen and (orientation: landscape) and (max-height: 500px) {
+
   // Compact bottom navigation in landscape
   .bottom-nav {
     padding: 0.25rem 0;
@@ -348,6 +351,7 @@ header.sticky-top {
 
 // Better visual feedback for touch interactions
 @media (hover: none) and (pointer: coarse) {
+
   // Touch devices get larger hit areas
   .tile {
     min-height: 54px;
@@ -358,7 +362,9 @@ header.sticky-top {
   }
 
   // Active state is more prominent
-  .bottom-nav-btn:active:not(:disabled),
+  // Note: .bottom-nav-btn is excluded — it uses opacity-only feedback
+  // because transform scale on :active causes Android browsers to lose
+  // the click target (element shifts from under the finger).
   .nav-action-btn:active:not(:disabled),
   .setting-tile:active,
   .tile:active {
@@ -379,8 +385,12 @@ header.sticky-top {
     justify-content: center;
     @include min-touch-target(44px);
   }
+}
 
-  // Hide floating action buttons on touch devices (use long-press instead)
+// Hide floating action buttons only on actual mobile devices.
+// Combined media query prevents Brave desktop (with fingerprint protection
+// spoofing hover: none) from hiding verse-actions in narrowed windows.
+@media (hover: none) and (pointer: coarse) and (max-width: 991.98px) {
   .verse-actions {
     display: none !important;
   }
@@ -390,6 +400,7 @@ header.sticky-top {
 // ---------------------------------------------------------
 
 @media (prefers-contrast: high) {
+
   .tile,
   .setting-tile,
   .search-result-item,

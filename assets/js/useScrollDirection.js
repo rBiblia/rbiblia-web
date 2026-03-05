@@ -9,12 +9,18 @@ import { useState, useEffect, useRef } from "react";
  * @param {number} options.threshold Minimum scroll difference to trigger change
  * @param {number} options.topThreshold Distance from top where nav is always visible
  */
-const useScrollDirection = ({ threshold = 50, topThreshold = 10 } = {}) => {
+const useScrollDirection = ({ threshold = 50, topThreshold = 10, disabled = false } = {}) => {
     const [isVisible, setIsVisible] = useState(true);
     const prevScrollY = useRef(0);
     const rafId = useRef(null);
 
     useEffect(() => {
+        // Zen Mode: skip scroll handling entirely, nav stays visible
+        if (disabled) {
+            setIsVisible(true);
+            return;
+        }
+
         const handleScroll = () => {
             // Throttle with requestAnimationFrame — at most one check per frame
             if (rafId.current) return;
@@ -61,7 +67,7 @@ const useScrollDirection = ({ threshold = 50, topThreshold = 10 } = {}) => {
                 rafId.current = null;
             }
         };
-    }, [threshold, topThreshold]);
+    }, [threshold, topThreshold, disabled]);
 
     return isVisible;
 };

@@ -593,67 +593,68 @@ const ComparisonGrid = ({
                 onKeyDown={(e) => e.stopPropagation()}
                 role="presentation"
             >
-                <div className="selection-header d-flex justify-content-between align-items-center mb-4 pt-4">
-                    {/* Navigation and title */}
-                    <div className="comparison-nav-header">
-                        <button
-                            className="comparison-nav-btn"
-                            onClick={handlePrevVerse}
-                            disabled={!canGoPrev}
-                            title={formatMessage({ id: "previousVerse" })}
-                        >
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
+                {/* Pinned area: header + primary translation (sticky on mobile) */}
+                <div className="comparison-pinned-area">
+                    <div className="selection-header d-flex justify-content-between align-items-center mb-3 pt-4">
+                        {/* Navigation and title */}
+                        <div className="comparison-nav-header">
+                            <button
+                                className="comparison-nav-btn"
+                                onClick={handlePrevVerse}
+                                disabled={!canGoPrev}
+                                title={formatMessage({ id: "previousVerse" })}
                             >
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
-                        </button>
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
 
-                        <h2 className="comparison-title">
-                            <span className="comparison-title-full">
-                                {bookName}
+                            <h2 className="comparison-title">
+                                <span className="comparison-title-full">
+                                    {bookName}
+                                </span>
+                                <span className="comparison-title-sigil">
+                                    {bookSigil}
+                                </span>{" "}
+                                {chapterId}:{verseId}
+                            </h2>
+
+                            <button
+                                className="comparison-nav-btn"
+                                onClick={handleNextVerse}
+                                disabled={!canGoNext}
+                                title={formatMessage({ id: "nextVerse" })}
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="d-flex align-items-center gap-2">
+                            <span className="comparison-keyboard-hint d-none d-lg-block">
+                                ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
+                                {formatMessage({ id: "toggleDifferences" })}
                             </span>
-                            <span className="comparison-title-sigil">
-                                {bookSigil}
-                            </span>{" "}
-                            {chapterId}:{verseId}
-                        </h2>
-
-                        <button
-                            className="comparison-nav-btn"
-                            onClick={handleNextVerse}
-                            disabled={!canGoNext}
-                            title={formatMessage({ id: "nextVerse" })}
-                        >
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </button>
+                            <button
+                                className="btn btn-close"
+                                onClick={onClose}
+                            ></button>
+                        </div>
                     </div>
 
-                    <div className="d-flex align-items-center gap-2">
-                        <span className="comparison-keyboard-hint d-none d-lg-block">
-                            ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
-                            {formatMessage({ id: "toggleDifferences" })}
-                        </span>
-                        <button
-                            className="btn btn-close"
-                            onClick={onClose}
-                        ></button>
-                    </div>
-                </div>
-
-                <div className="selection-body pb-5">
                     {/* Original verse */}
-                    <div className="comparison-original mb-4">
+                    <div className="comparison-original">
                         <div className="comparison-box comparison-box-primary">
                             <div className="comparison-box-header">
                                 <div className="comparison-box-title comparison-box-title-primary">
@@ -708,7 +709,9 @@ const ComparisonGrid = ({
                             )}
                         </div>
                     </div>
+                </div>
 
+                <div className="selection-body pb-5">
                     <div className="comparison-divider">
                         <span>{formatMessage({ id: "compareWith" })}</span>
                     </div>
@@ -728,10 +731,10 @@ const ComparisonGrid = ({
 ComparisonGrid.propTypes = {
     verseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         .isRequired,
-    bookId: PropTypes.number.isRequired,
+    bookId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     bookName: PropTypes.string.isRequired,
     bookSigil: PropTypes.string.isRequired,
-    chapterId: PropTypes.number.isRequired,
+    chapterId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     currentTranslation: PropTypes.string.isRequired,
     translations: PropTypes.arrayOf(
         PropTypes.shape({

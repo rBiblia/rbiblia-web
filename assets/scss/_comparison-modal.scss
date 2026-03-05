@@ -54,6 +54,27 @@
   }
 }
 
+// Pin header + primary translation while scrolling through comparisons
+.comparison-pinned-area {
+  @media (max-width: 991.98px) {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.97);
+    padding-bottom: 0.75rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+    @include dark-mode {
+      background: rgba(30, 30, 30, 0.97);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
 .comparison-box-header {
   display: flex;
   align-items: center;
@@ -147,20 +168,16 @@
     content: "";
     flex: 1;
     height: 1.5px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(0, 0, 0, 0.08),
-      transparent
-    );
+    background: linear-gradient(to right,
+        transparent,
+        rgba(0, 0, 0, 0.08),
+        transparent);
 
     @include dark-mode {
-      background: linear-gradient(
-        to right,
-        transparent,
-        rgba(255, 255, 255, 0.08),
-        transparent
-      );
+      background: linear-gradient(to right,
+          transparent,
+          rgba(255, 255, 255, 0.08),
+          transparent);
     }
   }
 
@@ -368,7 +385,7 @@
     margin-left: 18px;
   }
 
-  input:checked + .rb-switch-slider {
+  input:checked+.rb-switch-slider {
     background: $rb-header-navigator-arrow;
     border-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 10px rgba($rb-header-navigator-arrow, 0.2),
@@ -388,7 +405,7 @@
     background: rgba(0, 0, 0, 0.1);
   }
 
-  input:checked:hover + .rb-switch-slider {
+  input:checked:hover+.rb-switch-slider {
     background: darken($rb-header-navigator-arrow, 4%);
     box-shadow: 0 6px 14px rgba($rb-header-navigator-arrow, 0.3),
       inset 0 2px 4px rgba(0, 0, 0, 0.15);
@@ -409,7 +426,7 @@
       color: #999;
     }
 
-    input:checked + .rb-switch-slider {
+    input:checked+.rb-switch-slider {
       background: $rb-header-navigator-arrow;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
         inset 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -506,6 +523,6 @@
 }
 
 // Spacing between toggle and close button
-.comparison-overlay .selection-header > .d-flex {
+.comparison-overlay .selection-header>.d-flex {
   gap: 0.75rem !important;
 }

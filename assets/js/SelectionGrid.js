@@ -78,18 +78,18 @@ const SelectionGrid = ({
                 </h3>
                 <div className="grid-container">
                     {bookIds.map((id) => (
-                        <div
+                        <button
+                            type="button"
                             key={id}
-                            className={`tile book-tile ${
-                                isMobile ? "tile-compact" : ""
-                            } ${id === currentBook ? "tile-active" : ""}`}
+                            className={`tile book-tile ${isMobile ? "tile-compact" : ""
+                                } ${id === currentBook ? "tile-active" : ""}`}
                             onClick={() => handleBookClick(id)}
                             title={books[id].name}
                         >
                             <span className="tile-text">
                                 {getBookDisplayName(id)}
                             </span>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>
@@ -104,8 +104,8 @@ const SelectionGrid = ({
                         {view === "books"
                             ? formatMessage({ id: "selectBook" })
                             : `${books[selectedBook].name} - ${formatMessage({
-                                  id: "selectChapter",
-                              })}`}
+                                id: "selectChapter",
+                            })}`}
                     </h2>
                     <div className="d-flex gap-2">
                         {view === "chapters" && (
@@ -134,18 +134,18 @@ const SelectionGrid = ({
                     ) : (
                         <div className="grid-container chapters-grid">
                             {structure[selectedBook].map((chapter) => (
-                                <div
+                                <button
+                                    type="button"
                                     key={chapter}
-                                    className={`tile chapter-tile ${
-                                        selectedBook === currentBook &&
-                                        chapter === currentChapter
+                                    className={`tile chapter-tile ${selectedBook === currentBook &&
+                                            chapter === currentChapter
                                             ? "tile-active"
                                             : ""
-                                    }`}
+                                        }`}
                                     onClick={() => handleChapterClick(chapter)}
                                 >
                                     <span className="tile-text">{chapter}</span>
-                                </div>
+                                </button>
                             ))}
                         </div>
                     )}
