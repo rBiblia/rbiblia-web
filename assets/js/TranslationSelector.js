@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import {
     FAVORITE_TRANSLATIONS_UPDATED_EVENT,
@@ -57,12 +58,12 @@ const TranslationSelector = ({
             setFavorites(getFavoriteTranslations());
         };
 
-        window.addEventListener(
+        globalThis.addEventListener(
             FAVORITE_TRANSLATIONS_UPDATED_EVENT,
             handleFavoritesUpdated
         );
         return () => {
-            window.removeEventListener(
+            globalThis.removeEventListener(
                 FAVORITE_TRANSLATIONS_UPDATED_EVENT,
                 handleFavoritesUpdated
             );
@@ -120,34 +121,37 @@ const TranslationSelector = ({
         (t) => t.id === selectedTranslation
     );
 
+    // Resolve display value for the trigger button
+    const getDisplayValue = () => {
+        if (currentTranslation) return currentTranslation.name;
+        return selectedTranslation || placeholder;
+    };
+
     const renderTranslationItem = (t, showStar = true) => {
         const isDisabled = disabledOptions.includes(t.id);
 
         return (
-            <div
+            <button
+                type="button"
                 key={t.id}
-                className={`translation-item ${
-                    t.id === selectedTranslation ? "selected" : ""
-                } ${isDisabled ? "disabled" : ""}`}
+                className={`translation-item ${t.id === selectedTranslation ? "selected" : ""
+                    } ${isDisabled ? "disabled" : ""}`}
                 onClick={() => !isDisabled && handleSelect(t.id)}
                 onMouseEnter={() => !isDisabled && setHoveredId(t.id)}
                 onMouseLeave={() => !isDisabled && setHoveredId(null)}
-                style={
-                    isDisabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
-                }
+                disabled={isDisabled}
             >
                 <span className="translation-name">
                     {t.name} {t.date ? `[${t.date}]` : ""}
                 </span>
                 {showStar && (
                     <button
-                        className={`translation-star ${
-                            favorites.includes(t.id) ? "is-favorite" : ""
-                        } ${
-                            hoveredId === t.id || favorites.includes(t.id)
+                        type="button"
+                        className={`translation-star ${favorites.includes(t.id) ? "is-favorite" : ""
+                            } ${hoveredId === t.id || favorites.includes(t.id)
                                 ? "visible"
                                 : ""
-                        }`}
+                            }`}
                         onClick={(e) => toggleFavorite(e, t.id)}
                         title={
                             favorites.includes(t.id)
@@ -166,16 +170,15 @@ const TranslationSelector = ({
                         />
                     </button>
                 )}
-            </div>
+            </button>
         );
     };
 
     return (
         <div className="translation-selector" ref={dropdownRef}>
             <button
-                className={`translation-selector-trigger form-control ${
-                    isLoading ? "disabled" : ""
-                }`}
+                className={`translation-selector-trigger form-control ${isLoading ? "disabled" : ""
+                    }`}
                 onClick={() => !isLoading && setIsOpen(!isOpen)}
                 type="button"
                 disabled={isLoading}
@@ -183,18 +186,13 @@ const TranslationSelector = ({
                 <span className="translation-selector-value">
                     {isLoading ? (
                         <span className="d-flex align-items-center gap-2">
-                            <span
+                            <output
                                 className="spinner-border spinner-border-sm text-secondary"
-                                role="status"
-                            ></span>
+                            ></output>
                             <span>{selectedTranslation || placeholder}...</span>
                         </span>
-                    ) : currentTranslation ? (
-                        currentTranslation.name
-                    ) : selectedTranslation ? (
-                        selectedTranslation
                     ) : (
-                        placeholder
+                        getDisplayValue()
                     )}
                 </span>
                 <span className="translation-selector-arrow">
@@ -211,7 +209,8 @@ const TranslationSelector = ({
                             const isFavCollapsed = collapsedGroups[favLabel];
                             return (
                                 <div className="translation-group">
-                                    <div
+                                    <button
+                                        type="button"
                                         className="translation-group-label"
                                         onClick={(e) =>
                                             toggleGroup(e, favLabel)
@@ -240,7 +239,7 @@ const TranslationSelector = ({
                                             size={14}
                                             className="translation-group-chevron"
                                         />
-                                    </div>
+                                    </button>
                                     {!isFavCollapsed &&
                                         favoriteTranslations
                                             .sort((a, b) =>
@@ -255,11 +254,12 @@ const TranslationSelector = ({
 
                     {/* Other translations grouped by language */}
                     {translationList.map(
-                        ({ languageName, children }, index) => {
+                        ({ languageName, children }) => {
                             const isCollapsed = collapsedGroups[languageName];
                             return (
-                                <div className="translation-group" key={index}>
-                                    <div
+                                <div className="translation-group" key={languageName}>
+                                    <button
+                                        type="button"
                                         className="translation-group-label"
                                         onClick={(e) =>
                                             toggleGroup(e, languageName)
@@ -275,7 +275,7 @@ const TranslationSelector = ({
                                             size={14}
                                             className="translation-group-chevron"
                                         />
-                                    </div>
+                                    </button>
                                     {!isCollapsed &&
                                         children
                                             .sort((a, b) =>
@@ -292,6 +292,22 @@ const TranslationSelector = ({
             )}
         </div>
     );
+};
+
+TranslationSelector.propTypes = {
+    translations: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            language: PropTypes.string,
+            date: PropTypes.string,
+        })
+    ).isRequired,
+    selectedTranslation: PropTypes.string,
+    changeSelectedTranslation: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
+    disabledOptions: PropTypes.arrayOf(PropTypes.string),
+    placeholder: PropTypes.string,
 };
 
 export default TranslationSelector;

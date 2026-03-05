@@ -384,10 +384,8 @@ header {
       width: calc(33.333333% - 40px);
     }
   }
-}
 
-// Immersive Mode styles
-header {
+  // Immersive Mode styles
   transition: transform 0.3s ease-in-out;
 
   &.nav-hidden-header {
@@ -479,7 +477,7 @@ footer {
 @media screen and (max-width: 575px) {
   header {
     &.pb-2 {
-      padding-bottom: 0 !important;
+      padding-bottom: 0.35rem !important;
     }
 
     // Ensure selector row has vertical breathing room on mobile
@@ -513,5 +511,13 @@ footer {
 
   main {
     min-height: calc(100vh - 162px);
+  }
+}
+
+// Mid-range mobile/tablet: ensure header row has horizontal breathing room
+@media screen and (min-width: 576px) and (max-width: 991.98px) {
+  header .row {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { useIntl } from "react-intl";
 import Icon from "./Icon";
 
-const BottomNavigation = ({
+const BottomNavigation = memo(function BottomNavigation({
     onPrevChapter,
     onNextChapter,
     onOpenSelection,
@@ -13,7 +13,7 @@ const BottomNavigation = ({
     currentBook,
     currentChapter,
     className = "",
-}) => {
+}) {
     const { formatMessage } = useIntl();
 
     return (
@@ -98,6 +98,6 @@ const BottomNavigation = ({
             </button>
         </nav>
     );
-};
+});
 
 export default BottomNavigation;

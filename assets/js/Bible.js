@@ -65,8 +65,13 @@ const Bible = ({ intl, setLocale }) => {
         return localStorage.getItem("rbiblia-font-size") || "medium";
     });
 
-    // Immersive Mode (hide nav on scroll)
-    const isNavVisible = useScrollDirection();
+    // Zen Mode — lock navigation visible (disable hide-on-scroll)
+    const [zenMode, setZenMode] = useState(() => {
+        return localStorage.getItem("rbiblia-zen-mode") === "1";
+    });
+
+    // Immersive Mode (hide nav on scroll) — disabled when zenMode is on
+    const isNavVisible = useScrollDirection({ disabled: zenMode });
 
     // Font family (saved to localStorage)
     const [fontFamily, setFontFamily] = useState(() => {
@@ -360,34 +365,42 @@ const Bible = ({ intl, setLocale }) => {
     }, [intl.locale]); // Added dependencies based on variables used inside useEffect.
     // Other useEffect hooks as needed for componentDidUpdate logic
 
-    // Note: Number.parseInt is here because sometimes selectedChapter is a string.
-    //    Probably when chapter is parsed from the URL during first load it become a string
-    const getChapterIndex = () =>
-        chapters.indexOf(Number.parseInt(selectedChapter, 10));
+    // Memoize indices and availability checks to avoid recalculating on every render
+    const chapterIndex = useMemo(
+        () => chapters.indexOf(Number.parseInt(selectedChapter, 10)),
+        [chapters, selectedChapter]
+    );
 
     const isNextChapterAvailable = () =>
-        !isStructureLoading && chapters[getChapterIndex() + 1] !== undefined;
+        !isStructureLoading && chapters[chapterIndex + 1] !== undefined;
 
     const isPrevChapterAvailable = () => {
-        return !isStructureLoading && getChapterIndex() !== 0;
+        return !isStructureLoading && chapterIndex !== 0;
     };
 
-    const getBookIndex = () => Object.keys(structure).indexOf(selectedBook);
+    const bookKeys = useMemo(
+        () => (structure ? Object.keys(structure) : []),
+        [structure]
+    );
+    const bookIndex = useMemo(
+        () => bookKeys.indexOf(selectedBook),
+        [bookKeys, selectedBook]
+    );
 
     const isNextBookAvailable = () => {
         return (
             !isStructureLoading &&
-            structure[Object.keys(structure)[getBookIndex() + 1]] !== undefined
+            structure[bookKeys[bookIndex + 1]] !== undefined
         );
     };
 
     const isPrevBookAvailable = () => {
-        return !isStructureLoading && getBookIndex() !== 0;
+        return !isStructureLoading && bookIndex !== 0;
     };
 
     const nextChapter = () => {
         if (isNextChapterAvailable()) {
-            changeSelectedChapter(chapters[getChapterIndex() + 1]);
+            changeSelectedChapter(chapters[chapterIndex + 1]);
             return;
         }
         nextBook();
@@ -395,7 +408,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const prevChapter = () => {
         if (isPrevChapterAvailable()) {
-            changeSelectedChapter(chapters[getChapterIndex() - 1]);
+            changeSelectedChapter(chapters[chapterIndex - 1]);
             return;
         }
 
@@ -404,7 +417,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const nextBook = () => {
         if (isNextBookAvailable()) {
-            changeSelectedBook(Object.keys(structure)[getBookIndex() + 1]);
+            changeSelectedBook(bookKeys[bookIndex + 1]);
         }
     };
 
@@ -414,7 +427,7 @@ const Bible = ({ intl, setLocale }) => {
         }
         startFromLastVerse.current = _startFromLastVerse;
 
-        setSelectedBook(Object.keys(structure)[getBookIndex() - 1]);
+        setSelectedBook(bookKeys[bookIndex - 1]);
     };
 
     // Start critical fetches immediately on mount/change, independent of lists
@@ -472,6 +485,38 @@ const Bible = ({ intl, setLocale }) => {
     const allTranslationNotes = useMemo(
         () => loadTranslationNotes(),
         [notesVersion]
+    );
+
+    // Stable callbacks for overlay openers (prevents BottomNavigation memo breakage)
+    const handleOpenSelection = useCallback(
+        () => setIsSelectionOpen(true),
+        []
+    );
+    const handleOpenNotes = useCallback(() => setIsNotesOpen(true), []);
+    const handleOpenChapterComp = useCallback(
+        () => setIsChapterCompOpen(true),
+        []
+    );
+    const handleOpenSearch = useCallback(() => setIsSearchOpen(true), []);
+    const handleOpenSettings = useCallback(
+        () => setIsSideMenuOpen(true),
+        []
+    );
+
+    // Memoize translationName to avoid inline computation in render
+    const translationName = useMemo(
+        () =>
+            translations?.find?.((t) => t.id === selectedTranslation)?.name ||
+            selectedTranslation,
+        [translations, selectedTranslation]
+    );
+
+    // Memoize navigation availability for BottomNavigation
+    const isPrevAvailable = isPrevChapterAvailable() || isPrevBookAvailable();
+    const isNextAvailable = isNextChapterAvailable() || isNextBookAvailable();
+    const currentBookSigla = useMemo(
+        () => getSigla(selectedBook, intl.locale),
+        [selectedBook, intl.locale]
     );
 
     // Stable callbacks for Reader → Verse (prevents memo breakage)
@@ -544,11 +589,11 @@ const Bible = ({ intl, setLocale }) => {
                 isNextBookAvailable={isNextBookAvailable}
                 isPrevChapterAvailable={isPrevChapterAvailable}
                 isNextChapterAvailable={isNextChapterAvailable}
-                onOpenSelection={() => setIsSelectionOpen(true)}
-                onOpenNotes={() => setIsNotesOpen(true)}
-                onOpenSearch={() => setIsSearchOpen(true)}
-                onOpenSettings={() => setIsSideMenuOpen(true)}
-                onOpenChapterComparison={() => setIsChapterCompOpen(true)}
+                onOpenSelection={handleOpenSelection}
+                onOpenNotes={handleOpenNotes}
+                onOpenSearch={handleOpenSearch}
+                onOpenSettings={handleOpenSettings}
+                onOpenChapterComparison={handleOpenChapterComp}
                 className={isNavVisible ? "" : "nav-hidden-header"}
             />
             {isSelectionOpen && (
@@ -593,10 +638,7 @@ const Bible = ({ intl, setLocale }) => {
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 selectedTranslation={selectedTranslation}
-                translationName={
-                    translations?.find?.((t) => t.id === selectedTranslation)
-                        ?.name || selectedTranslation
-                }
+                translationName={translationName}
                 verses={verses}
                 onVerseClick={handleVerseClick}
                 onVerseLongPress={handleVerseLongPress}
@@ -609,16 +651,12 @@ const Bible = ({ intl, setLocale }) => {
             <BottomNavigation
                 onPrevChapter={prevChapter}
                 onNextChapter={nextChapter}
-                onOpenSelection={() => setIsSelectionOpen(true)}
-                onOpenNotes={() => setIsNotesOpen(true)}
-                onOpenChapterComparison={() => setIsChapterCompOpen(true)}
-                isPrevAvailable={
-                    isPrevChapterAvailable() || isPrevBookAvailable()
-                }
-                isNextAvailable={
-                    isNextChapterAvailable() || isNextBookAvailable()
-                }
-                currentBook={getSigla(selectedBook, intl.locale)}
+                onOpenSelection={handleOpenSelection}
+                onOpenNotes={handleOpenNotes}
+                onOpenChapterComparison={handleOpenChapterComp}
+                isPrevAvailable={isPrevAvailable}
+                isNextAvailable={isNextAvailable}
+                currentBook={currentBookSigla}
                 currentChapter={selectedChapter}
                 className={isNavVisible ? "" : "nav-hidden-bottom"}
             />
@@ -679,6 +717,11 @@ const Bible = ({ intl, setLocale }) => {
                     setTheme={setTheme}
                     darkVariant={darkVariant}
                     setDarkVariant={setDarkVariant}
+                    zenMode={zenMode}
+                    setZenMode={(value) => {
+                        setZenMode(value);
+                        localStorage.setItem("rbiblia-zen-mode", value ? "1" : "0");
+                    }}
                     onClose={() => setIsSideMenuOpen(false)}
                     onOpenChangelog={() => setIsChangelogOpen(true)}
                 />

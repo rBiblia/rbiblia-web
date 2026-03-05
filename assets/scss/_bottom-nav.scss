@@ -8,21 +8,26 @@
   left: 0;
   right: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 44px 1fr auto 1fr 44px;
   align-items: center;
-  @include glassmorphism-panel(0.9, 12px);
-  border-top: 1px solid rgba(0, 0, 0, 0.05); // Subtler border
+  // Use solid background instead of backdrop-filter blur for mobile performance
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
   padding: 0.5rem 0;
   padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
-  // box-shadow handled by mixin
-
-  // Transition handled in immersive mode block
 
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &.nav-hidden-bottom {
     transform: translateY(100%);
+  }
+
+  @include dark-mode {
+    background: rgba(30, 30, 30, 0.97);
+    border-top-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -32,14 +37,23 @@
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.25rem;
   background: transparent;
   border: none;
   color: #555;
   cursor: pointer;
   width: 100%;
   border-radius: 12px;
-  @include interactive-scale(0.92);
+  // Use opacity feedback instead of transform scale — scale on :active
+  // causes Android browsers to lose the click target (element moves from
+  // under the finger). touch-action prevents double-tap-to-zoom delay.
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s ease, background-color 0.15s ease;
+
+  &:active:not(:disabled) {
+    opacity: 0.6;
+  }
 
   &:hover:not(:disabled) {
     background: rgba(0, 0, 0, 0.05);
@@ -64,9 +78,10 @@
   gap: 0.5rem;
   background: $rb-header-navigator-arrow;
   color: white;
-  padding: 0.6rem 1.25rem;
+  padding: 0.6rem 3.25rem;
   border-radius: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
 
   &:hover:not(:disabled) {
     background: darken($rb-header-navigator-arrow, 8%);
@@ -78,6 +93,12 @@
     width: 18px;
     height: 18px;
   }
+}
+
+.bottom-nav-arrow {
+  padding: 0.5rem 0;
+  width: 44px;
+  justify-self: center;
 }
 
 .bottom-nav-icon {
@@ -105,8 +126,10 @@
 }
 
 // Add padding at the bottom of main to prevent overlap with bottom nav
+// and padding-top to guarantee spacing below sticky header (Brave compatibility)
 @media (max-width: 991.98px) {
   main {
+    padding-top: 0.5rem;
     padding-bottom: 90px !important;
   }
 

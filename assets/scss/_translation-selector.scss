@@ -116,6 +116,14 @@
   cursor: pointer;
   transition: background 0.15s ease;
   user-select: none;
+  // Reset button defaults (now <button> for accessibility & mobile touch)
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
 
   &:hover {
     background: rgba(0, 0, 0, 0.03);
@@ -148,6 +156,15 @@
   padding: 0.8rem 1rem;
   cursor: pointer;
   transition: background 0.1s ease;
+  // Reset button defaults (now <button> for mobile touch reliability)
+  font: inherit;
+  color: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
 
   &:hover {
     background: rgba($rb-header-navigator-arrow, 0.08);
@@ -156,6 +173,11 @@
   &.selected {
     background: rgba($rb-header-navigator-arrow, 0.12);
     font-weight: 600;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   @include dark-mode {
