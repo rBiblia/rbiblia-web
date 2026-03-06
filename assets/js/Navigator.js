@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, memo } from "react";
 import { useIntl } from "react-intl";
 import TranslationSelector from "./TranslationSelector";
 import BookSelector from "./BookSelector";
@@ -6,7 +6,7 @@ import ChapterSelector from "./ChapterSelector";
 import DirectionalNavigationButton from "./DirectionalNavigationButton";
 import Icon from "./Icon";
 
-export default function Navigator({
+const Navigator = memo(function Navigator({
     translations,
     books,
     structure,
@@ -36,9 +36,9 @@ export default function Navigator({
 }) {
     const { formatMessage } = useIntl();
     const isNextChapterOrBookAvailable =
-        isNextChapterAvailable() || isNextBookAvailable();
+        isNextChapterAvailable || isNextBookAvailable;
     const isPrevChapterOrBookAvailable =
-        isPrevChapterAvailable() || isPrevBookAvailable();
+        isPrevChapterAvailable || isPrevBookAvailable;
 
     const handlePrevChapter = useCallback(() => prevChapter(), [prevChapter]);
 
@@ -176,4 +176,6 @@ export default function Navigator({
             </div>
         </header>
     );
-}
+});
+
+export default Navigator;
