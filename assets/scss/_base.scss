@@ -112,6 +112,7 @@ main {
 
     .verse {
       white-space: pre-wrap;
+      user-select: none;
       font-family: var(--verse-font-family, $font-bible);
       font-size: var(--verse-font-size, 1.15rem);
       line-height: 1.85;

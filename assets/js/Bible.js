@@ -166,13 +166,21 @@ const Bible = ({ intl, setLocale }) => {
     );
     const [highlightedVerse, setHighlightedVerse] = useState(null);
 
+    const changeSelectedChapterRef = useRef();
+
+    useEffect(() => {
+        changeSelectedChapterRef.current = changeSelectedChapter;
+    });
+
     useEffect(() => {
         const handlePopState = () => {
             const data = getDataFromCurrentPathname();
             setSelectedTranslation(data.translation);
             setSelectedBook(data.book);
             // Use changeSelectedChapter (not raw setter) so verses are actually fetched
-            changeSelectedChapter(data.chapter, data.book);
+            if (changeSelectedChapterRef.current) {
+                changeSelectedChapterRef.current(data.chapter, data.book);
+            }
         };
 
         globalThis.addEventListener("popstate", handlePopState);
@@ -503,6 +511,47 @@ const Bible = ({ intl, setLocale }) => {
         []
     );
 
+    const handleOpenChangelog = useCallback(() => setIsChangelogOpen(true), []);
+
+    const handleCloseSelection = useCallback(() => setIsSelectionOpen(false), []);
+    const handleCloseNotes = useCallback(() => setIsNotesOpen(false), []);
+    const handleCloseChapterComp = useCallback(() => setIsChapterCompOpen(false), []);
+    const handleCloseSearch = useCallback(() => setIsSearchOpen(false), []);
+    const handleCloseSideMenu = useCallback(() => setIsSideMenuOpen(false), []);
+    const handleCloseChangelog = useCallback(() => setIsChangelogOpen(false), []);
+    const handleCloseWelcomePopup = useCallback(() => setIsWelcomePopupOpen(false), []);
+    const handleCloseComparison = useCallback(() => setComparedVerse(null), []);
+    const handleCloseNoteEditor = useCallback(() => setEditingNoteVerse(null), []);
+    const handleCloseErrorToast = useCallback(() => setToastError(null), []);
+
+    const handleSaveNote = useCallback(() => setNotesVersion((v) => v + 1), []);
+
+    const handleNavigateChapter = useCallback((book, chapter) => {
+        navigateToBookAndChapter(book, chapter);
+    }, [navigateToBookAndChapter]);
+
+    const handleNavigateVerseComparison = useCallback((direction) => {
+        setComparedVerse((prev) => {
+            const currentVerse = Number.parseInt(prev, 10);
+            const maxVerse = Object.keys(verses).length;
+            if (direction === "prev" && currentVerse > 1) {
+                return String(currentVerse - 1);
+            } else if (direction === "next" && currentVerse < maxVerse) {
+                return String(currentVerse + 1);
+            }
+            return prev;
+        });
+    }, [verses]);
+
+    const handleSetZenMode = useCallback((value) => {
+        setZenMode(value);
+        try {
+            localStorage.setItem("rbiblia-zen-mode", value ? "1" : "0");
+        } catch {
+            // ignore
+        }
+    }, []);
+
     // Memoize translationName to avoid inline computation in render
     const translationName = useMemo(
         () =>
@@ -602,10 +651,8 @@ const Bible = ({ intl, setLocale }) => {
                     structure={structure}
                     currentBook={selectedBook}
                     currentChapter={selectedChapter}
-                    onSelectChapter={(book, chapter) => {
-                        navigateToBookAndChapter(book, chapter);
-                    }}
-                    onClose={() => setIsSelectionOpen(false)}
+                    onSelectChapter={handleNavigateChapter}
+                    onClose={handleCloseSelection}
                 />
             )}
             {comparedVerse && (
@@ -618,19 +665,8 @@ const Bible = ({ intl, setLocale }) => {
                     translations={translations}
                     currentTranslation={selectedTranslation}
                     totalVerses={Object.keys(verses).length}
-                    onNavigateVerse={(direction) => {
-                        const currentVerse = Number.parseInt(comparedVerse, 10);
-                        const maxVerse = Object.keys(verses).length;
-                        if (direction === "prev" && currentVerse > 1) {
-                            setComparedVerse(currentVerse - 1);
-                        } else if (
-                            direction === "next" &&
-                            currentVerse < maxVerse
-                        ) {
-                            setComparedVerse(currentVerse + 1);
-                        }
-                    }}
-                    onClose={() => setComparedVerse(null)}
+                    onNavigateVerse={handleNavigateVerseComparison}
+                    onClose={handleCloseComparison}
                 />
             )}
             <Reader
@@ -663,7 +699,7 @@ const Bible = ({ intl, setLocale }) => {
             {/* Notes Panel */}
             <NotesPanel
                 isOpen={isNotesOpen}
-                onClose={() => setIsNotesOpen(false)}
+                onClose={handleCloseNotes}
                 selectedBook={selectedBook}
                 selectedChapter={selectedChapter}
                 selectedTranslation={selectedTranslation}
@@ -675,7 +711,7 @@ const Bible = ({ intl, setLocale }) => {
             {/* Search Panel */}
             <SearchPanel
                 isOpen={isSearchOpen}
-                onClose={() => setIsSearchOpen(false)}
+                onClose={handleCloseSearch}
                 selectedTranslation={selectedTranslation}
                 books={books}
                 onNavigateToVerse={handleNavigateToVerse}
@@ -684,7 +720,7 @@ const Bible = ({ intl, setLocale }) => {
             {/* Chapter Comparison */}
             <ChapterComparison
                 isOpen={isChapterCompOpen}
-                onClose={() => setIsChapterCompOpen(false)}
+                onClose={handleCloseChapterComp}
                 bookId={selectedBook}
                 bookName={books[selectedBook]?.name}
                 chapterId={selectedChapter}
@@ -692,19 +728,17 @@ const Bible = ({ intl, setLocale }) => {
                 currentTranslation={selectedTranslation}
                 structure={structure}
                 books={books}
-                onNavigateChapter={(book, chapter) => {
-                    navigateToBookAndChapter(book, chapter);
-                }}
+                onNavigateChapter={handleNavigateChapter}
             />
 
             {/* Side tab and menu */}
             <SideMenuTab
-                onClick={() => setIsSideMenuOpen(true)}
+                onClick={handleOpenSettings}
                 className={isNavVisible ? "" : "nav-hidden-fab"}
             />
             <SideMenu
                 isOpen={isSideMenuOpen}
-                onClose={() => setIsSideMenuOpen(false)}
+                onClose={handleCloseSideMenu}
             >
                 <DisplaySettings
                     fontSize={fontSize}
@@ -718,20 +752,17 @@ const Bible = ({ intl, setLocale }) => {
                     darkVariant={darkVariant}
                     setDarkVariant={setDarkVariant}
                     zenMode={zenMode}
-                    setZenMode={(value) => {
-                        setZenMode(value);
-                        localStorage.setItem("rbiblia-zen-mode", value ? "1" : "0");
-                    }}
-                    onClose={() => setIsSideMenuOpen(false)}
-                    onOpenChangelog={() => setIsChangelogOpen(true)}
+                    setZenMode={handleSetZenMode}
+                    onClose={handleCloseSideMenu}
+                    onOpenChangelog={handleOpenChangelog}
                 />
             </SideMenu>
 
             {/* Note Editor */}
             <NoteEditor
                 isOpen={editingNoteVerse !== null}
-                onClose={() => setEditingNoteVerse(null)}
-                onSave={() => setNotesVersion((v) => v + 1)}
+                onClose={handleCloseNoteEditor}
+                onSave={handleSaveNote}
                 book={selectedBook}
                 chapter={selectedChapter}
                 verse={editingNoteVerse}
@@ -744,18 +775,18 @@ const Bible = ({ intl, setLocale }) => {
             />
             <ChangelogModal
                 isOpen={isChangelogOpen}
-                onClose={() => setIsChangelogOpen(false)}
+                onClose={handleCloseChangelog}
             />
             <WelcomePopup
                 isOpen={isWelcomePopupOpen}
-                onClose={() => setIsWelcomePopupOpen(false)}
+                onClose={handleCloseWelcomePopup}
             />
 
             {/* Toast for non-blocking errors */}
             {toastError && (
                 <ErrorToast
                     message={toastError}
-                    onClose={() => setToastError(null)}
+                    onClose={handleCloseErrorToast}
                 />
             )}
         </>
