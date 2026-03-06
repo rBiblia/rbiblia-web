@@ -122,6 +122,8 @@ const Verse = memo(function Verse({
 
     const handleTouchMove = (e) => {
         // Cancel long press if user moves finger more than 10px
+        if (!longPressTimer.current) return;
+
         const touch = e.touches[0];
         const dx = Math.abs(touch.clientX - startPos.current.x);
         const dy = Math.abs(touch.clientY - startPos.current.y);

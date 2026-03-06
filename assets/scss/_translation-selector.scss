@@ -405,6 +405,7 @@
 // Immersive Mode - Bottom Navigation Transition
 .bottom-nav {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 
   &.nav-hidden-bottom {
     transform: translateY(100%);
@@ -414,6 +415,7 @@
 // Immersive Mode - Side Menu Tab (FAB) Transition
 .side-menu-tab {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 
   &.nav-hidden-fab {
     transform: scale(0);

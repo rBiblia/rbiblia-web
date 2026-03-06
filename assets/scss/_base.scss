@@ -388,6 +388,7 @@ header {
 
   // Immersive Mode styles
   transition: transform 0.3s ease-in-out;
+  will-change: transform;
 
   &.nav-hidden-header {
     transform: translateY(-100%);
