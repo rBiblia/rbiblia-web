@@ -31,7 +31,6 @@ import ChapterComparison from "./ChapterComparison";
 import ChangelogModal from "./ChangelogModal";
 import WelcomePopup, { isWelcomePopupDisabled } from "./WelcomePopup";
 import useVersesCache from "./useVersesCache";
-import useScrollDirection from "./useScrollDirection";
 import { useKeyboardNavigation } from "./hooks";
 import { safeJsonParse } from "./safeJsonParse";
 
@@ -70,8 +69,7 @@ const Bible = ({ intl, setLocale }) => {
         return localStorage.getItem("rbiblia-zen-mode") === "1";
     });
 
-    // Immersive Mode (hide nav on scroll) — disabled when zenMode is on
-    const isNavVisible = useScrollDirection({ disabled: zenMode });
+    const immersiveDisabled = zenMode || isWelcomePopupOpen;
 
     // Font family (saved to localStorage)
     const [fontFamily, setFontFamily] = useState(() => {
@@ -634,16 +632,16 @@ const Bible = ({ intl, setLocale }) => {
                 nextChapter={nextChapter}
                 prevBook={prevBook}
                 nextBook={nextBook}
-                isPrevBookAvailable={isPrevBookAvailable}
-                isNextBookAvailable={isNextBookAvailable}
-                isPrevChapterAvailable={isPrevChapterAvailable}
-                isNextChapterAvailable={isNextChapterAvailable}
+                isPrevBookAvailable={isPrevBookAvailable()}
+                isNextBookAvailable={isNextBookAvailable()}
+                isPrevChapterAvailable={isPrevChapterAvailable()}
+                isNextChapterAvailable={isNextChapterAvailable()}
                 onOpenSelection={handleOpenSelection}
                 onOpenNotes={handleOpenNotes}
                 onOpenSearch={handleOpenSearch}
                 onOpenSettings={handleOpenSettings}
                 onOpenChapterComparison={handleOpenChapterComp}
-                className={isNavVisible ? "" : "nav-hidden-header"}
+                immersiveDisabled={immersiveDisabled}
             />
             {isSelectionOpen && (
                 <SelectionGrid
@@ -694,7 +692,7 @@ const Bible = ({ intl, setLocale }) => {
                 isNextAvailable={isNextAvailable}
                 currentBook={currentBookSigla}
                 currentChapter={selectedChapter}
-                className={isNavVisible ? "" : "nav-hidden-bottom"}
+                immersiveDisabled={immersiveDisabled}
             />
             {/* Notes Panel */}
             <NotesPanel
@@ -734,7 +732,7 @@ const Bible = ({ intl, setLocale }) => {
             {/* Side tab and menu */}
             <SideMenuTab
                 onClick={handleOpenSettings}
-                className={isNavVisible ? "" : "nav-hidden-fab"}
+                immersiveDisabled={immersiveDisabled}
             />
             <SideMenu
                 isOpen={isSideMenuOpen}

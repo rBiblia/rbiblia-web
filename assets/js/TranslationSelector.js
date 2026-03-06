@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import {
@@ -8,7 +8,7 @@ import {
 } from "./SideMenu";
 import Icon from "./Icon";
 
-const TranslationSelector = ({
+const TranslationSelector = memo(({
     translations,
     selectedTranslation,
     changeSelectedTranslation,
@@ -292,7 +292,7 @@ const TranslationSelector = ({
             )}
         </div>
     );
-};
+});
 
 TranslationSelector.propTypes = {
     translations: PropTypes.arrayOf(

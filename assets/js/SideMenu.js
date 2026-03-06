@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 
 import useFocusTrap from "./hooks/useFocusTrap";
+import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
 
 const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
@@ -42,12 +43,13 @@ SideMenu.propTypes = {
 };
 
 // Sticky tab button on the right edge - lower on the screen
-const SideMenuTab = ({ onClick, className = "" }) => {
+const SideMenuTab = ({ onClick, className = "", immersiveDisabled = false }) => {
     const { formatMessage } = useIntl();
+    const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
 
     return (
         <button
-            className={`side-menu-tab ${className}`}
+            className={`side-menu-tab ${className} ${isNavVisible ? "" : "nav-hidden-fab"}`}
             onClick={onClick}
             aria-label={formatMessage({ id: "openMenu" })}
         >
@@ -312,8 +314,8 @@ const DisplaySettings = ({
                                         <button
                                             key={fs.value}
                                             className={`font-size-btn ${fontSize === fs.value
-                                                    ? "active"
-                                                    : ""
+                                                ? "active"
+                                                : ""
                                                 }`}
                                             onClick={() =>
                                                 setFontSize(fs.value)
@@ -337,8 +339,8 @@ const DisplaySettings = ({
                                             <button
                                                 key={ff.value}
                                                 className={`font-family-btn ${fontFamily === ff.value
-                                                        ? "active"
-                                                        : ""
+                                                    ? "active"
+                                                    : ""
                                                     }`}
                                                 onClick={() =>
                                                     setFontFamily(ff.value)
@@ -374,8 +376,8 @@ const DisplaySettings = ({
                                             <button
                                                 key={t.value}
                                                 className={`setting-tile ${theme === t.value
-                                                        ? "active"
-                                                        : ""
+                                                    ? "active"
+                                                    : ""
                                                     }`}
                                                 onClick={() =>
                                                     setTheme(t.value)
@@ -408,8 +410,8 @@ const DisplaySettings = ({
                                         <div className="setting-tiles-grid grid-2">
                                             <button
                                                 className={`setting-tile ${darkVariant === "gold"
-                                                        ? "active"
-                                                        : ""
+                                                    ? "active"
+                                                    : ""
                                                     }`}
                                                 onClick={() =>
                                                     setDarkVariant("gold")
@@ -433,8 +435,8 @@ const DisplaySettings = ({
                                             </button>
                                             <button
                                                 className={`setting-tile ${darkVariant === "blue"
-                                                        ? "active"
-                                                        : ""
+                                                    ? "active"
+                                                    : ""
                                                     }`}
                                                 onClick={() =>
                                                     setDarkVariant("blue")
@@ -563,8 +565,8 @@ const DisplaySettings = ({
                                             <button
                                                 key={num}
                                                 className={`comparison-limit-btn ${comparisonLimit === num
-                                                        ? "active"
-                                                        : ""
+                                                    ? "active"
+                                                    : ""
                                                     }`}
                                                 onClick={() =>
                                                     handleComparisonLimitChange(

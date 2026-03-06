@@ -4,6 +4,7 @@ import TranslationSelector from "./TranslationSelector";
 import BookSelector from "./BookSelector";
 import ChapterSelector from "./ChapterSelector";
 import DirectionalNavigationButton from "./DirectionalNavigationButton";
+import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
 
 const Navigator = memo(function Navigator({
@@ -33,8 +34,11 @@ const Navigator = memo(function Navigator({
     onOpenSettings,
     onOpenChapterComparison,
     className = "",
+    immersiveDisabled = false,
 }) {
     const { formatMessage } = useIntl();
+    const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
+
     const isNextChapterOrBookAvailable =
         isNextChapterAvailable || isNextBookAvailable;
     const isPrevChapterOrBookAvailable =
@@ -44,7 +48,7 @@ const Navigator = memo(function Navigator({
 
     return (
         <header
-            className={`container sticky-top pt-2 pb-2 user-select-none ${className}`}
+            className={`container sticky-top pt-2 pb-2 user-select-none ${className} ${isNavVisible ? "" : "nav-hidden-header"}`}
         >
             <div className="row align-items-center">
                 <div className="col-10 col-lg-3 translation-col pe-1 pe-lg-3">

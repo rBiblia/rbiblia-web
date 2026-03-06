@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { useIntl } from "react-intl";
 
-const ChapterSelector = ({
+const ChapterSelector = memo(({
     chapters,
     isStructureLoading,
     selectedChapter,
@@ -34,6 +34,6 @@ const ChapterSelector = ({
             <option>{formatMessage({ id: "chapterList" })}</option>
         </select>
     );
-};
+});
 
 export default ChapterSelector;
