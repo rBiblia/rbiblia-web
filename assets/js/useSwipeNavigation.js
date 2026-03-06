@@ -32,6 +32,7 @@ const useSwipeNavigation = (
         };
 
         const handleTouchMove = (e) => {
+            if (touchStartX.current === null) return;
             touchEndX.current = e.touches[0].clientX;
             touchEndY.current = e.touches[0].clientY;
         };
