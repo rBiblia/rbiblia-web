@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import { useIntl } from "react-intl";
 import Icon from "./Icon";
+import useScrollDirection from "./useScrollDirection";
 
 const BottomNavigation = memo(function BottomNavigation({
     onPrevChapter,
@@ -13,11 +14,13 @@ const BottomNavigation = memo(function BottomNavigation({
     currentBook,
     currentChapter,
     className = "",
+    immersiveDisabled = false,
 }) {
     const { formatMessage } = useIntl();
+    const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
 
     return (
-        <nav className={`bottom-nav d-lg-none ${className}`}>
+        <nav className={`bottom-nav d-lg-none ${className} ${isNavVisible ? "" : "nav-hidden-bottom"}`}>
             {/* Left arrow - far left position */}
             <button
                 className="bottom-nav-btn bottom-nav-arrow"

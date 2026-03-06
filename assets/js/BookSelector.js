@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { useIntl } from "react-intl";
 
-const BookSelector = ({
+const BookSelector = memo(({
     books,
     structure,
     isStructureLoading,
@@ -34,6 +34,6 @@ const BookSelector = ({
             ))}
         </select>
     );
-};
+});
 
 export default BookSelector;
