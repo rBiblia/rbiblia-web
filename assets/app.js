@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import "@fontsource/open-sans";
 import "bootstrap/scss/bootstrap.scss";
 import "./scss/app.scss";
@@ -9,4 +9,6 @@ import migrateOldNotes from "./js/migrateOldNotes";
 // One-time migration of legacy notes format
 migrateOldNotes();
 
-render(<AppWithIntlProvider />, document.getElementById("root"));
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(<AppWithIntlProvider />);
