@@ -273,7 +273,6 @@ const Verse = memo(function Verse({
                 }}
                 role="button"
                 tabIndex={0}
-                style={{ userSelect: "none" }}
             >
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
                 {hasAnyNote && (

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import Verse from "./Verse";
 import SkeletonLoader from "./SkeletonLoader";
 
-const Reader = ({
+const Reader = memo(function Reader({
     selectedBook,
     selectedChapter,
     selectedTranslation,
@@ -17,7 +17,7 @@ const Reader = ({
     highlightedVerse = null,
     allNotes = {},
     allTranslationNotes = {},
-}) => {
+}) {
     if (!showVerses || !verses) {
         return <SkeletonLoader lines={15} />;
     }
@@ -48,7 +48,7 @@ const Reader = ({
             </div>
         </main>
     );
-};
+});
 
 Reader.propTypes = {
     selectedBook: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

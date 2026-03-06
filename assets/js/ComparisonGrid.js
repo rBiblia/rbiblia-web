@@ -81,6 +81,11 @@ const computeLcsDiffIndices = (baseText, compareText, locale) => {
     const m = baseWords.length;
     const n = compareWords.length;
 
+    // Safety limit for very long verses (O(m*n) complexity)
+    if (m * n > 4000) {
+        return new Set();
+    }
+
     // Build LCS DP table
     const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
     for (let i = 1; i <= m; i++) {
