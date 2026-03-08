@@ -300,8 +300,8 @@
   }
 
   @include dark-mode {
-    background: rgba(255, 255, 255, 0.05);
-    color: #888;
+    background: #2a2a2a;
+    color: #e0e0e0;
 
     &:hover {
       background: rgba($rb-header-navigator-arrow, 0.15);
@@ -386,8 +386,8 @@
     }
 
     &:hover {
-      background: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
+      background: #fdf0f1;
+      color: #842029;
     }
   }
 }
@@ -601,16 +601,16 @@
   transition: all 0.15s ease;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.08);
-    color: #333;
+    background-color: #ebebeb;
+    color: #111;
   }
 
   @include dark-mode {
     color: #999;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ddd;
+      background-color: #3d4a5c;
+      color: #ffffff;
     }
   }
 }

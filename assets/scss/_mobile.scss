@@ -368,8 +368,7 @@ header.sticky-top {
   .nav-action-btn:active:not(:disabled),
   .setting-tile:active,
   .tile:active {
-    transform: scale(0.95);
-    opacity: 0.9;
+    opacity: 0.6;
   }
 
   // Remove hover effects that don't apply to touch

@@ -48,7 +48,8 @@
   // Use opacity feedback instead of transform scale — scale on :active
   // causes Android browsers to lose the click target (element moves from
   // under the finger). touch-action prevents double-tap-to-zoom delay.
-  touch-action: manipulation;
+  // Updated to none to fix iOS Safari completely dropping clicks on tap-drag.
+  touch-action: none;
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.1s ease, background-color 0.15s ease;
 
