@@ -131,19 +131,31 @@ const TranslationSelector = memo(({
         const isDisabled = disabledOptions.includes(t.id);
 
         return (
-            <button
-                type="button"
+            <div
                 key={t.id}
                 className={`translation-item ${t.id === selectedTranslation ? "selected" : ""
                     } ${isDisabled ? "disabled" : ""}`}
-                onClick={() => !isDisabled && handleSelect(t.id)}
                 onMouseEnter={() => !isDisabled && setHoveredId(t.id)}
                 onMouseLeave={() => !isDisabled && setHoveredId(null)}
-                disabled={isDisabled}
             >
-                <span className="translation-name">
+                <button
+                    type="button"
+                    onClick={() => !isDisabled && handleSelect(t.id)}
+                    disabled={isDisabled}
+                    className="translation-name"
+                    style={{
+                        background: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        padding: 0,
+                        color: 'inherit',
+                        font: 'inherit',
+                        outline: 'none',
+                        cursor: isDisabled ? 'not-allowed' : 'pointer'
+                    }}
+                >
                     {t.name} {t.date ? `[${t.date}]` : ""}
-                </span>
+                </button>
                 {showStar && (
                     <button
                         type="button"
@@ -170,7 +182,7 @@ const TranslationSelector = memo(({
                         />
                     </button>
                 )}
-            </button>
+            </div>
         );
     };
 

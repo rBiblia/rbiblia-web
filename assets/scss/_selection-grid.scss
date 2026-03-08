@@ -61,6 +61,8 @@
   color: inherit;
   appearance: none;
   -webkit-appearance: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     transform: translateY(-3px);

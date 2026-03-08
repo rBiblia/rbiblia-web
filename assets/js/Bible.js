@@ -5,6 +5,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    Suspense
 } from "react";
 import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
@@ -15,8 +16,6 @@ import PropTypes from "prop-types";
 import { AppError, ErrorToast } from "./AppError";
 import updateHistory from "./updateHistory";
 import getAppropriateBook from "./getAppropriateBook";
-import SelectionGrid from "./SelectionGrid";
-import ComparisonGrid from "./ComparisonGrid";
 import BottomNavigation from "./BottomNavigation";
 import useSwipeNavigation from "./useSwipeNavigation";
 import { SideMenu, SideMenuTab, DisplaySettings } from "./SideMenu";
@@ -26,13 +25,17 @@ import {
     loadNotes,
     loadTranslationNotes,
 } from "./Notes";
-import SearchPanel from "./SearchPanel";
-import ChapterComparison from "./ChapterComparison";
-import ChangelogModal from "./ChangelogModal";
 import WelcomePopup, { isWelcomePopupDisabled } from "./WelcomePopup";
 import useVersesCache from "./useVersesCache";
 import { useKeyboardNavigation } from "./hooks";
 import { safeJsonParse } from "./safeJsonParse";
+
+// Lazy-loaded heavy components (Code Splitting)
+const SelectionGrid = React.lazy(() => import("./SelectionGrid"));
+const ComparisonGrid = React.lazy(() => import("./ComparisonGrid"));
+const SearchPanel = React.lazy(() => import("./SearchPanel"));
+const ChapterComparison = React.lazy(() => import("./ChapterComparison"));
+const ChangelogModal = React.lazy(() => import("./ChangelogModal"));
 
 const Bible = ({ intl, setLocale }) => {
     const [error, setError] = useState(null);
@@ -643,30 +646,32 @@ const Bible = ({ intl, setLocale }) => {
                 onOpenChapterComparison={handleOpenChapterComp}
                 immersiveDisabled={immersiveDisabled}
             />
-            {isSelectionOpen && (
-                <SelectionGrid
-                    books={books}
-                    structure={structure}
-                    currentBook={selectedBook}
-                    currentChapter={selectedChapter}
-                    onSelectChapter={handleNavigateChapter}
-                    onClose={handleCloseSelection}
-                />
-            )}
-            {comparedVerse && (
-                <ComparisonGrid
-                    verseId={comparedVerse}
-                    bookId={selectedBook}
-                    bookName={books[selectedBook]?.name}
-                    bookSigil={getSigla(selectedBook, intl.locale)}
-                    chapterId={selectedChapter}
-                    translations={translations}
-                    currentTranslation={selectedTranslation}
-                    totalVerses={Object.keys(verses).length}
-                    onNavigateVerse={handleNavigateVerseComparison}
-                    onClose={handleCloseComparison}
-                />
-            )}
+            <Suspense fallback={null}>
+                {isSelectionOpen && (
+                    <SelectionGrid
+                        books={books}
+                        structure={structure}
+                        currentBook={selectedBook}
+                        currentChapter={selectedChapter}
+                        onSelectChapter={handleNavigateChapter}
+                        onClose={handleCloseSelection}
+                    />
+                )}
+                {comparedVerse && (
+                    <ComparisonGrid
+                        verseId={comparedVerse}
+                        bookId={selectedBook}
+                        bookName={books[selectedBook]?.name}
+                        bookSigil={getSigla(selectedBook, intl.locale)}
+                        chapterId={selectedChapter}
+                        translations={translations}
+                        currentTranslation={selectedTranslation}
+                        totalVerses={Object.keys(verses).length}
+                        onNavigateVerse={handleNavigateVerseComparison}
+                        onClose={handleCloseComparison}
+                    />
+                )}
+            </Suspense>
             <Reader
                 showVerses={showVerses}
                 selectedBook={selectedBook}
@@ -705,29 +710,28 @@ const Bible = ({ intl, setLocale }) => {
                 books={books}
                 onNavigateToVerse={handleNavigateToVerse}
             />
-
-            {/* Search Panel */}
-            <SearchPanel
-                isOpen={isSearchOpen}
-                onClose={handleCloseSearch}
-                selectedTranslation={selectedTranslation}
-                books={books}
-                onNavigateToVerse={handleNavigateToVerse}
-            />
-
-            {/* Chapter Comparison */}
-            <ChapterComparison
-                isOpen={isChapterCompOpen}
-                onClose={handleCloseChapterComp}
-                bookId={selectedBook}
-                bookName={books[selectedBook]?.name}
-                chapterId={selectedChapter}
-                translations={translations}
-                currentTranslation={selectedTranslation}
-                structure={structure}
-                books={books}
-                onNavigateChapter={handleNavigateChapter}
-            />
+            {/* Lazy Loaded Panels */}
+            <Suspense fallback={null}>
+                <SearchPanel
+                    isOpen={isSearchOpen}
+                    onClose={handleCloseSearch}
+                    selectedTranslation={selectedTranslation}
+                    books={books}
+                    onNavigateToVerse={handleNavigateToVerse}
+                />
+                <ChapterComparison
+                    isOpen={isChapterCompOpen}
+                    onClose={handleCloseChapterComp}
+                    bookId={selectedBook}
+                    bookName={books[selectedBook]?.name}
+                    chapterId={selectedChapter}
+                    translations={translations}
+                    currentTranslation={selectedTranslation}
+                    structure={structure}
+                    books={books}
+                    onNavigateChapter={handleNavigateChapter}
+                />
+            </Suspense>
 
             {/* Side tab and menu */}
             <SideMenuTab
@@ -771,22 +775,26 @@ const Bible = ({ intl, setLocale }) => {
                         ?.name || selectedTranslation
                 }
             />
-            <ChangelogModal
-                isOpen={isChangelogOpen}
-                onClose={handleCloseChangelog}
-            />
+            <Suspense fallback={null}>
+                <ChangelogModal
+                    isOpen={isChangelogOpen}
+                    onClose={handleCloseChangelog}
+                />
+            </Suspense>
             <WelcomePopup
                 isOpen={isWelcomePopupOpen}
                 onClose={handleCloseWelcomePopup}
             />
 
             {/* Toast for non-blocking errors */}
-            {toastError && (
-                <ErrorToast
-                    message={toastError}
-                    onClose={handleCloseErrorToast}
-                />
-            )}
+            {
+                toastError && (
+                    <ErrorToast
+                        message={toastError}
+                        onClose={handleCloseErrorToast}
+                    />
+                )
+            }
         </>
     );
 };

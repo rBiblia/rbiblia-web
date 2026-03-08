@@ -81,8 +81,9 @@ const computeLcsDiffIndices = (baseText, compareText, locale) => {
     const m = baseWords.length;
     const n = compareWords.length;
 
-    // Safety limit for very long verses (O(m*n) complexity)
-    if (m * n > 4000) {
+    // Safety limit to guarantee smooth frame rendering down to old devices
+    // (O(m*n) complexity). Reduced from 4000 to 1200 points.
+    if (m * n > 1200) {
         return new Set();
     }
 
@@ -234,13 +235,30 @@ const ComparisonGrid = ({
         setComparedVerses({});
         setLoading({});
 
-        // Fetch current translation
+        // We use timeouts to stagger the fetches. This ensures that the massive JSON 
+        // objects (entire chapters) are parsed in separate frames, yielding to the 
+        // browser's main thread and preventing UI freezes during overlay open.
+        const timeouts = [];
+
+        // Fetch current translation immediately
         fetchTranslationVerse(currentTranslation, verseId);
 
-        // Fetch all selected translations
+        // Stagger fetching all selected translations
+        let delayCount = 1;
         selectedTranslations.forEach((id) => {
-            if (id) fetchTranslationVerse(id, verseId);
+            if (id) {
+                const timer = setTimeout(() => {
+                    fetchTranslationVerse(id, verseId);
+                }, delayCount * 120); // 120ms stagger
+                timeouts.push(timer);
+                delayCount++;
+            }
         });
+
+        // Cleanup function
+        return () => {
+            timeouts.forEach((t) => clearTimeout(t));
+        };
     }, [verseId, bookId, chapterId, currentTranslation, fetchTranslationVerse]);
 
     // Update selections when favorites change
@@ -580,23 +598,28 @@ const ComparisonGrid = ({
     };
 
     return (
-        <div
-            className="selection-overlay comparison-overlay"
-            onClick={onClose}
-            onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    onClose();
-                }
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label={formatMessage({ id: "close" })}
-        >
+        <div className="selection-overlay comparison-overlay">
+            <button
+                type="button"
+                onClick={onClose}
+                aria-label={formatMessage({ id: "close" })}
+                style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: "transparent",
+                    border: "none",
+                    padding: 0,
+                    margin: 0,
+                    cursor: "default",
+                    zIndex: 0
+                }}
+                tabIndex={-1}
+            />
             <div
                 className="selection-content container"
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
-                role="presentation"
+                style={{ position: "relative", zIndex: 1 }}
             >
                 {/* Pinned area: header + primary translation (sticky on mobile) */}
                 <div className="comparison-pinned-area">
