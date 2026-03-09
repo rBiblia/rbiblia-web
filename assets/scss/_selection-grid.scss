@@ -63,6 +63,8 @@
   -webkit-appearance: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 54px;
 
   &:hover {
     transform: translateY(-3px);

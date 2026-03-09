@@ -447,6 +447,13 @@ header.sticky-top {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+
+  @media (max-width: 991.98px) {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #ffffff;
+  }
+
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -454,6 +461,10 @@ header.sticky-top {
 
   @include dark-mode {
     background: var(--dm-bg-overlay);
+
+    @media (max-width: 991.98px) {
+      background: var(--dm-bg-surface, #121212);
+    }
   }
 }
 
@@ -731,6 +742,9 @@ header.sticky-top {
 }
 
 .chapter-comp-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 60px;
+
   &:nth-child(even) {
     background: rgba(0, 0, 0, 0.015);
 
@@ -799,6 +813,8 @@ header.sticky-top {
   gap: 0.5rem;
   padding: 0.55rem 1rem;
   border-bottom: 1px solid #f0f0f0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 80px;
 
   @include dark-mode {
     border-bottom-color: #2a2a2a;
@@ -858,4 +874,19 @@ select:focus-visible,
 textarea:focus-visible {
   outline: none;
   @include focus-ring;
+}
+
+// 11. Fullscreen Overlay Performance Optimization
+// ---------------------------------------------------------
+body.has-fullscreen-overlay {
+  overflow: hidden;
+
+  // Hide the main application content to save GPU/CPU cycles
+  main,
+  header.sticky-top,
+  .bottom-nav {
+    content-visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
 }

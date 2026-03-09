@@ -598,6 +598,15 @@ const Bible = ({ intl, setLocale }) => {
         [navigateToBookAndChapter]
     );
 
+    // Toggle body class when fullscreen overlays are open to hide background content and improve performance
+    useEffect(() => {
+        if (isSelectionOpen || comparedVerse || isChapterCompOpen) {
+            document.body.classList.add("has-fullscreen-overlay");
+        } else {
+            document.body.classList.remove("has-fullscreen-overlay");
+        }
+    }, [isSelectionOpen, comparedVerse, isChapterCompOpen]);
+
     // Render content
     if (error) {
         return (
