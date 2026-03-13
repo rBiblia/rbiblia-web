@@ -735,6 +735,4 @@
   }
 }
 
-.note-editor-modal {
-  @include premium-modal(500px);
-}
+// .note-editor-modal is defined in _notes.scss — do not duplicate here
