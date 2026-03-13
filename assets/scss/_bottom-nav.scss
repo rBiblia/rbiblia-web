@@ -57,6 +57,12 @@
     opacity: 0.6;
   }
 
+  // Narrow side buttons (Notes, Comparison) as requested
+  &:not(.bottom-nav-btn-center) {
+    max-width: 65px;
+    justify-self: center;
+  }
+
   &:hover:not(:disabled) {
     background: rgba(0, 0, 0, 0.05);
   }
