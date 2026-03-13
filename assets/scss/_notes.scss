@@ -422,6 +422,10 @@
 
 .note-editor-modal {
   @include premium-modal(500px);
+  // Override: remove container padding — children manage their own padding.
+  // The mixin's 2.2rem padding combined with children padding caused overflow.
+  padding: 0;
+  overflow: hidden;
 }
 
 .note-editor-header {
@@ -479,6 +483,7 @@
 
 .note-editor-textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: 1rem 1.25rem;
   border: none;
   font-size: 1rem;
