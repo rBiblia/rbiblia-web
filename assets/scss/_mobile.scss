@@ -510,6 +510,11 @@ header.sticky-top {
   font-weight: 600;
   margin: 0;
   font-family: $font-ui;
+  color: #333;
+
+  @include dark-mode {
+    color: var(--dm-text-primary, #f0f0f0);
+  }
 }
 
 .chapter-comp-close {
@@ -562,6 +567,7 @@ header.sticky-top {
 
   @include dark-mode {
     border-color: #333;
+    color: var(--dm-text-primary, #f0f0f0);
   }
 }
 
@@ -878,15 +884,26 @@ textarea:focus-visible {
 
 // 11. Fullscreen Overlay Performance Optimization
 // ---------------------------------------------------------
+// When a fullscreen overlay (SelectionGrid, ComparisonGrid, ChapterComparison)
+// is open, hide background content to reduce GPU/CPU load.
+//
+// IMPORTANT: We use visibility: hidden (not content-visibility: hidden) because:
+// 1. content-visibility: hidden is not supported on all mobile browsers
+// 2. On devices where it's unsupported, only opacity: 0 took effect,
+//    and if the overlay hadn't rendered yet (lazy-load + animation delay),
+//    the user saw a blank screen.
+//
+// The transition-delay ensures that background content stays visible for
+// a brief moment until the overlay has fully appeared on top.
 body.has-fullscreen-overlay {
   overflow: hidden;
 
-  // Hide the main application content to save GPU/CPU cycles
   main,
   header.sticky-top,
   .bottom-nav {
-    content-visibility: hidden;
-    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
+    // Delay hiding so the overlay renders first on slow devices
+    transition: visibility 0s linear 0.05s;
   }
 }

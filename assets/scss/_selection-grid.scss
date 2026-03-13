@@ -11,7 +11,17 @@
   @include glassmorphism-panel(0.95, 20px);
   z-index: 2000;
   overflow-y: auto;
+
+  // Desktop: smooth slide-up entrance
   @include smooth-entrance-slide-up;
+
+  // Mobile: instant appearance (no transform animation) to prevent
+  // blank screen on slow devices where background hides before overlay renders
+  @media (max-width: 991.98px) {
+    animation: fadeIn 0.15s ease-out forwards;
+    opacity: 1;
+    transform: none;
+  }
 
   @include dark-mode {
     // Background handled by mixin
