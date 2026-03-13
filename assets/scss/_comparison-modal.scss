@@ -83,6 +83,18 @@
       background: rgba(30, 30, 30, 0.97);
       border-bottom-color: rgba(255, 255, 255, 0.1);
     }
+
+    // When primary verse is too tall (≥2/3 viewport), unpin and scroll normally
+    &.comparison-pinned-unpinned {
+      position: relative;
+      border-bottom: none;
+      background: transparent;
+      will-change: auto;
+
+      @include dark-mode {
+        background: transparent;
+      }
+    }
   }
 }
 
@@ -140,7 +152,7 @@
 
 .comparison-text {
   font-family: $font-bible;
-  font-size: 1.15rem;
+  font-size: 0.9rem;
   line-height: 1.8;
   margin: 0;
   color: #2c2c2c;
@@ -152,7 +164,7 @@
 }
 
 .comparison-text-primary {
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   font-weight: 400;
 }
 

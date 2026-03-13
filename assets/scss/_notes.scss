@@ -681,7 +681,9 @@
 
 .note-add-form {
   border: 2px dashed #ddd;
+  border-radius: 12px;
   background: rgba($rb-header-navigator-arrow, 0.02);
+  margin-bottom: 2rem;
 
   @include dark-mode {
     border-color: #444;

@@ -70,12 +70,12 @@ const TranslationSelector = memo(({
         };
     }, []);
 
-    const toggleGroup = (e, groupName) => {
+    const toggleGroup = (e, groupName, defaultCollapsed = true) => {
         e.preventDefault();
         e.stopPropagation();
         setCollapsedGroups((prev) => ({
             ...prev,
-            [groupName]: !prev[groupName],
+            [groupName]: !(prev[groupName] ?? defaultCollapsed),
         }));
     };
 
@@ -148,7 +148,6 @@ const TranslationSelector = memo(({
                         border: 'none',
                         textAlign: 'left',
                         padding: 0,
-                        color: 'inherit',
                         font: 'inherit',
                         outline: 'none',
                         cursor: isDisabled ? 'not-allowed' : 'pointer'
@@ -218,14 +217,14 @@ const TranslationSelector = memo(({
                     {favoriteTranslations.length > 0 &&
                         (() => {
                             const favLabel = formatMessage({ id: "favorites" });
-                            const isFavCollapsed = collapsedGroups[favLabel];
+                            const isFavCollapsed = collapsedGroups[favLabel] ?? false;
                             return (
                                 <div className="translation-group">
                                     <button
                                         type="button"
                                         className="translation-group-label"
                                         onClick={(e) =>
-                                            toggleGroup(e, favLabel)
+                                            toggleGroup(e, favLabel, false)
                                         }
                                     >
                                         <div>
@@ -267,14 +266,14 @@ const TranslationSelector = memo(({
                     {/* Other translations grouped by language */}
                     {translationList.map(
                         ({ languageName, children }) => {
-                            const isCollapsed = collapsedGroups[languageName];
+                            const isCollapsed = collapsedGroups[languageName] ?? true;
                             return (
                                 <div className="translation-group" key={languageName}>
                                     <button
                                         type="button"
                                         className="translation-group-label"
                                         onClick={(e) =>
-                                            toggleGroup(e, languageName)
+                                            toggleGroup(e, languageName, true)
                                         }
                                     >
                                         {languageName}
