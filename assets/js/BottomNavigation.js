@@ -42,9 +42,6 @@ const BottomNavigation = memo(function BottomNavigation({
                 aria-label={formatMessage({ id: "notes" })}
             >
                 <Icon className="bottom-nav-icon" name="square-pen" />
-                <span className="bottom-nav-label">
-                    {formatMessage({ id: "notes" })}
-                </span>
             </button>
 
             {/* Book selection - center */}
@@ -81,9 +78,6 @@ const BottomNavigation = memo(function BottomNavigation({
                     <path d="M12 3v18" />
                     <path d="M3 7h18" />
                 </svg>
-                <span className="bottom-nav-label">
-                    {formatMessage({ id: "chapterComparisonShort" })}
-                </span>
             </button>
 
             {/* Right arrow - far right position */}

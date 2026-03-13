@@ -1,4 +1,4 @@
-﻿/* global globalThis */
+/* global globalThis */
 import React, {
     useEffect,
     useState,
@@ -309,6 +309,31 @@ const ComparisonGrid = ({
     }, [isDiffHighlightEnabled]);
 
     const primaryText = comparedVerses[currentTranslation];
+
+    // Dynamic unpin: if the pinned area exceeds 2/3 of viewport height on mobile, unpin it
+    const pinnedAreaRef = useRef(null);
+    const [isPinnedTooTall, setIsPinnedTooTall] = useState(false);
+
+    useEffect(() => {
+        const el = pinnedAreaRef.current;
+        if (!el) return;
+
+        const checkHeight = () => {
+            const threshold = window.innerHeight * (2 / 3);
+            setIsPinnedTooTall(el.scrollHeight >= threshold);
+        };
+
+        checkHeight();
+
+        const observer = new ResizeObserver(checkHeight);
+        observer.observe(el);
+        window.addEventListener('resize', checkHeight);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('resize', checkHeight);
+        };
+    }, [verseId, primaryText]);
 
     const availableComparisonTexts = useMemo(() => {
         const selectedTexts = selectedTranslations
@@ -622,7 +647,7 @@ const ComparisonGrid = ({
                 style={{ position: "relative", zIndex: 1 }}
             >
                 {/* Pinned area: header + primary translation (sticky on mobile) */}
-                <div className="comparison-pinned-area">
+                <div ref={pinnedAreaRef} className={`comparison-pinned-area${isPinnedTooTall ? ' comparison-pinned-unpinned' : ''}`}>
                     <div className="selection-header d-flex justify-content-between align-items-center mb-3 pt-4">
                         {/* Navigation and title */}
                         <div className="comparison-nav-header">

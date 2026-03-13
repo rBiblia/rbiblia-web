@@ -87,6 +87,7 @@
   @include dark-mode {
     background: var(--dm-bg-surface);
     border-color: var(--dm-border-subtle);
+    color: var(--dm-text-primary);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
@@ -130,6 +131,8 @@
   }
 
   @include dark-mode {
+    color: var(--dm-text-secondary);
+
     &:hover {
       background: rgba(255, 255, 255, 0.03);
     }
@@ -175,9 +178,19 @@
     font-weight: 600;
   }
 
-  &:disabled {
+  &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    
+    .translation-name {
+      color: #888;
+    }
+
+    @include dark-mode {
+      .translation-name {
+        color: #666;
+      }
+    }
   }
 
   @include dark-mode {
@@ -197,7 +210,7 @@
   color: #333;
 
   @include dark-mode {
-    color: #ddd;
+    color: var(--dm-text-primary);
   }
 }
 
