@@ -9,13 +9,14 @@ import { useIntl } from "react-intl";
 import Icon from "./Icon";
 import { safeJsonParse } from "./safeJsonParse";
 import TranslationSelector from "./TranslationSelector";
+import { safeLocalStorageGetItem } from "./safeStorage";
 
 const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
 
 const getFavoriteTranslations = () => {
     try {
         return JSON.parse(
-            localStorage.getItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
+            safeLocalStorageGetItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
         );
     } catch {
         return [];
@@ -133,7 +134,13 @@ const ChapterComparison = ({
 
     // --- Chapter navigation ---
     const chapters = structure?.[bookId] || [];
-    const currentChapterIndex = chapters.indexOf(chapterId);
+    const currentChapterIndex = useMemo(() => {
+        const chapterNum = Number.parseInt(String(chapterId), 10);
+        if (!Number.isFinite(chapterNum)) return -1;
+        return chapters
+            .map((c) => Number.parseInt(String(c), 10))
+            .indexOf(chapterNum);
+    }, [chapters, chapterId]);
     const hasPrev = currentChapterIndex > 0;
     const hasNext = currentChapterIndex < chapters.length - 1;
 

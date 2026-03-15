@@ -8,7 +8,7 @@
  *   - Images: Cache-first with network fallback
  */
 
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 const STATIC_CACHE = `rbiblia-static-${CACHE_VERSION}`;
 const API_CACHE = `rbiblia-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `rbiblia-images-${CACHE_VERSION}`;
@@ -94,6 +94,16 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    // JS/CSS are UI-critical and can break badly when stale (especially webpack chunks).
+    // Prefer network-first and fall back to cache when offline.
+    if (
+        url.pathname.startsWith("/assets/") &&
+        (url.pathname.endsWith(".js") || url.pathname.endsWith(".css"))
+    ) {
+        event.respondWith(networkFirst(request, STATIC_CACHE));
+        return;
+    }
+
     // Static assets → Cache-first
     if (isStaticAsset(url.pathname)) {
         event.respondWith(cacheFirst(request, STATIC_CACHE));
@@ -128,7 +138,17 @@ async function cacheFirst(request, cacheName) {
         return cached;
     }
 
-    return fetchAndCache(request, cache);
+    try {
+        return await fetchAndCache(request, cache);
+    } catch (error) {
+        // If the request has a cache-busting query string, try ignoring it.
+        // This improves offline support for pre-cached "/assets/app.*" files.
+        const cachedIgnoringSearch = await cache.match(request, {
+            ignoreSearch: true,
+        });
+        if (cachedIgnoringSearch) return cachedIgnoringSearch;
+        throw error;
+    }
 }
 
 /**
@@ -154,7 +174,10 @@ async function networkFirst(request, cacheName) {
         return response;
     } catch (error) {
         // Network failed – try cache
-        const cached = await cache.match(request);
+        let cached = await cache.match(request);
+        if (!cached) {
+            cached = await cache.match(request, { ignoreSearch: true });
+        }
 
         if (cached) {
             return cached;
@@ -211,4 +234,3 @@ function isStaticAsset(pathname) {
 function isImage(pathname) {
     return /\.(png|jpe?g|gif|webp|ico)(\?.*)?$/i.test(pathname);
 }
-

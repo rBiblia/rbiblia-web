@@ -29,6 +29,7 @@ import WelcomePopup, { isWelcomePopupDisabled } from "./WelcomePopup";
 import useVersesCache from "./useVersesCache";
 import { useKeyboardNavigation } from "./hooks";
 import { safeJsonParse } from "./safeJsonParse";
+import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
 
 // Lazy-loaded heavy components (Code Splitting)
 const SelectionGrid = React.lazy(() => import("./SelectionGrid"));
@@ -64,24 +65,24 @@ const Bible = ({ intl, setLocale }) => {
 
     // Font size (saved to localStorage)
     const [fontSize, setFontSize] = useState(() => {
-        return localStorage.getItem("rbiblia-font-size") || "medium";
+        return safeLocalStorageGetItem("rbiblia-font-size") || "medium";
     });
 
     // Zen Mode — lock navigation visible (disable hide-on-scroll)
     const [zenMode, setZenMode] = useState(() => {
-        return localStorage.getItem("rbiblia-zen-mode") === "1";
+        return safeLocalStorageGetItem("rbiblia-zen-mode") === "1";
     });
 
     const immersiveDisabled = zenMode || isWelcomePopupOpen;
 
     // Font family (saved to localStorage)
     const [fontFamily, setFontFamily] = useState(() => {
-        return localStorage.getItem("rbiblia-font-family") || "serif";
+        return safeLocalStorageGetItem("rbiblia-font-family") || "serif";
     });
 
     // Save font size to localStorage and apply to CSS variable
     useEffect(() => {
-        localStorage.setItem("rbiblia-font-size", fontSize);
+        safeLocalStorageSetItem("rbiblia-font-size", fontSize);
         const sizeMap = {
             small: "0.9rem",
             medium: "1.15rem",
@@ -107,17 +108,17 @@ const Bible = ({ intl, setLocale }) => {
     // Theme State (saved to localStorage)
     // Values: 'system', 'light', 'dark'
     const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("rbiblia-theme") || "system";
+        return safeLocalStorageGetItem("rbiblia-theme") || "system";
     });
 
     // Dark mode variant: 'gold' (warm neutral) or 'blue' (slate-blue)
     const [darkVariant, setDarkVariant] = useState(() => {
-        return localStorage.getItem("rbiblia-dark-variant") || "gold";
+        return safeLocalStorageGetItem("rbiblia-dark-variant") || "gold";
     });
 
     // Apply Theme Side Effect
     useEffect(() => {
-        localStorage.setItem("rbiblia-theme", theme);
+        safeLocalStorageSetItem("rbiblia-theme", theme);
 
         const root = document.documentElement;
         if (theme === "system") {
@@ -129,13 +130,13 @@ const Bible = ({ intl, setLocale }) => {
 
     // Apply Dark Variant Side Effect
     useEffect(() => {
-        localStorage.setItem("rbiblia-dark-variant", darkVariant);
+        safeLocalStorageSetItem("rbiblia-dark-variant", darkVariant);
         document.documentElement.dataset.darkVariant = darkVariant;
     }, [darkVariant]);
 
     // Save font family to localStorage and apply to CSS variable
     useEffect(() => {
-        localStorage.setItem("rbiblia-font-family", fontFamily);
+        safeLocalStorageSetItem("rbiblia-font-family", fontFamily);
         const familyMap = {
             serif: 'Georgia, "Times New Roman", serif',
             sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
@@ -546,11 +547,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const handleSetZenMode = useCallback((value) => {
         setZenMode(value);
-        try {
-            localStorage.setItem("rbiblia-zen-mode", value ? "1" : "0");
-        } catch {
-            // ignore
-        }
+        safeLocalStorageSetItem("rbiblia-zen-mode", value ? "1" : "0");
     }, []);
 
     // Memoize translationName to avoid inline computation in render

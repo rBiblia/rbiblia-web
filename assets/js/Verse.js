@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect, useMemo, memo } from "react";
+import React, { useRef, useState, useEffect, useMemo, useCallback, memo } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import { getVerseKey, getTranslationVerseKey } from "./Notes";
 
 const LONG_PRESS_DURATION = 500; // ms
 const NOTE_PREVIEW_TOGGLE_THRESHOLD = 80;
+const VERSE_ACTIONS_GAP_PX = 6;
 
 const Verse = memo(function Verse({
     verseContent,
@@ -18,12 +19,27 @@ const Verse = memo(function Verse({
     onVerseCompare,
     notesVersion = 0, // Increment to force note indicator refresh
     isHighlighted = false,
+    isFirstVerse = false,
     allNotes = {},
     allTranslationNotes = {},
 }) {
     const { formatMessage } = useIntl();
     const [isNoteExpanded, setIsNoteExpanded] = useState(false);
     const verseRef = useRef(null);
+    const verseNumberCellRef = useRef(null);
+    const verseActionsRef = useRef(null);
+
+    // Cache DOM lookups for header / bottom-nav (shared across all hovers)
+    const headerElRef = useRef(undefined);
+    const bottomNavElRef = useRef(undefined);
+
+    // For the first verse, default to "below" on mount so the tooltip
+    // doesn't clip under the sticky header before any hover occurs.
+    useEffect(() => {
+        if (isFirstVerse && verseActionsRef.current) {
+            verseActionsRef.current.classList.add("is-below");
+        }
+    }, [isFirstVerse]);
 
     // Derive note state from pre-loaded notes (no localStorage reads)
     const noteKey = getVerseKey(bookId, chapterId, verseId);
@@ -77,14 +93,83 @@ const Verse = memo(function Verse({
         onVerseCompare?.(verseId);
     };
 
+    // Synchronously toggle the "is-below" class on the actions element
+    // via direct DOM manipulation.  This MUST happen before the browser
+    // processes the CSS :hover rule (which makes the tooltip visible).
+    // Using React state (setState) would be too late — the re-render is
+    // asynchronous and the tooltip would briefly flash in the wrong position.
+    const updateActionsPlacement = useCallback(() => {
+        if (typeof window === "undefined") return;
+
+        // On touch devices we hide the actions entirely (CSS media query),
+        // so avoid doing any measurements.
+        if (
+            window.matchMedia &&
+            window.matchMedia("(hover: none)").matches
+        ) {
+            return;
+        }
+
+        const cellEl = verseNumberCellRef.current;
+        const actionsEl = verseActionsRef.current;
+        if (!cellEl || !actionsEl) return;
+
+        const actionsRect = actionsEl.getBoundingClientRect();
+        if (!actionsRect.height) {
+            actionsEl.classList.remove("is-below");
+            return;
+        }
+
+        const cellRect = cellEl.getBoundingClientRect();
+
+        // Cache header/bottomNav lookups — they don't change between hovers
+        if (headerElRef.current === undefined) {
+            headerElRef.current = document.querySelector("header.sticky-top") || null;
+        }
+        if (bottomNavElRef.current === undefined) {
+            bottomNavElRef.current = document.querySelector(".bottom-nav") || null;
+        }
+
+        const headerRect = headerElRef.current
+            ? headerElRef.current.getBoundingClientRect()
+            : null;
+        const topLimit = Math.max(headerRect?.bottom ?? 0, 0);
+
+        const bottomNavRect = bottomNavElRef.current
+            ? bottomNavElRef.current.getBoundingClientRect()
+            : null;
+        const bottomLimit = Math.min(
+            bottomNavRect?.top ?? window.innerHeight,
+            window.innerHeight
+        );
+
+        const aboveTop = cellRect.top - actionsRect.height - VERSE_ACTIONS_GAP_PX;
+        const belowBottom =
+            cellRect.bottom + actionsRect.height + VERSE_ACTIONS_GAP_PX;
+
+        const canShowAbove = aboveTop >= topLimit;
+        const canShowBelow = belowBottom <= bottomLimit;
+
+        // Default is above; only flip to below when above would be hidden
+        // under the sticky header, and there's space below.
+        actionsEl.classList.toggle("is-below", !canShowAbove && canShowBelow);
+    }, []);
+
     return (
         <div
             ref={verseRef}
             className={`row line ${hasAnyNote ? "has-note" : ""} ${isHighlighted ? "highlighted" : ""
                 }`}
+            onMouseEnter={updateActionsPlacement}
         >
-            <div className="col-2 col-lg-1 verse-number-cell">
-                <div className="verse-actions">
+            <div
+                ref={verseNumberCellRef}
+                className="col-2 col-lg-1 verse-number-cell"
+            >
+                <div
+                    ref={verseActionsRef}
+                    className="verse-actions"
+                >
                     <button
                         type="button"
                         className={`verse-action-btn verse-action-note ${hasAnyNote ? "has-note-value" : ""
@@ -208,6 +293,7 @@ Verse.propTypes = {
     onVerseCompare: PropTypes.func,
     notesVersion: PropTypes.number,
     isHighlighted: PropTypes.bool,
+    isFirstVerse: PropTypes.bool,
     allNotes: PropTypes.object,
     allTranslationNotes: PropTypes.object,
 };

@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import useFocusTrap from "./hooks/useFocusTrap";
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageRemoveItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
 
 const WELCOME_POPUP_DISABLED_KEY = "rbiblia_disable_welcome_popup";
 const DESKTOP_DOWNLOAD_URL = "https://api.toborek.info/download/rbib261.exe";
 
 const isWelcomePopupDisabled = () =>
-    localStorage.getItem(WELCOME_POPUP_DISABLED_KEY) === "1";
+    safeLocalStorageGetItem(WELCOME_POPUP_DISABLED_KEY) === "1";
 
 const setWelcomePopupDisabled = (disabled) => {
     if (disabled) {
-        localStorage.setItem(WELCOME_POPUP_DISABLED_KEY, "1");
+        safeLocalStorageSetItem(WELCOME_POPUP_DISABLED_KEY, "1");
         return;
     }
-    localStorage.removeItem(WELCOME_POPUP_DISABLED_KEY);
+    safeLocalStorageRemoveItem(WELCOME_POPUP_DISABLED_KEY);
 };
 
 const WelcomePopup = ({ isOpen, onClose }) => {
