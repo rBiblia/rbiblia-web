@@ -16,11 +16,19 @@
  * This migration runs once and sets a flag so it doesn't run again.
  */
 
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageKey,
+    safeLocalStorageLength,
+    safeLocalStorageRemoveItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
+
 const MIGRATION_FLAG = "rbiblia_notes_migrated";
 
 const migrateOldNotes = () => {
     // Already migrated
-    if (localStorage.getItem(MIGRATION_FLAG)) {
+    if (safeLocalStorageGetItem(MIGRATION_FLAG)) {
         return;
     }
 
@@ -30,8 +38,9 @@ const migrateOldNotes = () => {
     const legacyChapterNotes = [];
     const legacyVerseNotes = [];
 
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
+    const storageLength = safeLocalStorageLength();
+    for (let i = 0; i < storageLength; i++) {
+        const key = safeLocalStorageKey(i);
         if (key && key.startsWith("note_chapter_")) {
             legacyChapterNotes.push(key);
             hasLegacy = true;
@@ -42,22 +51,22 @@ const migrateOldNotes = () => {
     }
 
     if (!hasLegacy) {
-        localStorage.setItem(MIGRATION_FLAG, "1");
+        safeLocalStorageSetItem(MIGRATION_FLAG, "1");
         return;
     }
 
     try {
         // Load existing unified notes
         const existingNotes = JSON.parse(
-            localStorage.getItem("rbiblia_notes") || "{}"
+            safeLocalStorageGetItem("rbiblia_notes") || "{}"
         );
         const existingGeneral = JSON.parse(
-            localStorage.getItem("rbiblia_general_notes") || "[]"
+            safeLocalStorageGetItem("rbiblia_general_notes") || "[]"
         );
 
         // Migrate verse notes → rbiblia_notes
         for (const key of legacyVerseNotes) {
-            const text = localStorage.getItem(key);
+            const text = safeLocalStorageGetItem(key);
             if (!text || !text.trim()) continue;
 
             // Parse key: "note_verse_{bookId}_{chapterId}_{verseId}"
@@ -75,7 +84,7 @@ const migrateOldNotes = () => {
 
         // Migrate chapter notes → general notes (with reference in text)
         for (const key of legacyChapterNotes) {
-            const text = localStorage.getItem(key);
+            const text = safeLocalStorageGetItem(key);
             if (!text || !text.trim()) continue;
 
             // Parse key: "note_chapter_{bookId}_{chapterId}"
@@ -94,19 +103,19 @@ const migrateOldNotes = () => {
         }
 
         // Save migrated data
-        localStorage.setItem("rbiblia_notes", JSON.stringify(existingNotes));
-        localStorage.setItem(
+        safeLocalStorageSetItem("rbiblia_notes", JSON.stringify(existingNotes));
+        safeLocalStorageSetItem(
             "rbiblia_general_notes",
             JSON.stringify(existingGeneral)
         );
 
         // Clean up legacy keys
         for (const key of [...legacyChapterNotes, ...legacyVerseNotes]) {
-            localStorage.removeItem(key);
+            safeLocalStorageRemoveItem(key);
         }
 
         // Set migration flag
-        localStorage.setItem(MIGRATION_FLAG, "1");
+        safeLocalStorageSetItem(MIGRATION_FLAG, "1");
 
         console.log(
             `[rBiblia] Migrated ${legacyVerseNotes.length} verse notes and ${legacyChapterNotes.length} chapter notes to unified format.`
@@ -114,7 +123,7 @@ const migrateOldNotes = () => {
     } catch (err) {
         console.error("[rBiblia] Notes migration failed:", err);
         // Set flag anyway to avoid repeated failures
-        localStorage.setItem(MIGRATION_FLAG, "1");
+        safeLocalStorageSetItem(MIGRATION_FLAG, "1");
     }
 };
 

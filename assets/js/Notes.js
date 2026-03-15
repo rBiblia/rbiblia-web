@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
+import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
 
 const NOTES_STORAGE_KEY = "rbiblia_notes";
 const GENERAL_NOTES_KEY = "rbiblia_general_notes";
@@ -32,7 +33,7 @@ const parseTranslationVerseKey = (key) => {
  */
 const loadNotes = () => {
     try {
-        const saved = localStorage.getItem(NOTES_STORAGE_KEY);
+        const saved = safeLocalStorageGetItem(NOTES_STORAGE_KEY);
         return saved ? JSON.parse(saved) : {};
     } catch {
         return {};
@@ -43,7 +44,7 @@ const loadNotes = () => {
  * Save all notes to localStorage
  */
 const saveNotes = (notes) => {
-    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
+    safeLocalStorageSetItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
 };
 
 /**
@@ -51,7 +52,7 @@ const saveNotes = (notes) => {
  */
 const loadGeneralNotes = () => {
     try {
-        const saved = localStorage.getItem(GENERAL_NOTES_KEY);
+        const saved = safeLocalStorageGetItem(GENERAL_NOTES_KEY);
         return saved ? JSON.parse(saved) : [];
     } catch {
         return [];
@@ -62,7 +63,7 @@ const loadGeneralNotes = () => {
  * Save general notes
  */
 const saveGeneralNotes = (notes) => {
-    localStorage.setItem(GENERAL_NOTES_KEY, JSON.stringify(notes));
+    safeLocalStorageSetItem(GENERAL_NOTES_KEY, JSON.stringify(notes));
 };
 
 /**
@@ -70,7 +71,7 @@ const saveGeneralNotes = (notes) => {
  */
 const loadTranslationNotes = () => {
     try {
-        const saved = localStorage.getItem(TRANSLATION_NOTES_KEY);
+        const saved = safeLocalStorageGetItem(TRANSLATION_NOTES_KEY);
         return saved ? JSON.parse(saved) : {};
     } catch {
         return {};
@@ -81,7 +82,7 @@ const loadTranslationNotes = () => {
  * Save translation-specific notes to localStorage
  */
 const saveTranslationNotes = (notes) => {
-    localStorage.setItem(TRANSLATION_NOTES_KEY, JSON.stringify(notes));
+    safeLocalStorageSetItem(TRANSLATION_NOTES_KEY, JSON.stringify(notes));
 };
 
 /**

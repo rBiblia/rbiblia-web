@@ -16,6 +16,7 @@ import {
 import { safeJsonParse } from "./safeJsonParse";
 import TranslationSelector from "./TranslationSelector";
 import useSwipeNavigation from "./useSwipeNavigation";
+import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
 
 const COMPARISON_DIFF_MODE_KEY = "rbiblia-comparison-diff-mode";
 const WORD_SPLIT_PATTERN =
@@ -165,13 +166,9 @@ const ComparisonGrid = ({
         ].slice(0, comparisonLimit);
     });
 
-    const [isDiffHighlightEnabled, setIsDiffHighlightEnabled] = useState(() => {
-        try {
-            return localStorage.getItem(COMPARISON_DIFF_MODE_KEY) === "1";
-        } catch {
-            return false;
-        }
-    });
+    const [isDiffHighlightEnabled, setIsDiffHighlightEnabled] = useState(
+        () => safeLocalStorageGetItem(COMPARISON_DIFF_MODE_KEY) === "1"
+    );
 
     const [diffStrictMode, setDiffStrictMode] = useState(isDiffModeStrict);
 
@@ -298,14 +295,10 @@ const ComparisonGrid = ({
     }, []);
 
     useEffect(() => {
-        try {
-            localStorage.setItem(
-                COMPARISON_DIFF_MODE_KEY,
-                isDiffHighlightEnabled ? "1" : "0"
-            );
-        } catch {
-            // Ignore storage write failures (private mode/quota)
-        }
+        safeLocalStorageSetItem(
+            COMPARISON_DIFF_MODE_KEY,
+            isDiffHighlightEnabled ? "1" : "0"
+        );
     }, [isDiffHighlightEnabled]);
 
     const primaryText = comparedVerses[currentTranslation];

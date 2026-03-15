@@ -6,3 +6,4 @@ public_html/assets
 yarn-error.log
 .php-cs-fixer.cache
 .agent/
+error.log

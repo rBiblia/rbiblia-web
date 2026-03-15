@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
 import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
+import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
 
 const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
 const FAVORITE_TRANSLATIONS_UPDATED_EVENT =
@@ -66,19 +67,19 @@ SideMenuTab.propTypes = {
 // Helper functions for settings
 const getComparisonLimit = () => {
     return Number.parseInt(
-        localStorage.getItem("rbiblia_comparison_limit") || "4",
+        safeLocalStorageGetItem("rbiblia_comparison_limit") || "4",
         10
     );
 };
 
 const setComparisonLimitValue = (limit) => {
-    localStorage.setItem("rbiblia_comparison_limit", limit.toString());
+    safeLocalStorageSetItem("rbiblia_comparison_limit", limit.toString());
 };
 
 const getFavoriteTranslations = () => {
     try {
         return JSON.parse(
-            localStorage.getItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
+            safeLocalStorageGetItem(FAVORITE_TRANSLATIONS_STORAGE_KEY) || "[]"
         );
     } catch {
         return [];
@@ -86,7 +87,7 @@ const getFavoriteTranslations = () => {
 };
 
 const saveFavoriteTranslations = (favorites) => {
-    localStorage.setItem(
+    safeLocalStorageSetItem(
         FAVORITE_TRANSLATIONS_STORAGE_KEY,
         JSON.stringify(favorites)
     );
@@ -100,19 +101,11 @@ const saveFavoriteTranslations = (favorites) => {
 };
 
 const isDiffModeStrict = () => {
-    try {
-        return localStorage.getItem(COMPARISON_DIFF_STRICT_KEY) === "1";
-    } catch {
-        return false;
-    }
+    return safeLocalStorageGetItem(COMPARISON_DIFF_STRICT_KEY) === "1";
 };
 
 const setDiffModeStrict = (strict) => {
-    try {
-        localStorage.setItem(COMPARISON_DIFF_STRICT_KEY, strict ? "1" : "0");
-    } catch {
-        // Ignore storage write failures
-    }
+    safeLocalStorageSetItem(COMPARISON_DIFF_STRICT_KEY, strict ? "1" : "0");
 };
 
 // Settings section with tabs

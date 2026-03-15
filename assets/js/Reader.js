@@ -157,7 +157,7 @@ const Reader = memo(function Reader({
         >
             <div className="row">
                 <div className="col-12">
-                    {Object.entries(verses).map(([verseId, verseContent]) => (
+                    {Object.entries(verses).map(([verseId, verseContent], index) => (
                         <Verse
                             key={verseId}
                             bookId={selectedBook}
@@ -171,6 +171,7 @@ const Reader = memo(function Reader({
                             onVerseCompare={onVerseCompare}
                             notesVersion={notesVersion}
                             isHighlighted={highlightedVerse === verseId}
+                            isFirstVerse={index === 0}
                             allNotes={allNotes}
                             allTranslationNotes={allTranslationNotes}
                         />
