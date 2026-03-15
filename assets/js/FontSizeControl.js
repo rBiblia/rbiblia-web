@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
 
 const FONT_SIZE_KEY = "rbiblia_font_size";
 const MIN_SIZE = 0.8;
@@ -11,7 +12,7 @@ const DEFAULT_SIZE = 1.15;
  */
 const FontSizeControl = () => {
     const [fontSize, setFontSize] = useState(() => {
-        const saved = localStorage.getItem(FONT_SIZE_KEY);
+        const saved = safeLocalStorageGetItem(FONT_SIZE_KEY);
         return saved ? parseFloat(saved) : DEFAULT_SIZE;
     });
     const [isExpanded, setIsExpanded] = useState(false);
@@ -22,7 +23,7 @@ const FontSizeControl = () => {
             "--verse-font-size",
             `${fontSize}rem`
         );
-        localStorage.setItem(FONT_SIZE_KEY, fontSize.toString());
+        safeLocalStorageSetItem(FONT_SIZE_KEY, fontSize.toString());
     }, [fontSize]);
 
     const increase = () => {

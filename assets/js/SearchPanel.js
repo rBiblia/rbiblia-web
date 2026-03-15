@@ -10,6 +10,11 @@ import { OT_BOOKS, NT_BOOKS, SEARCH_SCOPE } from "./constants";
 import useFocusTrap from "./hooks/useFocusTrap";
 import useScrollWithVirtualization from "./hooks/useScrollWithVirtualization";
 import { safeJsonParse } from "./safeJsonParse";
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageRemoveItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
 
 const SEARCH_HISTORY_KEY = "rbiblia-search-history";
 const SEARCH_HISTORY_LIMIT = 5;
@@ -171,7 +176,7 @@ const normalizeQuery = (value) => value.trim().replace(/\s+/g, " ");
 
 const getSavedSearchHistory = () => {
     try {
-        const rawHistory = localStorage.getItem(SEARCH_HISTORY_KEY);
+        const rawHistory = safeLocalStorageGetItem(SEARCH_HISTORY_KEY);
         if (!rawHistory) {
             return [];
         }
@@ -238,7 +243,7 @@ const SearchPanel = ({
             ].slice(0, SEARCH_HISTORY_LIMIT);
 
             try {
-                localStorage.setItem(
+                safeLocalStorageSetItem(
                     SEARCH_HISTORY_KEY,
                     JSON.stringify(nextHistory)
                 );
@@ -251,7 +256,7 @@ const SearchPanel = ({
 
     const clearSearchHistory = useCallback(() => {
         try {
-            localStorage.removeItem(SEARCH_HISTORY_KEY);
+            safeLocalStorageRemoveItem(SEARCH_HISTORY_KEY);
         } catch {
             // Ignore storage write failures (private mode/quota)
         }
