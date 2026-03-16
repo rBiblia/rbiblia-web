@@ -116,7 +116,7 @@
   "clear": "Clear",
   "showDifferences": "Differences",
   "hideDifferences": "Hide differences",
-  "toggleDifferences": "show differences",
+  "toggleDifferences": "differences",
   "toggleDifferencesKeyboardHint": "Press D to toggle difference highlighting",
   "diffMode": "Comparison mode",
   "diffModeHint": "Loose — ignores word order. Strict (LCS) — pairwise comparison with base, respects word order.",

@@ -116,7 +116,7 @@
   "clear": "Wyczyść",
   "showDifferences": "Różnice",
   "hideDifferences": "Ukryj różnice",
-  "toggleDifferences": "pokaż różnice",
+  "toggleDifferences": "óżnice",
   "toggleDifferencesKeyboardHint": "Naciśnij D aby przełączyć podświetlanie różnic",
   "diffMode": "Tryb porównywania",
   "diffModeHint": "Luźny — ignoruje kolejność słów. Ścisły (LCS) — porównuje parami z bazowym, uwzględnia kolejność.",
