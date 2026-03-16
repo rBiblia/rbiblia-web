@@ -133,8 +133,8 @@
   "info": "Info",
   "usefulLinks": "Useful links",
   "websiteLink": "Program homepage",
-  "downloadWindowsLink": "Download rBiblia for Windows",
-  "faqLink": "Frequently Asked Questions (FAQ)",
-  "contactLink": "Contact / Report a bug",
+  "downloadWindowsLink": "rBiblia for Windows",
+  "faqLink": "FAQ",
+  "contactLink": "Contact / Bug report",
   "radioLink": "Radio with the Gospel"
 }
