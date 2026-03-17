@@ -136,5 +136,9 @@
   "downloadWindowsLink": "rBiblia for Windows",
   "faqLink": "FAQ",
   "contactLink": "Contact / Bug report",
-  "radioLink": "Radio with the Gospel"
+  "radioLink": "Radio with the Gospel",
+  "zenMode": "Zen Mode",
+  "zenModeHint": "Hides navigation while scrolling for distraction-free reading",
+  "zenModeOff": "Disabled",
+  "zenModeOn": "Enabled"
 }

@@ -64,39 +64,9 @@
   }
 }
 
-// Pin header + primary translation while scrolling through comparisons
-.comparison-pinned-area {
-  @media (max-width: 991.98px) {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.97);
-    padding-bottom: 0.75rem;
-    margin-left: -1rem;
-    margin-right: -1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    will-change: transform; // Hint for browser during scroll
-
-    @include dark-mode {
-      background: rgba(30, 30, 30, 0.97);
-      border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
-
-    // When primary verse is too tall (≥2/3 viewport), unpin and scroll normally
-    &.comparison-pinned-unpinned {
-      position: relative;
-      border-bottom: none;
-      background: transparent;
-      will-change: auto;
-
-      @include dark-mode {
-        background: transparent;
-      }
-    }
-  }
-}
+// .comparison-pinned-area: no sticky pinning — the entire overlay scrolls
+// freely so the user can always reach comparison slots without the base verse
+// taking up permanent viewport space on small screens.
 
 .comparison-box-header {
   display: flex;
