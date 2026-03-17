@@ -68,12 +68,14 @@ const Bible = ({ intl, setLocale }) => {
         return safeLocalStorageGetItem("rbiblia-font-size") || "medium";
     });
 
-    // Zen Mode — lock navigation visible (disable hide-on-scroll)
+    // Zen Mode — hides navigation on scroll (immersive reading)
+    // zenMode=true  → immersiveDisabled=false → nav hides while scrolling down
+    // zenMode=false → immersiveDisabled=true  → nav always visible
     const [zenMode, setZenMode] = useState(() => {
         return safeLocalStorageGetItem("rbiblia-zen-mode") === "1";
     });
 
-    const immersiveDisabled = zenMode || isWelcomePopupOpen;
+    const immersiveDisabled = !zenMode || isWelcomePopupOpen;
 
     // Font family (saved to localStorage)
     const [fontFamily, setFontFamily] = useState(() => {
@@ -198,6 +200,11 @@ const Bible = ({ intl, setLocale }) => {
     const keepChapterIfPossible = useRef(false);
     const startFromLastVerse = useRef(false);
 
+    // Ref to track current translation — used by changeSelectedTranslation
+    // guard without adding selectedTranslation to the callback's deps.
+    const selectedTranslationRef = useRef(selectedTranslation);
+    selectedTranslationRef.current = selectedTranslation;
+
     const chapters =
         structure && selectedBook && structure[selectedBook]
             ? structure[selectedBook]
@@ -205,6 +212,12 @@ const Bible = ({ intl, setLocale }) => {
 
     const changeSelectedTranslation = useCallback(
         (newTranslation) => {
+            // Skip if translation hasn't actually changed — prevents resetting
+            // isStructureLoading when the structure fetch is already in progress
+            // or completed (avoids race condition on initial load / locale change).
+            if (newTranslation === selectedTranslationRef.current) {
+                return;
+            }
             setShowVerses(false);
             setIsStructureLoading(true);
             keepChapterIfPossible.current = true;
@@ -292,6 +305,12 @@ const Bible = ({ intl, setLocale }) => {
             setSelectedChapter(newSelectedChapter);
             setVerses(result.data);
             setShowVerses(true);
+
+            // Always scroll to top when a new chapter loads.
+            // 'instant' prevents a visible scroll animation fighting the
+            // content swap (especially when data comes from cache and the
+            // chapter appears without a loading state).
+            globalThis.scrollTo({ top: 0, behavior: "instant" });
 
             // Prefetch next and previous chapters in the background
             versesCache.prefetchAdjacent(
@@ -589,7 +608,7 @@ const Bible = ({ intl, setLocale }) => {
                 setHighlightedVerse(verseId);
                 setTimeout(() => {
                     setHighlightedVerse(null);
-                }, 3000);
+                }, 5000);
             }
         },
         [navigateToBookAndChapter]

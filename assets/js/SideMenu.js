@@ -62,6 +62,7 @@ const SideMenuTab = ({ onClick, className = "", immersiveDisabled = false }) => 
 SideMenuTab.propTypes = {
     onClick: PropTypes.func,
     className: PropTypes.string,
+    immersiveDisabled: PropTypes.bool,
 };
 
 // Helper functions for settings
@@ -91,8 +92,8 @@ const saveFavoriteTranslations = (favorites) => {
         FAVORITE_TRANSLATIONS_STORAGE_KEY,
         JSON.stringify(favorites)
     );
-    if (typeof window !== "undefined") {
-        window.dispatchEvent(
+    if (globalThis.window !== undefined) {
+        globalThis.window.dispatchEvent(
             new CustomEvent(FAVORITE_TRANSLATIONS_UPDATED_EVENT, {
                 detail: favorites,
             })
@@ -143,12 +144,12 @@ const DisplaySettings = ({
             setFavoriteTranslations(getFavoriteTranslations());
         };
 
-        window.addEventListener(
+        globalThis.addEventListener(
             FAVORITE_TRANSLATIONS_UPDATED_EVENT,
             handleFavoritesUpdated
         );
         return () => {
-            window.removeEventListener(
+            globalThis.removeEventListener(
                 FAVORITE_TRANSLATIONS_UPDATED_EVENT,
                 handleFavoritesUpdated
             );
@@ -473,13 +474,13 @@ const DisplaySettings = ({
                                     </p>
                                     <div className="diff-mode-toggle">
                                         <button
-                                            className={`diff-mode-btn ${!zenMode ? "active" : ""
+                                            className={`diff-mode-btn ${zenMode ? "" : "active"
                                                 }`}
                                             onClick={() => setZenMode(false)}
                                         >
                                             {formatMessage({
-                                                id: "off",
-                                                defaultMessage: "Wył.",
+                                                id: "zenModeOff",
+                                                defaultMessage: "Wyłączony",
                                             })}
                                         </button>
                                         <button
@@ -488,8 +489,8 @@ const DisplaySettings = ({
                                             onClick={() => setZenMode(true)}
                                         >
                                             {formatMessage({
-                                                id: "on",
-                                                defaultMessage: "Wł.",
+                                                id: "zenModeOn",
+                                                defaultMessage: "Włączony",
                                             })}
                                         </button>
                                     </div>
