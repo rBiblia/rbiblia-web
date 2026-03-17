@@ -136,5 +136,9 @@
   "downloadWindowsLink": "rBiblia für Windows herunterladen",
   "faqLink": "Häufig gestellte Fragen (FAQ)",
   "contactLink": "Kontakt / Fehler melden",
-  "radioLink": "Radio mit dem Evangelium"
+  "radioLink": "Radio mit dem Evangelium",
+  "zenMode": "Zen-Modus",
+  "zenModeHint": "Blendet die Navigation beim Scrollen für ablenkungsfreies Lesen aus",
+  "zenModeOff": "Deaktiviert",
+  "zenModeOn": "Aktiviert"
 }

@@ -116,7 +116,7 @@
   "clear": "Wyczyść",
   "showDifferences": "Różnice",
   "hideDifferences": "Ukryj różnice",
-  "toggleDifferences": "óżnice",
+  "toggleDifferences": "różnice",
   "toggleDifferencesKeyboardHint": "Naciśnij D aby przełączyć podświetlanie różnic",
   "diffMode": "Tryb porównywania",
   "diffModeHint": "Luźny — ignoruje kolejność słów. Ścisły (LCS) — porównuje parami z bazowym, uwzględnia kolejność.",
@@ -136,5 +136,9 @@
   "downloadWindowsLink": "rBiblia na Windows",
   "faqLink": "Lista pytań (FAQ)",
   "contactLink": "Kontakt / Zgłoś błąd",
-  "radioLink": "Radio Początek"
+  "radioLink": "Radio Początek",
+  "zenMode": "Tryb Zen",
+  "zenModeHint": "Ukrywa nawigację podczas przewijania dla wygodniejszego czytania",
+  "zenModeOff": "Wyłączony",
+  "zenModeOn": "Włączony"
 }

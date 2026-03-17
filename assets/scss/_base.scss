@@ -53,6 +53,14 @@ $font-bible: "Crimson Text", Georgia, "Times New Roman", serif;
     border-bottom: 2px dashed $rb-header-navigator-arrow;
     @include fluid-text(1rem, 1.3rem);
   }
+
+  @include dark-mode {
+    color: var(--dm-text-primary);
+
+    &:hover {
+      color: var(--dm-accent);
+    }
+  }
 }
 
 .icon-expand {
@@ -94,6 +102,12 @@ body {
   background-size: 84px 83px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @include dark-mode {
+    background-image: none;
+    background-color: var(--dm-bg-base);
+    color: var(--dm-text-primary);
+  }
 }
 
 main {
@@ -102,12 +116,21 @@ main {
   min-height: calc(100vh - 53px);
   background: $rb-background-color;
 
+  @include dark-mode {
+    background: var(--dm-bg-surface);
+    border-color: var(--dm-border);
+  }
+
   .row {
     padding-top: 0.2em;
     padding-bottom: 0.2em;
 
     &:nth-child(even) {
       background: $rb-verse-even-color;
+
+      @include dark-mode {
+        background: rgba(255, 255, 255, 0.02);
+      }
     }
 
     .verse {
@@ -119,11 +142,19 @@ main {
       letter-spacing: 0.01em;
       color: #2c2c2c;
       padding: 0.5rem 0;
+
+      @include dark-mode {
+        color: var(--dm-text-primary);
+      }
     }
 
     .line {
       &:hover {
         background: $rb-verse-line-hover;
+
+        @include dark-mode {
+          background: var(--dm-bg-hover);
+        }
       }
 
       // Long-press animation
@@ -134,7 +165,11 @@ main {
 
       // Highlighted verse (e.g. from search)
       &.highlighted {
-        animation: highlightFadeOut 3s ease forwards;
+        animation: highlightFadeOut 5s ease forwards;
+
+        .verse {
+          animation: highlightBoldFadeOut 5s ease forwards;
+        }
       }
 
       @keyframes highlightFadeOut {
@@ -148,6 +183,20 @@ main {
 
         100% {
           background: transparent;
+        }
+      }
+
+      @keyframes highlightBoldFadeOut {
+        0% {
+          font-weight: 700;
+        }
+
+        60% {
+          font-weight: 700;
+        }
+
+        100% {
+          font-weight: normal;
         }
       }
 
@@ -310,6 +359,16 @@ main {
       &:hover {
         text-decoration: underline;
       }
+
+      @include dark-mode {
+        color: var(--dm-accent);
+      }
+    }
+
+    .verse-note-label {
+      @include dark-mode {
+        color: var(--dm-text-muted);
+      }
     }
   }
 
@@ -330,16 +389,35 @@ main {
       color: $rb-verse-hover-color;
       opacity: 1;
     }
+
+    @include dark-mode {
+      &:link,
+      &:visited {
+        color: var(--dm-text-secondary);
+      }
+
+      &:hover {
+        color: var(--dm-accent);
+      }
+    }
   }
 }
 
 header,
 footer>.container {
   @include rb-border;
+
+  @include dark-mode {
+    border-color: var(--dm-border);
+  }
 }
 
 header {
   background: $rb-header-background-color;
+
+  @include dark-mode {
+    background: var(--dm-bg-elevated);
+  }
 
   .icon-navigator {
     cursor: pointer;
@@ -371,6 +449,15 @@ header {
       color: $rb-header-navigator-arrow-active;
       transform: scale(0.95);
     }
+
+    @include dark-mode {
+      color: var(--dm-accent);
+
+      &:hover,
+      &:focus {
+        color: var(--dm-text-primary);
+      }
+    }
   }
 
   .icon-navigator-disabled {
@@ -384,6 +471,16 @@ header {
     &:active {
       color: $rb-header-navigator-arrow-disabled;
       background: transparent;
+    }
+
+    @include dark-mode {
+      color: var(--dm-text-muted);
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: var(--dm-text-muted);
+      }
     }
   }
 
@@ -437,6 +534,17 @@ header {
   &:active {
     transform: translateY(0);
   }
+
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--dm-accent);
+
+    &:hover {
+      background: var(--dm-accent);
+      color: var(--dm-bg-base);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+  }
 }
 
 footer {
@@ -449,6 +557,10 @@ footer {
     background: $rb-footer-background-color;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
+
+    @include dark-mode {
+      background: var(--dm-bg-elevated);
+    }
   }
 
   a {
@@ -460,6 +572,17 @@ footer {
 
     &:hover {
       color: $rb-footer-hover-color;
+    }
+
+    @include dark-mode {
+      &:link,
+      &:visited {
+        color: var(--dm-text-secondary);
+      }
+
+      &:hover {
+        color: var(--dm-accent);
+      }
     }
   }
 }
@@ -526,6 +649,15 @@ footer {
 
   main {
     min-height: calc(100vh - 162px);
+  }
+}
+
+// Skeleton row dark mode
+@include dark-mode {
+  .skeleton-row {
+    &:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
   }
 }
 
