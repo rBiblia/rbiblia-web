@@ -11,10 +11,10 @@
   }
 
   @include dark-mode {
-    background: rgba(18, 18, 18, 0.85);
+    background: var(--dm-bg-overlay);
 
     @media (max-width: 991.98px) {
-      background: #121212;
+      background: var(--dm-bg-base);
     }
   }
 
@@ -44,12 +44,12 @@
   }
 
   @include dark-mode {
-    background: #252525;
+    background: var(--dm-bg-surface);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
     &:hover {
-      background: #2a2a2a;
+      background: var(--dm-bg-hover);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
   }
@@ -129,7 +129,7 @@
   white-space: pre-wrap;
 
   @include dark-mode {
-    color: #e5e5e5;
+    color: var(--dm-text-primary);
   }
 }
 
@@ -304,7 +304,7 @@
   }
 
   @include dark-mode {
-    background: #383838;
+    background: var(--dm-bg-elevated);
     color: #eee;
 
     &:hover:not(:disabled) {
