@@ -1,4 +1,11 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback, memo } from "react";
+import React, {
+    useRef,
+    useState,
+    useEffect,
+    useMemo,
+    useCallback,
+    memo,
+} from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import { getVerseKey, getTranslationVerseKey } from "./Notes";
@@ -66,8 +73,12 @@ const Verse = memo(function Verse({
     const hasAnyNote = hasNote || hasTranslationNote;
 
     const isNoteExpandable =
-        (hasNote && (noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || noteText.includes("\n"))) ||
-        (hasTranslationNote && (translationNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD || translationNoteText.includes("\n")));
+        (hasNote &&
+            (noteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+                noteText.includes("\n"))) ||
+        (hasTranslationNote &&
+            (translationNoteText.length > NOTE_PREVIEW_TOGGLE_THRESHOLD ||
+                translationNoteText.includes("\n")));
 
     const appLink = `bib://${bookId}${chapterId}:${verseId}`;
 
@@ -103,10 +114,7 @@ const Verse = memo(function Verse({
 
         // On touch devices we hide the actions entirely (CSS media query),
         // so avoid doing any measurements.
-        if (
-            window.matchMedia &&
-            window.matchMedia("(hover: none)").matches
-        ) {
+        if (window.matchMedia && window.matchMedia("(hover: none)").matches) {
             return;
         }
 
@@ -124,10 +132,12 @@ const Verse = memo(function Verse({
 
         // Cache header/bottomNav lookups — they don't change between hovers
         if (headerElRef.current === undefined) {
-            headerElRef.current = document.querySelector("header.sticky-top") || null;
+            headerElRef.current =
+                document.querySelector("header.sticky-top") || null;
         }
         if (bottomNavElRef.current === undefined) {
-            bottomNavElRef.current = document.querySelector(".bottom-nav") || null;
+            bottomNavElRef.current =
+                document.querySelector(".bottom-nav") || null;
         }
 
         const headerRect = headerElRef.current
@@ -143,7 +153,8 @@ const Verse = memo(function Verse({
             window.innerHeight
         );
 
-        const aboveTop = cellRect.top - actionsRect.height - VERSE_ACTIONS_GAP_PX;
+        const aboveTop =
+            cellRect.top - actionsRect.height - VERSE_ACTIONS_GAP_PX;
         const belowBottom =
             cellRect.bottom + actionsRect.height + VERSE_ACTIONS_GAP_PX;
 
@@ -158,22 +169,21 @@ const Verse = memo(function Verse({
     return (
         <div
             ref={verseRef}
-            className={`row line ${hasAnyNote ? "has-note" : ""} ${isHighlighted ? "highlighted" : ""
-                }`}
+            className={`row line ${hasAnyNote ? "has-note" : ""} ${
+                isHighlighted ? "highlighted" : ""
+            }`}
             onMouseEnter={updateActionsPlacement}
         >
             <div
                 ref={verseNumberCellRef}
                 className="col-2 col-lg-1 verse-number-cell"
             >
-                <div
-                    ref={verseActionsRef}
-                    className="verse-actions"
-                >
+                <div ref={verseActionsRef} className="verse-actions">
                     <button
                         type="button"
-                        className={`verse-action-btn verse-action-note ${hasAnyNote ? "has-note-value" : ""
-                            }`}
+                        className={`verse-action-btn verse-action-note ${
+                            hasAnyNote ? "has-note-value" : ""
+                        }`}
                         title={formatMessage({
                             id: hasAnyNote ? "edit" : "addNote",
                         })}
@@ -226,10 +236,11 @@ const Verse = memo(function Verse({
                     <div className="verse-note-preview-wrap">
                         {hasNote && (
                             <div
-                                className={`verse-note-preview ${isNoteExpandable && !isNoteExpanded
-                                    ? "is-collapsed"
-                                    : ""
-                                    }`}
+                                className={`verse-note-preview ${
+                                    isNoteExpandable && !isNoteExpanded
+                                        ? "is-collapsed"
+                                        : ""
+                                }`}
                             >
                                 {hasTranslationNote && (
                                     <span className="verse-note-label verse-note-label-global">
@@ -243,10 +254,11 @@ const Verse = memo(function Verse({
                         )}
                         {hasTranslationNote && (
                             <div
-                                className={`verse-note-preview verse-note-preview-translation ${isNoteExpandable && !isNoteExpanded
-                                    ? "is-collapsed"
-                                    : ""
-                                    }`}
+                                className={`verse-note-preview verse-note-preview-translation ${
+                                    isNoteExpandable && !isNoteExpanded
+                                        ? "is-collapsed"
+                                        : ""
+                                }`}
                             >
                                 {hasNote && (
                                     <span className="verse-note-label verse-note-label-translation">

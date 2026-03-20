@@ -46,4 +46,3 @@ export function safeLocalStorageKey(index) {
         return null;
     }
 }
-

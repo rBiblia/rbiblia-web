@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
 
 const FONT_SIZE_KEY = "rbiblia_font_size";
 const MIN_SIZE = 0.8;

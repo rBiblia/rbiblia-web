@@ -165,39 +165,40 @@ main {
 
       // Highlighted verse (e.g. from search)
       &.highlighted {
-        animation: highlightFadeOut 5s ease forwards;
+        animation: highlightPulseFade 8s ease-out forwards;
+
+        @include dark-mode {
+          animation: highlightPulseFadeDark 8s ease-out forwards;
+        }
 
         .verse {
-          animation: highlightBoldFadeOut 5s ease forwards;
+          animation: highlightBoldFadeOut 8s ease-out forwards;
+          display: inline-block; /* allows transform to work smoothly */
         }
       }
 
-      @keyframes highlightFadeOut {
-        0% {
-          background: rgba($rb-header-navigator-arrow, 0.25);
-        }
+      @keyframes highlightPulseFade {
+        0% { background: rgba($rb-header-navigator-arrow, 0.35); box-shadow: inset 6px 0 0 $rb-header-navigator-arrow; }
+        15% { background: rgba($rb-header-navigator-arrow, 0.1); box-shadow: inset 6px 0 0 $rb-header-navigator-arrow; }
+        30% { background: rgba($rb-header-navigator-arrow, 0.35); box-shadow: inset 6px 0 0 $rb-header-navigator-arrow; }
+        60% { background: rgba($rb-header-navigator-arrow, 0.05); box-shadow: inset 6px 0 0 rgba($rb-header-navigator-arrow, 0.5); }
+        100% { background: transparent; box-shadow: inset 6px 0 0 transparent; }
+      }
 
-        70% {
-          background: rgba($rb-header-navigator-arrow, 0.15);
-        }
-
-        100% {
-          background: transparent;
-        }
+      @keyframes highlightPulseFadeDark {
+        0% { background: rgba(255, 255, 255, 0.15); box-shadow: inset 6px 0 0 var(--dm-accent); }
+        15% { background: rgba(255, 255, 255, 0.05); box-shadow: inset 6px 0 0 var(--dm-accent); }
+        30% { background: rgba(255, 255, 255, 0.15); box-shadow: inset 6px 0 0 var(--dm-accent); }
+        60% { background: rgba(255, 255, 255, 0.05); box-shadow: inset 6px 0 0 rgba(255, 255, 255, 0.15); }
+        100% { background: transparent; box-shadow: inset 6px 0 0 transparent; }
       }
 
       @keyframes highlightBoldFadeOut {
-        0% {
-          font-weight: 700;
-        }
-
-        60% {
-          font-weight: 700;
-        }
-
-        100% {
-          font-weight: normal;
-        }
+        0% { font-weight: 700; transform: translateX(8px); }
+        15% { font-weight: 700; transform: translateX(2px); }
+        30% { font-weight: 700; transform: translateX(8px); }
+        60% { font-weight: 700; transform: translateX(0); }
+        100% { font-weight: normal; transform: translateX(0); }
       }
 
       // Verse with note
@@ -223,7 +224,7 @@ main {
       }
     }
 
-    // Verse number cell with floating action buttons
+    // Verse number cell with floating action buttons (to the left)
     .verse-number-cell {
       display: flex;
       align-items: center;
@@ -232,42 +233,47 @@ main {
 
       .verse-actions {
         position: absolute;
-        bottom: calc(100% + 6px);
-        left: 50%;
-        transform: translateX(-50%);
+        right: calc(100% + 4px);
+        top: 50%;
+        transform: translateY(-50%);
         display: flex;
         flex-direction: row;
-        gap: 4px;
-        padding: 4px;
+        gap: 2px;
+        padding: 3px;
         background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
-          0 1px 3px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
+          0 1px 2px rgba(0, 0, 0, 0.06);
         opacity: 0;
         visibility: hidden;
-        transition: all 0.15s ease;
-        z-index: 10;
         pointer-events: none;
+        transition: opacity 0.15s ease, visibility 0.15s ease;
+        z-index: 10;
 
-        &.is-below {
-          bottom: auto;
-          top: calc(100% + 6px);
+        // Invisible hover bridge: fills the gap between tooltip and verse number
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: calc(4px + 1rem);
+          height: 100%;
         }
 
         @include dark-mode {
           background: var(--dm-bg-elevated);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4),
-            0 1px 3px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+            0 1px 2px rgba(0, 0, 0, 0.15);
         }
       }
 
       .verse-action-btn {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         border: none;
-        border-radius: 8px;
+        border-radius: 6px;
         background: transparent;
-        color: #666;
+        color: #999;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -276,18 +282,18 @@ main {
         transition: all 0.15s ease;
 
         svg {
-          width: 16px;
-          height: 16px;
+          width: 14px;
+          height: 14px;
         }
 
         &:hover {
           background: rgba($rb-header-navigator-arrow, 0.12);
           color: $rb-header-navigator-arrow;
-          transform: scale(1.1);
+          transform: scale(1.15);
         }
 
         &:active {
-          transform: scale(0.95);
+          transform: scale(0.9);
         }
 
         @include dark-mode {
