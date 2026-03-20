@@ -45,7 +45,7 @@
 
   @include dark-mode {
     background: var(--dm-bg-surface);
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--dm-border-subtle);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
     &:hover {
@@ -87,7 +87,7 @@
   contain-intrinsic-size: auto 150px;
 
   @include dark-mode {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--dm-border-subtle);
   }
 }
 
@@ -103,7 +103,7 @@
   gap: 0.6rem;
 
   @include dark-mode {
-    color: #777;
+    color: var(--dm-text-muted);
   }
 }
 
@@ -225,8 +225,8 @@
   flex-shrink: 0;
 
   @include dark-mode {
-    background: #3a3a3a;
-    color: #f0f0f0;
+    background: var(--dm-bg-elevated);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -244,9 +244,9 @@
   }
 
   @include dark-mode {
-    background: #333;
-    border-color: #444;
-    color: #eee;
+    background: var(--dm-bg-surface);
+    border-color: var(--dm-border);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -305,10 +305,10 @@
 
   @include dark-mode {
     background: var(--dm-bg-elevated);
-    color: #eee;
+    color: var(--dm-text-primary);
 
     &:hover:not(:disabled) {
-      background: $rb-header-navigator-arrow;
+      background: var(--dm-accent);
       color: white;
     }
   }
@@ -322,8 +322,8 @@
   border-radius: 4px;
 
   @include dark-mode {
-    background: #333;
-    color: #ebebeb;
+    background: var(--dm-bg-surface);
+    color: var(--dm-text-primary);
   }
 }
 
@@ -409,20 +409,20 @@
   @include dark-mode {
     .rb-switch-slider {
       background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--dm-border-subtle);
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 
       &::before {
-        background: #e0e0e0;
+        background: var(--dm-text-primary);
       }
     }
 
     .rb-switch-text {
-      color: #999;
+      color: var(--dm-text-secondary);
     }
 
     input:checked+.rb-switch-slider {
-      background: $rb-header-navigator-arrow;
+      background: var(--dm-accent);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
         inset 0 2px 4px rgba(0, 0, 0, 0.2);
 
@@ -453,7 +453,7 @@
   border: 1.5px solid #e0e0e0;
 
   @include dark-mode {
-    border-color: #444;
+    border-color: var(--dm-border);
   }
 }
 
@@ -472,7 +472,7 @@
     border-right: 1.5px solid #e0e0e0;
 
     @include dark-mode {
-      border-right-color: #444;
+      border-right-color: var(--dm-border);
     }
   }
 

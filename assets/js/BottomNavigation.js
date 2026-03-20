@@ -20,7 +20,11 @@ const BottomNavigation = memo(function BottomNavigation({
     const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
 
     return (
-        <nav className={`bottom-nav d-lg-none ${className} ${isNavVisible ? "" : "nav-hidden-bottom"}`}>
+        <nav
+            className={`bottom-nav d-lg-none ${className} ${
+                isNavVisible ? "" : "nav-hidden-bottom"
+            }`}
+        >
             {/* Left arrow - far left position */}
             <button
                 className="bottom-nav-btn bottom-nav-arrow"

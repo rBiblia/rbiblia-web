@@ -9,7 +9,11 @@ import { useState, useEffect, useRef } from "react";
  * @param {number} options.threshold Minimum scroll difference to trigger change
  * @param {number} options.topThreshold Distance from top where nav is always visible
  */
-const useScrollDirection = ({ threshold = 50, topThreshold = 10, disabled = false } = {}) => {
+const useScrollDirection = ({
+    threshold = 50,
+    topThreshold = 10,
+    disabled = false,
+} = {}) => {
     const [isVisible, setIsVisible] = useState(true);
     const prevScrollY = useRef(0);
     const rafId = useRef(null);

@@ -16,7 +16,10 @@ import {
 import { safeJsonParse } from "./safeJsonParse";
 import TranslationSelector from "./TranslationSelector";
 import useSwipeNavigation from "./useSwipeNavigation";
-import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
 
 const COMPARISON_DIFF_MODE_KEY = "rbiblia-comparison-diff-mode";
 const WORD_SPLIT_PATTERN =
@@ -232,8 +235,8 @@ const ComparisonGrid = ({
         setComparedVerses({});
         setLoading({});
 
-        // We use timeouts to stagger the fetches. This ensures that the massive JSON 
-        // objects (entire chapters) are parsed in separate frames, yielding to the 
+        // We use timeouts to stagger the fetches. This ensures that the massive JSON
+        // objects (entire chapters) are parsed in separate frames, yielding to the
         // browser's main thread and preventing UI freezes during overlay open.
         const timeouts = [];
 
@@ -606,7 +609,7 @@ const ComparisonGrid = ({
                     padding: 0,
                     margin: 0,
                     cursor: "default",
-                    zIndex: 0
+                    zIndex: 0,
                 }}
                 tabIndex={-1}
             />
@@ -664,8 +667,8 @@ const ComparisonGrid = ({
 
                         <div className="d-flex align-items-center gap-2">
                             <span className="comparison-keyboard-hint d-none d-lg-block">
-                                ← → {formatMessage({ id: "navigateVerses" })} • D{" "}
-                                {formatMessage({ id: "toggleDifferences" })}
+                                ← → {formatMessage({ id: "navigateVerses" })} •
+                                D {formatMessage({ id: "toggleDifferences" })}
                             </span>
                             <button
                                 className="btn btn-close"
@@ -752,10 +755,12 @@ const ComparisonGrid = ({
 ComparisonGrid.propTypes = {
     verseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         .isRequired,
-    bookId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    bookId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
     bookName: PropTypes.string.isRequired,
     bookSigil: PropTypes.string.isRequired,
-    chapterId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    chapterId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
     currentTranslation: PropTypes.string.isRequired,
     translations: PropTypes.arrayOf(
         PropTypes.shape({

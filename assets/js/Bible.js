@@ -5,7 +5,7 @@ import React, {
     useMemo,
     useRef,
     useState,
-    Suspense
+    Suspense,
 } from "react";
 import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
@@ -29,7 +29,10 @@ import WelcomePopup, { isWelcomePopupDisabled } from "./WelcomePopup";
 import useVersesCache from "./useVersesCache";
 import { useKeyboardNavigation } from "./hooks";
 import { safeJsonParse } from "./safeJsonParse";
-import { safeLocalStorageGetItem, safeLocalStorageSetItem } from "./safeStorage";
+import {
+    safeLocalStorageGetItem,
+    safeLocalStorageSetItem,
+} from "./safeStorage";
 
 // Lazy-loaded heavy components (Code Splitting)
 const SelectionGrid = React.lazy(() => import("./SelectionGrid"));
@@ -517,52 +520,67 @@ const Bible = ({ intl, setLocale }) => {
     );
 
     // Stable callbacks for overlay openers (prevents BottomNavigation memo breakage)
-    const handleOpenSelection = useCallback(
-        () => setIsSelectionOpen(true),
-        []
-    );
+    const handleOpenSelection = useCallback(() => setIsSelectionOpen(true), []);
     const handleOpenNotes = useCallback(() => setIsNotesOpen(true), []);
     const handleOpenChapterComp = useCallback(
         () => setIsChapterCompOpen(true),
         []
     );
     const handleOpenSearch = useCallback(() => setIsSearchOpen(true), []);
-    const handleOpenSettings = useCallback(
-        () => setIsSideMenuOpen(true),
-        []
-    );
+    const handleOpenSettings = useCallback(() => setIsSideMenuOpen(true), []);
 
     const handleOpenChangelog = useCallback(() => setIsChangelogOpen(true), []);
 
-    const handleCloseSelection = useCallback(() => setIsSelectionOpen(false), []);
+    const handleCloseSelection = useCallback(
+        () => setIsSelectionOpen(false),
+        []
+    );
     const handleCloseNotes = useCallback(() => setIsNotesOpen(false), []);
-    const handleCloseChapterComp = useCallback(() => setIsChapterCompOpen(false), []);
+    const handleCloseChapterComp = useCallback(
+        () => setIsChapterCompOpen(false),
+        []
+    );
     const handleCloseSearch = useCallback(() => setIsSearchOpen(false), []);
     const handleCloseSideMenu = useCallback(() => setIsSideMenuOpen(false), []);
-    const handleCloseChangelog = useCallback(() => setIsChangelogOpen(false), []);
-    const handleCloseWelcomePopup = useCallback(() => setIsWelcomePopupOpen(false), []);
+    const handleCloseChangelog = useCallback(
+        () => setIsChangelogOpen(false),
+        []
+    );
+    const handleCloseWelcomePopup = useCallback(
+        () => setIsWelcomePopupOpen(false),
+        []
+    );
     const handleCloseComparison = useCallback(() => setComparedVerse(null), []);
-    const handleCloseNoteEditor = useCallback(() => setEditingNoteVerse(null), []);
+    const handleCloseNoteEditor = useCallback(
+        () => setEditingNoteVerse(null),
+        []
+    );
     const handleCloseErrorToast = useCallback(() => setToastError(null), []);
 
     const handleSaveNote = useCallback(() => setNotesVersion((v) => v + 1), []);
 
-    const handleNavigateChapter = useCallback((book, chapter) => {
-        navigateToBookAndChapter(book, chapter);
-    }, [navigateToBookAndChapter]);
+    const handleNavigateChapter = useCallback(
+        (book, chapter) => {
+            navigateToBookAndChapter(book, chapter);
+        },
+        [navigateToBookAndChapter]
+    );
 
-    const handleNavigateVerseComparison = useCallback((direction) => {
-        setComparedVerse((prev) => {
-            const currentVerse = Number.parseInt(prev, 10);
-            const maxVerse = Object.keys(verses).length;
-            if (direction === "prev" && currentVerse > 1) {
-                return String(currentVerse - 1);
-            } else if (direction === "next" && currentVerse < maxVerse) {
-                return String(currentVerse + 1);
-            }
-            return prev;
-        });
-    }, [verses]);
+    const handleNavigateVerseComparison = useCallback(
+        (direction) => {
+            setComparedVerse((prev) => {
+                const currentVerse = Number.parseInt(prev, 10);
+                const maxVerse = Object.keys(verses).length;
+                if (direction === "prev" && currentVerse > 1) {
+                    return String(currentVerse - 1);
+                } else if (direction === "next" && currentVerse < maxVerse) {
+                    return String(currentVerse + 1);
+                }
+                return prev;
+            });
+        },
+        [verses]
+    );
 
     const handleSetZenMode = useCallback((value) => {
         setZenMode(value);
@@ -763,10 +781,7 @@ const Bible = ({ intl, setLocale }) => {
                 onClick={handleOpenSettings}
                 immersiveDisabled={immersiveDisabled}
             />
-            <SideMenu
-                isOpen={isSideMenuOpen}
-                onClose={handleCloseSideMenu}
-            >
+            <SideMenu isOpen={isSideMenuOpen} onClose={handleCloseSideMenu}>
                 <DisplaySettings
                     fontSize={fontSize}
                     setFontSize={setFontSize}
@@ -812,14 +827,12 @@ const Bible = ({ intl, setLocale }) => {
             />
 
             {/* Toast for non-blocking errors */}
-            {
-                toastError && (
-                    <ErrorToast
-                        message={toastError}
-                        onClose={handleCloseErrorToast}
-                    />
-                )
-            }
+            {toastError && (
+                <ErrorToast
+                    message={toastError}
+                    onClose={handleCloseErrorToast}
+                />
+            )}
         </>
     );
 };

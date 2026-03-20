@@ -81,8 +81,9 @@ const SelectionGrid = ({
                         <button
                             type="button"
                             key={id}
-                            className={`tile book-tile ${isMobile ? "tile-compact" : ""
-                                } ${id === currentBook ? "tile-active" : ""}`}
+                            className={`tile book-tile ${
+                                isMobile ? "tile-compact" : ""
+                            } ${id === currentBook ? "tile-active" : ""}`}
                             onClick={() => handleBookClick(id)}
                             title={books[id].name}
                         >
@@ -104,8 +105,8 @@ const SelectionGrid = ({
                         {view === "books"
                             ? formatMessage({ id: "selectBook" })
                             : `${books[selectedBook].name} - ${formatMessage({
-                                id: "selectChapter",
-                            })}`}
+                                  id: "selectChapter",
+                              })}`}
                     </h2>
                     <div className="d-flex gap-2">
                         {view === "chapters" && (
@@ -137,11 +138,12 @@ const SelectionGrid = ({
                                 <button
                                     type="button"
                                     key={chapter}
-                                    className={`tile chapter-tile ${selectedBook === currentBook &&
-                                            chapter === currentChapter
+                                    className={`tile chapter-tile ${
+                                        selectedBook === currentBook &&
+                                        chapter === currentChapter
                                             ? "tile-active"
                                             : ""
-                                        }`}
+                                    }`}
                                     onClick={() => handleChapterClick(chapter)}
                                 >
                                     <span className="tile-text">{chapter}</span>
