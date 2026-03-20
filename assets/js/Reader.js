@@ -50,88 +50,121 @@ const Reader = memo(function Reader({
         }
     }, [onVerseLongPress]);
 
-    const handleTouchStart = useCallback((e) => {
-        const verseEl = e.target.closest('.verse');
-        if (!verseEl || e.touches.length > 1) return;
+    const handleTouchStart = useCallback(
+        (e) => {
+            const verseEl = e.target.closest(".verse");
+            if (!verseEl || e.touches.length > 1) return;
 
-        isLongPress.current = false;
-        isPressing.current = true;
-        targetVerseEl.current = verseEl;
-        verseEl.classList.add("pressing");
-
-        startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        longPressTimer.current = setTimeout(triggerLongPress, LONG_PRESS_DURATION);
-    }, [triggerLongPress]);
-
-    const handleTouchEnd = useCallback((e) => {
-        clearPress();
-    }, [clearPress]);
-
-    const handleTouchMove = useCallback((e) => {
-        if (!longPressTimer.current) return;
-        const touch = e.touches[0];
-        const dx = Math.abs(touch.clientX - startPos.current.x);
-        const dy = Math.abs(touch.clientY - startPos.current.y);
-        if (dx > 10 || dy > 10) {
-            clearPress();
-        }
-    }, [clearPress]);
-
-    const handleMouseDown = useCallback((e) => {
-        if (e.button !== 0) return;
-        const verseEl = e.target.closest('.verse');
-        if (!verseEl) return;
-
-        isLongPress.current = false;
-        isPressing.current = true;
-        targetVerseEl.current = verseEl;
-        verseEl.classList.add("pressing");
-
-        startPos.current = { x: e.clientX, y: e.clientY };
-        longPressTimer.current = setTimeout(triggerLongPress, LONG_PRESS_DURATION);
-    }, [triggerLongPress]);
-
-    const handleMouseMove = useCallback((e) => {
-        if (!isPressing.current) return;
-        const dx = Math.abs(e.clientX - startPos.current.x);
-        const dy = Math.abs(e.clientY - startPos.current.y);
-        if (dx > 10 || dy > 10) {
-            clearPress();
-        }
-    }, [clearPress]);
-
-    const handleClick = useCallback((e) => {
-        const verseEl = e.target.closest('.verse');
-        if (!verseEl) return;
-
-        if (isLongPress.current) {
             isLongPress.current = false;
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-        }
+            isPressing.current = true;
+            targetVerseEl.current = verseEl;
+            verseEl.classList.add("pressing");
 
-        const verseId = verseEl.dataset.verseId;
-        if (verseId) {
-            onVerseClick?.(verseId);
-        }
-    }, [onVerseClick]);
+            startPos.current = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+            };
+            longPressTimer.current = setTimeout(
+                triggerLongPress,
+                LONG_PRESS_DURATION
+            );
+        },
+        [triggerLongPress]
+    );
+
+    const handleTouchEnd = useCallback(
+        (e) => {
+            clearPress();
+        },
+        [clearPress]
+    );
+
+    const handleTouchMove = useCallback(
+        (e) => {
+            if (!longPressTimer.current) return;
+            const touch = e.touches[0];
+            const dx = Math.abs(touch.clientX - startPos.current.x);
+            const dy = Math.abs(touch.clientY - startPos.current.y);
+            if (dx > 10 || dy > 10) {
+                clearPress();
+            }
+        },
+        [clearPress]
+    );
+
+    const handleMouseDown = useCallback(
+        (e) => {
+            if (e.button !== 0) return;
+            const verseEl = e.target.closest(".verse");
+            if (!verseEl) return;
+
+            isLongPress.current = false;
+            isPressing.current = true;
+            targetVerseEl.current = verseEl;
+            verseEl.classList.add("pressing");
+
+            startPos.current = { x: e.clientX, y: e.clientY };
+            longPressTimer.current = setTimeout(
+                triggerLongPress,
+                LONG_PRESS_DURATION
+            );
+        },
+        [triggerLongPress]
+    );
+
+    const handleMouseMove = useCallback(
+        (e) => {
+            if (!isPressing.current) return;
+            const dx = Math.abs(e.clientX - startPos.current.x);
+            const dy = Math.abs(e.clientY - startPos.current.y);
+            if (dx > 10 || dy > 10) {
+                clearPress();
+            }
+        },
+        [clearPress]
+    );
+
+    const handleClick = useCallback(
+        (e) => {
+            const verseEl = e.target.closest(".verse");
+            if (!verseEl) return;
+
+            if (isLongPress.current) {
+                isLongPress.current = false;
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+
+            const verseId = verseEl.dataset.verseId;
+            if (verseId) {
+                onVerseClick?.(verseId);
+            }
+        },
+        [onVerseClick]
+    );
 
     const handleContextMenu = useCallback((e) => {
-        if (e.target.closest('.verse') && (isPressing.current || isLongPress.current)) {
+        if (
+            e.target.closest(".verse") &&
+            (isPressing.current || isLongPress.current)
+        ) {
             e.preventDefault();
         }
     }, []);
 
-    const handleKeyDown = useCallback((e) => {
-        if (e.key === "Enter" || e.key === " ") {
-            const verseEl = e.target.closest('.verse');
-            if (verseEl) {
-                if (e.key === " ") e.preventDefault();
-                handleClick(e);
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                const verseEl = e.target.closest(".verse");
+                if (verseEl) {
+                    if (e.key === " ") e.preventDefault();
+                    handleClick(e);
+                }
             }
-        }
-    }, [handleClick]);
+        },
+        [handleClick]
+    );
 
     useEffect(() => {
         return clearPress;
@@ -157,25 +190,27 @@ const Reader = memo(function Reader({
         >
             <div className="row">
                 <div className="col-12">
-                    {Object.entries(verses).map(([verseId, verseContent], index) => (
-                        <Verse
-                            key={verseId}
-                            bookId={selectedBook}
-                            chapterId={selectedChapter}
-                            verseId={verseId}
-                            translationId={selectedTranslation}
-                            translationName={translationName}
-                            verseContent={verseContent}
-                            onVerseClick={onVerseClick}
-                            onVerseLongPress={onVerseLongPress}
-                            onVerseCompare={onVerseCompare}
-                            notesVersion={notesVersion}
-                            isHighlighted={highlightedVerse === verseId}
-                            isFirstVerse={index === 0}
-                            allNotes={allNotes}
-                            allTranslationNotes={allTranslationNotes}
-                        />
-                    ))}
+                    {Object.entries(verses).map(
+                        ([verseId, verseContent], index) => (
+                            <Verse
+                                key={verseId}
+                                bookId={selectedBook}
+                                chapterId={selectedChapter}
+                                verseId={verseId}
+                                translationId={selectedTranslation}
+                                translationName={translationName}
+                                verseContent={verseContent}
+                                onVerseClick={onVerseClick}
+                                onVerseLongPress={onVerseLongPress}
+                                onVerseCompare={onVerseCompare}
+                                notesVersion={notesVersion}
+                                isHighlighted={highlightedVerse === verseId}
+                                isFirstVerse={index === 0}
+                                allNotes={allNotes}
+                                allTranslationNotes={allTranslationNotes}
+                            />
+                        )
+                    )}
                 </div>
             </div>
         </main>
