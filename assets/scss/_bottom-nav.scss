@@ -26,8 +26,8 @@
   }
 
   @include dark-mode {
-    background: rgba(30, 30, 30, 0.97);
-    border-top-color: rgba(255, 255, 255, 0.08);
+    background: var(--dm-bg-glass);
+    border-top-color: var(--dm-border-subtle);
     box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
   }
 }
@@ -57,6 +57,11 @@
     opacity: 0.6;
   }
 
+  &:focus:not(:focus-visible) {
+    outline: none;
+    background: transparent;
+  }
+
   // Narrow side buttons (Notes, Comparison) as requested
   &:not(.bottom-nav-btn-center) {
     max-width: 65px;
@@ -73,10 +78,10 @@
   }
 
   @include dark-mode {
-    color: #aaa;
+    color: var(--dm-text-secondary);
 
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--dm-bg-hover);
     }
   }
 }

@@ -197,7 +197,7 @@ const Bible = ({ intl, setLocale }) => {
         }
     }, []);
 
-    const keepChapterIfPossible = useRef(false);
+    const keepChapterIfPossible = useRef(true);
     const startFromLastVerse = useRef(false);
 
     // Ref to track current translation — used by changeSelectedTranslation
