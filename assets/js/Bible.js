@@ -202,7 +202,12 @@ const Bible = ({ intl, setLocale }) => {
 
     const keepChapterIfPossible = useRef(true);
     const startFromLastVerse = useRef(false);
-    const pendingHighlightRef = useRef(null); // verseId to highlight after chapter loads
+    // Initialize pending highlight with verse ID from URL hash if present
+    const pendingHighlightRef = useRef(
+        typeof globalThis !== "undefined" && globalThis.location?.hash
+            ? globalThis.location.hash.replace("#", "")
+            : null
+    ); // verseId to highlight after chapter loads
 
     // Ref to track current translation — used by changeSelectedTranslation
     // guard without adding selectedTranslation to the callback's deps.
@@ -235,7 +240,7 @@ const Bible = ({ intl, setLocale }) => {
         const { chapter, book, translation } = getDataFromCurrentPathname();
 
         setLocale(locale);
-        updateHistory(locale, translation, book, chapter);
+        updateHistory(locale, translation, book, chapter, pendingHighlightRef.current);
     };
 
     const changeSelectedBook = (newSelectedBook) => {
@@ -299,7 +304,8 @@ const Bible = ({ intl, setLocale }) => {
             locale,
             selectedTranslation,
             effectiveBook,
-            newSelectedChapter
+            newSelectedChapter,
+            pendingHighlightRef.current
         );
 
         // Check if data is in cache - if yes, show immediately
