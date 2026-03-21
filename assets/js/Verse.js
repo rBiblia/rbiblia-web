@@ -85,9 +85,12 @@ const Verse = memo(function Verse({
     // Scroll into view when highlighted
     useEffect(() => {
         if (isHighlighted && verseRef.current) {
-            verseRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
+            // Use rAF to ensure the element is laid out before scrolling
+            requestAnimationFrame(() => {
+                verseRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
             });
         }
     }, [isHighlighted]);

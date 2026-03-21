@@ -202,6 +202,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const keepChapterIfPossible = useRef(true);
     const startFromLastVerse = useRef(false);
+    const pendingHighlightRef = useRef(null); // verseId to highlight after chapter loads
 
     // Ref to track current translation — used by changeSelectedTranslation
     // guard without adding selectedTranslation to the callback's deps.
@@ -309,11 +310,27 @@ const Bible = ({ intl, setLocale }) => {
             setVerses(result.data);
             setShowVerses(true);
 
-            // Always scroll to top when a new chapter loads.
-            // 'instant' prevents a visible scroll animation fighting the
-            // content swap (especially when data comes from cache and the
-            // chapter appears without a loading state).
-            globalThis.scrollTo({ top: 0, behavior: "instant" });
+            // If a specific verse is pending highlight, skip scroll-to-top
+            // and apply the highlight after the DOM has rendered.
+            if (pendingHighlightRef.current) {
+                const verseId = pendingHighlightRef.current;
+                pendingHighlightRef.current = null;
+                // Use double rAF to ensure React has committed the DOM update
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setHighlightedVerse(verseId);
+                        setTimeout(() => {
+                            setHighlightedVerse(null);
+                        }, 8000);
+                    });
+                });
+            } else {
+                // Always scroll to top when a new chapter loads.
+                // 'instant' prevents a visible scroll animation fighting the
+                // content swap (especially when data comes from cache and the
+                // chapter appears without a loading state).
+                globalThis.scrollTo({ top: 0, behavior: "instant" });
+            }
 
             // Prefetch next and previous chapters in the background
             versesCache.prefetchAdjacent(
@@ -618,18 +635,24 @@ const Bible = ({ intl, setLocale }) => {
     );
 
     const handleNavigateToVerse = useCallback(
-        (book, chapter, verse) => {
-            navigateToBookAndChapter(book, chapter);
+        (book, chapter, verse, translationId) => {
+            // If a translation-specific note was clicked, switch translation first
+            if (
+                translationId &&
+                translationId !== selectedTranslationRef.current
+            ) {
+                changeSelectedTranslation(translationId);
+            }
 
             if (verse) {
-                const verseId = String(verse);
-                setHighlightedVerse(verseId);
-                setTimeout(() => {
-                    setHighlightedVerse(null);
-                }, 5000);
+                // Store the pending verse BEFORE navigation so changeSelectedChapter
+                // knows not to scroll to top and can apply the highlight after render.
+                pendingHighlightRef.current = String(verse);
             }
+
+            navigateToBookAndChapter(book, chapter);
         },
-        [navigateToBookAndChapter]
+        [navigateToBookAndChapter, changeSelectedTranslation]
     );
 
     // Toggle body class when fullscreen overlays are open to hide background content and improve performance
