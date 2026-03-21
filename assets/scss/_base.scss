@@ -267,12 +267,12 @@ main {
         }
 
         @media (max-width: 1199.98px) {
-          right: auto;
-          left: calc(100% + 4px);
+          right: 50%;
+          left: auto;
+          transform: translate(50%, -50%);
 
           &::after {
-            left: auto;
-            right: 100%;
+            display: none;
           }
         }
       }
