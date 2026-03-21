@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
+import PropTypes from "prop-types";
 import useFocusTrap from "./hooks/useFocusTrap";
 import Icon from "./Icon";
 
@@ -70,6 +71,7 @@ const ChangelogModal = ({ isOpen, onClose }) => {
         <>
             <div
                 className={`changelog-overlay ${isOpen ? "active" : ""}`}
+                aria-hidden="true"
                 onClick={onClose}
             />
             <div
@@ -98,6 +100,11 @@ const ChangelogModal = ({ isOpen, onClose }) => {
             </div>
         </>
     );
+};
+
+ChangelogModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export default ChangelogModal;

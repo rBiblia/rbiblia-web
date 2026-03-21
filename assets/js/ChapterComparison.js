@@ -6,6 +6,7 @@ import React, {
     useRef,
 } from "react";
 import { useIntl } from "react-intl";
+import PropTypes from "prop-types";
 import Icon from "./Icon";
 import { safeJsonParse } from "./safeJsonParse";
 import TranslationSelector from "./TranslationSelector";
@@ -50,14 +51,6 @@ const ChapterComparison = ({
         return translations
             .filter((t) => favorites.includes(t.id))
             .map((t) => t.id);
-    }, [translations, favorites]);
-    const favoriteTranslations = useMemo(() => {
-        if (!translations) return [];
-        return translations.filter((t) => favorites.includes(t.id));
-    }, [translations, favorites]);
-    const nonFavoriteTranslations = useMemo(() => {
-        if (!translations) return [];
-        return translations.filter((t) => !favorites.includes(t.id));
     }, [translations, favorites]);
 
     const [translationA, setTranslationA] = useState("");
@@ -170,8 +163,8 @@ const ChapterComparison = ({
                 goToNextChapter();
             }
         };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
+        globalThis.window.addEventListener("keydown", handleKeyDown);
+        return () => globalThis.window.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, onClose, goToPrevChapter, goToNextChapter]);
 
     // Scroll to top when chapter changes
@@ -180,27 +173,6 @@ const ChapterComparison = ({
             containerRef.current.scrollTop = 0;
         }
     }, [bookId, chapterId]);
-
-    // --- Translation selector ---
-    const TranslationSelect = ({ value, onChange, side }) => {
-        const otherId = side === "A" ? translationB : translationA;
-        return (
-            <div
-                className="chapter-comp-select-wrapper"
-                style={{ flex: 1, minWidth: 0 }}
-            >
-                <TranslationSelector
-                    translations={translations || []}
-                    selectedTranslation={value}
-                    changeSelectedTranslation={onChange}
-                    disabledOptions={[otherId]}
-                    placeholder={formatMessage({
-                        id: "chapterCompSelectTranslation",
-                    })}
-                />
-            </div>
-        );
-    };
 
     // --- Render helpers ---
     const renderVerseText = (text) => {
@@ -236,17 +208,35 @@ const ChapterComparison = ({
 
                 {/* Translation selectors */}
                 <div className="chapter-comp-selectors">
-                    <TranslationSelect
-                        value={translationA}
-                        onChange={setTranslationA}
-                        side="A"
-                    />
+                    <div
+                        className="chapter-comp-select-wrapper"
+                        style={{ flex: 1, minWidth: 0 }}
+                    >
+                        <TranslationSelector
+                            translations={translations || []}
+                            selectedTranslation={translationA}
+                            changeSelectedTranslation={setTranslationA}
+                            disabledOptions={[translationB]}
+                            placeholder={formatMessage({
+                                id: "chapterCompSelectTranslation",
+                            })}
+                        />
+                    </div>
                     <span className="chapter-comp-vs">vs</span>
-                    <TranslationSelect
-                        value={translationB}
-                        onChange={setTranslationB}
-                        side="B"
-                    />
+                    <div
+                        className="chapter-comp-select-wrapper"
+                        style={{ flex: 1, minWidth: 0 }}
+                    >
+                        <TranslationSelector
+                            translations={translations || []}
+                            selectedTranslation={translationB}
+                            changeSelectedTranslation={setTranslationB}
+                            disabledOptions={[translationA]}
+                            placeholder={formatMessage({
+                                id: "chapterCompSelectTranslation",
+                            })}
+                        />
+                    </div>
                 </div>
 
                 {/* Chapter navigation */}
@@ -404,6 +394,19 @@ const ChapterComparison = ({
             </div>
         </div>
     );
+};
+
+ChapterComparison.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    bookId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    bookName: PropTypes.string,
+    chapterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    translations: PropTypes.array.isRequired,
+    currentTranslation: PropTypes.string,
+    structure: PropTypes.object.isRequired,
+    books: PropTypes.array.isRequired,
+    onNavigateChapter: PropTypes.func,
 };
 
 export default ChapterComparison;
