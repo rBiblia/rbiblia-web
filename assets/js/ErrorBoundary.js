@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { AppError } from "./AppError";
 
 /**
@@ -44,7 +45,7 @@ class ErrorBoundary extends React.Component {
 
         // Optionally reload the page for complete reset
         if (this.props.reloadOnRetry) {
-            window.location.reload();
+            globalThis.location.reload();
         }
     };
 
@@ -73,6 +74,12 @@ class ErrorBoundary extends React.Component {
         return this.props.children;
     }
 }
+
+ErrorBoundary.propTypes = {
+    reloadOnRetry: PropTypes.bool,
+    fallback: PropTypes.func,
+    children: PropTypes.node.isRequired,
+};
 
 /**
  * Higher-order component version of ErrorBoundary

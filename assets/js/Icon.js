@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default function Icon({
     name,
@@ -22,7 +23,6 @@ export default function Icon({
             strokeLinejoin="round"
             className={className}
             aria-hidden={title ? undefined : "true"}
-            role={title ? "img" : undefined}
             {...props}
         >
             {title && <title>{title}</title>}
@@ -30,3 +30,10 @@ export default function Icon({
         </svg>
     );
 }
+
+Icon.propTypes = {
+    name: PropTypes.string.isRequired,
+    size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    className: PropTypes.string,
+    title: PropTypes.string,
+};
