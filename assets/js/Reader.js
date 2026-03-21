@@ -205,7 +205,6 @@ const Reader = memo(function Reader({
                                 onVerseCompare={onVerseCompare}
                                 notesVersion={notesVersion}
                                 isHighlighted={highlightedVerse === verseId}
-                                isFirstVerse={index === 0}
                                 allNotes={allNotes}
                                 allTranslationNotes={allTranslationNotes}
                             />
