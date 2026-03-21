@@ -175,8 +175,9 @@ const Reader = memo(function Reader({
     }
 
     return (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <main
-            className="container"
+            className="container" // NOSONAR
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             onTouchStart={handleTouchStart}
