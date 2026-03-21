@@ -113,11 +113,11 @@ const Verse = memo(function Verse({
     // Using React state (setState) would be too late — the re-render is
     // asynchronous and the tooltip would briefly flash in the wrong position.
     const updateActionsPlacement = useCallback(() => {
-        if (typeof window === "undefined") return;
+        if (globalThis.window === undefined) return;
 
         // On touch devices we hide the actions entirely (CSS media query),
         // so avoid doing any measurements.
-        if (window.matchMedia && window.matchMedia("(hover: none)").matches) {
+        if (globalThis.matchMedia?.("(hover: none)").matches) {
             return;
         }
 
@@ -170,7 +170,7 @@ const Verse = memo(function Verse({
     }, []);
 
     return (
-        <div
+        <article
             ref={verseRef}
             className={`row line ${hasAnyNote ? "has-note" : ""} ${
                 isHighlighted ? "highlighted" : ""
@@ -232,7 +232,6 @@ const Verse = memo(function Verse({
             <div
                 className="col-10 col-lg-11 verse"
                 data-verse-id={verseId}
-                tabIndex={0}
             >
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
                 {hasAnyNote && (
@@ -290,7 +289,7 @@ const Verse = memo(function Verse({
                     </div>
                 )}
             </div>
-        </div>
+        </article>
     );
 });
 

@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { useIntl } from "react-intl";
+import PropTypes from "prop-types";
 import Icon from "./Icon";
 import useScrollDirection from "./useScrollDirection";
 
@@ -106,5 +107,19 @@ const BottomNavigation = memo(function BottomNavigation({
         </nav>
     );
 });
+
+BottomNavigation.propTypes = {
+    onPrevChapter: PropTypes.func.isRequired,
+    onNextChapter: PropTypes.func.isRequired,
+    onOpenSelection: PropTypes.func.isRequired,
+    onOpenNotes: PropTypes.func.isRequired,
+    onOpenChapterComparison: PropTypes.func.isRequired,
+    isPrevAvailable: PropTypes.bool.isRequired,
+    isNextAvailable: PropTypes.bool.isRequired,
+    currentBook: PropTypes.string.isRequired,
+    currentChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    className: PropTypes.string,
+    immersiveDisabled: PropTypes.bool,
+};
 
 export default BottomNavigation;
