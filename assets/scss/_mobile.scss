@@ -102,7 +102,7 @@ header.sticky-top {
   .note-editor-modal,
   .comparison-overlay {
     animation: none !important;
-    transition: opacity 0s !important, visibility 0s !important;
+    transition: none !important;
   }
 
   // Immediate state changes instead of animations
