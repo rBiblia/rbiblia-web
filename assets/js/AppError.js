@@ -1,5 +1,6 @@
 import React from "react";
 import { useIntl } from "react-intl";
+import PropTypes from "prop-types";
 
 /**
  * Error display component with retry functionality
@@ -72,8 +73,6 @@ function AppError({ message, onRetry, type = "full" }) {
  * Toast notification for non-blocking errors
  */
 function ErrorToast({ message, onClose, autoHide = 5000 }) {
-    const { formatMessage } = useIntl();
-
     React.useEffect(() => {
         if (autoHide) {
             const timer = setTimeout(() => {
@@ -147,6 +146,22 @@ class ErrorBoundary extends React.Component {
         return this.props.children;
     }
 }
+
+AppError.propTypes = {
+    message: PropTypes.string,
+    onRetry: PropTypes.func,
+    type: PropTypes.oneOf(["full", "inline"]),
+};
+
+ErrorToast.propTypes = {
+    message: PropTypes.string.isRequired,
+    onClose: PropTypes.func,
+    autoHide: PropTypes.number,
+};
+
+ErrorBoundary.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export default AppError;
 export { AppError, ErrorToast, ErrorBoundary };
