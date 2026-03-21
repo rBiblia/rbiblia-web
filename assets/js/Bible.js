@@ -277,6 +277,20 @@ const Bible = ({ intl, setLocale }) => {
         return structure[selectedBook][0];
     };
 
+    const applyPendingHighlight = (verseId) => {
+        const clearHighlight = () => setHighlightedVerse(null);
+        
+        const setHighlight = () => {
+            setHighlightedVerse(verseId);
+            setTimeout(clearHighlight, 8000);
+        };
+
+        const scheduleHighlight = () => requestAnimationFrame(setHighlight);
+
+        // Use double rAF to ensure React has committed the DOM update
+        requestAnimationFrame(scheduleHighlight);
+    };
+
     const changeSelectedChapter = async (newSelectedChapter, bookOverride) => {
         const { locale } = intl;
         const effectiveBook = bookOverride || selectedBook;
@@ -315,15 +329,7 @@ const Bible = ({ intl, setLocale }) => {
             if (pendingHighlightRef.current) {
                 const verseId = pendingHighlightRef.current;
                 pendingHighlightRef.current = null;
-                // Use double rAF to ensure React has committed the DOM update
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        setHighlightedVerse(verseId);
-                        setTimeout(() => {
-                            setHighlightedVerse(null);
-                        }, 8000);
-                    });
-                });
+                applyPendingHighlight(verseId);
             } else {
                 // Always scroll to top when a new chapter loads.
                 // 'instant' prevents a visible scroll animation fighting the
