@@ -398,11 +398,12 @@ const NotesPanel = ({
 
     // Navigate to verse
     const handleNavigate = (key, type) => {
-        const { book, chapter, verse } = parseNoteKey(key, type);
+        const { book, chapter, verse, translationId } = parseNoteKey(key, type);
         onNavigateToVerse?.(
             book,
             Number.parseInt(chapter, 10),
-            Number.parseInt(verse, 10)
+            Number.parseInt(verse, 10),
+            translationId
         );
         onClose();
     };

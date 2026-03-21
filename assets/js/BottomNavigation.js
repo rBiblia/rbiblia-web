@@ -28,7 +28,10 @@ const BottomNavigation = memo(function BottomNavigation({
             {/* Left arrow - far left position */}
             <button
                 className="bottom-nav-btn bottom-nav-arrow"
-                onClick={(e) => { e.currentTarget.blur(); onPrevChapter(); }}
+                onClick={(e) => {
+                    e.currentTarget.blur();
+                    onPrevChapter();
+                }}
                 disabled={!isPrevAvailable}
                 aria-label={formatMessage({ id: "previousChapter" })}
             >
@@ -87,7 +90,10 @@ const BottomNavigation = memo(function BottomNavigation({
             {/* Right arrow - far right position */}
             <button
                 className="bottom-nav-btn bottom-nav-arrow"
-                onClick={(e) => { e.currentTarget.blur(); onNextChapter(); }}
+                onClick={(e) => {
+                    e.currentTarget.blur();
+                    onNextChapter();
+                }}
                 disabled={!isNextAvailable}
                 aria-label={formatMessage({ id: "nextChapter" })}
             >
