@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { getSigla } from "./bookSigla";
+import PropTypes from "prop-types";
 
 const SelectionGrid = ({
     books,
@@ -43,20 +44,18 @@ const SelectionGrid = ({
     if (!structure || !books) return null;
 
     const otBooks = Object.keys(structure).filter(
-        (id) => books[id] && books[id].group === "ot"
+        (id) => books[id]?.group === "ot"
     );
     const dcBooks = Object.keys(structure).filter(
-        (id) => books[id] && books[id].group === "dc"
+        (id) => books[id]?.group === "dc"
     );
     const ntBooks = Object.keys(structure).filter(
-        (id) => books[id] && books[id].group === "nt"
+        (id) => books[id]?.group === "nt"
     );
     const otherBooks = Object.keys(structure).filter(
         (id) =>
             books[id] &&
-            books[id].group !== "ot" &&
-            books[id].group !== "nt" &&
-            books[id].group !== "dc"
+            !["ot", "dc", "nt"].includes(books[id].group)
     );
 
     const handleBookClick = (bookId) => {
@@ -155,6 +154,21 @@ const SelectionGrid = ({
             </div>
         </div>
     );
+};
+
+SelectionGrid.propTypes = {
+    books: PropTypes.objectOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            group: PropTypes.string,
+        })
+    ).isRequired,
+    structure: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+    onSelectChapter: PropTypes.func.isRequired,
+    initialBook: PropTypes.string,
+    currentBook: PropTypes.string,
+    currentChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onClose: PropTypes.func.isRequired,
 };
 
 export default SelectionGrid;

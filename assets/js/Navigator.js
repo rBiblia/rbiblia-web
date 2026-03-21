@@ -1,9 +1,8 @@
 import React, { useCallback, memo } from "react";
 import { useIntl } from "react-intl";
 import TranslationSelector from "./TranslationSelector";
-import BookSelector from "./BookSelector";
-import ChapterSelector from "./ChapterSelector";
 import DirectionalNavigationButton from "./DirectionalNavigationButton";
+import PropTypes from "prop-types";
 import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
 
@@ -11,19 +10,14 @@ const Navigator = memo(function Navigator({
     translations,
     books,
     structure,
-    chapters,
     isStructureLoading,
     listsLoading,
     changeSelectedTranslation,
-    changeSelectedBook,
-    changeSelectedChapter,
     selectedTranslation,
     selectedBook,
     selectedChapter,
     prevChapter,
     nextChapter,
-    prevBook,
-    nextBook,
     isNextBookAvailable,
     isPrevBookAvailable,
     isNextChapterAvailable,
@@ -183,5 +177,34 @@ const Navigator = memo(function Navigator({
         </header>
     );
 });
+
+Navigator.propTypes = {
+    translations: PropTypes.array.isRequired,
+    books: PropTypes.objectOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    structure: PropTypes.object,
+    isStructureLoading: PropTypes.bool.isRequired,
+    listsLoading: PropTypes.bool.isRequired,
+    changeSelectedTranslation: PropTypes.func.isRequired,
+    selectedTranslation: PropTypes.string,
+    selectedBook: PropTypes.string,
+    selectedChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    prevChapter: PropTypes.func.isRequired,
+    nextChapter: PropTypes.func.isRequired,
+    isNextBookAvailable: PropTypes.bool.isRequired,
+    isPrevBookAvailable: PropTypes.bool.isRequired,
+    isNextChapterAvailable: PropTypes.bool.isRequired,
+    isPrevChapterAvailable: PropTypes.bool.isRequired,
+    onOpenSelection: PropTypes.func.isRequired,
+    onOpenNotes: PropTypes.func.isRequired,
+    onOpenSearch: PropTypes.func.isRequired,
+    onOpenSettings: PropTypes.func.isRequired,
+    onOpenChapterComparison: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    immersiveDisabled: PropTypes.bool,
+};
 
 export default Navigator;

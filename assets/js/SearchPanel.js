@@ -6,6 +6,7 @@ import React, {
     useEffect,
 } from "react";
 import { useIntl } from "react-intl";
+import PropTypes from "prop-types";
 import { OT_BOOKS, NT_BOOKS, SEARCH_SCOPE } from "./constants";
 import useFocusTrap from "./hooks/useFocusTrap";
 import useScrollWithVirtualization from "./hooks/useScrollWithVirtualization";
@@ -172,7 +173,11 @@ const SuggestionIcon = ({ type }) => {
     );
 };
 
-const normalizeQuery = (value) => value.trim().replace(/\s+/g, " ");
+SuggestionIcon.propTypes = {
+    type: PropTypes.string.isRequired,
+};
+
+const normalizeQuery = (value) => value.trim().replaceAll(/\s+/g, " ");
 
 const getSavedSearchHistory = () => {
     try {
@@ -303,11 +308,10 @@ const SearchPanel = ({
                 // Handle both nested and flat response structures
                 const resultsData = data.data?.results || data.results || [];
 
-                // Map API response to our format
                 const mappedResults = resultsData.map((item) => ({
                     book: item.book,
-                    chapter: parseInt(item.chapter),
-                    verse: parseInt(item.verse),
+                    chapter: Number.parseInt(item.chapter),
+                    verse: Number.parseInt(item.verse),
                     text: item.content || item.text || "",
                 }));
 
@@ -492,14 +496,14 @@ const SearchPanel = ({
 
         try {
             const regex = new RegExp(
-                `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+                `(${searchTerm.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)})`,
                 "gi"
             );
             const parts = text.split(regex);
 
             return parts.map((part, i) =>
                 regex.test(part) ? (
-                    <mark key={i} className="search-highlight">
+                    <mark key={`${i}-${part}`} className="search-highlight">
                         {part}
                     </mark>
                 ) : (
@@ -567,6 +571,7 @@ const SearchPanel = ({
             {/* Overlay */}
             <div
                 className={`search-overlay ${isOpen ? "active" : ""}`}
+                aria-hidden="true"
                 onClick={onClose}
             />
 
@@ -627,6 +632,7 @@ const SearchPanel = ({
                             })}
                             autoFocus
                             role="combobox"
+                            aria-controls="search-suggestions-listbox"
                             aria-expanded={
                                 isSuggestionsOpen && suggestions.length > 0
                             }
@@ -658,54 +664,60 @@ const SearchPanel = ({
                         {/* Autocomplete suggestions dropdown */}
                         {isSuggestionsOpen && suggestions.length > 0 && (
                             <ul
+                                id="search-suggestions-listbox"
                                 ref={suggestionsRef}
                                 className="search-suggestions"
                                 role="listbox"
                             >
-                                {suggestions.map((suggestion, index) => (
-                                    <li
-                                        key={`${suggestion.type}-${suggestion.text}`}
-                                        id={`suggestion-${index}`}
-                                        className={`search-suggestion-item ${
-                                            index === selectedSuggestionIndex
-                                                ? "active"
-                                                : ""
-                                        }`}
-                                        role="option"
-                                        aria-selected={
-                                            index === selectedSuggestionIndex
-                                        }
-                                        onMouseDown={(e) => {
-                                            e.preventDefault(); // Prevent input blur on desktop
-                                        }}
-                                        onClick={() => {
-                                            selectSuggestion(suggestion);
-                                        }}
-                                        onMouseEnter={() =>
-                                            setSelectedSuggestionIndex(index)
-                                        }
-                                    >
-                                        <SuggestionIcon
-                                            type={suggestion.type}
-                                        />
-                                        <span className="suggestion-text">
-                                            {suggestion.text}
-                                        </span>
-                                        <span className="suggestion-type-label">
-                                            {suggestion.type === "history"
-                                                ? formatMessage({
-                                                      id: "suggestionHistory",
-                                                  })
-                                                : suggestion.type === "book"
-                                                ? formatMessage({
-                                                      id: "suggestionBook",
-                                                  })
-                                                : formatMessage({
-                                                      id: "suggestionPhrase",
-                                                  })}
-                                        </span>
-                                    </li>
-                                ))}
+                                {suggestions.map((suggestion, index) => {
+                                    const getTypeLabel = (type) => {
+                                        if (type === "history") return formatMessage({ id: "suggestionHistory" });
+                                        if (type === "book") return formatMessage({ id: "suggestionBook" });
+                                        return formatMessage({ id: "suggestionPhrase" });
+                                    };
+
+                                    return (
+                                        <li
+                                            key={`${suggestion.type}-${suggestion.text}`}
+                                            id={`suggestion-${index}`}
+                                            className={`search-suggestion-item ${
+                                                index === selectedSuggestionIndex
+                                                    ? "active"
+                                                    : ""
+                                            }`}
+                                            role="option"
+                                            tabIndex={-1}
+                                            aria-selected={
+                                                index === selectedSuggestionIndex
+                                            }
+                                            onMouseDown={(e) => {
+                                                e.preventDefault(); // Prevent input blur on desktop
+                                            }}
+                                            onClick={() => {
+                                                selectSuggestion(suggestion);
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" || e.key === " ") {
+                                                    e.preventDefault();
+                                                    selectSuggestion(suggestion);
+                                                }
+                                            }}
+                                            onMouseEnter={() =>
+                                                setSelectedSuggestionIndex(index)
+                                            }
+                                        >
+                                            <SuggestionIcon
+                                                type={suggestion.type}
+                                            />
+                                            <span className="suggestion-text">
+                                                {suggestion.text}
+                                            </span>
+                                            <span className="suggestion-type-label">
+                                                {getTypeLabel(suggestion.type)}
+                                            </span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>
@@ -837,20 +849,21 @@ const SearchPanel = ({
                                     <li
                                         key={`${result.book}_${result.chapter}_${result.verse}_${index}`}
                                         className="search-result-item"
-                                        onClick={() =>
-                                            handleResultClick(result)
-                                        }
-                                        tabIndex={0}
-                                        onKeyDown={(e) => {
-                                            if (
-                                                e.key === "Enter" ||
-                                                e.key === " "
-                                            ) {
-                                                e.preventDefault();
-                                                handleResultClick(result);
-                                            }
-                                        }}
                                     >
+                                        <button
+                                            type="button"
+                                            className="search-result-button"
+                                            onClick={() =>
+                                                handleResultClick(result)
+                                            }
+                                            style={{
+                                                all: "unset",
+                                                display: "block",
+                                                width: "100%",
+                                                cursor: "pointer",
+                                                textAlign: "left"
+                                            }}
+                                        >
                                         <div className="search-result-header">
                                             <span className="search-result-reference">
                                                 {getBookName(result.book)}{" "}
@@ -866,6 +879,7 @@ const SearchPanel = ({
                                                 query
                                             )}
                                         </p>
+                                        </button>
                                     </li>
                                 ))}
                                 {hasMore && (
@@ -966,6 +980,18 @@ const SearchPanel = ({
             </div>
         </>
     );
+};
+
+SearchPanel.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    selectedTranslation: PropTypes.string,
+    books: PropTypes.objectOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        })
+    ),
+    onNavigateToVerse: PropTypes.func.isRequired,
 };
 
 export default SearchPanel;
