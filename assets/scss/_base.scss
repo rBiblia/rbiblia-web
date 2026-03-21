@@ -322,14 +322,6 @@ main {
       }
     }
 
-    // First verse in a chapter: always show actions below so the tooltip
-    // never extends above `main` into the sticky header area.
-    // Compiles to: main .row .line:first-child .verse-number-cell .verse-actions
-    .line:first-child .verse-number-cell .verse-actions {
-      bottom: auto;
-      top: calc(100% + 6px);
-    }
-
     .verse-note-preview-wrap {
       margin-top: 0.35rem;
     }
