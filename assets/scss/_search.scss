@@ -168,7 +168,7 @@
 
     @include dark-mode {
       background: rgba(255, 255, 255, 0.15);
-      color: white;
+      color: #fff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
   }
@@ -252,7 +252,7 @@
 
   &:hover {
     background: rgba(0, 0, 0, 0.08);
-    color: #555;
+    color: #333;
   }
 
   @include dark-mode {
@@ -260,7 +260,7 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.1);
-      color: #ccc;
+      color: #fff;
     }
   }
 }
@@ -453,7 +453,7 @@
 
   @include dark-mode {
     background: rgba(255, 255, 255, 0.12);
-    color: #ddd;
+    color: #fff;
 
     &:hover {
       background: rgba($rb-header-navigator-arrow, 0.25);
