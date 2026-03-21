@@ -16,7 +16,7 @@ const DEFAULT_SIZE = 1.15;
 const FontSizeControl = () => {
     const [fontSize, setFontSize] = useState(() => {
         const saved = safeLocalStorageGetItem(FONT_SIZE_KEY);
-        return saved ? parseFloat(saved) : DEFAULT_SIZE;
+        return saved ? Number.parseFloat(saved) : DEFAULT_SIZE;
     });
     const [isExpanded, setIsExpanded] = useState(false);
 
