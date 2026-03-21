@@ -495,10 +495,11 @@ const SearchPanel = ({
         if (!searchTerm.trim() || !text) return text;
 
         try {
-            const regex = new RegExp(
-                `(${searchTerm.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)})`,
-                "gi"
+            const escapedTerm = searchTerm.replaceAll(
+                /[.*+?^${}()|[\]\\]/g,
+                String.raw`\$&`
             );
+            const regex = new RegExp(`(${escapedTerm})`, "gi");
             const parts = text.split(regex);
 
             return parts.map((part, i) =>
@@ -631,17 +632,6 @@ const SearchPanel = ({
                                 id: "searchPlaceholder",
                             })}
                             autoFocus
-                            role="combobox"
-                            aria-controls="search-suggestions-listbox"
-                            aria-expanded={
-                                isSuggestionsOpen && suggestions.length > 0
-                            }
-                            aria-autocomplete="list"
-                            aria-activedescendant={
-                                selectedSuggestionIndex >= 0
-                                    ? `suggestion-${selectedSuggestionIndex}`
-                                    : undefined
-                            }
                         />
                         {query && (
                             <button
@@ -664,10 +654,8 @@ const SearchPanel = ({
                         {/* Autocomplete suggestions dropdown */}
                         {isSuggestionsOpen && suggestions.length > 0 && (
                             <ul
-                                id="search-suggestions-listbox"
                                 ref={suggestionsRef}
                                 className="search-suggestions"
-                                role="listbox"
                             >
                                 {suggestions.map((suggestion, index) => {
                                     const getTypeLabel = (type) => {
@@ -677,19 +665,16 @@ const SearchPanel = ({
                                     };
 
                                     return (
+                                        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
                                         <li
                                             key={`${suggestion.type}-${suggestion.text}`}
-                                            id={`suggestion-${index}`}
                                             className={`search-suggestion-item ${
                                                 index === selectedSuggestionIndex
                                                     ? "active"
                                                     : ""
                                             }`}
-                                            role="option"
                                             tabIndex={-1}
-                                            aria-selected={
-                                                index === selectedSuggestionIndex
-                                            }
+                                            role="button"
                                             onMouseDown={(e) => {
                                                 e.preventDefault(); // Prevent input blur on desktop
                                             }}
