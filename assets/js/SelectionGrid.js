@@ -53,9 +53,7 @@ const SelectionGrid = ({
         (id) => books[id]?.group === "nt"
     );
     const otherBooks = Object.keys(structure).filter(
-        (id) =>
-            books[id] &&
-            !["ot", "dc", "nt"].includes(books[id].group)
+        (id) => books[id] && !["ot", "dc", "nt"].includes(books[id].group)
     );
 
     const handleBookClick = (bookId) => {
@@ -163,7 +161,8 @@ SelectionGrid.propTypes = {
             group: PropTypes.string,
         })
     ).isRequired,
-    structure: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
+    structure: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number))
+        .isRequired,
     onSelectChapter: PropTypes.func.isRequired,
     initialBook: PropTypes.string,
     currentBook: PropTypes.string,
