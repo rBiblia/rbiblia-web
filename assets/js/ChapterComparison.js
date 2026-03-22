@@ -164,7 +164,8 @@ const ChapterComparison = ({
             }
         };
         globalThis.window.addEventListener("keydown", handleKeyDown);
-        return () => globalThis.window.removeEventListener("keydown", handleKeyDown);
+        return () =>
+            globalThis.window.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, onClose, goToPrevChapter, goToNextChapter]);
 
     // Scroll to top when chapter changes
@@ -399,9 +400,11 @@ const ChapterComparison = ({
 ChapterComparison.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    bookId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    bookId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
     bookName: PropTypes.string,
-    chapterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    chapterId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
     translations: PropTypes.array.isRequired,
     currentTranslation: PropTypes.string,
     structure: PropTypes.object.isRequired,

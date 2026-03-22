@@ -240,7 +240,13 @@ const Bible = ({ intl, setLocale }) => {
         const { chapter, book, translation } = getDataFromCurrentPathname();
 
         setLocale(locale);
-        updateHistory(locale, translation, book, chapter, pendingHighlightRef.current);
+        updateHistory(
+            locale,
+            translation,
+            book,
+            chapter,
+            pendingHighlightRef.current
+        );
     };
 
     const changeSelectedBook = (newSelectedBook) => {
@@ -284,7 +290,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const applyPendingHighlight = (verseId) => {
         const clearHighlight = () => setHighlightedVerse(null);
-        
+
         const setHighlight = () => {
             setHighlightedVerse(verseId);
             setTimeout(clearHighlight, 8000);

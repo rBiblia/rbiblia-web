@@ -659,9 +659,17 @@ const SearchPanel = ({
                             >
                                 {suggestions.map((suggestion, index) => {
                                     const getTypeLabel = (type) => {
-                                        if (type === "history") return formatMessage({ id: "suggestionHistory" });
-                                        if (type === "book") return formatMessage({ id: "suggestionBook" });
-                                        return formatMessage({ id: "suggestionPhrase" });
+                                        if (type === "history")
+                                            return formatMessage({
+                                                id: "suggestionHistory",
+                                            });
+                                        if (type === "book")
+                                            return formatMessage({
+                                                id: "suggestionBook",
+                                            });
+                                        return formatMessage({
+                                            id: "suggestionPhrase",
+                                        });
                                     };
 
                                     return (
@@ -669,7 +677,8 @@ const SearchPanel = ({
                                         <li
                                             key={`${suggestion.type}-${suggestion.text}`}
                                             className={`search-suggestion-item ${
-                                                index === selectedSuggestionIndex
+                                                index ===
+                                                selectedSuggestionIndex
                                                     ? "active"
                                                     : ""
                                             }`}
@@ -682,13 +691,20 @@ const SearchPanel = ({
                                                 selectSuggestion(suggestion);
                                             }}
                                             onKeyDown={(e) => {
-                                                if (e.key === "Enter" || e.key === " ") {
+                                                if (
+                                                    e.key === "Enter" ||
+                                                    e.key === " "
+                                                ) {
                                                     e.preventDefault();
-                                                    selectSuggestion(suggestion);
+                                                    selectSuggestion(
+                                                        suggestion
+                                                    );
                                                 }
                                             }}
                                             onMouseEnter={() =>
-                                                setSelectedSuggestionIndex(index)
+                                                setSelectedSuggestionIndex(
+                                                    index
+                                                )
                                             }
                                         >
                                             <SuggestionIcon
@@ -846,24 +862,25 @@ const SearchPanel = ({
                                                 display: "block",
                                                 width: "100%",
                                                 cursor: "pointer",
-                                                textAlign: "left"
+                                                textAlign: "left",
                                             }}
                                         >
-                                        <div className="search-result-header">
-                                            <span className="search-result-reference">
-                                                {getBookName(result.book)}{" "}
-                                                {result.chapter}:{result.verse}
-                                            </span>
-                                        </div>
-                                        <p className="search-result-text">
-                                            {highlightMatch(
-                                                getTruncatedText(
-                                                    result.text,
+                                            <div className="search-result-header">
+                                                <span className="search-result-reference">
+                                                    {getBookName(result.book)}{" "}
+                                                    {result.chapter}:
+                                                    {result.verse}
+                                                </span>
+                                            </div>
+                                            <p className="search-result-text">
+                                                {highlightMatch(
+                                                    getTruncatedText(
+                                                        result.text,
+                                                        query
+                                                    ),
                                                     query
-                                                ),
-                                                query
-                                            )}
-                                        </p>
+                                                )}
+                                            </p>
                                         </button>
                                     </li>
                                 ))}
