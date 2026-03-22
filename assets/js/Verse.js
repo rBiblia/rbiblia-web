@@ -1,10 +1,4 @@
-import React, {
-    useRef,
-    useState,
-    useEffect,
-    useMemo,
-    memo,
-} from "react";
+import React, { useRef, useState, useEffect, useMemo, memo } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import { getVerseKey, getTranslationVerseKey } from "./Notes";
@@ -152,10 +146,7 @@ const Verse = memo(function Verse({
                     {chapterId}:{verseId}
                 </a>
             </div>
-            <div
-                className="col-10 col-lg-11 verse"
-                data-verse-id={verseId}
-            >
+            <div className="col-10 col-lg-11 verse" data-verse-id={verseId}>
                 <div>{verseContent.replaceAll("//", "\u000A")}</div>
                 {hasAnyNote && (
                     <div className="verse-note-preview-wrap">

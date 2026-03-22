@@ -117,7 +117,8 @@ BottomNavigation.propTypes = {
     isPrevAvailable: PropTypes.bool.isRequired,
     isNextAvailable: PropTypes.bool.isRequired,
     currentBook: PropTypes.string.isRequired,
-    currentChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    currentChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
     className: PropTypes.string,
     immersiveDisabled: PropTypes.bool,
 };
