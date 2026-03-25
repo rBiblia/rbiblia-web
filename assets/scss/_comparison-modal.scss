@@ -287,15 +287,26 @@
     stroke-width: 2.5;
   }
 
-  &:hover:not(:disabled) {
-    background: $rb-header-navigator-arrow;
-    color: white;
-    transform: scale(1.08);
-    box-shadow: 0 8px 20px rgba($rb-header-navigator-arrow, 0.3);
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover:not(:disabled) {
+        background: $rb-header-navigator-arrow;
+        color: white;
+        transform: scale(1.08);
+        box-shadow: 0 8px 20px rgba($rb-header-navigator-arrow, 0.3);
+      }
+    }
   }
 
   &:active:not(:disabled) {
     transform: scale(0.95);
+  }
+
+  &.touch-tap-feedback:not(:disabled) {
+    background: $rb-header-navigator-arrow;
+    color: white;
+    transform: scale(0.96);
+    box-shadow: 0 6px 14px rgba($rb-header-navigator-arrow, 0.28);
   }
 
   &:disabled {
@@ -307,9 +318,19 @@
     background: var(--dm-bg-elevated);
     color: var(--dm-text-primary);
 
-    &:hover:not(:disabled) {
+    &.touch-tap-feedback:not(:disabled) {
       background: var(--dm-accent);
       color: white;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      body:not([data-input-modality="touch"]) & {
+        &:hover:not(:disabled) {
+          background: var(--dm-accent);
+          color: white;
+        }
+      }
     }
   }
 }

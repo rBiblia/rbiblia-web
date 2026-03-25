@@ -20,6 +20,7 @@ import {
     safeLocalStorageGetItem,
     safeLocalStorageSetItem,
 } from "./safeStorage";
+import blurOnTouchInteraction from "./blurOnTouchInteraction";
 
 const COMPARISON_DIFF_MODE_KEY = "rbiblia-comparison-diff-mode";
 const WORD_SPLIT_PATTERN =
@@ -624,7 +625,12 @@ const ComparisonGrid = ({
                         <div className="comparison-nav-header">
                             <button
                                 className="comparison-nav-btn"
-                                onClick={handlePrevVerse}
+                                onClick={(e) => {
+                                    handlePrevVerse();
+                                    blurOnTouchInteraction(e);
+                                }}
+                                onPointerUp={blurOnTouchInteraction}
+                                onTouchEnd={blurOnTouchInteraction}
                                 disabled={!canGoPrev}
                                 title={formatMessage({ id: "previousVerse" })}
                             >
@@ -650,7 +656,12 @@ const ComparisonGrid = ({
 
                             <button
                                 className="comparison-nav-btn"
-                                onClick={handleNextVerse}
+                                onClick={(e) => {
+                                    handleNextVerse();
+                                    blurOnTouchInteraction(e);
+                                }}
+                                onPointerUp={blurOnTouchInteraction}
+                                onTouchEnd={blurOnTouchInteraction}
                                 disabled={!canGoNext}
                                 title={formatMessage({ id: "nextVerse" })}
                             >
