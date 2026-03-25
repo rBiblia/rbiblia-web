@@ -440,6 +440,14 @@ header.sticky-top {
   @include focus-ring;
 }
 
+// Touch devices: prevent sticky focus ring on nav arrow buttons after tap
+body[data-input-modality="touch"] .bottom-nav-btn.bottom-nav-arrow:focus-visible,
+body[data-input-modality="touch"] .chapter-comp-nav-btn:focus-visible,
+body[data-input-modality="touch"] .comparison-nav-btn:focus-visible {
+  outline: none;
+  box-shadow: none !important;
+}
+
 .chapter-comp-overlay {
   position: fixed;
   inset: 0;
@@ -639,8 +647,16 @@ header.sticky-top {
   cursor: pointer;
   transition: background 0.15s ease;
 
-  &:hover:not(:disabled) {
-    background: rgba($rb-header-navigator-arrow, 0.08);
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover:not(:disabled) {
+        background: rgba($rb-header-navigator-arrow, 0.08);
+      }
+    }
+  }
+
+  &.touch-tap-feedback:not(:disabled) {
+    background: rgba($rb-header-navigator-arrow, 0.14);
   }
 
   &:disabled {

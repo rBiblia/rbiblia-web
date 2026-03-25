@@ -1,3 +1,4 @@
+/* global globalThis */
 import React, {
     useState,
     useCallback,
@@ -11,6 +12,7 @@ import Icon from "./Icon";
 import { safeJsonParse } from "./safeJsonParse";
 import TranslationSelector from "./TranslationSelector";
 import { safeLocalStorageGetItem } from "./safeStorage";
+import blurOnTouchInteraction from "./blurOnTouchInteraction";
 
 const FAVORITE_TRANSLATIONS_STORAGE_KEY = "rbiblia_favorite_translations";
 
@@ -244,7 +246,12 @@ const ChapterComparison = ({
                 <div className="chapter-comp-nav">
                     <button
                         className="chapter-comp-nav-btn"
-                        onClick={goToPrevChapter}
+                        onClick={(e) => {
+                            goToPrevChapter();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         disabled={!hasPrev}
                         title={formatMessage({ id: "previousChapter" })}
                     >
@@ -256,7 +263,12 @@ const ChapterComparison = ({
                     </span>
                     <button
                         className="chapter-comp-nav-btn"
-                        onClick={goToNextChapter}
+                        onClick={(e) => {
+                            goToNextChapter();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         disabled={!hasNext}
                         title={formatMessage({ id: "nextChapter" })}
                     >
