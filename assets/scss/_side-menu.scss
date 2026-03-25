@@ -159,6 +159,11 @@
     color: #444;
   }
 
+  &:active:not(:disabled):not(.active) {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
+
   &.active {
     background: $rb-header-navigator-arrow;
     color: white;
@@ -169,6 +174,11 @@
     &:hover {
       background: rgba(255, 255, 255, 0.08);
       color: #eee;
+    }
+
+    &:active:not(:disabled):not(.active) {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
     }
 
     &.active {

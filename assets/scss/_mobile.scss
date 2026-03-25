@@ -128,6 +128,24 @@ header.sticky-top {
   .favorite-translation-item:hover {
     transform: none !important;
   }
+
+  // Keep search-result verse highlight animation unchanged across devices.
+  // This intentionally overrides reduced-motion defaults for this one effect.
+  .line.highlighted {
+    animation: highlightPulseFade 8s ease-out forwards !important;
+    animation-duration: 8s !important;
+    animation-iteration-count: 1 !important;
+
+    @include dark-mode {
+      animation: highlightPulseFadeDark 8s ease-out forwards !important;
+    }
+
+    .verse {
+      animation: highlightBoldFadeOut 8s ease-out forwards !important;
+      animation-duration: 8s !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }
 
 // Dark mode skeleton fix for reduced motion
