@@ -3,6 +3,7 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
 import useScrollDirection from "./useScrollDirection";
+import blurOnTouchInteraction from "./blurOnTouchInteraction";
 
 const BottomNavigation = memo(function BottomNavigation({
     onPrevChapter,
@@ -30,9 +31,11 @@ const BottomNavigation = memo(function BottomNavigation({
             <button
                 className="bottom-nav-btn bottom-nav-arrow"
                 onClick={(e) => {
-                    e.currentTarget.blur();
                     onPrevChapter();
+                    blurOnTouchInteraction(e);
                 }}
+                onPointerUp={blurOnTouchInteraction}
+                onTouchEnd={blurOnTouchInteraction}
                 disabled={!isPrevAvailable}
                 aria-label={formatMessage({ id: "previousChapter" })}
             >
@@ -92,9 +95,11 @@ const BottomNavigation = memo(function BottomNavigation({
             <button
                 className="bottom-nav-btn bottom-nav-arrow"
                 onClick={(e) => {
-                    e.currentTarget.blur();
                     onNextChapter();
+                    blurOnTouchInteraction(e);
                 }}
+                onPointerUp={blurOnTouchInteraction}
+                onTouchEnd={blurOnTouchInteraction}
                 disabled={!isNextAvailable}
                 aria-label={formatMessage({ id: "nextChapter" })}
             >

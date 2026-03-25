@@ -57,6 +57,10 @@
     opacity: 0.6;
   }
 
+  &.touch-tap-feedback:not(:disabled) {
+    opacity: 0.6;
+  }
+
   &:focus:not(:focus-visible) {
     outline: none;
     background: transparent;
@@ -68,8 +72,12 @@
     justify-self: center;
   }
 
-  &:hover:not(:disabled) {
-    background: rgba(0, 0, 0, 0.05);
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover:not(:disabled) {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
   }
 
   &:disabled {
@@ -80,8 +88,12 @@
   @include dark-mode {
     color: var(--dm-text-secondary);
 
-    &:hover:not(:disabled) {
-      background: var(--dm-bg-hover);
+    @media (hover: hover) and (pointer: fine) {
+      body:not([data-input-modality="touch"]) & {
+        &:hover:not(:disabled) {
+          background: var(--dm-bg-hover);
+        }
+      }
     }
   }
 }
@@ -96,10 +108,14 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   white-space: nowrap;
 
-  &:hover:not(:disabled) {
-    background: darken($rb-header-navigator-arrow, 8%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover:not(:disabled) {
+        background: darken($rb-header-navigator-arrow, 8%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+    }
   }
 
   .bottom-nav-icon {
