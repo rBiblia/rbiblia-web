@@ -142,6 +142,7 @@ main {
       letter-spacing: 0.01em;
       color: #2c2c2c;
       padding: 0.5rem 0;
+      display: inline-block; /* keep stable layout after highlight ends */
 
       @include dark-mode {
         color: var(--dm-text-primary);
@@ -173,7 +174,6 @@ main {
 
         .verse {
           animation: highlightBoldFadeOut 8s ease-out forwards;
-          display: inline-block; /* allows transform to work smoothly */
         }
       }
 
@@ -525,6 +525,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   @include interactive-scale;
 
   svg {
@@ -532,25 +534,41 @@ header {
     height: 20px;
   }
 
-  &:hover {
-    background: $rb-header-navigator-arrow;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.3);
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover {
+        background: $rb-header-navigator-arrow;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($rb-header-navigator-arrow, 0.3);
+      }
+    }
   }
 
   &:active {
     transform: translateY(0);
   }
 
+  &.touch-tap-feedback:not(:disabled) {
+    opacity: 0.6;
+  }
+
   @include dark-mode {
     background: rgba(255, 255, 255, 0.08);
     color: var(--dm-accent);
 
-    &:hover {
-      background: var(--dm-accent);
-      color: var(--dm-bg-base);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    @media (hover: hover) and (pointer: fine) {
+      body:not([data-input-modality="touch"]) & {
+        &:hover {
+          background: var(--dm-accent);
+          color: var(--dm-bg-base);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+      }
     }
   }
 }

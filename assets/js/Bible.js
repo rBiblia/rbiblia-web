@@ -41,6 +41,10 @@ const SearchPanel = React.lazy(() => import("./SearchPanel"));
 const ChapterComparison = React.lazy(() => import("./ChapterComparison"));
 const ChangelogModal = React.lazy(() => import("./ChangelogModal"));
 
+const FullscreenOverlayFallback = () => (
+    <div className="selection-overlay" aria-hidden="true" />
+);
+
 const Bible = ({ intl, setLocale }) => {
     const [error, setError] = useState(null);
     const [toastError, setToastError] = useState(null); // Non-blocking error notifications
@@ -730,7 +734,7 @@ const Bible = ({ intl, setLocale }) => {
                 onOpenChapterComparison={handleOpenChapterComp}
                 immersiveDisabled={immersiveDisabled}
             />
-            <Suspense fallback={null}>
+            <Suspense fallback={<FullscreenOverlayFallback />}>
                 {isSelectionOpen && (
                     <SelectionGrid
                         books={books}
@@ -795,7 +799,11 @@ const Bible = ({ intl, setLocale }) => {
                 onNavigateToVerse={handleNavigateToVerse}
             />
             {/* Lazy Loaded Panels */}
-            <Suspense fallback={null}>
+            <Suspense
+                fallback={
+                    isChapterCompOpen ? <FullscreenOverlayFallback /> : null
+                }
+            >
                 <SearchPanel
                     isOpen={isSearchOpen}
                     onClose={handleCloseSearch}

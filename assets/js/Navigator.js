@@ -5,6 +5,7 @@ import DirectionalNavigationButton from "./DirectionalNavigationButton";
 import PropTypes from "prop-types";
 import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
+import blurOnTouchInteraction from "./blurOnTouchInteraction";
 
 const Navigator = memo(function Navigator({
     translations,
@@ -60,7 +61,12 @@ const Navigator = memo(function Navigator({
                 <div className="col-2 d-lg-none d-flex justify-content-end ps-0">
                     <button
                         className="nav-action-btn d-flex justify-content-center align-items-center"
-                        onClick={onOpenSearch}
+                        onClick={(e) => {
+                            onOpenSearch();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "search" })}
                         style={{
                             width: "44px",
@@ -123,28 +129,48 @@ const Navigator = memo(function Navigator({
                 <div className="col-3 d-none d-lg-flex justify-content-end gap-2">
                     <button
                         className="nav-action-btn"
-                        onClick={onOpenSelection}
+                        onClick={(e) => {
+                            onOpenSelection();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "selectBook" })}
                     >
                         <Icon name="book-marked" size={20} />
                     </button>
                     <button
                         className="nav-action-btn"
-                        onClick={onOpenSearch}
+                        onClick={(e) => {
+                            onOpenSearch();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "search" })}
                     >
                         <Icon name="search" size={20} />
                     </button>
                     <button
                         className="nav-action-btn"
-                        onClick={onOpenNotes}
+                        onClick={(e) => {
+                            onOpenNotes();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "notes" })}
                     >
                         <Icon name="file-text" size={20} />
                     </button>
                     <button
                         className="nav-action-btn"
-                        onClick={onOpenChapterComparison}
+                        onClick={(e) => {
+                            onOpenChapterComparison();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "chapterComparison" })}
                     >
                         <svg
@@ -167,7 +193,12 @@ const Navigator = memo(function Navigator({
                     </button>
                     <button
                         className="nav-action-btn"
-                        onClick={onOpenSettings}
+                        onClick={(e) => {
+                            onOpenSettings();
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "settings" })}
                     >
                         <Icon name="settings" size={20} />
