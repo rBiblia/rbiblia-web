@@ -145,6 +145,8 @@
   justify-content: center;
   color: #888;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: all 0.2s ease;
   @include interactive-scale(0.92);
 
@@ -154,12 +156,26 @@
     stroke-width: 2.2;
   }
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: #444;
+  &:focus:not(:focus-visible) {
+    outline: none;
+    background: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      &:hover:not(:disabled) {
+        background: rgba(0, 0, 0, 0.05);
+        color: #444;
+      }
+    }
   }
 
   &:active:not(:disabled):not(.active) {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
+
+  &.touch-tap-feedback:not(:disabled):not(.active) {
     background: rgba(0, 0, 0, 0.1);
     color: #333;
   }
@@ -171,12 +187,21 @@
   }
 
   @include dark-mode {
-    &:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #eee;
+    @media (hover: hover) and (pointer: fine) {
+      body:not([data-input-modality="touch"]) & {
+        &:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.08);
+          color: #eee;
+        }
+      }
     }
 
     &:active:not(:disabled):not(.active) {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    &.touch-tap-feedback:not(:disabled):not(.active) {
       background: rgba(255, 255, 255, 0.14);
       color: #fff;
     }

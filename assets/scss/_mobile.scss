@@ -460,8 +460,12 @@ header.sticky-top {
 
 // Touch devices: prevent sticky focus ring on nav arrow buttons after tap
 body[data-input-modality="touch"] .bottom-nav-btn.bottom-nav-arrow:focus-visible,
+body[data-input-modality="touch"] .nav-action-btn:focus-visible,
 body[data-input-modality="touch"] .chapter-comp-nav-btn:focus-visible,
-body[data-input-modality="touch"] .comparison-nav-btn:focus-visible {
+body[data-input-modality="touch"] .comparison-nav-btn:focus-visible,
+body[data-input-modality="touch"] .side-menu-dock-item:focus-visible,
+body[data-input-modality="touch"] .side-menu-tab:focus-visible,
+body[data-input-modality="touch"] .side-menu-close:focus-visible {
   outline: none;
   box-shadow: none !important;
 }

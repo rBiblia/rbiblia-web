@@ -7,6 +7,20 @@ const LONG_PRESS_DURATION = 500; // ms
 const NOTE_PREVIEW_TOGGLE_THRESHOLD = 80;
 const VERSE_ACTIONS_GAP_PX = 6;
 
+const shouldBlockAppDeepLink = () => {
+    if (
+        typeof globalThis === "undefined" ||
+        typeof globalThis.matchMedia !== "function"
+    ) {
+        return false;
+    }
+
+    return (
+        globalThis.matchMedia("(hover: none) and (pointer: coarse)").matches ||
+        globalThis.matchMedia("(max-width: 991.98px)").matches
+    );
+};
+
 const Verse = memo(function Verse({
     verseContent,
     bookId,
@@ -141,7 +155,12 @@ const Verse = memo(function Verse({
                 <a
                     href={appLink}
                     title={formatMessage({ id: "linkOpenInRBibliaApp" })}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                        if (shouldBlockAppDeepLink()) {
+                            e.preventDefault();
+                        }
+                        e.stopPropagation();
+                    }}
                 >
                     {chapterId}:{verseId}
                 </a>
