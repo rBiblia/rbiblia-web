@@ -94,7 +94,17 @@ const useFocusTrap = (isOpen, onClose) => {
                 previousActiveElement.current &&
                 previousActiveElement.current.focus
             ) {
-                previousActiveElement.current.focus();
+                // Avoid browser auto-scrolling the page when restoring focus.
+                // This can fight verse scrollIntoView after selecting a search result,
+                // especially in Chromium-based browsers (e.g. Brave).
+                try {
+                    previousActiveElement.current.focus({
+                        preventScroll: true,
+                    });
+                } catch {
+                    // Fallback for older browsers that don't support focus options
+                    previousActiveElement.current.focus();
+                }
             }
         };
     }, [isOpen, onClose]);

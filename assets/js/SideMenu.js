@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
 import useScrollDirection from "./useScrollDirection";
 import Icon from "./Icon";
+import blurOnTouchInteraction from "./blurOnTouchInteraction";
 import {
     safeLocalStorageGetItem,
     safeLocalStorageSetItem,
@@ -60,7 +61,12 @@ const SideMenuTab = ({
             className={`side-menu-tab ${className} ${
                 isNavVisible ? "" : "nav-hidden-fab"
             }`}
-            onClick={onClick}
+            onClick={(e) => {
+                onClick?.(e);
+                blurOnTouchInteraction(e);
+            }}
+            onPointerUp={blurOnTouchInteraction}
+            onTouchEnd={blurOnTouchInteraction}
             aria-label={formatMessage({ id: "openMenu" })}
         >
             <Icon name="settings" />
@@ -277,7 +283,12 @@ const DisplaySettings = ({
                         className={`side-menu-dock-item ${
                             activeTab === tab.id ? "active" : ""
                         }`}
-                        onClick={() => setActiveTab(tab.id)}
+                        onClick={(e) => {
+                            setActiveTab(tab.id);
+                            blurOnTouchInteraction(e);
+                        }}
+                        onPointerUp={blurOnTouchInteraction}
+                        onTouchEnd={blurOnTouchInteraction}
                         title={tab.label}
                     >
                         {tab.icon}
@@ -293,7 +304,12 @@ const DisplaySettings = ({
                     {onClose && (
                         <button
                             className="side-menu-close"
-                            onClick={onClose}
+                            onClick={(e) => {
+                                onClose(e);
+                                blurOnTouchInteraction(e);
+                            }}
+                            onPointerUp={blurOnTouchInteraction}
+                            onTouchEnd={blurOnTouchInteraction}
                             aria-label={formatMessage({ id: "close" })}
                         >
                             <Icon name="x" />
