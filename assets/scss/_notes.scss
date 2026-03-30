@@ -241,6 +241,14 @@
   }
 }
 
+.general-note-item {
+  cursor: pointer;
+}
+
+.verse-note-item {
+  cursor: pointer;
+}
+
 .note-header {
   display: flex;
   align-items: center;
@@ -688,6 +696,75 @@
   @include dark-mode {
     border-color: #444;
   }
+}
+
+.general-note-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2700;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.general-note-preview-modal {
+  width: min(560px, calc(100% - 1.5rem));
+  max-height: calc(100vh - 2.5rem);
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+
+  @include dark-mode {
+    background: var(--dm-bg-surface);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.general-note-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  @include dark-mode {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.general-note-preview-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+
+  @include dark-mode {
+    color: var(--dm-text-primary);
+  }
+}
+
+.general-note-preview-body {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.general-note-preview-text {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.general-note-preview-textarea {
+  margin-top: 0.5rem;
+}
+
+.general-note-preview-actions {
+  padding: 0 1rem 1rem;
 }
 
 // ---------------------------------------------------------
