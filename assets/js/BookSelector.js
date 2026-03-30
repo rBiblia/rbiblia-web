@@ -38,4 +38,6 @@ const BookSelector = memo(
     }
 );
 
+BookSelector.displayName = "BookSelector";
+
 export default BookSelector;

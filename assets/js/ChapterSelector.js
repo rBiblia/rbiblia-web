@@ -38,4 +38,6 @@ const ChapterSelector = memo(
     }
 );
 
+ChapterSelector.displayName = "ChapterSelector";
+
 export default ChapterSelector;

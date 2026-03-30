@@ -334,4 +334,6 @@ TranslationSelector.propTypes = {
     placeholder: PropTypes.string,
 };
 
+TranslationSelector.displayName = "TranslationSelector";
+
 export default TranslationSelector;
