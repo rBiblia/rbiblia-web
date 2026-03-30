@@ -412,12 +412,10 @@ const NotesPanel = ({
         if (trimmed.length <= VERSE_NOTE_PREVIEW_LIMIT) {
             return trimmed;
         }
-        return `${trimmed.slice(0, VERSE_NOTE_PREVIEW_LIMIT)} ${formatMessage(
-            {
-                id: "showMore",
-                defaultMessage: "więcej",
-            }
-        )}...`;
+        return `${trimmed.slice(0, VERSE_NOTE_PREVIEW_LIMIT)} ${formatMessage({
+            id: "showMore",
+            defaultMessage: "więcej",
+        })}...`;
     };
 
     const openGeneralNotePreview = (note) => {
@@ -493,7 +491,10 @@ const NotesPanel = ({
             setTranslationNotes(updatedNotes);
             saveTranslationNotes(updatedNotes);
         } else {
-            const updatedNotes = { ...notes, [selectedVerseNote.key]: updatedText };
+            const updatedNotes = {
+                ...notes,
+                [selectedVerseNote.key]: updatedText,
+            };
             setNotes(updatedNotes);
             saveNotes(updatedNotes);
         }
@@ -781,7 +782,9 @@ const NotesPanel = ({
                                             role="button"
                                             tabIndex={0}
                                             onKeyDown={(e) => {
-                                                if (e.target !== e.currentTarget) {
+                                                if (
+                                                    e.target !== e.currentTarget
+                                                ) {
                                                     return;
                                                 }
                                                 if (
@@ -789,7 +792,9 @@ const NotesPanel = ({
                                                     e.key === " "
                                                 ) {
                                                     e.preventDefault();
-                                                    openGeneralNotePreview(note);
+                                                    openGeneralNotePreview(
+                                                        note
+                                                    );
                                                 }
                                             }}
                                         >
@@ -915,7 +920,9 @@ const NotesPanel = ({
                                                         <div className="note-header-left">
                                                             <button
                                                                 className="note-reference"
-                                                                onClick={(e) => {
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
                                                                     e.stopPropagation();
                                                                     handleNavigate(
                                                                         key,
@@ -952,7 +959,9 @@ const NotesPanel = ({
                                                         <div className="note-actions">
                                                             <button
                                                                 className="note-action-btn"
-                                                                onClick={(e) => {
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
                                                                     e.stopPropagation();
                                                                     openVerseNotePreview(
                                                                         verseNote,
@@ -977,7 +986,9 @@ const NotesPanel = ({
                                                             </button>
                                                             <button
                                                                 className="note-action-btn note-action-delete"
-                                                                onClick={(e) => {
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
                                                                     e.stopPropagation();
                                                                     deleteNote(
                                                                         key,

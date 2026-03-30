@@ -1,4 +1,3 @@
-/* global globalThis */
 import React, {
     useCallback,
     useEffect,

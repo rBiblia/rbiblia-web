@@ -1,4 +1,3 @@
-/* global globalThis */
 import { useRef, useCallback } from "react";
 import { safeJsonParse } from "./safeJsonParse";
 
