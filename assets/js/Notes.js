@@ -10,6 +10,8 @@ import {
 const NOTES_STORAGE_KEY = "rbiblia_notes";
 const GENERAL_NOTES_KEY = "rbiblia_general_notes";
 const TRANSLATION_NOTES_KEY = "rbiblia_translation_notes";
+const GENERAL_NOTE_PREVIEW_LIMIT = 100;
+const VERSE_NOTE_PREVIEW_LIMIT = 100;
 
 /**
  * Get verse key for storage
@@ -245,10 +247,15 @@ const NotesPanel = ({
     const [translationNotes, setTranslationNotes] = useState({});
     const [generalNotes, setGeneralNotes] = useState([]);
     const [filter, setFilter] = useState("current"); // "current" | "all" | "general"
-    const [editingNote, setEditingNote] = useState(null);
-    const [editText, setEditText] = useState("");
     const [isAddingGeneral, setIsAddingGeneral] = useState(false);
     const [newGeneralNote, setNewGeneralNote] = useState("");
+    const [selectedGeneralNote, setSelectedGeneralNote] = useState(null);
+    const [isEditingGeneralPreview, setIsEditingGeneralPreview] =
+        useState(false);
+    const [generalPreviewDraft, setGeneralPreviewDraft] = useState("");
+    const [selectedVerseNote, setSelectedVerseNote] = useState(null);
+    const [isEditingVersePreview, setIsEditingVersePreview] = useState(false);
+    const [versePreviewDraft, setVersePreviewDraft] = useState("");
     const [importMessage, setImportMessage] = useState(null);
 
     // Focus trap for keyboard navigation
@@ -261,7 +268,20 @@ const NotesPanel = ({
             setTranslationNotes(loadTranslationNotes());
             setGeneralNotes(loadGeneralNotes());
             setImportMessage(null);
+            setSelectedGeneralNote(null);
+            setIsEditingGeneralPreview(false);
+            setGeneralPreviewDraft("");
+            setSelectedVerseNote(null);
+            setIsEditingVersePreview(false);
+            setVersePreviewDraft("");
+            return;
         }
+        setSelectedGeneralNote(null);
+        setIsEditingGeneralPreview(false);
+        setGeneralPreviewDraft("");
+        setSelectedVerseNote(null);
+        setIsEditingVersePreview(false);
+        setVersePreviewDraft("");
     }, [isOpen]);
 
     // Get filtered notes — returns array of [key, text, type] where type is "global" or "translation"
@@ -323,40 +343,6 @@ const NotesPanel = ({
         return books[bookId]?.name || bookId;
     };
 
-    // Start editing
-    const startEdit = (key, text) => {
-        setEditingNote(key);
-        setEditText(text);
-    };
-
-    // Save edit
-    const saveEdit = (type) => {
-        if (!editingNote) return;
-
-        if (type === "translation") {
-            const updatedNotes = { ...translationNotes };
-            if (editText.trim()) {
-                updatedNotes[editingNote] = editText.trim();
-            } else {
-                delete updatedNotes[editingNote];
-            }
-            setTranslationNotes(updatedNotes);
-            saveTranslationNotes(updatedNotes);
-        } else {
-            const updatedNotes = { ...notes };
-            if (editText.trim()) {
-                updatedNotes[editingNote] = editText.trim();
-            } else {
-                delete updatedNotes[editingNote];
-            }
-            setNotes(updatedNotes);
-            saveNotes(updatedNotes);
-        }
-
-        setEditingNote(null);
-        setEditText("");
-    };
-
     // Delete note
     const deleteNote = (key, type) => {
         if (type === "translation") {
@@ -369,6 +355,12 @@ const NotesPanel = ({
             delete updatedNotes[key];
             setNotes(updatedNotes);
             saveNotes(updatedNotes);
+        }
+
+        if (selectedVerseNote?.key === key) {
+            setSelectedVerseNote(null);
+            setIsEditingVersePreview(false);
+            setVersePreviewDraft("");
         }
     };
 
@@ -394,6 +386,123 @@ const NotesPanel = ({
         const updated = generalNotes.filter((n) => n.id !== id);
         setGeneralNotes(updated);
         saveGeneralNotes(updated);
+
+        if (selectedGeneralNote?.id === id) {
+            setSelectedGeneralNote(null);
+            setIsEditingGeneralPreview(false);
+            setGeneralPreviewDraft("");
+        }
+    };
+
+    const getGeneralNotePreviewText = (text) => {
+        const trimmed = (text || "").trim();
+        if (trimmed.length <= GENERAL_NOTE_PREVIEW_LIMIT) {
+            return trimmed;
+        }
+        return `${trimmed.slice(0, GENERAL_NOTE_PREVIEW_LIMIT)} ${formatMessage(
+            {
+                id: "showMore",
+                defaultMessage: "więcej",
+            }
+        )}...`;
+    };
+
+    const getVerseNotePreviewText = (text) => {
+        const trimmed = (text || "").trim();
+        if (trimmed.length <= VERSE_NOTE_PREVIEW_LIMIT) {
+            return trimmed;
+        }
+        return `${trimmed.slice(0, VERSE_NOTE_PREVIEW_LIMIT)} ${formatMessage(
+            {
+                id: "showMore",
+                defaultMessage: "więcej",
+            }
+        )}...`;
+    };
+
+    const openGeneralNotePreview = (note) => {
+        setSelectedVerseNote(null);
+        setIsEditingVersePreview(false);
+        setVersePreviewDraft("");
+        setSelectedGeneralNote(note);
+        setIsEditingGeneralPreview(false);
+        setGeneralPreviewDraft(note.text || "");
+    };
+
+    const closeGeneralNotePreview = () => {
+        setSelectedGeneralNote(null);
+        setIsEditingGeneralPreview(false);
+        setGeneralPreviewDraft("");
+    };
+
+    const openVerseNotePreview = (note, startEditing = false) => {
+        setSelectedGeneralNote(null);
+        setIsEditingGeneralPreview(false);
+        setGeneralPreviewDraft("");
+        setSelectedVerseNote(note);
+        setVersePreviewDraft(note.text || "");
+        setIsEditingVersePreview(startEditing);
+    };
+
+    const closeVerseNotePreview = () => {
+        setSelectedVerseNote(null);
+        setIsEditingVersePreview(false);
+        setVersePreviewDraft("");
+    };
+
+    const startEditGeneralNotePreview = () => {
+        if (!selectedGeneralNote) return;
+        setGeneralPreviewDraft(selectedGeneralNote.text || "");
+        setIsEditingGeneralPreview(true);
+    };
+
+    const saveGeneralNoteFromPreview = () => {
+        if (!selectedGeneralNote) return;
+        const updatedText = generalPreviewDraft.trim();
+        if (!updatedText) return;
+
+        const updated = generalNotes.map((note) =>
+            note.id === selectedGeneralNote.id
+                ? {
+                      ...note,
+                      text: updatedText,
+                      updatedAt: new Date().toISOString(),
+                  }
+                : note
+        );
+
+        setGeneralNotes(updated);
+        saveGeneralNotes(updated);
+
+        const refreshedSelectedNote =
+            updated.find((note) => note.id === selectedGeneralNote.id) || null;
+        setSelectedGeneralNote(refreshedSelectedNote);
+        setIsEditingGeneralPreview(false);
+    };
+
+    const saveVerseNoteFromPreview = () => {
+        if (!selectedVerseNote) return;
+        const updatedText = versePreviewDraft.trim();
+        if (!updatedText) return;
+
+        if (selectedVerseNote.type === "translation") {
+            const updatedNotes = {
+                ...translationNotes,
+                [selectedVerseNote.key]: updatedText,
+            };
+            setTranslationNotes(updatedNotes);
+            saveTranslationNotes(updatedNotes);
+        } else {
+            const updatedNotes = { ...notes, [selectedVerseNote.key]: updatedText };
+            setNotes(updatedNotes);
+            saveNotes(updatedNotes);
+        }
+
+        setSelectedVerseNote({
+            ...selectedVerseNote,
+            text: updatedText,
+        });
+        setIsEditingVersePreview(false);
     };
 
     // Navigate to verse
@@ -663,7 +772,27 @@ const NotesPanel = ({
                             ) : (
                                 <ul className="notes-list">
                                     {generalNotes.map((note) => (
-                                        <li key={note.id} className="note-item">
+                                        <li
+                                            key={note.id}
+                                            className="note-item general-note-item"
+                                            onClick={() =>
+                                                openGeneralNotePreview(note)
+                                            }
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={(e) => {
+                                                if (e.target !== e.currentTarget) {
+                                                    return;
+                                                }
+                                                if (
+                                                    e.key === "Enter" ||
+                                                    e.key === " "
+                                                ) {
+                                                    e.preventDefault();
+                                                    openGeneralNotePreview(note);
+                                                }
+                                            }}
+                                        >
                                             <div className="note-header">
                                                 <span className="note-date">
                                                     {new Date(
@@ -672,11 +801,12 @@ const NotesPanel = ({
                                                 </span>
                                                 <button
                                                     className="note-action-btn note-action-delete"
-                                                    onClick={() =>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         deleteGeneralNote(
                                                             note.id
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                     title={formatMessage({
                                                         id: "delete",
                                                     })}
@@ -693,7 +823,9 @@ const NotesPanel = ({
                                                 </button>
                                             </div>
                                             <p className="note-text">
-                                                {note.text}
+                                                {getGeneralNotePreviewText(
+                                                    note.text
+                                                )}
                                             </p>
                                         </li>
                                     ))}
@@ -740,24 +872,56 @@ const NotesPanel = ({
                                         ([key, text, type, translationId]) => {
                                             const { book, chapter, verse } =
                                                 parseNoteKey(key, type);
-                                            const isEditing =
-                                                editingNote === key;
+                                            const verseNote = {
+                                                key,
+                                                text,
+                                                type,
+                                                translationId,
+                                                book,
+                                                chapter,
+                                                verse,
+                                            };
 
                                             return (
                                                 <li
                                                     key={key}
-                                                    className="note-item"
+                                                    className="note-item verse-note-item"
+                                                    onClick={() =>
+                                                        openVerseNotePreview(
+                                                            verseNote
+                                                        )
+                                                    }
+                                                    role="button"
+                                                    tabIndex={0}
+                                                    onKeyDown={(e) => {
+                                                        if (
+                                                            e.target !==
+                                                            e.currentTarget
+                                                        ) {
+                                                            return;
+                                                        }
+                                                        if (
+                                                            e.key === "Enter" ||
+                                                            e.key === " "
+                                                        ) {
+                                                            e.preventDefault();
+                                                            openVerseNotePreview(
+                                                                verseNote
+                                                            );
+                                                        }
+                                                    }}
                                                 >
                                                     <div className="note-header">
                                                         <div className="note-header-left">
                                                             <button
                                                                 className="note-reference"
-                                                                onClick={() =>
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
                                                                     handleNavigate(
                                                                         key,
                                                                         type
-                                                                    )
-                                                                }
+                                                                    );
+                                                                }}
                                                             >
                                                                 {getBookName(
                                                                     book
@@ -786,111 +950,64 @@ const NotesPanel = ({
                                                             </span>
                                                         </div>
                                                         <div className="note-actions">
-                                                            {!isEditing && (
-                                                                <>
-                                                                    <button
-                                                                        className="note-action-btn"
-                                                                        onClick={() =>
-                                                                            startEdit(
-                                                                                key,
-                                                                                text
-                                                                            )
-                                                                        }
-                                                                        title={formatMessage(
-                                                                            {
-                                                                                id: "edit",
-                                                                            }
-                                                                        )}
-                                                                    >
-                                                                        <svg
-                                                                            viewBox="0 0 24 24"
-                                                                            fill="none"
-                                                                            stroke="currentColor"
-                                                                            strokeWidth="2"
-                                                                        >
-                                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                                        </svg>
-                                                                    </button>
-                                                                    <button
-                                                                        className="note-action-btn note-action-delete"
-                                                                        onClick={() =>
-                                                                            deleteNote(
-                                                                                key,
-                                                                                type
-                                                                            )
-                                                                        }
-                                                                        title={formatMessage(
-                                                                            {
-                                                                                id: "delete",
-                                                                            }
-                                                                        )}
-                                                                    >
-                                                                        <svg
-                                                                            viewBox="0 0 24 24"
-                                                                            fill="none"
-                                                                            stroke="currentColor"
-                                                                            strokeWidth="2"
-                                                                        >
-                                                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                                        </svg>
-                                                                    </button>
-                                                                </>
-                                                            )}
+                                                            <button
+                                                                className="note-action-btn"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    openVerseNotePreview(
+                                                                        verseNote,
+                                                                        true
+                                                                    );
+                                                                }}
+                                                                title={formatMessage(
+                                                                    {
+                                                                        id: "edit",
+                                                                    }
+                                                                )}
+                                                            >
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                >
+                                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <button
+                                                                className="note-action-btn note-action-delete"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    deleteNote(
+                                                                        key,
+                                                                        type
+                                                                    );
+                                                                }}
+                                                                title={formatMessage(
+                                                                    {
+                                                                        id: "delete",
+                                                                    }
+                                                                )}
+                                                            >
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                >
+                                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                </svg>
+                                                            </button>
                                                         </div>
                                                     </div>
 
-                                                    {isEditing ? (
-                                                        <div className="note-edit">
-                                                            <textarea
-                                                                className="note-textarea"
-                                                                value={editText}
-                                                                onChange={(e) =>
-                                                                    setEditText(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                autoFocus
-                                                                rows={3}
-                                                            />
-                                                            <div className="note-edit-actions">
-                                                                <button
-                                                                    className="note-edit-btn note-edit-cancel"
-                                                                    onClick={() =>
-                                                                        setEditingNote(
-                                                                            null
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {formatMessage(
-                                                                        {
-                                                                            id: "cancel",
-                                                                        }
-                                                                    )}
-                                                                </button>
-                                                                <button
-                                                                    className="note-edit-btn note-edit-save"
-                                                                    onClick={() =>
-                                                                        saveEdit(
-                                                                            type
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {formatMessage(
-                                                                        {
-                                                                            id: "save",
-                                                                        }
-                                                                    )}
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <p className="note-text">
-                                                            {text}
-                                                        </p>
-                                                    )}
+                                                    <p className="note-text">
+                                                        {getVerseNotePreviewText(
+                                                            text
+                                                        )}
+                                                    </p>
                                                 </li>
                                             );
                                         }
@@ -901,6 +1018,198 @@ const NotesPanel = ({
                     )}
                 </div>
             </div>
+
+            {isOpen && selectedGeneralNote && (
+                <div
+                    className="general-note-preview-overlay"
+                    onClick={closeGeneralNotePreview}
+                    role="presentation"
+                >
+                    <div
+                        className="general-note-preview-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="general-note-preview-header">
+                            <h4 className="general-note-preview-title">
+                                {formatMessage({ id: "generalNotes" })}
+                            </h4>
+                            <button
+                                className="notes-close general-note-preview-close"
+                                onClick={closeGeneralNotePreview}
+                                title={formatMessage({ id: "close" })}
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="general-note-preview-body">
+                            <span className="note-date">
+                                {new Date(
+                                    selectedGeneralNote.createdAt
+                                ).toLocaleDateString()}
+                            </span>
+                            {isEditingGeneralPreview ? (
+                                <textarea
+                                    className="note-textarea general-note-preview-textarea"
+                                    value={generalPreviewDraft}
+                                    onChange={(e) =>
+                                        setGeneralPreviewDraft(e.target.value)
+                                    }
+                                    autoFocus
+                                    rows={6}
+                                />
+                            ) : (
+                                <p className="note-text general-note-preview-text">
+                                    {selectedGeneralNote.text}
+                                </p>
+                            )}
+                        </div>
+                        <div className="note-edit-actions general-note-preview-actions">
+                            {isEditingGeneralPreview ? (
+                                <>
+                                    <button
+                                        className="note-edit-btn note-edit-cancel"
+                                        onClick={() => {
+                                            setIsEditingGeneralPreview(false);
+                                            setGeneralPreviewDraft(
+                                                selectedGeneralNote.text || ""
+                                            );
+                                        }}
+                                    >
+                                        {formatMessage({ id: "cancel" })}
+                                    </button>
+                                    <button
+                                        className="note-edit-btn note-edit-save"
+                                        onClick={saveGeneralNoteFromPreview}
+                                        disabled={!generalPreviewDraft.trim()}
+                                    >
+                                        {formatMessage({ id: "save" })}
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="note-edit-btn note-edit-save"
+                                    onClick={startEditGeneralNotePreview}
+                                >
+                                    {formatMessage({ id: "edit" })}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isOpen && selectedVerseNote && (
+                <div
+                    className="general-note-preview-overlay"
+                    onClick={closeVerseNotePreview}
+                    role="presentation"
+                >
+                    <div
+                        className="general-note-preview-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="general-note-preview-header">
+                            <h4 className="general-note-preview-title">
+                                {formatMessage({ id: "noteFor" })}{" "}
+                                {getBookName(selectedVerseNote.book)}{" "}
+                                {selectedVerseNote.chapter}:
+                                {selectedVerseNote.verse}
+                            </h4>
+                            <button
+                                className="notes-close general-note-preview-close"
+                                onClick={closeVerseNotePreview}
+                                title={formatMessage({ id: "close" })}
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="general-note-preview-body">
+                            <span
+                                className={`note-type-badge ${
+                                    selectedVerseNote.type === "translation"
+                                        ? "note-type-translation"
+                                        : "note-type-global"
+                                }`}
+                            >
+                                {selectedVerseNote.type === "translation"
+                                    ? getTranslationName(
+                                          selectedVerseNote.translationId
+                                      )
+                                    : formatMessage({
+                                          id: "noteGlobal",
+                                      })}
+                            </span>
+                            {isEditingVersePreview ? (
+                                <textarea
+                                    className="note-textarea general-note-preview-textarea"
+                                    value={versePreviewDraft}
+                                    onChange={(e) =>
+                                        setVersePreviewDraft(e.target.value)
+                                    }
+                                    autoFocus
+                                    rows={6}
+                                />
+                            ) : (
+                                <p className="note-text general-note-preview-text">
+                                    {selectedVerseNote.text}
+                                </p>
+                            )}
+                        </div>
+                        <div className="note-edit-actions general-note-preview-actions">
+                            {isEditingVersePreview ? (
+                                <>
+                                    <button
+                                        className="note-edit-btn note-edit-cancel"
+                                        onClick={() => {
+                                            setIsEditingVersePreview(false);
+                                            setVersePreviewDraft(
+                                                selectedVerseNote.text || ""
+                                            );
+                                        }}
+                                    >
+                                        {formatMessage({ id: "cancel" })}
+                                    </button>
+                                    <button
+                                        className="note-edit-btn note-edit-save"
+                                        onClick={saveVerseNoteFromPreview}
+                                        disabled={!versePreviewDraft.trim()}
+                                    >
+                                        {formatMessage({ id: "save" })}
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    className="note-edit-btn note-edit-save"
+                                    onClick={() =>
+                                        openVerseNotePreview(
+                                            selectedVerseNote,
+                                            true
+                                        )
+                                    }
+                                >
+                                    {formatMessage({ id: "edit" })}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
