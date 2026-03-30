@@ -15,9 +15,9 @@ try {
 }
 
 const container = document.getElementById("root");
-if (!container) {
-    console.error('[rBiblia] Missing "#root" container, cannot mount UI.');
-} else {
+if (container) {
     const root = createRoot(container);
     root.render(<AppWithIntlProvider />);
+} else {
+    console.error('[rBiblia] Missing "#root" container, cannot mount UI.');
 }
