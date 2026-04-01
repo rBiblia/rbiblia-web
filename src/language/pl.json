@@ -11,6 +11,7 @@
   "aliases": {
     "gen": {
       "name": "Rodzaju (1 Mojż.)",
+      "sigla": "Rdz",
       "group": "ot",
       "aliases": [
         "gen",
@@ -25,6 +26,7 @@
     },
     "exo": {
       "name": "Wyjścia (2 Mojż.)",
+      "sigla": "Wj",
       "group": "ot",
       "aliases": [
         "exo",
@@ -39,6 +41,7 @@
     },
     "lev": {
       "name": "Kapłańska (3 Mojż.)",
+      "sigla": "Kpł",
       "group": "ot",
       "aliases": [
         "lev",
@@ -53,6 +56,7 @@
     },
     "num": {
       "name": "Liczb (4 Mojż.)",
+      "sigla": "Lb",
       "group": "ot",
       "aliases": [
         "num",
@@ -67,6 +71,7 @@
     },
     "deu": {
       "name": "Powtórzonego Prawa (5 Mojż.)",
+      "sigla": "Pwt",
       "group": "ot",
       "aliases": [
         "deu",
@@ -81,6 +86,7 @@
     },
     "jos": {
       "name": "Jozuego",
+      "sigla": "Joz",
       "group": "ot",
       "aliases": [
         "jos",
@@ -95,6 +101,7 @@
     },
     "jdg": {
       "name": "Sędziów",
+      "sigla": "Sdz",
       "group": "ot",
       "aliases": [
         "jdg",
@@ -109,6 +116,7 @@
     },
     "rut": {
       "name": "Rut (Ruty)",
+      "sigla": "Rt",
       "group": "ot",
       "aliases": [
         "rut",
@@ -122,6 +130,7 @@
     },
     "1sa": {
       "name": "1 Samuela",
+      "sigla": "1 Sm",
       "group": "ot",
       "aliases": [
         "1sa",
@@ -137,6 +146,7 @@
     },
     "2sa": {
       "name": "2 Samuela",
+      "sigla": "2 Sm",
       "group": "ot",
       "aliases": [
         "2sa",
@@ -152,6 +162,7 @@
     },
     "1ki": {
       "name": "1 Królewska",
+      "sigla": "1 Krl",
       "group": "ot",
       "aliases": [
         "1ki",
@@ -167,6 +178,7 @@
     },
     "2ki": {
       "name": "2 Królewska",
+      "sigla": "2 Krl",
       "group": "ot",
       "aliases": [
         "2ki",
@@ -182,6 +194,7 @@
     },
     "1ch": {
       "name": "1 Kronik",
+      "sigla": "1 Krn",
       "group": "ot",
       "aliases": [
         "1ch",
@@ -197,6 +210,7 @@
     },
     "2ch": {
       "name": "2 Kronik",
+      "sigla": "2 Krn",
       "group": "ot",
       "aliases": [
         "2ch",
@@ -212,6 +226,7 @@
     },
     "ezr": {
       "name": "Ezdrasza",
+      "sigla": "Ezd",
       "group": "ot",
       "aliases": [
         "ezr",
@@ -226,6 +241,7 @@
     },
     "neh": {
       "name": "Nehemiasza",
+      "sigla": "Ne",
       "group": "ot",
       "aliases": [
         "neh",
@@ -240,6 +256,7 @@
     },
     "tob": {
       "name": "Tobiasza",
+      "sigla": "Tb",
       "group": "dc",
       "aliases": [
         "tob",
@@ -248,6 +265,7 @@
     },
     "jdt": {
       "name": "Judyty",
+      "sigla": "Jdt",
       "group": "dc",
       "aliases": [
         "jdt",
@@ -256,6 +274,7 @@
     },
     "est": {
       "name": "Estery",
+      "sigla": "Est",
       "group": "ot",
       "aliases": [
         "est",
@@ -269,6 +288,7 @@
     },
     "1ma": {
       "name": "1 Machabejska",
+      "sigla": "1 Mch",
       "group": "dc",
       "aliases": [
         "ma1",
@@ -277,6 +297,7 @@
     },
     "2ma": {
       "name": "2 Machabejska",
+      "sigla": "2 Mch",
       "group": "dc",
       "aliases": [
         "ma2",
@@ -285,18 +306,21 @@
     },
     "3ma": {
       "name": "3 Machabejska",
+      "sigla": "3 Mch",
       "aliases": [
         "ma3"
       ]
     },
     "4ma": {
       "name": "4 Machabejska",
+      "sigla": "4 Mch",
       "aliases": [
         "ma4"
       ]
     },
     "job": {
       "name": "Hioba (Joba)",
+      "sigla": "Hi",
       "group": "ot",
       "aliases": [
         "job",
@@ -311,6 +335,7 @@
     },
     "psa": {
       "name": "Psalmy",
+      "sigla": "Ps",
       "group": "ot",
       "aliases": [
         "psa",
@@ -325,6 +350,7 @@
     },
     "pro": {
       "name": "Przysłów (Przypowieści Salomona)",
+      "sigla": "Prz",
       "group": "ot",
       "aliases": [
         "pro",
@@ -339,6 +365,7 @@
     },
     "ecc": {
       "name": "Koheleta (Kaznodziei Salomona)",
+      "sigla": "Koh",
       "group": "ot",
       "aliases": [
         "ecc",
@@ -353,6 +380,7 @@
     },
     "sol": {
       "name": "Pieśń nad Pieśniami",
+      "sigla": "Pnp",
       "group": "ot",
       "aliases": [
         "sol",
@@ -367,6 +395,7 @@
     },
     "wis": {
       "name": "Mądrości",
+      "sigla": "Mdr",
       "group": "dc",
       "aliases": [
         "wis",
@@ -375,12 +404,14 @@
     },
     "sip": {
       "name": "Prolog Syracha",
+      "sigla": "Syr Prol",
       "aliases": [
         "sip"
       ]
     },
     "sir": {
       "name": "Mądrość Syracha",
+      "sigla": "Syr",
       "group": "dc",
       "aliases": [
         "sir",
@@ -389,12 +420,14 @@
     },
     "pss": {
       "name": "Psalmy Solomona",
+      "sigla": "Ps Sal",
       "aliases": [
         "pss"
       ]
     },
     "isa": {
       "name": "Izajasza",
+      "sigla": "Iz",
       "group": "ot",
       "aliases": [
         "isa",
@@ -409,6 +442,7 @@
     },
     "jer": {
       "name": "Jeremiasza",
+      "sigla": "Jr",
       "group": "ot",
       "aliases": [
         "jer",
@@ -423,6 +457,7 @@
     },
     "lam": {
       "name": "Treny (Lamentacje Jeremiasza)",
+      "sigla": "Lm",
       "group": "ot",
       "aliases": [
         "lam",
@@ -436,6 +471,7 @@
     },
     "bar": {
       "name": "Barucha",
+      "sigla": "Ba",
       "group": "dc",
       "aliases": [
         "bar",
@@ -444,6 +480,7 @@
     },
     "eze": {
       "name": "Ezechiela",
+      "sigla": "Ez",
       "group": "ot",
       "aliases": [
         "eze",
@@ -458,6 +495,7 @@
     },
     "dan": {
       "name": "Daniela",
+      "sigla": "Dn",
       "group": "ot",
       "aliases": [
         "dan",
@@ -471,6 +509,7 @@
     },
     "hos": {
       "name": "Ozeasza",
+      "sigla": "Oz",
       "group": "ot",
       "aliases": [
         "hos",
@@ -485,6 +524,7 @@
     },
     "joe": {
       "name": "Joela",
+      "sigla": "Jl",
       "group": "ot",
       "aliases": [
         "joe",
@@ -499,6 +539,7 @@
     },
     "amo": {
       "name": "Amosa",
+      "sigla": "Am",
       "group": "ot",
       "aliases": [
         "amo",
@@ -513,6 +554,7 @@
     },
     "oba": {
       "name": "Abdiasza",
+      "sigla": "Ab",
       "group": "ot",
       "aliases": [
         "oba",
@@ -527,6 +569,7 @@
     },
     "jon": {
       "name": "Jonasza",
+      "sigla": "Jon",
       "group": "ot",
       "aliases": [
         "jon",
@@ -540,6 +583,7 @@
     },
     "mic": {
       "name": "Micheasza",
+      "sigla": "Mi",
       "group": "ot",
       "aliases": [
         "mic",
@@ -554,6 +598,7 @@
     },
     "nah": {
       "name": "Nahuma",
+      "sigla": "Na",
       "group": "ot",
       "aliases": [
         "nah",
@@ -568,6 +613,7 @@
     },
     "hab": {
       "name": "Habakuka",
+      "sigla": "Ha",
       "group": "ot",
       "aliases": [
         "hab",
@@ -581,6 +627,7 @@
     },
     "zep": {
       "name": "Sofoniasza",
+      "sigla": "So",
       "group": "ot",
       "aliases": [
         "zep",
@@ -595,6 +642,7 @@
     },
     "hag": {
       "name": "Aggeusza",
+      "sigla": "Ag",
       "group": "ot",
       "aliases": [
         "hag",
@@ -609,6 +657,7 @@
     },
     "zec": {
       "name": "Zachariasza",
+      "sigla": "Za",
       "group": "ot",
       "aliases": [
         "zac",
@@ -623,6 +672,7 @@
     },
     "mal": {
       "name": "Malachiasza",
+      "sigla": "Ml",
       "group": "ot",
       "aliases": [
         "mal",
@@ -637,6 +687,7 @@
     },
     "mat": {
       "name": "Ewangelia Mateusza",
+      "sigla": "Mt",
       "group": "nt",
       "aliases": [
         "mat",
@@ -650,6 +701,7 @@
     },
     "mar": {
       "name": "Ewangelia Marka",
+      "sigla": "Mk",
       "group": "nt",
       "aliases": [
         "mar",
@@ -664,6 +716,7 @@
     },
     "luk": {
       "name": "Ewangelia Łukasza",
+      "sigla": "Łk",
       "group": "nt",
       "aliases": [
         "luk",
@@ -678,6 +731,7 @@
     },
     "joh": {
       "name": "Ewangelia Jana",
+      "sigla": "J",
       "group": "nt",
       "aliases": [
         "joh",
@@ -692,6 +746,7 @@
     },
     "act": {
       "name": "Dzieje Apostolskie",
+      "sigla": "Dz",
       "group": "nt",
       "aliases": [
         "act",
@@ -706,6 +761,7 @@
     },
     "rom": {
       "name": "List do Rzymian",
+      "sigla": "Rz",
       "group": "nt",
       "aliases": [
         "rom",
@@ -720,6 +776,7 @@
     },
     "1co": {
       "name": "1 List do Koryntian",
+      "sigla": "1 Kor",
       "group": "nt",
       "aliases": [
         "1co",
@@ -735,6 +792,7 @@
     },
     "2co": {
       "name": "2 List do Koryntian",
+      "sigla": "2 Kor",
       "group": "nt",
       "aliases": [
         "2co",
@@ -750,6 +808,7 @@
     },
     "gal": {
       "name": "List do Galatów",
+      "sigla": "Ga",
       "group": "nt",
       "aliases": [
         "gal",
@@ -763,6 +822,7 @@
     },
     "eph": {
       "name": "List do Efezjan",
+      "sigla": "Ef",
       "group": "nt",
       "aliases": [
         "eph",
@@ -777,6 +837,7 @@
     },
     "phi": {
       "name": "List do Filipian",
+      "sigla": "Flp",
       "group": "nt",
       "aliases": [
         "phi",
@@ -791,6 +852,7 @@
     },
     "col": {
       "name": "List do Kolosan",
+      "sigla": "Kol",
       "group": "nt",
       "aliases": [
         "col",
@@ -805,6 +867,7 @@
     },
     "1th": {
       "name": "1 List do Tesaloniczan",
+      "sigla": "1 Tes",
       "group": "nt",
       "aliases": [
         "1th",
@@ -820,6 +883,7 @@
     },
     "2th": {
       "name": "2 List do Tesaloniczan",
+      "sigla": "2 Tes",
       "group": "nt",
       "aliases": [
         "2th",
@@ -835,6 +899,7 @@
     },
     "1ti": {
       "name": "1 List do Tymoteusza",
+      "sigla": "1 Tm",
       "group": "nt",
       "aliases": [
         "1ti",
@@ -850,6 +915,7 @@
     },
     "2ti": {
       "name": "2 List do Tymoteusza",
+      "sigla": "2 Tm",
       "group": "nt",
       "aliases": [
         "2ti",
@@ -865,6 +931,7 @@
     },
     "tit": {
       "name": "List do Tytusa",
+      "sigla": "Tt",
       "group": "nt",
       "aliases": [
         "tit",
@@ -879,6 +946,7 @@
     },
     "phm": {
       "name": "List do Filemona",
+      "sigla": "Flm",
       "group": "nt",
       "aliases": [
         "plm",
@@ -893,6 +961,7 @@
     },
     "heb": {
       "name": "List do Hebrajczyków",
+      "sigla": "Hbr",
       "group": "nt",
       "aliases": [
         "heb",
@@ -907,6 +976,7 @@
     },
     "jam": {
       "name": "List św. Jakuba",
+      "sigla": "Jk",
       "group": "nt",
       "aliases": [
         "jam",
@@ -921,6 +991,7 @@
     },
     "1pe": {
       "name": "1 List św. Piotra",
+      "sigla": "1 P",
       "group": "nt",
       "aliases": [
         "1pe",
@@ -936,6 +1007,7 @@
     },
     "2pe": {
       "name": "2 List św. Piotra",
+      "sigla": "2 P",
       "group": "nt",
       "aliases": [
         "2pe",
@@ -951,6 +1023,7 @@
     },
     "1jo": {
       "name": "1 List św. Jana",
+      "sigla": "1 J",
       "group": "nt",
       "aliases": [
         "1jo",
@@ -966,6 +1039,7 @@
     },
     "2jo": {
       "name": "2 List św. Jana",
+      "sigla": "2 J",
       "group": "nt",
       "aliases": [
         "2jo",
@@ -981,6 +1055,7 @@
     },
     "3jo": {
       "name": "3 List św. Jana",
+      "sigla": "3 J",
       "group": "nt",
       "aliases": [
         "3jo",
@@ -996,40 +1071,45 @@
     },
     "jud": {
       "name": "List św. Judy",
+      "sigla": "Jud",
       "group": "nt",
       "aliases": [
-        "jde",
-        "Judy",
+        "jud",
+        "Juda",
         "jude",
         "Jude",
-        "List Judasa",
+        "List Judy",
         "vol65",
         "65",
         "judy"
       ]
     },
     "rev": {
-      "name": "Objawienie św. Jana (Apokalipsa)",
+      "name": "Apokalipsa św. Jana (Objawienie)",
+      "sigla": "Ap",
       "group": "nt",
       "aliases": [
         "rev",
-        "Zjawienie",
-        "revelations",
+        "Objawienie",
+        "revelation",
         "Rev",
-        "Objawienie spisane przez Jana",
+        "Apokalipsa Jana",
         "vol66",
         "66",
+        "ap",
         "obj"
       ]
     },
     "epj": {
       "name": "List Jeremiasza",
+      "sigla": "Epj",
       "aliases": [
         "epj"
       ]
     },
     "sus": {
       "name": "Susanna",
+      "sigla": "Sus",
       "aliases": [
         "sus",
         "87"
@@ -1037,42 +1117,49 @@
     },
     "sn3": {
       "name": "Pieśń trzech młodzieńców",
+      "sigla": "Ptm",
       "aliases": [
         "sn3"
       ]
     },
     "bel": {
       "name": "Bel",
+      "sigla": "Bel",
       "aliases": [
         "bel"
       ]
     },
     "pra": {
       "name": "Modlitwa Azariasza",
+      "sigla": "Aza",
       "aliases": [
         "pra"
       ]
     },
     "prm": {
       "name": "Modlitwa Manassesa",
+      "sigla": "Man",
       "aliases": [
         "prm"
       ]
     },
     "lao": {
       "name": "List do Laodicean",
+      "sigla": "Lao",
       "aliases": [
         "lao"
       ]
     },
     "3es": {
       "name": "3 Ezdrasz",
+      "sigla": "3 Ezd",
       "aliases": [
         "3es"
       ]
     },
     "4es": {
       "name": "4 Ezdrasz",
+      "sigla": "4 Ezd",
       "aliases": [
         "4es"
       ]

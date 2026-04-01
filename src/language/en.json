@@ -11,6 +11,7 @@
   "aliases": {
     "gen": {
       "name": "Genesis",
+      "sigla": "Gen",
       "group": "ot",
       "aliases": [
         "gen",
@@ -29,6 +30,7 @@
     },
     "exo": {
       "name": "Exodus",
+      "sigla": "Exod",
       "group": "ot",
       "aliases": [
         "ex",
@@ -47,6 +49,7 @@
     },
     "lev": {
       "name": "Leviticus",
+      "sigla": "Lev",
       "group": "ot",
       "aliases": [
         "lev",
@@ -66,6 +69,7 @@
     },
     "num": {
       "name": "Numbers",
+      "sigla": "Num",
       "group": "ot",
       "aliases": [
         "num",
@@ -84,6 +88,7 @@
     },
     "deu": {
       "name": "Deuteronomy",
+      "sigla": "Deut",
       "group": "ot",
       "aliases": [
         "deut",
@@ -103,6 +108,7 @@
     },
     "jos": {
       "name": "Joshua",
+      "sigla": "Josh",
       "group": "ot",
       "aliases": [
         "josh",
@@ -113,6 +119,7 @@
     },
     "jdg": {
       "name": "Judges",
+      "sigla": "Judg",
       "group": "ot",
       "aliases": [
         "judg",
@@ -125,6 +132,7 @@
     },
     "rut": {
       "name": "Ruth",
+      "sigla": "Ruth",
       "group": "ot",
       "aliases": [
         "ruth",
@@ -135,6 +143,7 @@
     },
     "1sa": {
       "name": "1 Samuel",
+      "sigla": "1 Sam",
       "group": "ot",
       "aliases": [
         "1sam",
@@ -152,6 +161,7 @@
     },
     "2sa": {
       "name": "2 Samuel",
+      "sigla": "2 Sam",
       "group": "ot",
       "aliases": [
         "2sam",
@@ -171,6 +181,7 @@
     },
     "1ki": {
       "name": "1 Kings",
+      "sigla": "1 Kgs",
       "group": "ot",
       "aliases": [
         "1kings",
@@ -191,6 +202,7 @@
     },
     "2ki": {
       "name": "2 Kings",
+      "sigla": "2 Kgs",
       "group": "ot",
       "aliases": [
         "2kings",
@@ -211,6 +223,7 @@
     },
     "1ch": {
       "name": "1 Chronicles",
+      "sigla": "1 Chr",
       "group": "ot",
       "aliases": [
         "1chron",
@@ -226,6 +239,7 @@
     },
     "2ch": {
       "name": "2 Chronicles",
+      "sigla": "2 Chr",
       "group": "ot",
       "aliases": [
         "2chron",
@@ -243,6 +257,7 @@
     },
     "ezr": {
       "name": "Ezra",
+      "sigla": "Ezra",
       "group": "ot",
       "aliases": [
         "ezra",
@@ -252,6 +267,7 @@
     },
     "neh": {
       "name": "Nehemiah",
+      "sigla": "Neh",
       "group": "ot",
       "aliases": [
         "neh",
@@ -264,6 +280,7 @@
     },
     "tob": {
       "name": "Tobit",
+      "sigla": "Tob",
       "group": "dc",
       "aliases": [
         "tob",
@@ -273,6 +290,7 @@
     },
     "jdt": {
       "name": "Judith",
+      "sigla": "Jdt",
       "group": "dc",
       "aliases": [
         "jth",
@@ -282,6 +300,7 @@
     },
     "est": {
       "name": "Esther",
+      "sigla": "Esth",
       "group": "ot",
       "aliases": [
         "est",
@@ -294,6 +313,7 @@
     },
     "1ma": {
       "name": "1 Maccabees",
+      "sigla": "1 Macc",
       "group": "dc",
       "aliases": [
         "1macc",
@@ -305,6 +325,7 @@
     },
     "2ma": {
       "name": "2 Maccabees",
+      "sigla": "2 Macc",
       "group": "dc",
       "aliases": [
         "2macc",
@@ -316,6 +337,7 @@
     },
     "3ma": {
       "name": "3 Maccabees",
+      "sigla": "3 Macc",
       "aliases": [
         "3macc",
         "3mac",
@@ -325,6 +347,7 @@
     },
     "4ma": {
       "name": "4 Maccabees",
+      "sigla": "4 Macc",
       "aliases": [
         "4macc",
         "4mac",
@@ -335,6 +358,7 @@
     },
     "job": {
       "name": "Job",
+      "sigla": "Job",
       "group": "ot",
       "aliases": [
         "job",
@@ -343,6 +367,7 @@
     },
     "psa": {
       "name": "Psalms",
+      "sigla": "Ps",
       "group": "ot",
       "aliases": [
         "ps",
@@ -356,6 +381,7 @@
     },
     "pro": {
       "name": "Proverbs",
+      "sigla": "Prov",
       "group": "ot",
       "aliases": [
         "prov",
@@ -368,6 +394,7 @@
     },
     "ecc": {
       "name": "Ecclesiastes",
+      "sigla": "Eccl",
       "group": "ot",
       "aliases": [
         "eccles",
@@ -382,6 +409,7 @@
     },
     "sol": {
       "name": "Song of Solomon",
+      "sigla": "Song",
       "group": "ot",
       "aliases": [
         "song",
@@ -398,6 +426,7 @@
     },
     "wis": {
       "name": "Wisdom of Solomon",
+      "sigla": "Wis",
       "group": "dc",
       "aliases": [
         "wisdofsol",
@@ -408,12 +437,14 @@
     },
     "sip": {
       "name": "Sirach's Prologue",
+      "sigla": "Sir Prol",
       "aliases": [
         "sip"
       ]
     },
     "sir": {
       "name": "Wisdom of Sirach",
+      "sigla": "Sir",
       "group": "dc",
       "aliases": [
         "sir",
@@ -424,6 +455,7 @@
     },
     "pss": {
       "name": "Psalms of Solomon",
+      "sigla": "Ps Sol",
       "aliases": [
         "pssol",
         "pssolomon",
@@ -432,6 +464,7 @@
     },
     "isa": {
       "name": "Isaiah",
+      "sigla": "Isa",
       "group": "ot",
       "aliases": [
         "isa",
@@ -442,6 +475,7 @@
     },
     "jer": {
       "name": "Jeremiah",
+      "sigla": "Jer",
       "group": "ot",
       "aliases": [
         "jer",
@@ -456,6 +490,7 @@
     },
     "lam": {
       "name": "Lamentations",
+      "sigla": "Lam",
       "group": "ot",
       "aliases": [
         "lam",
@@ -470,6 +505,7 @@
     },
     "bar": {
       "name": "Baruch",
+      "sigla": "Bar",
       "group": "dc",
       "aliases": [
         "bar",
@@ -478,6 +514,7 @@
     },
     "eze": {
       "name": "Ezekiel",
+      "sigla": "Ezek",
       "group": "ot",
       "aliases": [
         "ezek",
@@ -493,6 +530,7 @@
     },
     "dan": {
       "name": "Daniel",
+      "sigla": "Dan",
       "group": "ot",
       "aliases": [
         "dan",
@@ -506,6 +544,7 @@
     },
     "hos": {
       "name": "Hosea",
+      "sigla": "Hos",
       "group": "ot",
       "aliases": [
         "hos",
@@ -517,6 +556,7 @@
     },
     "joe": {
       "name": "Joel",
+      "sigla": "Joel",
       "group": "ot",
       "aliases": [
         "joel",
@@ -526,6 +566,7 @@
     },
     "amo": {
       "name": "Amos",
+      "sigla": "Amos",
       "group": "ot",
       "aliases": [
         "amos",
@@ -536,6 +577,7 @@
     },
     "oba": {
       "name": "Obadiah",
+      "sigla": "Obad",
       "group": "ot",
       "aliases": [
         "obad",
@@ -551,6 +593,7 @@
     },
     "jon": {
       "name": "Jonah",
+      "sigla": "Jonah",
       "group": "ot",
       "aliases": [
         "jonah",
@@ -560,6 +603,7 @@
     },
     "mic": {
       "name": "Micah",
+      "sigla": "Mic",
       "group": "ot",
       "aliases": [
         "mic",
@@ -570,6 +614,7 @@
     },
     "nah": {
       "name": "Nahum",
+      "sigla": "Nah",
       "group": "ot",
       "aliases": [
         "nah",
@@ -581,6 +626,7 @@
     },
     "hab": {
       "name": "Habakkuk",
+      "sigla": "Hab",
       "group": "ot",
       "aliases": [
         "hab",
@@ -594,6 +640,7 @@
     },
     "zep": {
       "name": "Zephaniah",
+      "sigla": "Zeph",
       "group": "ot",
       "aliases": [
         "zeph",
@@ -609,6 +656,7 @@
     },
     "hag": {
       "name": "Haggai",
+      "sigla": "Hag",
       "group": "ot",
       "aliases": [
         "hag",
@@ -621,6 +669,7 @@
     },
     "zec": {
       "name": "Zechariah",
+      "sigla": "Zech",
       "group": "ot",
       "aliases": [
         "zech",
@@ -638,6 +687,7 @@
     },
     "mal": {
       "name": "Malachi",
+      "sigla": "Mal",
       "group": "ot",
       "aliases": [
         "mal",
@@ -649,6 +699,7 @@
     },
     "mat": {
       "name": "Matthew",
+      "sigla": "Matt",
       "group": "nt",
       "aliases": [
         "matt",
@@ -662,6 +713,7 @@
     },
     "mar": {
       "name": "Mark",
+      "sigla": "Mark",
       "group": "nt",
       "aliases": [
         "mark",
@@ -672,6 +724,7 @@
     },
     "luk": {
       "name": "Luke",
+      "sigla": "Luke",
       "group": "nt",
       "aliases": [
         "luke",
@@ -682,6 +735,7 @@
     },
     "joh": {
       "name": "John",
+      "sigla": "John",
       "group": "nt",
       "aliases": [
         "john",
@@ -693,6 +747,7 @@
     },
     "act": {
       "name": "Acts",
+      "sigla": "Acts",
       "group": "nt",
       "aliases": [
         "acts",
@@ -701,6 +756,7 @@
     },
     "rom": {
       "name": "Romans",
+      "sigla": "Rom",
       "group": "nt",
       "aliases": [
         "rom",
@@ -714,6 +770,7 @@
     },
     "1co": {
       "name": "1 Corinthians",
+      "sigla": "1 Cor",
       "group": "nt",
       "aliases": [
         "1cor",
@@ -729,6 +786,7 @@
     },
     "2co": {
       "name": "2 Corinthians",
+      "sigla": "2 Cor",
       "group": "nt",
       "aliases": [
         "2cor",
@@ -744,6 +802,7 @@
     },
     "gal": {
       "name": "Galatians",
+      "sigla": "Gal",
       "group": "nt",
       "aliases": [
         "gal",
@@ -756,6 +815,7 @@
     },
     "eph": {
       "name": "Ephesians",
+      "sigla": "Eph",
       "group": "nt",
       "aliases": [
         "eph",
@@ -766,6 +826,7 @@
     },
     "phi": {
       "name": "Philippians",
+      "sigla": "Phil",
       "group": "nt",
       "aliases": [
         "phil",
@@ -778,6 +839,7 @@
     },
     "col": {
       "name": "Colossians",
+      "sigla": "Col",
       "group": "nt",
       "aliases": [
         "col",
@@ -790,6 +852,7 @@
     },
     "1th": {
       "name": "1 Thessalonians",
+      "sigla": "1 Thess",
       "group": "nt",
       "aliases": [
         "1thess",
@@ -805,6 +868,7 @@
     },
     "2th": {
       "name": "2 Thessalonians",
+      "sigla": "2 Thess",
       "group": "nt",
       "aliases": [
         "2thess",
@@ -824,6 +888,7 @@
     },
     "1ti": {
       "name": "1 Timothy",
+      "sigla": "1 Tim",
       "group": "nt",
       "aliases": [
         "1tim",
@@ -843,6 +908,7 @@
     },
     "2ti": {
       "name": "2 Timothy",
+      "sigla": "2 Tim",
       "group": "nt",
       "aliases": [
         "2tim",
@@ -862,6 +928,7 @@
     },
     "tit": {
       "name": "Titus",
+      "sigla": "Titus",
       "group": "nt",
       "aliases": [
         "titus",
@@ -873,6 +940,7 @@
     },
     "phm": {
       "name": "Philemon",
+      "sigla": "Phlm",
       "group": "nt",
       "aliases": [
         "philem",
@@ -885,6 +953,7 @@
     },
     "heb": {
       "name": "Hebrews",
+      "sigla": "Heb",
       "group": "nt",
       "aliases": [
         "heb",
@@ -897,6 +966,7 @@
     },
     "jam": {
       "name": "James",
+      "sigla": "Jas",
       "group": "nt",
       "aliases": [
         "james",
@@ -908,6 +978,7 @@
     },
     "1pe": {
       "name": "1 Peter",
+      "sigla": "1 Pet",
       "group": "nt",
       "aliases": [
         "1pet",
@@ -929,6 +1000,7 @@
     },
     "2pe": {
       "name": "2 Peter",
+      "sigla": "2 Pet",
       "group": "nt",
       "aliases": [
         "2pet",
@@ -950,6 +1022,7 @@
     },
     "1jo": {
       "name": "1 John",
+      "sigla": "1 John",
       "group": "nt",
       "aliases": [
         "1john",
@@ -969,6 +1042,7 @@
     },
     "2jo": {
       "name": "2 John",
+      "sigla": "2 John",
       "group": "nt",
       "aliases": [
         "2john",
@@ -988,6 +1062,7 @@
     },
     "3jo": {
       "name": "3 John",
+      "sigla": "3 John",
       "group": "nt",
       "aliases": [
         "3john",
@@ -1007,6 +1082,7 @@
     },
     "jud": {
       "name": "Jude",
+      "sigla": "Jude",
       "group": "nt",
       "aliases": [
         "jude",
@@ -1016,6 +1092,7 @@
     },
     "rev": {
       "name": "Revelation",
+      "sigla": "Rev",
       "group": "nt",
       "aliases": [
         "rev",
@@ -1034,12 +1111,14 @@
     },
     "epj": {
       "name": "Epistle of Jeremiah",
+      "sigla": "EoJ",
       "aliases": [
         "epjer"
       ]
     },
     "sus": {
       "name": "Susanna",
+      "sigla": "Sus",
       "aliases": [
         "sus",
         "sussanna"
@@ -1047,12 +1126,14 @@
     },
     "bel": {
       "name": "Bel and the Dragon",
+      "sigla": "Bel",
       "aliases": [
         "bel"
       ]
     },
     "pra": {
       "name": "Prayer of Azariah",
+      "sigla": "Aza",
       "aliases": [
         "aza",
         "prazar"
@@ -1060,6 +1141,7 @@
     },
     "prm": {
       "name": "Prayer of Manasseh",
+      "sigla": "Man",
       "aliases": [
         "profman",
         "prman",
@@ -1070,6 +1152,7 @@
     },
     "lao": {
       "name": "Epistle of the Laodiceans",
+      "sigla": "Lao",
       "aliases": [
         "laodiceans",
         "laod",
@@ -1081,6 +1164,7 @@
     },
     "4es": {
       "name": "4 Esdras",
+      "sigla": "4 Es",
       "aliases": [
         "4es",
         "4esd",
