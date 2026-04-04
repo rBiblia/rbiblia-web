@@ -89,6 +89,32 @@ const Verse = memo(function Verse({
         }
     }, [isHighlighted]);
 
+    // Handle verse actions positioning when space is limited on the left
+    useEffect(() => {
+        const checkSpace = () => {
+            if (!verseNumberCellRef.current || !verseActionsRef.current) return;
+
+            const rect = verseNumberCellRef.current.getBoundingClientRect();
+            const actionsWidth = 80; // Estimated width of actions panel
+
+            if (rect.left < actionsWidth) {
+                verseActionsRef.current.classList.add("shifted-right");
+            } else {
+                verseActionsRef.current.classList.remove("shifted-right");
+            }
+        };
+
+        // Check initially and on scroll/resize
+        checkSpace();
+        window.addEventListener("scroll", checkSpace, { passive: true });
+        window.addEventListener("resize", checkSpace);
+
+        return () => {
+            window.removeEventListener("scroll", checkSpace);
+            window.removeEventListener("resize", checkSpace);
+        };
+    }, []);
+
     const openNoteEditor = (e) => {
         e.preventDefault();
         e.stopPropagation();

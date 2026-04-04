@@ -42,6 +42,11 @@
       border-color: rgba(255, 255, 255, 0.3);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
+
+    &:focus {
+      border-color: var(--dm-accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--dm-accent) 15%, transparent);
+    }
   }
 }
 
@@ -99,7 +104,7 @@
     border-bottom: 1px solid #eee;
 
     @include dark-mode {
-      border-bottom-color: #3d3d3d;
+      border-bottom-color: var(--dm-border);
     }
   }
 }
@@ -199,7 +204,7 @@
     }
 
     &.selected {
-      background: rgba($rb-header-navigator-arrow, 0.2);
+      background: color-mix(in srgb, var(--dm-accent) 20%, transparent);
     }
   }
 }
@@ -313,16 +318,16 @@
   }
 
   @include dark-mode {
-    background: #2a2a2a;
+    background: var(--dm-bg-elevated);
     color: #e0e0e0;
 
     &:hover {
-      background: rgba($rb-header-navigator-arrow, 0.15);
-      color: $rb-header-navigator-arrow;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--dm-accent);
     }
 
     &.active {
-      background: $rb-header-navigator-arrow;
+      background: var(--dm-accent);
       color: white;
     }
   }
@@ -363,7 +368,7 @@
   }
 
   @include dark-mode {
-    border-color: #444;
+    border-color: var(--dm-border);
     background: rgba(255, 255, 255, 0.02);
 
     p {
@@ -438,11 +443,11 @@
 // Dark Mode Legibility Overrides
 @include dark-mode {
   .badge.bg-light {
-    background-color: #444 !important;
+    background-color: var(--dm-border) !important;
     /* Dark grey for badge background */
     color: #e0e0e0 !important;
     /* Light text for badge */
-    border: 1px solid #555;
+    border: 1px solid var(--dm-bg-hover);
   }
 
   .btn-outline-secondary {
@@ -523,8 +528,9 @@
 
   @include dark-mode {
     background: var(--dm-bg-glass);
-    border-color: var(--dm-border-subtle);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+    border-color: transparent;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px var(--dm-border);
   }
 
   @media (max-width: 575px) {

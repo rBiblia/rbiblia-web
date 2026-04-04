@@ -60,7 +60,8 @@
   background: rgba($rb-header-navigator-arrow, 0.03);
 
   @include dark-mode {
-    background: rgba($rb-header-navigator-arrow, 0.08);
+    border-color: var(--dm-accent);
+    background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
   }
 }
 
@@ -109,6 +110,10 @@
 
 .comparison-box-title-primary {
   color: $rb-header-navigator-arrow;
+
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
 }
 
 .comparison-current-badge {
@@ -118,6 +123,11 @@
   border-radius: 20px;
   background: $rb-header-navigator-arrow;
   color: white;
+
+  @include dark-mode {
+    background: var(--dm-accent);
+    color: white;
+  }
 }
 
 .comparison-text {
@@ -323,9 +333,11 @@
       color: white;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
     }
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-      body:not([data-input-modality="touch"]) & {
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      @include dark-mode {
         &:hover:not(:disabled) {
           background: var(--dm-accent);
           color: white;
@@ -509,12 +521,20 @@
     background: $rb-header-navigator-arrow;
     color: #fff;
     font-weight: 700;
+
+    @include dark-mode {
+      background: var(--dm-accent);
+    }
   }
 }
 
 .comparison-title-book {
   font-weight: 500;
   color: $rb-header-navigator-arrow;
+
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
 }
 
 // Responsive Book Name (Full vs Sigil)

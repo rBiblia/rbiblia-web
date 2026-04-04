@@ -63,8 +63,9 @@
 
   @include dark-mode {
     background: var(--dm-bg-glass);
-    border-color: var(--dm-border-subtle);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+    border-color: transparent;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px var(--dm-border);
   }
 
   @media (max-width: 575px) {
@@ -167,12 +168,12 @@
   }
 
   @include dark-mode {
-    border-color: #444;
+    border-color: var(--dm-border);
     color: #aaa;
 
     &.active {
-      background: $rb-header-navigator-arrow;
-      border-color: $rb-header-navigator-arrow;
+      background: var(--dm-accent);
+      border-color: var(--dm-accent);
       color: white;
     }
   }
@@ -271,6 +272,14 @@
     background: darken($rb-header-navigator-arrow, 10%);
     transform: translateY(-1px);
   }
+
+  @include dark-mode {
+    background: var(--dm-accent);
+    
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 85%, black);
+    }
+  }
 }
 
 .note-actions {
@@ -351,6 +360,10 @@
     background: var(--dm-bg-elevated);
     border-color: var(--dm-border);
     color: var(--dm-text-primary);
+
+    &:focus {
+      border-color: var(--dm-accent);
+    }
   }
 }
 
@@ -379,11 +392,11 @@
   }
 
   @include dark-mode {
-    background: #444;
+    background: var(--dm-border);
     color: #ccc;
 
     &:hover {
-      background: #555;
+      background: var(--dm-bg-hover);
     }
   }
 }
@@ -394,6 +407,14 @@
 
   &:hover {
     background: darken($rb-header-navigator-arrow, 10%);
+  }
+
+  @include dark-mode {
+    background: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 85%, black);
+    }
   }
 }
 
@@ -540,11 +561,11 @@
   }
 
   @include dark-mode {
-    background: #444;
+    background: var(--dm-border);
     color: #ccc;
 
     &:hover {
-      background: #555;
+      background: var(--dm-bg-hover);
     }
   }
 }
@@ -555,6 +576,14 @@
 
   &:hover {
     background: darken($rb-header-navigator-arrow, 10%);
+  }
+
+  @include dark-mode {
+    background: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 85%, black);
+    }
   }
 }
 
@@ -570,6 +599,11 @@
 
   .tile-text {
     color: white !important;
+  }
+
+  @include dark-mode {
+    background: var(--dm-accent) !important;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--dm-accent) 40%, transparent);
   }
 }
 
@@ -609,16 +643,16 @@
   }
 
   @include dark-mode {
-    background: #2d2d2d;
-    border-color: #444;
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border);
     color: #ddd;
 
     &:hover {
-      border-color: $rb-header-navigator-arrow;
+      border-color: var(--dm-accent);
     }
 
     &.active {
-      background: $rb-header-navigator-arrow;
+      background: var(--dm-accent);
       color: white;
     }
   }
@@ -660,6 +694,14 @@
   &:active {
     transform: scale(0.95);
   }
+
+  @include dark-mode {
+    background: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 80%, black);
+    }
+  }
 }
 
 .notes-empty-add-btn {
@@ -676,6 +718,14 @@
 
   &:hover {
     background: darken($rb-header-navigator-arrow, 10%);
+  }
+
+  @include dark-mode {
+    background: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 80%, black);
+    }
   }
 }
 
@@ -694,7 +744,8 @@
   margin-bottom: 2rem;
 
   @include dark-mode {
-    border-color: #444;
+    border-color: var(--dm-border);
+    background: color-mix(in srgb, var(--dm-accent) 5%, transparent);
   }
 }
 
@@ -922,7 +973,7 @@
   }
 
   @include dark-mode {
-    border-color: #444;
+    border-color: var(--dm-border);
     color: #aaa;
 
     &:hover {
