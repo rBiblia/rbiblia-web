@@ -23,7 +23,7 @@
 
   @include dark-mode {
     background: var(--dm-bg-glass);
-    border-color: var(--dm-border-subtle);
+    border-color: transparent;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 
     @media (max-width: 991.98px) {

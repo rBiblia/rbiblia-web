@@ -39,6 +39,7 @@
 
   @include dark-mode {
     color: var(--dm-text-primary);
+    border-color: var(--dm-accent);
   }
 }
 

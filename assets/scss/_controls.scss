@@ -68,7 +68,7 @@
   }
 
   @include dark-mode {
-    background: #333;
+    background: var(--dm-bg-elevated);
     color: #ddd;
   }
 }
@@ -84,7 +84,7 @@
   animation: slideIn 0.2s ease-out;
 
   @include dark-mode {
-    background: #333;
+    background: var(--dm-bg-elevated);
   }
 }
 
@@ -136,12 +136,12 @@
   }
 
   @include dark-mode {
-    background: #444;
-    border-color: #555;
+    background: var(--dm-border);
+    border-color: var(--dm-bg-hover);
     color: #ccc;
 
     &:hover {
-      background: #555;
+      background: var(--dm-bg-hover);
     }
   }
 }

@@ -60,6 +60,10 @@ $font-bible: "Crimson Text", Georgia, "Times New Roman", serif;
     &:hover {
       color: var(--dm-accent);
     }
+    
+    .location-text {
+      border-bottom-color: var(--dm-accent);
+    }
   }
 }
 
@@ -194,11 +198,11 @@ main {
       }
 
       @keyframes highlightBoldFadeOut {
-        0% { font-weight: 700; transform: translateX(8px); }
-        15% { font-weight: 700; transform: translateX(2px); }
-        30% { font-weight: 700; transform: translateX(8px); }
-        60% { font-weight: 700; transform: translateX(0); }
-        100% { font-weight: normal; transform: translateX(0); }
+        0% { font-weight: 700; padding-left: 8px; }
+        15% { font-weight: 700; padding-left: 2px; }
+        30% { font-weight: 700; padding-left: 8px; }
+        60% { font-weight: 700; padding-left: 0; }
+        100% { font-weight: normal; padding-left: 0; }
       }
 
       // Verse with note
@@ -270,6 +274,16 @@ main {
           right: 50%;
           left: auto;
           transform: translate(50%, -50%);
+
+          &::after {
+            display: none;
+          }
+        }
+
+        &.shifted-right {
+          right: auto;
+          left: 50%;
+          transform: translate(-50%, -50%);
 
           &::after {
             display: none;
@@ -560,12 +574,14 @@ header {
   @include dark-mode {
     background: rgba(255, 255, 255, 0.08);
     color: var(--dm-accent);
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-      body:not([data-input-modality="touch"]) & {
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      @include dark-mode {
         &:hover {
           background: var(--dm-accent);
-          color: var(--dm-bg-base);
+          color: white;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
       }

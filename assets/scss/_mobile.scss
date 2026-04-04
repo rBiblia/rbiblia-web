@@ -669,16 +669,30 @@ body[data-input-modality="touch"] .side-menu-close:focus-visible {
   cursor: pointer;
   transition: background 0.15s ease;
 
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
+
   @media (hover: hover) and (pointer: fine) {
     body:not([data-input-modality="touch"]) & {
       &:hover:not(:disabled) {
         background: rgba($rb-header-navigator-arrow, 0.08);
+      }
+
+      @include dark-mode {
+        &:hover:not(:disabled) {
+          background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
+        }
       }
     }
   }
 
   &.touch-tap-feedback:not(:disabled) {
     background: rgba($rb-header-navigator-arrow, 0.14);
+
+    @include dark-mode {
+      background: color-mix(in srgb, var(--dm-accent) 14%, transparent);
+    }
   }
 
   &:disabled {
