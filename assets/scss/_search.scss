@@ -54,8 +54,9 @@
 
   @include dark-mode {
     background: var(--dm-bg-glass);
-    border-color: var(--dm-border-subtle);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+    border-color: transparent;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px var(--dm-border);
   }
 
   @media (max-width: 575px) {
@@ -542,6 +543,10 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: $rb-header-navigator-arrow;
+
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
 }
 
 .search-results {
@@ -590,6 +595,10 @@
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 600;
+
+  @include dark-mode {
+    background: var(--dm-accent);
+  }
 }
 
 .search-result-text {
@@ -609,6 +618,10 @@
   padding: 0.1rem 0.15rem;
   border-radius: 3px;
   font-weight: 600;
+
+  @include dark-mode {
+    background: color-mix(in srgb, var(--dm-accent) 25%, transparent);
+  }
 }
 
 // Search Help Section

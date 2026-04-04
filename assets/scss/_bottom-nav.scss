@@ -87,9 +87,11 @@
 
   @include dark-mode {
     color: var(--dm-text-secondary);
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-      body:not([data-input-modality="touch"]) & {
+  @media (hover: hover) and (pointer: fine) {
+    body:not([data-input-modality="touch"]) & {
+      @include dark-mode {
         &:hover:not(:disabled) {
           background: var(--dm-bg-hover);
         }
@@ -108,12 +110,23 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   white-space: nowrap;
 
+  @include dark-mode {
+    background: var(--dm-accent);
+    color: white;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     body:not([data-input-modality="touch"]) & {
       &:hover:not(:disabled) {
         background: darken($rb-header-navigator-arrow, 8%);
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      @include dark-mode {
+        &:hover:not(:disabled) {
+          background: color-mix(in srgb, var(--dm-accent) 80%, black);
+        }
       }
     }
   }
