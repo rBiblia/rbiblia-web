@@ -776,7 +776,7 @@ const NotesPanel = ({
                                             onClick={() =>
                                                 openGeneralNotePreview(note)
                                             }
-                                            role="button" // NOSONAR
+                                            role="button"
                                             tabIndex={0}
                                             onKeyDown={(e) => {
                                                 if (
@@ -893,7 +893,7 @@ const NotesPanel = ({
                                                             verseNote
                                                         )
                                                     }
-                                                    role="button" // NOSONAR
+                                                    role="button"
                                                     tabIndex={0}
                                                     onKeyDown={(e) => {
                                                         if (
@@ -1030,12 +1030,20 @@ const NotesPanel = ({
             {isOpen && selectedGeneralNote && (
                 <div
                     className="general-note-preview-overlay"
-                    onClick={closeGeneralNotePreview} // NOSONAR
+                    onClick={closeGeneralNotePreview}
                     aria-hidden="true"
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") closeGeneralNotePreview();
+                    }}
                 >
                     <div
                         className="general-note-preview-modal"
-                        onClick={(e) => e.stopPropagation()} // NOSONAR
+                        role="dialog"
+                        aria-modal="true"
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Escape") closeGeneralNotePreview();
+                        }}
                     >
                         <div className="general-note-preview-header">
                             <h4 className="general-note-preview-title">
@@ -1117,12 +1125,20 @@ const NotesPanel = ({
             {isOpen && selectedVerseNote && (
                 <div
                     className="general-note-preview-overlay"
-                    onClick={closeVerseNotePreview} // NOSONAR
+                    onClick={closeVerseNotePreview}
                     aria-hidden="true"
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") closeVerseNotePreview();
+                    }}
                 >
                     <div
                         className="general-note-preview-modal"
-                        onClick={(e) => e.stopPropagation()} // NOSONAR
+                        role="dialog"
+                        aria-modal="true"
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Escape") closeVerseNotePreview();
+                        }}
                     >
                         <div className="general-note-preview-header">
                             <h4 className="general-note-preview-title">
