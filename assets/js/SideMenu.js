@@ -753,11 +753,7 @@ const DisplaySettings = ({
                                         href="https://rbiblia.toborek.info/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
-                                        style={{
-                                            borderRadius: "10px",
-                                            padding: "0.6rem 1rem",
-                                        }}
+                                        className="info-link stagger-3"
                                     >
                                         <Icon name="globe" size={18} />
                                         {formatMessage({
@@ -768,11 +764,7 @@ const DisplaySettings = ({
                                     </a>
                                     <a
                                         href="https://api.toborek.info/download/rbib261.exe"
-                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
-                                        style={{
-                                            borderRadius: "10px",
-                                            padding: "0.6rem 1rem",
-                                        }}
+                                        className="info-link stagger-4"
                                     >
                                         <Icon name="download" size={18} />
                                         {formatMessage({
@@ -785,11 +777,7 @@ const DisplaySettings = ({
                                         href="https://rbiblia.toborek.info/faq/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
-                                        style={{
-                                            borderRadius: "10px",
-                                            padding: "0.6rem 1rem",
-                                        }}
+                                        className="info-link stagger-5"
                                     >
                                         <Icon name="help-circle" size={18} />
                                         {formatMessage({
@@ -802,11 +790,7 @@ const DisplaySettings = ({
                                         href="https://kontakt.toborek.info"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
-                                        style={{
-                                            borderRadius: "10px",
-                                            padding: "0.6rem 1rem",
-                                        }}
+                                        className="info-link stagger-6"
                                     >
                                         <Icon name="mail" size={18} />
                                         {formatMessage({
@@ -819,11 +803,7 @@ const DisplaySettings = ({
                                         href="https://radio.toborek.info"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn btn-outline-secondary d-flex align-items-center justify-content-start gap-2"
-                                        style={{
-                                            borderRadius: "10px",
-                                            padding: "0.6rem 1rem",
-                                        }}
+                                        className="info-link stagger-7"
                                     >
                                         <Icon name="radio" size={18} />
                                         {formatMessage({
