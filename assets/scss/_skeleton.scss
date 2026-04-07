@@ -60,7 +60,12 @@
 @include dark-mode {
   .skeleton-verse-number,
   .skeleton-line {
-    background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+    background: linear-gradient(
+      90deg,
+      var(--dm-bg-elevated) 25%,
+      var(--dm-bg-hover) 50%,
+      var(--dm-bg-elevated) 75%
+    );
     background-size: 200% 100%;
   }
 }

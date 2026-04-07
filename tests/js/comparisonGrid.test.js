@@ -139,44 +139,36 @@ function testComparisonSwipeGestures() {
 // ─── Translation Selector Disabled Options Tests ───────────────────────────
 
 function testTranslationSelectorDisabledOptions() {
-  const translations = [
-    { id: "pl_ubg", name: "UBG", language: "pl" },
-    { id: "pl_bw", name: "BW", language: "pl" },
-    { id: "en_kjv", name: "KJV", language: "en" },
-    { id: "en_esv", name: "ESV", language: "en" },
-    { id: "de_lut", name: "Luther", language: "de" },
-  ];
-
   const currentTranslation = "pl_ubg";
   const selectedTranslations = ["en_kjv", "de_lut", ""];
 
   // Build disabled IDs for slot index 2 (empty slot)
   const usedTranslations = selectedTranslations.filter((t, i) => t && i !== 2);
-  const disabledIds = [currentTranslation, ...usedTranslations];
+  const disabledIds = new Set([currentTranslation, ...usedTranslations]);
 
   // Current translation should be disabled
   console.assert(
-    disabledIds.includes("pl_ubg"),
+    disabledIds.has("pl_ubg"),
     "Current translation should be in disabled list"
   );
 
   // Already selected translations should be disabled
   console.assert(
-    disabledIds.includes("en_kjv"),
+    disabledIds.has("en_kjv"),
     "Already selected translation should be disabled"
   );
   console.assert(
-    disabledIds.includes("de_lut"),
+    disabledIds.has("de_lut"),
     "Already selected translation should be disabled"
   );
 
   // Available translations should NOT be disabled
   console.assert(
-    !disabledIds.includes("pl_bw"),
+    !disabledIds.has("pl_bw"),
     "Available translation should NOT be disabled"
   );
   console.assert(
-    !disabledIds.includes("en_esv"),
+    !disabledIds.has("en_esv"),
     "Available translation should NOT be disabled"
   );
 
@@ -192,14 +184,14 @@ function testTranslationGrouping() {
     { id: "en_kjv", name: "KJV", language: "en" },
     { id: "de_lut", name: "Luther", language: "de" },
   ];
-  const favorites = ["pl_ubg", "en_kjv"];
+  const favorites = new Set(["pl_ubg", "en_kjv"]);
 
   // Separate favorites from others
   const favoriteTranslations = translations.filter((t) =>
-    favorites.includes(t.id)
+    favorites.has(t.id)
   );
   const otherTranslations = translations.filter(
-    (t) => !favorites.includes(t.id)
+    (t) => !favorites.has(t.id)
   );
 
   console.assert(favoriteTranslations.length === 2, "Should have 2 favorites");
@@ -361,7 +353,7 @@ function testComparisonKeyboardShortcuts() {
   // Escape works even in input
   handleKeyDown("Escape", "input");
   console.assert(
-    calls[calls.length - 1] === "close",
+    calls.at(-1) === "close",
     "Escape should work even when input is focused"
   );
 
@@ -390,6 +382,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }

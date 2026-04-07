@@ -161,7 +161,7 @@ const Navigator = memo(function Navigator({
                         onTouchEnd={blurOnTouchInteraction}
                         title={formatMessage({ id: "notes" })}
                     >
-                        <Icon name="file-text" size={20} />
+                        <Icon name="square-pen" size={20} />
                     </button>
                     <button
                         className="nav-action-btn"

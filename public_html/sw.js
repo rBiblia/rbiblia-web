@@ -31,7 +31,7 @@ const API_CACHE_MAX_ITEMS = 200;
 // ──────────────────────────────────────
 // Install – pre-cache essential assets
 // ──────────────────────────────────────
-self.addEventListener("install", (event) => {
+globalThis.addEventListener("install", (event) => {
     event.waitUntil(
         caches
             .open(STATIC_CACHE)
@@ -46,33 +46,33 @@ self.addEventListener("install", (event) => {
                     )
                 );
             })
-            .then(() => self.skipWaiting())
+            .then(() => globalThis.skipWaiting())
     );
 });
 
 // ──────────────────────────────────────
 // Activate – clean old caches
 // ──────────────────────────────────────
-self.addEventListener("activate", (event) => {
-    const currentCaches = [STATIC_CACHE, API_CACHE, IMAGE_CACHE];
+globalThis.addEventListener("activate", (event) => {
+    const currentCaches = new Set([STATIC_CACHE, API_CACHE, IMAGE_CACHE]);
     event.waitUntil(
         caches
             .keys()
             .then((cacheNames) =>
                 Promise.all(
                     cacheNames
-                        .filter((name) => !currentCaches.includes(name))
+                        .filter((name) => !currentCaches.has(name))
                         .map((name) => caches.delete(name))
                 )
             )
-            .then(() => self.clients.claim())
+            .then(() => globalThis.clients.claim())
     );
 });
 
 // ──────────────────────────────────────
 // Fetch – routing strategies
 // ──────────────────────────────────────
-self.addEventListener("fetch", (event) => {
+globalThis.addEventListener("fetch", (event) => {
     const { request } = event;
     const url = new URL(request.url);
 
@@ -173,6 +173,7 @@ async function networkFirst(request, cacheName) {
 
         return response;
     } catch (error) {
+        console.warn("[SW] Network failed, falling back to cache:", error);
         // Network failed – try cache
         let cached = await cache.match(request);
         if (!cached) {
