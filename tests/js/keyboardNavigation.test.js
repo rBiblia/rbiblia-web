@@ -173,6 +173,7 @@ function testNullCallbacks() {
     handler("ArrowRight");
   } catch (e) {
     threw = true;
+    console.debug("Callback threw an error as expected or gracefully failed", e);
   }
 
   console.assert(!threw, "Null callbacks should not throw");
@@ -194,14 +195,14 @@ function createMockStructure() {
 
 function getChapterIndex(structure, book, chapter) {
   if (!structure[book]) return -1;
-  return structure[book].findIndex((c) => c === parseInt(chapter));
+  return structure[book].indexOf(Number.parseInt(chapter, 10));
 }
 
 function isNextChapterAvailable(structure, book, chapter) {
   const chapters = structure[book];
   if (!chapters) return false;
   const idx = getChapterIndex(structure, book, chapter);
-  return typeof chapters[idx + 1] !== "undefined";
+  return chapters[idx + 1] !== undefined;
 }
 
 function isPrevChapterAvailable(structure, book, chapter) {
@@ -210,12 +211,12 @@ function isPrevChapterAvailable(structure, book, chapter) {
 }
 
 function getBookIndex(structure, book) {
-  return Object.keys(structure).findIndex((key) => key === book);
+  return Object.keys(structure).indexOf(book);
 }
 
 function isNextBookAvailable(structure, book) {
   const idx = getBookIndex(structure, book);
-  return typeof Object.keys(structure)[idx + 1] !== "undefined";
+  return Object.keys(structure)[idx + 1] !== undefined;
 }
 
 function isPrevBookAvailable(structure, book) {
@@ -316,7 +317,7 @@ function testCrossBookNavigation() {
   const books = Object.keys(struct);
 
   // At last chapter of gen (50) - prevChapter should work, nextChapter should go to next book
-  const genLastChapter = struct.gen[struct.gen.length - 1];
+  const genLastChapter = struct.gen.at(-1);
   console.assert(
     !isNextChapterAvailable(struct, "gen", genLastChapter),
     "gen last chapter should not have next chapter"
@@ -535,6 +536,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }

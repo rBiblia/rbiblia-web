@@ -41,10 +41,10 @@ const migrateOldNotes = () => {
     const storageLength = safeLocalStorageLength();
     for (let i = 0; i < storageLength; i++) {
         const key = safeLocalStorageKey(i);
-        if (key && key.startsWith("note_chapter_")) {
+        if (key?.startsWith("note_chapter_")) {
             legacyChapterNotes.push(key);
             hasLegacy = true;
-        } else if (key && key.startsWith("note_verse_")) {
+        } else if (key?.startsWith("note_verse_")) {
             legacyVerseNotes.push(key);
             hasLegacy = true;
         }
@@ -64,43 +64,8 @@ const migrateOldNotes = () => {
             safeLocalStorageGetItem("rbiblia_general_notes") || "[]"
         );
 
-        // Migrate verse notes → rbiblia_notes
-        for (const key of legacyVerseNotes) {
-            const text = safeLocalStorageGetItem(key);
-            if (!text || !text.trim()) continue;
-
-            // Parse key: "note_verse_{bookId}_{chapterId}_{verseId}"
-            const match = key.match(/^note_verse_([a-z0-9]+)_(\d+)_(\d+)$/);
-            if (!match) continue;
-
-            const [, bookId, chapterId, verseId] = match;
-            const unifiedKey = `${bookId}_${chapterId}_${verseId}`;
-
-            // Only migrate if not already overwritten in the unified system
-            if (!existingNotes[unifiedKey]) {
-                existingNotes[unifiedKey] = text.trim();
-            }
-        }
-
-        // Migrate chapter notes → general notes (with reference in text)
-        for (const key of legacyChapterNotes) {
-            const text = safeLocalStorageGetItem(key);
-            if (!text || !text.trim()) continue;
-
-            // Parse key: "note_chapter_{bookId}_{chapterId}"
-            const match = key.match(/^note_chapter_([a-z0-9]+)_(\d+)$/);
-            if (!match) continue;
-
-            const [, bookId, chapterId] = match;
-
-            // Create a general note with a reference
-            const generalNote = {
-                id: Date.now() + Math.random(),
-                text: `[${bookId} ${chapterId}] ${text.trim()}`,
-                createdAt: new Date().toISOString(),
-            };
-            existingGeneral.unshift(generalNote);
-        }
+        migrateVerseNotes(legacyVerseNotes, existingNotes);
+        migrateChapterNotes(legacyChapterNotes, existingGeneral);
 
         // Save migrated data
         safeLocalStorageSetItem("rbiblia_notes", JSON.stringify(existingNotes));
@@ -124,6 +89,48 @@ const migrateOldNotes = () => {
         console.error("[rBiblia] Notes migration failed:", err);
         // Set flag anyway to avoid repeated failures
         safeLocalStorageSetItem(MIGRATION_FLAG, "1");
+    }
+};
+
+const migrateVerseNotes = (legacyVerseNotes, existingNotes) => {
+    const verseRegex = /^note_verse_([a-z0-9]+)_(\d+)_(\d+)$/;
+    for (const key of legacyVerseNotes) {
+        const text = safeLocalStorageGetItem(key);
+        if (!text?.trim()) continue;
+
+        // Parse key: "note_verse_{bookId}_{chapterId}_{verseId}"
+        const match = verseRegex.exec(key);
+        if (!match) continue;
+
+        const [, bookId, chapterId, verseId] = match;
+        const unifiedKey = `${bookId}_${chapterId}_${verseId}`;
+
+        // Only migrate if not already overwritten in the unified system
+        if (!existingNotes[unifiedKey]) {
+            existingNotes[unifiedKey] = text.trim();
+        }
+    }
+};
+
+const migrateChapterNotes = (legacyChapterNotes, existingGeneral) => {
+    const chapterRegex = /^note_chapter_([a-z0-9]+)_(\d+)$/;
+    for (const key of legacyChapterNotes) {
+        const text = safeLocalStorageGetItem(key);
+        if (!text?.trim()) continue;
+
+        // Parse key: "note_chapter_{bookId}_{chapterId}"
+        const match = chapterRegex.exec(key);
+        if (!match) continue;
+
+        const [, bookId, chapterId] = match;
+
+        // Create a general note with a reference
+        const generalNote = {
+            id: Date.now() + Math.random(),
+            text: `[${bookId} ${chapterId}] ${text.trim()}`,
+            createdAt: new Date().toISOString(),
+        };
+        existingGeneral.unshift(generalNote);
     }
 };
 

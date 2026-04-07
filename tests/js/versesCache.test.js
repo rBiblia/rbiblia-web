@@ -195,6 +195,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }

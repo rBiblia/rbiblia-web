@@ -475,6 +475,10 @@
   color: inherit;
   border-radius: 4px;
   padding: 0.06rem 0.1rem;
+
+  @include dark-mode {
+    background: color-mix(in srgb, var(--dm-accent) 25%, transparent);
+  }
 }
 
 // Diff mode toggle (Loose / Strict) in SideMenu

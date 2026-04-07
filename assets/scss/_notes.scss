@@ -104,6 +104,10 @@
 
   @include dark-mode {
     color: var(--dm-text-primary);
+
+    svg {
+      color: var(--dm-accent);
+    }
   }
 }
 
@@ -238,6 +242,20 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  // Reset styles for inner native button wrapping the content
+  & > button.btn-link {
+    color: inherit !important;
+    font-family: inherit;
+    border-radius: inherit;
+    padding: 1rem !important;
+
+    &:hover, &:focus {
+      text-decoration: none;
+      color: inherit;
+      outline: none; // Rely on parent container visual hover via bg color
     }
   }
 }
@@ -874,8 +892,9 @@
     }
 
     &.active {
-      color: $rb-header-navigator-arrow;
-      background: rgba($rb-header-navigator-arrow, 0.08);
+      color: var(--dm-accent);
+      border-bottom-color: var(--dm-accent);
+      background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
     }
   }
 }
@@ -887,6 +906,10 @@
   background: $rb-header-navigator-arrow;
   display: inline-block;
   flex-shrink: 0;
+
+  @include dark-mode {
+    background: var(--dm-accent);
+  }
 }
 
 // ---------------------------------------------------------
@@ -925,8 +948,8 @@
   color: $rb-header-navigator-arrow;
 
   @include dark-mode {
-    background: rgba($rb-header-navigator-arrow, 0.25);
-    color: lighten($rb-header-navigator-arrow, 15%);
+    background: color-mix(in srgb, var(--dm-accent) 25%, transparent);
+    color: var(--dm-accent);
   }
 }
 
@@ -974,11 +997,12 @@
 
   @include dark-mode {
     border-color: var(--dm-border);
-    color: #aaa;
+    color: var(--dm-text-secondary);
 
     &:hover {
-      border-color: $rb-header-navigator-arrow;
-      color: $rb-header-navigator-arrow;
+      border-color: var(--dm-accent);
+      color: var(--dm-accent);
+      background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
     }
   }
 }
@@ -1045,8 +1069,8 @@
   color: $rb-header-navigator-arrow;
 
   @include dark-mode {
-    background: rgba($rb-header-navigator-arrow, 0.3);
-    color: lighten($rb-header-navigator-arrow, 15%);
+    background: color-mix(in srgb, var(--dm-accent) 25%, transparent);
+    color: var(--dm-accent);
   }
 }
 

@@ -110,7 +110,7 @@ function testNotePreviewThreshold() {
   // Two short notes together — NOT expandable (separator \n should not trigger)
   console.assert(
     isNoteExpandable("Amen", "notatka dla tłumaczenia") === false,
-    "Two short notes combined should NOT be expandable (separator \\n fix)"
+    String.raw`Two short notes combined should NOT be expandable (separator \n fix)`
   );
 
   // Short global + long translation — expandable (translation is long)
@@ -204,6 +204,7 @@ function testVerseActionHandlers() {
     openComparison("1", null);
   } catch (e) {
     threw = true;
+    console.debug("Callback threw an error as expected or gracefully failed", e);
   }
   console.assert(!threw, "Null callbacks should not throw");
 
@@ -248,6 +249,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }

@@ -23,28 +23,10 @@ export async function safeJsonParse(response) {
     try {
         parsedJson = JSON.parse(text);
     } catch (parseError) {
-        // Try to extract valid JSON from the beginning of the response
-        // This handles cases where PHP appends warnings/notices after JSON output
-        const jsonMatch = text.match(/^(\{[\s\S]*\})\s*[^}\s]/);
-        if (jsonMatch) {
-            try {
-                parsedJson = JSON.parse(jsonMatch[1]);
-            } catch {
-                // Fall through to error
-            }
-        }
+        // Log the initial error and try fallbacks
+        console.warn("[safeJsonParse] Standard JSON parse failed, trying fallbacks", parseError);
 
-        if (!parsedJson) {
-            // Try matching a complete JSON object at the start
-            const simpleMatch = text.match(/^(\{[^]*?\})(?:\s*<|$)/);
-            if (simpleMatch) {
-                try {
-                    parsedJson = JSON.parse(simpleMatch[1]);
-                } catch {
-                    // Fall through to error
-                }
-            }
-        }
+        parsedJson = tryParseEmbeddedJson(text) || tryParseSimpleJson(text);
 
         if (!parsedJson && isOk) {
             throw new Error("Invalid server response");
@@ -52,13 +34,46 @@ export async function safeJsonParse(response) {
     }
 
     if (!isOk) {
-        if (parsedJson && parsedJson.message) {
+        if (parsedJson?.message) {
             throw new Error(parsedJson.message);
         }
         throw new Error(`Server error (${response.status})`);
     }
 
     return parsedJson;
+}
+
+/**
+ * Tries to extract valid JSON from the beginning of the response
+ * handling cases where PHP appends warnings/notices after JSON output.
+ */
+function tryParseEmbeddedJson(text) {
+    const jsonRegex = /^(\{[\s\S]*\})\s*[^}\s]/;
+    const jsonMatch = jsonRegex.exec(text);
+    if (jsonMatch) {
+        try {
+            return JSON.parse(jsonMatch[1]);
+        } catch (e) {
+            console.debug("[safeJsonParse] Embedded JSON parse failed", e);
+        }
+    }
+    return null;
+}
+
+/**
+ * Tries matching a complete JSON object at the start.
+ */
+function tryParseSimpleJson(text) {
+    const simpleRegex = /^(\{[^]*?\})(?:\s*<|$)/;
+    const simpleMatch = simpleRegex.exec(text);
+    if (simpleMatch) {
+        try {
+            return JSON.parse(simpleMatch[1]);
+        } catch (e) {
+            console.debug("[safeJsonParse] Simple JSON parse failed", e);
+        }
+    }
+    return null;
 }
 
 /**

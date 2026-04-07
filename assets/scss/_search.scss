@@ -95,6 +95,10 @@
 
   @include dark-mode {
     color: var(--dm-text-primary);
+
+    svg {
+      color: var(--dm-accent);
+    }
   }
 }
 
@@ -231,6 +235,12 @@
   }
 }
 
+.search-input-wrapper:focus-within .search-input-icon {
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
+}
+
 .search-clear-btn {
   position: absolute;
   right: 0.5rem;
@@ -261,7 +271,7 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.1);
-      color: #fff;
+      color: var(--dm-accent);
     }
   }
 }
@@ -428,6 +438,14 @@
   &:hover {
     background: rgba($rb-header-navigator-arrow, 0.1);
   }
+
+  @include dark-mode {
+    color: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 15%, transparent);
+    }
+  }
 }
 
 .search-history-list {
@@ -457,7 +475,7 @@
     color: #fff;
 
     &:hover {
-      background: rgba($rb-header-navigator-arrow, 0.25);
+      background: color-mix(in srgb, var(--dm-accent) 25%, transparent);
       color: #fff;
     }
   }
@@ -513,6 +531,11 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
+
+  @include dark-mode {
+    border-color: color-mix(in srgb, var(--dm-accent) 20%, transparent);
+    border-top-color: var(--dm-accent);
+  }
 }
 
 @keyframes spin {
@@ -578,7 +601,7 @@
     background: rgba(255, 255, 255, 0.05);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: color-mix(in srgb, var(--dm-accent) 12%, transparent);
     }
   }
 }
@@ -679,6 +702,10 @@
 
     @include dark-mode {
       color: #bbb;
+
+      &::before {
+        background: var(--dm-accent);
+      }
     }
   }
 }

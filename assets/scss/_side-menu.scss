@@ -523,6 +523,17 @@
     background: $rb-header-navigator-arrow;
     color: white;
   }
+
+  @include dark-mode {
+    background: color-mix(in srgb, var(--dm-accent) 10%, transparent);
+    border-color: var(--dm-accent);
+    color: var(--dm-accent);
+
+    &:hover {
+      background: var(--dm-accent);
+      color: white;
+    }
+  }
 }
 
 .backup-import {
@@ -539,11 +550,12 @@
   @include dark-mode {
     background: var(--dm-bg-elevated);
     border-color: var(--dm-border);
-    color: #ccc;
+    color: var(--dm-text-secondary);
 
     &:hover {
-      border-color: $rb-header-navigator-arrow;
-      color: $rb-header-navigator-arrow;
+      border-color: var(--dm-accent);
+      color: var(--dm-accent);
+      background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
     }
   }
 }
@@ -564,11 +576,12 @@
   @include dark-mode {
     background: var(--dm-bg-elevated);
     border-color: var(--dm-border);
-    color: #ccc;
+    color: var(--dm-text-secondary);
 
     &:hover {
-      border-color: $rb-header-navigator-arrow;
-      color: $rb-header-navigator-arrow;
+      border-color: var(--dm-accent);
+      color: var(--dm-accent);
+      background: color-mix(in srgb, var(--dm-accent) 8%, transparent);
     }
   }
 }
@@ -752,16 +765,38 @@
   }
 }
 
-// ---------------------------------------------------------
-// Bottom Nav Arrow Buttons
-// ---------------------------------------------------------
+// Info links (SideMenu info tab)
+.info-link {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #e0e0e0 !important;
+  background: white !important;
+  color: #555 !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
 
-.bottom-nav-arrow {
-  min-width: 50px;
-  padding: 0.5rem;
+  &:hover {
+    border-color: $rb-header-navigator-arrow !important;
+    background: rgba($rb-header-navigator-arrow, 0.05) !important;
+    color: $rb-header-navigator-arrow !important;
+    transform: translateX(4px);
+  }
 
-  .bottom-nav-icon {
-    width: 28px;
-    height: 28px;
+  @include dark-mode {
+    background: color-mix(in srgb, var(--dm-accent) 8%, transparent) !important;
+    border-color: color-mix(in srgb, var(--dm-accent) 30%, transparent) !important;
+    color: var(--dm-text-primary) !important;
+
+    &:hover {
+      background: var(--dm-accent) !important;
+      border-color: var(--dm-accent) !important;
+      color: white !important;
+    }
   }
 }
