@@ -24,7 +24,10 @@ export async function safeJsonParse(response) {
         parsedJson = JSON.parse(text);
     } catch (parseError) {
         // Log the initial error and try fallbacks
-        console.warn("[safeJsonParse] Standard JSON parse failed, trying fallbacks", parseError);
+        console.warn(
+            "[safeJsonParse] Standard JSON parse failed, trying fallbacks",
+            parseError
+        );
 
         parsedJson = tryParseEmbeddedJson(text) || tryParseSimpleJson(text);
 
