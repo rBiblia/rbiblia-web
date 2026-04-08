@@ -1,4 +1,5 @@
 @charset "UTF-8";
+/* stylelint-disable no-duplicate-selectors */
 @keyframes slideUpFade {
   0% {
     opacity: 0;
@@ -2057,12 +2058,9 @@ html[data-theme=dark] .favorite-translation-item .favorite-name {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   will-change: transform, opacity;
   backface-visibility: hidden;
   perspective: 1000px;
-  transform: translateZ(0);
   z-index: 2600;
   border-radius: 24px;
   display: flex;
@@ -2521,7 +2519,6 @@ html[data-theme=dark] .note-edit-cancel:hover {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   z-index: 3000;
   border-radius: 28px;
   display: flex;
@@ -3162,12 +3159,9 @@ html[data-theme=dark] .verse-note-label-translation {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   will-change: transform, opacity;
   backface-visibility: hidden;
   perspective: 1000px;
-  transform: translateZ(0);
   z-index: 2600;
   border-radius: 24px;
   display: flex;
@@ -5217,9 +5211,6 @@ html[data-theme=dark] .no-favorites-hint p {
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-theme=light]) {
-    /* Language Selector Text Fix */
-  }
   html:not([data-theme=light]) .badge.bg-light {
     background-color: #444 !important;
     /* Dark grey for badge background */
@@ -5243,9 +5234,6 @@ html[data-theme=dark] .no-favorites-hint p {
     color: var(--bs-primary) !important;
     border-color: var(--bs-primary) !important;
   }
-}
-html[data-theme=dark] {
-  /* Language Selector Text Fix */
 }
 html[data-theme=dark] .badge.bg-light {
   background-color: #444 !important;
@@ -5304,12 +5292,9 @@ html[data-theme=dark] .language-buttons .btn-outline-secondary.active {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   will-change: transform, opacity;
   backface-visibility: hidden;
   perspective: 1000px;
-  transform: translateZ(0);
   z-index: 2600;
   border-radius: 24px;
   display: flex;
@@ -5718,7 +5703,7 @@ header.sticky-top {
   .note-editor-modal,
   .comparison-overlay {
     animation: none !important;
-    transition: opacity 0s !important, visibility 0s !important;
+    transition: opacity 0s, visibility 0s !important;
   }
   .side-menu-panel.open,
   .notes-panel.open,

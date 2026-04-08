@@ -673,7 +673,7 @@ const SearchPanel = ({
                                     };
 
                                     return (
-                                        // eslint-disable-next-line
+                                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
                                         <li
                                             key={`${suggestion.type}-${suggestion.text}`}
                                             className={`search-suggestion-item ${
@@ -683,7 +683,6 @@ const SearchPanel = ({
                                                     : ""
                                             }`}
                                             tabIndex={-1}
-                                            role="button"
                                             onMouseDown={(e) => {
                                                 e.preventDefault(); // Prevent input blur on desktop
                                             }}

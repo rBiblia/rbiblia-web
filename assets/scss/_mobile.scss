@@ -251,6 +251,11 @@ header.sticky-top {
   border-top-color: $rb-header-navigator-arrow;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+
+  @include dark-mode {
+    border-color: color-mix(in srgb, var(--dm-accent) 20%, transparent);
+    border-top-color: var(--dm-accent);
+  }
 }
 
 .pull-indicator-arrow {
@@ -258,6 +263,10 @@ header.sticky-top {
   height: 24px;
   color: $rb-header-navigator-arrow;
   transition: transform 0.2s ease;
+
+  @include dark-mode {
+    color: var(--dm-accent);
+  }
 
   &.ready {
     transform: rotate(180deg);
@@ -328,6 +337,11 @@ header.sticky-top {
     border-top-color: $rb-header-navigator-arrow;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+
+    @include dark-mode {
+      border-color: color-mix(in srgb, var(--dm-accent) 20%, transparent);
+      border-top-color: var(--dm-accent);
+    }
   }
 }
 

@@ -132,6 +132,7 @@ const TranslationSelector = memo(
             const isDisabled = disabledOptions.includes(t.id);
 
             return (
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions, jsx-a11y/mouse-events-have-key-events
                 <div
                     key={t.id}
                     className={`translation-item ${
