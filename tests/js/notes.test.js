@@ -109,15 +109,17 @@ function testLoadNotesSaved() {
   const testNotes = { gen_1_1: "Test note" };
   mockStorage.setItem("rbiblia_notes", JSON.stringify(testNotes));
 
-  const loadNotes = () => {
+  const fetchNotes = () => {
+    const rawData = mockStorage.getItem("rbiblia_notes");
+    if (!rawData) return {};
     try {
-      return JSON.parse(mockStorage.getItem("rbiblia_notes") || "{}");
+      return JSON.parse(rawData);
     } catch {
       return {};
     }
   };
 
-  const loaded = loadNotes();
+  const loaded = fetchNotes();
   console.assert(
     loaded["gen_1_1"] === "Test note",
     "loadNotes should return saved notes"
@@ -281,13 +283,15 @@ function testXmlEscaping() {
 
 // Test: XML export generates valid structure
 function testXmlExportStructure() {
-  const escapeXml = (str) =>
-    str
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&apos;");
+  const escapeXml = (textData) => {
+    let result = String(textData);
+    result = result.replaceAll("&", "&amp;");
+    result = result.replaceAll("<", "&lt;");
+    result = result.replaceAll(">", "&gt;");
+    result = result.replaceAll('"', "&quot;");
+    result = result.replaceAll("'", "&apos;");
+    return result;
+  };
 
   const globalNotes = { gen_4_7: "Global note" };
   const translationNotes = {
@@ -456,6 +460,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof globalThis.window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }

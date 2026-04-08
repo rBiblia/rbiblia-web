@@ -498,6 +498,6 @@ if (typeof module !== "undefined" && module.exports) {
 }
 
 // Auto-run in browser
-if (typeof globalThis.window !== "undefined") {
+if (globalThis.window !== undefined) {
   runAllTests();
 }
