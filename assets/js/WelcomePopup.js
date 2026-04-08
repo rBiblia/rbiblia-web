@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import useFocusTrap from "./hooks/useFocusTrap";
 import {
     safeLocalStorageGetItem,
@@ -42,12 +43,12 @@ const WelcomePopup = ({ isOpen, onClose }) => {
 
     return (
         <>
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-static-element-interactions */}
             <div className="welcome-popup-overlay" onClick={onClose} />
-            <div
+            <dialog
                 ref={popupRef}
                 className="welcome-popup-modal"
-                role="dialog"
-                aria-modal="true"
+                open
             >
                 <h3 className="welcome-popup-title">Witamy w rBiblia Web</h3>
                 <p className="welcome-popup-text">
@@ -87,9 +88,14 @@ const WelcomePopup = ({ isOpen, onClose }) => {
                         Zamknij
                     </button>
                 </div>
-            </div>
+            </dialog>
         </>
     );
+};
+
+WelcomePopup.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
 
 export { isWelcomePopupDisabled };

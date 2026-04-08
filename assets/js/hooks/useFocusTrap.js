@@ -59,15 +59,13 @@ const useFocusTrap = (isOpen, onClose) => {
                         e.preventDefault();
                         lastElement?.focus();
                     }
-                } else {
+                } else if (
+                    document.activeElement === lastElement ||
+                    !container.contains(document.activeElement)
+                ) {
                     // Tab: go forwards
-                    if (
-                        document.activeElement === lastElement ||
-                        !container.contains(document.activeElement)
-                    ) {
-                        e.preventDefault();
-                        firstElement?.focus();
-                    }
+                    e.preventDefault();
+                    firstElement?.focus();
                 }
             }
         };
@@ -90,10 +88,7 @@ const useFocusTrap = (isOpen, onClose) => {
             document.removeEventListener("keydown", handleKeyDown);
 
             // Restore focus to the previously focused element
-            if (
-                previousActiveElement.current &&
-                previousActiveElement.current.focus
-            ) {
+            if (previousActiveElement.current?.focus) {
                 // Avoid browser auto-scrolling the page when restoring focus.
                 // This can fight verse scrollIntoView after selecting a search result,
                 // especially in Chromium-based browsers (e.g. Brave).

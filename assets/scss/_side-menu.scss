@@ -38,6 +38,14 @@
     transform: translateY(-50%) scale(0.95);
   }
 
+  @include dark-mode {
+    background: var(--dm-accent);
+
+    &:hover {
+      background: color-mix(in srgb, var(--dm-accent) 92%, black);
+    }
+  }
+
   // Even lower on mobile
   @media (max-width: 991.98px) {
     top: auto;
