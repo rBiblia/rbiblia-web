@@ -763,7 +763,7 @@ const DisplaySettings = ({
                                         })}
                                     </a>
                                     <a
-                                        href="https://api.toborek.info/download/rbib261.exe"
+                                        href="https://rbiblia.toborek.info/download"
                                         className="info-link stagger-4"
                                     >
                                         <Icon name="download" size={18} />
