@@ -8,7 +8,7 @@ import {
 } from "./safeStorage";
 
 const WELCOME_POPUP_DISABLED_KEY = "rbiblia_disable_welcome_popup";
-const DESKTOP_DOWNLOAD_URL = "https://api.toborek.info/download/rbib261.exe";
+const DESKTOP_DOWNLOAD_URL = "https://rbiblia.toborek.info/download";
 
 const isWelcomePopupDisabled = () =>
     safeLocalStorageGetItem(WELCOME_POPUP_DISABLED_KEY) === "1";
