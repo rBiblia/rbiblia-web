@@ -11,7 +11,7 @@ class LandingPageResponse
         if (isset($settings['stats_class']) && file_exists($settings['stats_class'])) {
             require_once $settings['stats_class'];
 
-            $matomo = \matomo::getCode(26);
+            $matomo = \matomo::getCode(37);
         }
 
         $cssTimestamp = filemtime(APP_PATH_ASSETS.'/app.css');
