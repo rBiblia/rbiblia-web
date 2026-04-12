@@ -6,7 +6,6 @@ import React, {
     useState,
     Suspense,
 } from "react";
-import { getSigla } from "./bookSigla";
 import Navigator from "./Navigator";
 import Reader from "./Reader";
 import { injectIntl } from "react-intl";
@@ -39,6 +38,7 @@ const ComparisonGrid = React.lazy(() => import("./ComparisonGrid"));
 const SearchPanel = React.lazy(() => import("./SearchPanel"));
 const ChapterComparison = React.lazy(() => import("./ChapterComparison"));
 const ChangelogModal = React.lazy(() => import("./ChangelogModal"));
+const AboutModal = React.lazy(() => import("./AboutModal"));
 
 const FullscreenOverlayFallback = () => (
     <div className="selection-overlay" aria-hidden="true" />
@@ -62,6 +62,7 @@ const Bible = ({ intl, setLocale }) => {
     const [isNotesOpen, setIsNotesOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+    const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [isWelcomePopupOpen, setIsWelcomePopupOpen] = useState(false);
     const [isChapterCompOpen, setIsChapterCompOpen] = useState(false);
 
@@ -532,6 +533,7 @@ const Bible = ({ intl, setLocale }) => {
         isNotesOpen ||
         isSearchOpen ||
         isChangelogOpen ||
+        isAboutOpen ||
         isWelcomePopupOpen ||
         !!editingNoteVerse;
     useSwipeNavigation(
@@ -568,6 +570,7 @@ const Bible = ({ intl, setLocale }) => {
     const handleOpenSettings = useCallback(() => setIsSideMenuOpen(true), []);
 
     const handleOpenChangelog = useCallback(() => setIsChangelogOpen(true), []);
+    const handleOpenAbout = useCallback(() => setIsAboutOpen(true), []);
 
     const handleCloseSelection = useCallback(
         () => setIsSelectionOpen(false),
@@ -584,6 +587,7 @@ const Bible = ({ intl, setLocale }) => {
         () => setIsChangelogOpen(false),
         []
     );
+    const handleCloseAbout = useCallback(() => setIsAboutOpen(false), []);
     const handleCloseWelcomePopup = useCallback(
         () => setIsWelcomePopupOpen(false),
         []
@@ -637,8 +641,8 @@ const Bible = ({ intl, setLocale }) => {
     const isPrevAvailable = isPrevChapterAvailable() || isPrevBookAvailable();
     const isNextAvailable = isNextChapterAvailable() || isNextBookAvailable();
     const currentBookSigla = useMemo(
-        () => getSigla(selectedBook, intl.locale),
-        [selectedBook, intl.locale]
+        () => books[selectedBook]?.sigla || selectedBook?.toUpperCase() || "",
+        [selectedBook, books]
     );
 
     // Stable callbacks for Reader → Verse (prevents memo breakage)
@@ -749,7 +753,10 @@ const Bible = ({ intl, setLocale }) => {
                         verseId={comparedVerse}
                         bookId={selectedBook}
                         bookName={books[selectedBook]?.name}
-                        bookSigil={getSigla(selectedBook, intl.locale)}
+                        bookSigil={
+                            books[selectedBook]?.sigla ||
+                            selectedBook?.toUpperCase()
+                        }
                         chapterId={selectedChapter}
                         translations={translations}
                         currentTranslation={selectedTranslation}
@@ -845,6 +852,7 @@ const Bible = ({ intl, setLocale }) => {
                     setZenMode={handleSetZenMode}
                     onClose={handleCloseSideMenu}
                     onOpenChangelog={handleOpenChangelog}
+                    onOpenAbout={handleOpenAbout}
                 />
             </SideMenu>
 
@@ -867,6 +875,12 @@ const Bible = ({ intl, setLocale }) => {
                 <ChangelogModal
                     isOpen={isChangelogOpen}
                     onClose={handleCloseChangelog}
+                />
+            </Suspense>
+            <Suspense fallback={null}>
+                <AboutModal
+                    isOpen={isAboutOpen}
+                    onClose={handleCloseAbout}
                 />
             </Suspense>
             <WelcomePopup
