@@ -6,6 +6,7 @@ const testFiles = [
   "./js/notes.test.js",
   "./js/versesCache.test.js",
   "./js/navigation.test.js",
+  "./js/sigla.test.js",
 ];
 
 let allPassed = true;

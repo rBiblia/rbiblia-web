@@ -43,7 +43,7 @@ const WelcomePopup = ({ isOpen, onClose }) => {
 
     return (
         <>
-            {/* eslint-disable-next-line */}
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div className="welcome-popup-overlay" onClick={onClose} />
             <dialog ref={popupRef} className="welcome-popup-modal" open>
                 <h3 className="welcome-popup-title">Witamy w rBiblia Web</h3>

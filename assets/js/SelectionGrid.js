@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { getSigla } from "./bookSigla";
 import PropTypes from "prop-types";
 
 const SelectionGrid = ({
@@ -36,7 +35,7 @@ const SelectionGrid = ({
      */
     const getBookDisplayName = (bookId) => {
         if (isMobile) {
-            return getSigla(bookId, locale);
+            return books[bookId]?.sigla || bookId.toUpperCase();
         }
         return books[bookId]?.name || bookId;
     };
@@ -158,6 +157,7 @@ SelectionGrid.propTypes = {
     books: PropTypes.objectOf(
         PropTypes.shape({
             name: PropTypes.string.isRequired,
+            sigla: PropTypes.string,
             group: PropTypes.string,
         })
     ).isRequired,

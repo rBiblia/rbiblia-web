@@ -1,0 +1,42 @@
+rBiblia Web
+===========
+
+Webowa wersja aplikacji rBiblia — darmowego programu do czytania Pisma Świętego.
+
+Strona domowa: https://rbiblia.toborek.info/
+Repozytorium:  https://github.com/rBiblia/rbiblia-web
+
+Licencja: GPL-3.0
+
+---------------------------------------------------------------------
+Autorzy / Contributors
+---------------------------------------------------------------------
+
+Projekt oryginalnej aplikacji rBiblia:
+  Rafał Toborek
+
+Wersja webowa:
+  Współtwórcy projektu (GitHub Contributors)
+
+---------------------------------------------------------------------
+Technologie
+---------------------------------------------------------------------
+
+  • PHP / Symfony
+  • React (JSX)
+  • SCSS / Bootstrap
+  • Webpack Encore
+
+---------------------------------------------------------------------
+Dane Pisma Świętego
+---------------------------------------------------------------------
+
+Aplikacja korzysta z treści Pisma Świętego udostępnianych przez
+autorów poszczególnych przekładów. Szczegóły licencji każdego
+przekładu dostępne są na stronie rbiblia.toborek.info.
+
+---------------------------------------------------------------------
+Kontakt / Zgłoś błąd
+---------------------------------------------------------------------
+
+  https://kontakt.toborek.info

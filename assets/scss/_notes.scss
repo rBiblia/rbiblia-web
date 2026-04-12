@@ -529,10 +529,12 @@
 }
 
 .note-editor-textarea {
-  width: 100%;
+  width: calc(100% - 2.5rem);
+  margin: 1rem 1.25rem;
   box-sizing: border-box;
-  padding: 1rem 1.25rem;
-  border: none;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 12px;
   font-size: 1rem;
   font-family: inherit;
   resize: none;
@@ -540,11 +542,17 @@
 
   &:focus {
     outline: none;
+    border-color: $rb-header-navigator-arrow;
   }
 
   @include dark-mode {
     background: var(--dm-bg-elevated);
     color: var(--dm-text-primary);
+    border-color: var(--dm-border);
+
+    &:focus {
+      border-color: var(--dm-accent);
+    }
   }
 }
 

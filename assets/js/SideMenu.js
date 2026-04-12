@@ -140,6 +140,7 @@ const DisplaySettings = ({
     setZenMode,
     onClose,
     onOpenChangelog,
+    onOpenAbout,
 }) => {
     const { formatMessage, locale } = useIntl();
 
@@ -729,6 +730,19 @@ const DisplaySettings = ({
                                     {translations.length}
                                 </span>
 
+                                {onOpenAbout && (
+                                    <button
+                                        className="backup-btn backup-changelog mt-2"
+                                        onClick={onOpenAbout}
+                                        style={{ width: "100%" }}
+                                    >
+                                        <Icon name="help-circle" />
+                                        {formatMessage({
+                                            id: "aboutLink",
+                                            defaultMessage: "O programie",
+                                        })}
+                                    </button>
+                                )}
                                 {onOpenChangelog && (
                                     <button
                                         className="backup-btn backup-changelog mt-2"
@@ -838,6 +852,7 @@ DisplaySettings.propTypes = {
     setZenMode: PropTypes.func,
     onClose: PropTypes.func,
     onOpenChangelog: PropTypes.func,
+    onOpenAbout: PropTypes.func,
 };
 
 export {
