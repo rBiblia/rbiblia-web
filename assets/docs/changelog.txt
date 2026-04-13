@@ -1,7 +1,7 @@
 UWAGA! Ta wersja nie jest już rozwijana i z czasem zostanie wyłączona. Proszę o korzystanie z nowej wersji dostępnej pod adresem https://rbiblia.app.
 
 Strona domowa projektu:
-https://web.rbiblia.toborek.info
+https://rbiblia.app
 
 Kod źródłowy aplikacji na GitHubie:
 https://github.com/rBiblia/rbiblia-web

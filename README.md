@@ -8,7 +8,7 @@
 ![js-tests](https://github.com/rbiblia/rbiblia-web/actions/workflows/js-tests.yaml/badge.svg)
 ![sonarcloud](https://github.com/rbiblia/rbiblia-web/actions/workflows/sonarcloud.yaml/badge.svg)
 
-Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://web.rbiblia.toborek.info](https://web.rbiblia.toborek.info).
+Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://rbiblia.app](https://rbiblia.app).
 
 Check also standalone and more powerful desktop version of this application at [https://rbiblia.toborek.info](https://rbiblia.toborek.info/en-US/). Binary version is available in different languages (English, Polish and Russian) and works on Windows.
 
