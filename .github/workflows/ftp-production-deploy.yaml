@@ -1,13 +1,16 @@
-name: ftp staging deploy
+name: ftp production deploy
 
 on:
+  release:
+    types:
+      - published
   push:
-    branches:
-      - dev
+    tags:
+      - '*'
 
 jobs:
   ftp-deploy:
-    name: Deploy to FTP Staging Server running on ${{ matrix.operating-system }} / PHP v${{ matrix.php-versions }}
+    name: Deploy to FTP Production Server running on ${{ matrix.operating-system }} / PHP v${{ matrix.php-versions }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -51,9 +54,9 @@ jobs:
 
       - name: Deploy via FTPS with lftp
         env:
-          FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+          FTP_SERVER: ${{ secrets.PROD_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.PROD_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.PROD_FTP_PASSWORD }}
         run: |
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER" <<EOF
           set ftp:passive-mode on
