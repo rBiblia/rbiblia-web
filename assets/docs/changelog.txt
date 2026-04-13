@@ -1,5 +1,5 @@
 Strona domowa projektu:
-https://web.rbiblia.toborek.info
+https://rbiblia.app
 
 Kod źródłowy aplikacji na GitHubie:
 https://github.com/rBiblia/rbiblia-web
