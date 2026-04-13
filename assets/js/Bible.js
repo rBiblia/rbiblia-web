@@ -878,10 +878,7 @@ const Bible = ({ intl, setLocale }) => {
                 />
             </Suspense>
             <Suspense fallback={null}>
-                <AboutModal
-                    isOpen={isAboutOpen}
-                    onClose={handleCloseAbout}
-                />
+                <AboutModal isOpen={isAboutOpen} onClose={handleCloseAbout} />
             </Suspense>
             <WelcomePopup
                 isOpen={isWelcomePopupOpen}
