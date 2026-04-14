@@ -20,10 +20,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends Command
 {
-    private const TABLE_TEMP = 'temp';
-    private const ENTRY_TEMP_ID = '_%s';
+    private const string TABLE_TEMP = 'temp';
+    private const string ENTRY_TEMP_ID = '_%s';
 
-    protected static $defaultName = 'import';
+    protected static string $defaultName = 'import';
 
     private OutputInterface $output;
 
@@ -49,7 +49,7 @@ class ImportCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->output = $output;
 
@@ -133,7 +133,7 @@ class ImportCommand extends Command
 
         $index = 0;
         foreach ($filteredFileList as $file) {
-            $this->output->writeln(sprintf('Progress: %d/%d', ++$index, \count($filteredFileList)));
+            $this->output->writeln(\sprintf('Progress: %d/%d', ++$index, \count($filteredFileList)));
 
             if (Command::SUCCESS !== $this->decompressFile($file)) {
                 return Command::FAILURE;
@@ -175,7 +175,7 @@ class ImportCommand extends Command
         $filePath = $this->settings['bibx_folder'].'/'.$file;
 
         if (!file_exists($filePath)) {
-            return $this->displayError(sprintf('Input file `%s` not exists', $filePath));
+            return $this->displayError(\sprintf('Input file `%s` not exists', $filePath));
         }
 
         $content = '';
@@ -184,7 +184,7 @@ class ImportCommand extends Command
             $zh = gzopen($filePath, 'r');
 
             if ($zh === false) {
-                return $this->displayError(sprintf('Error occurred while reading input file `%s`', $filePath));
+                return $this->displayError(\sprintf('Error occurred while reading input file `%s`', $filePath));
             }
 
             while ($line = gzgets($zh)) {
@@ -193,17 +193,17 @@ class ImportCommand extends Command
 
             gzclose($zh);
         } catch (Exception $e) {
-            return $this->displayError(sprintf('Error occurred while reading XML file: %s', $e->getMessage()));
+            return $this->displayError(\sprintf('Error occurred while reading XML file: %s', $e->getMessage()));
         }
 
         if ($content === '') {
-            return $this->displayError(sprintf('No translation data found in: %s', $filePath));
+            return $this->displayError(\sprintf('No translation data found in: %s', $filePath));
         }
 
         $xml = simplexml_load_string($content);
 
         if ($xml === false) {
-            return $this->displayError(sprintf('Error occurred while loading XML file: %s', $filePath));
+            return $this->displayError(\sprintf('Error occurred while loading XML file: %s', $filePath));
         }
 
         $this->xml = $xml;
@@ -223,7 +223,7 @@ class ImportCommand extends Command
             $this->xml->about->language->__toString(),
             $this->xml->about->description->__toString(),
             '1' === $this->xml->about->authorised->__toString(),
-            isset($this->xml->about->date) ? $this->xml->about->date->__toString() : ''
+            property_exists($this->xml->about, 'date') && $this->xml->about->date !== null ? $this->xml->about->date->__toString() : ''
         );
 
         $body = new Body();
@@ -252,7 +252,7 @@ class ImportCommand extends Command
     private function loadTranslationIntoDatabase(Translation $translation): int
     {
         // check if we really need to update translation
-        $statement = $this->db()->executeQuery(sprintf('SELECT id FROM %s WHERE id=? AND hash=?', TranslationController::TABLE_TRANSLATION), [
+        $statement = $this->db()->executeQuery(\sprintf('SELECT id FROM %s WHERE id=? AND hash=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
             $translation->getAbout()->getHash(),
         ], [
@@ -262,12 +262,12 @@ class ImportCommand extends Command
         $translationId = $statement->fetchOne();
 
         if ($translationId === $translation->getAbout()->getId()) {
-            $this->output->writeln(sprintf('Skipping: <info>%s</info>', $translation->getAbout()->getFile()));
+            $this->output->writeln(\sprintf('Skipping: <info>%s</info>', $translation->getAbout()->getFile()));
 
             return Command::SUCCESS;
         }
 
-        $this->output->writeln(sprintf('Importing: <info>%s</info>', $translation->getAbout()->getFile()));
+        $this->output->writeln(\sprintf('Importing: <info>%s</info>', $translation->getAbout()->getFile()));
 
         // delete existing temporary translation data table
         $this->dropTemporaryTable();
@@ -315,13 +315,13 @@ class ImportCommand extends Command
             throw $e;
         }
 
-        $translationTable = sprintf(TranslationController::TABLE_DATA, $translation->getAbout()->getId());
+        $translationTable = \sprintf(TranslationController::TABLE_DATA, $translation->getAbout()->getId());
 
         // remove old translation data table
-        $this->db()->executeQuery(sprintf('DROP TABLE IF EXISTS %s', $translationTable));
+        $this->db()->executeQuery(\sprintf('DROP TABLE IF EXISTS %s', $translationTable));
 
         // rename temporary translation data table
-        $this->db()->executeQuery(sprintf('ALTER TABLE %s RENAME %s', self::TABLE_TEMP, $translationTable));
+        $this->db()->executeQuery(\sprintf('ALTER TABLE %s RENAME %s', self::TABLE_TEMP, $translationTable));
 
         // remove temporary translation details if exists
         $this->removeTemporaryDetails($translation);
@@ -337,7 +337,7 @@ class ImportCommand extends Command
                 'date' => $translation->getAbout()->getDate(),
                 'hash' => $translation->getAbout()->getHash(),
                 'file' => $translation->getAbout()->getFile(),
-                'id' => sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
+                'id' => \sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
             ]);
         } catch (Exception $e) {
             // something went wrong, remove temporary translation details
@@ -347,16 +347,16 @@ class ImportCommand extends Command
         }
 
         // remove existing translation details
-        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
+        $this->db()->executeQuery(\sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
         ], [
             ParameterType::STRING,
         ]);
 
         // rename translation details
-        $this->db()->executeQuery(sprintf('UPDATE %s SET id=? WHERE id=?', TranslationController::TABLE_TRANSLATION), [
+        $this->db()->executeQuery(\sprintf('UPDATE %s SET id=? WHERE id=?', TranslationController::TABLE_TRANSLATION), [
             $translation->getAbout()->getId(),
-            sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
+            \sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
         ], [
             ParameterType::STRING,
             ParameterType::STRING,
@@ -367,8 +367,8 @@ class ImportCommand extends Command
 
     private function removeTemporaryDetails(Translation $translation): void
     {
-        $this->db()->executeQuery(sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
-            sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
+        $this->db()->executeQuery(\sprintf('DELETE FROM %s WHERE id=?', TranslationController::TABLE_TRANSLATION), [
+            \sprintf(self::ENTRY_TEMP_ID, $translation->getAbout()->getId()),
         ], [
             ParameterType::STRING,
         ]);
@@ -376,7 +376,7 @@ class ImportCommand extends Command
 
     private function dropTemporaryTable(): void
     {
-        $this->db()->executeQuery(sprintf('DROP TABLE IF EXISTS %s', self::TABLE_TEMP));
+        $this->db()->executeQuery(\sprintf('DROP TABLE IF EXISTS %s', self::TABLE_TEMP));
     }
 
     private function db(): Connection
@@ -400,7 +400,7 @@ class ImportCommand extends Command
     {
         $this->output->writeln([
             '',
-            sprintf('<error>Error:</error> %s', $message),
+            \sprintf('<error>Error:</error> %s', $message),
         ]);
 
         return Command::FAILURE;

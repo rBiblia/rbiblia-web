@@ -9,7 +9,7 @@ class ConsoleApp
 {
     private readonly Application $application;
 
-    public function __construct(readonly array $settings = [])
+    public function __construct(public readonly array $settings = [])
     {
         $this->application = new Application();
 

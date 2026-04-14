@@ -19,7 +19,6 @@ class LanguageProviderTest extends TestCase
     {
         $results = $this->languageProvider->getAliases();
 
-        $this->assertIsArray($results);
         $this->assertArrayHasKey('eph', $results);
         $this->assertArrayHasKey('gal', $results);
         $this->assertArrayHasKey('luk', $results);

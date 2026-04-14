@@ -8,7 +8,7 @@ class PageNotFoundResponse
 {
     use ResponseTrait;
 
-    private const ERROR_MESSAGE = 'Not found';
+    private const string ERROR_MESSAGE = 'Not found';
 
     public function render(): void
     {

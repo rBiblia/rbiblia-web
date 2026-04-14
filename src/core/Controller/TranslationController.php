@@ -15,9 +15,9 @@ class TranslationController
     use LanguageProviderTrait;
     use ResponseTrait;
 
-    final public const TABLE_TRANSLATION = 'translation';
-    final public const TABLE_DATA = 'data_%s';
-    private const TABLE_SECURITY = 'security';
+    final public const string TABLE_TRANSLATION = 'translation';
+    final public const string TABLE_DATA = 'data_%s';
+    private const string TABLE_SECURITY = 'security';
 
     private int $securityQueryLimit = 0;
 
@@ -30,7 +30,7 @@ class TranslationController
     public function getTranslationList(string $language): void
     {
         try {
-            $statement = $this->db->executeQuery(sprintf(
+            $statement = $this->db->executeQuery(\sprintf(
                 'SELECT id, language, name, description, date FROM %s ORDER BY language ASC',
                 self::TABLE_TRANSLATION
             ));
@@ -57,7 +57,7 @@ class TranslationController
         $this->checkIfTranslationTableExists($language, $translationId);
 
         try {
-            $statement = $this->db->executeQuery(sprintf(
+            $statement = $this->db->executeQuery(\sprintf(
                 'SELECT DISTINCT book, chapter FROM %s ORDER BY book ASC, chapter ASC',
                 self::getTranslationTable($translationId)
             ));
@@ -86,7 +86,7 @@ class TranslationController
         $this->trackAndValidateQueryUsage($language);
 
         try {
-            $statement = $this->db->executeQuery(sprintf(
+            $statement = $this->db->executeQuery(\sprintf(
                 'SELECT verse, content FROM %s WHERE book=? AND chapter=? ORDER BY verse ASC',
                 self::getTranslationTable($translationId)
             ), [
@@ -114,7 +114,7 @@ class TranslationController
 
     public static function getTranslationTable(string $translationId): string
     {
-        return sprintf(self::TABLE_DATA, $translationId);
+        return \sprintf(self::TABLE_DATA, $translationId);
     }
 
     private function checkIfTranslationTableExists(string $language, string $translationId): void
@@ -147,13 +147,13 @@ class TranslationController
 
         try {
             // remove all IP addresses older than today
-            $this->db->executeQuery(sprintf(
+            $this->db->executeQuery(\sprintf(
                 'DELETE FROM %s WHERE DATE<CURDATE()',
                 self::TABLE_SECURITY
             ));
 
             // query for a given IP address
-            $response = $this->db->fetchOne(sprintf(
+            $response = $this->db->fetchOne(\sprintf(
                 'SELECT query_counter FROM %s WHERE ip=? AND DATE(date)=CURDATE()',
                 self::TABLE_SECURITY
             ), [
@@ -178,7 +178,7 @@ class TranslationController
             }
 
             // increment query counter for current IP address
-            $this->db->executeQuery(sprintf(
+            $this->db->executeQuery(\sprintf(
                 'UPDATE %s SET query_counter=query_counter+1 WHERE ip=? AND DATE(date)=CURDATE()',
                 self::TABLE_SECURITY
             ), [

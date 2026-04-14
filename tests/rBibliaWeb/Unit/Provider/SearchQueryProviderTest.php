@@ -8,7 +8,7 @@ use rBibliaWeb\Provider\SearchQueryProvider;
 
 class SearchQueryProviderTest extends TestCase
 {
-    private const INPUT_DATA = [
+    private const array INPUT_DATA = [
         'translation' => 'en_kjv',
         'query' => 'Jesus',
     ];
