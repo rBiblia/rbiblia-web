@@ -11,7 +11,7 @@ class SearchQueryProvider
 {
     use LanguageProviderTrait;
 
-    private const SUPPORTED_PARAMS = [
+    private const array SUPPORTED_PARAMS = [
         'query',
         'translation',
     ];
@@ -33,7 +33,7 @@ class SearchQueryProvider
 
         foreach (self::SUPPORTED_PARAMS as $param) {
             if (empty($queryData[$param])) {
-                throw new InvalidArgumentException(sprintf($this->getLanguageProvider($language)
+                throw new InvalidArgumentException(\sprintf($this->getLanguageProvider($language)
                     ->showMessage(LanguageProvider::MSG_ERROR_JSON_PARAMETER_IS_MISSING), $param));
             }
         }

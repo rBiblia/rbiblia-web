@@ -12,7 +12,7 @@ use rBibliaWeb\Value\Action;
 
 class WebApp
 {
-    private const SERVER_ID = 'rBiblia Web Server';
+    private const string SERVER_ID = 'rBiblia Web Server';
 
     public function __construct(private readonly array $settings = [])
     {
@@ -31,7 +31,7 @@ class WebApp
 
                 $r->addRoute('GET', '/translation', new Action($translationController, 'getTranslationList'));
                 $r->addGroup('/translation/{translationId:[a-z]{2}_\w+}',
-                    function (FastRoute\RouteCollector $r) use ($translationController): void {
+                    static function (FastRoute\RouteCollector $r) use ($translationController): void {
                     $r->addRoute('GET', '', new Action($translationController, 'getTranslationStructureById'));
                     $r->addRoute('GET', '/book/{bookId:[a-z0-9]{3}}/chapter/{chapterId:\d+}', new Action(
                         $translationController, 'getVerses'
@@ -54,7 +54,7 @@ class WebApp
         $uri = rawurldecode($uri);
 
         // send extra header for identification
-        header(sprintf('X-Powered-By: %s', self::SERVER_ID));
+        header(\sprintf('X-Powered-By: %s', self::SERVER_ID));
 
         $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
         switch ($routeInfo[0]) {

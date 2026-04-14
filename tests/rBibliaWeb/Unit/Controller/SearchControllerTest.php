@@ -23,7 +23,6 @@ class SearchControllerTest extends TestCase
 
         $reflection = new \ReflectionClass(SearchController::class);
         $property = $reflection->getProperty('db');
-        $property->setAccessible(true);
         $db = $property->getValue($this->searchController);
 
         $db->executeStatement('CREATE TABLE data_en_kjv (book VARCHAR(3), chapter INT, verse INT, content TEXT)');

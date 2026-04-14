@@ -62,7 +62,7 @@ class SearchController
 
             $whereClause = implode(' AND ', $whereParts);
 
-            $sql = sprintf(
+            $sql = \sprintf(
                 'SELECT book, chapter, verse, content FROM %s WHERE %s ORDER BY book ASC, chapter ASC, verse ASC',
                 TranslationController::getTranslationTable($searchQuery->getTranslation()),
                 $whereClause

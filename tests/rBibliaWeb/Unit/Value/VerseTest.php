@@ -7,10 +7,10 @@ use rBibliaWeb\Value\Verse;
 
 class VerseTest extends TestCase
 {
-    private const TEST_BOOK_ID = 'gen';
-    private const TEST_CHAPTER_ID = 1;
-    private const TEST_VERSE_ID = 1;
-    private const TEST_CONTENT = 'In the beginning God created the heaven and the earth.';
+    private const string TEST_BOOK_ID = 'gen';
+    private const int TEST_CHAPTER_ID = 1;
+    private const int TEST_VERSE_ID = 1;
+    private const string TEST_CONTENT = 'In the beginning God created the heaven and the earth.';
 
     private Verse $verse;
 
