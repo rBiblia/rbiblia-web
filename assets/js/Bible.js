@@ -390,7 +390,7 @@ const Bible = ({ intl, setLocale }) => {
             // sees the correct chapter value when useEffect fires.
             keepChapterIfPossible.current = true;
             setSelectedChapter(chapter);
-            
+
             if (book !== selectedBook) {
                 skipNextBookEffect.current = true;
                 setSelectedBook(book);
