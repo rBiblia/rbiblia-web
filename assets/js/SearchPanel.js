@@ -879,20 +879,17 @@ const SearchPanel = ({
                                                     // Only treat as tap if finger barely moved
                                                     if (dx < 10 && dy < 10) {
                                                         e.preventDefault();
-                                                        touchHandledRef.current =
-                                                            true;
+                                                        touchHandledRef.current = true;
                                                         handleResultClick(
                                                             result
                                                         );
                                                     }
                                                 }
-                                                touchStartPosRef.current =
-                                                    null;
+                                                touchStartPosRef.current = null;
                                             }}
                                             onClick={() => {
                                                 if (touchHandledRef.current) {
-                                                    touchHandledRef.current =
-                                                        false;
+                                                    touchHandledRef.current = false;
                                                     return;
                                                 }
                                                 handleResultClick(result);
