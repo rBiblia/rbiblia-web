@@ -100,7 +100,7 @@ const useVersesCache = (locale) => {
      */
     const prefetchAdjacent = useCallback(
         (translation, book, chapter, structure) => {
-            if (!structure || !structure[book]) return;
+            if (!structure?.[book]) return;
 
             const chapters = structure[book];
             const currentIndex = chapters.indexOf(chapter);

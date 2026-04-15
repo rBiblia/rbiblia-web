@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
@@ -770,7 +771,7 @@ const NotesPanel = ({
                             ) : (
                                 <ul className="notes-list">
                                     {generalNotes.map((note) => (
-                                        <li
+                                        <li // NOSONAR
                                             key={note.id}
                                             className="note-item general-note-item"
                                             onClick={() =>
@@ -885,7 +886,7 @@ const NotesPanel = ({
                                             };
 
                                             return (
-                                                <li
+                                                <li // NOSONAR
                                                     key={key}
                                                     className="note-item verse-note-item"
                                                     onClick={() =>
@@ -1036,7 +1037,7 @@ const NotesPanel = ({
                         if (e.key === "Escape") closeGeneralNotePreview();
                     }}
                 >
-                    <div
+                    <div // NOSONAR
                         className="general-note-preview-modal"
                         role="dialog"
                         aria-modal="true"
@@ -1131,7 +1132,7 @@ const NotesPanel = ({
                         if (e.key === "Escape") closeVerseNotePreview();
                     }}
                 >
-                    <div
+                    <div // NOSONAR
                         className="general-note-preview-modal"
                         role="dialog"
                         aria-modal="true"

@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 
 const BookSelector = memo(
@@ -39,5 +40,17 @@ const BookSelector = memo(
 );
 
 BookSelector.displayName = "BookSelector";
+
+BookSelector.propTypes = {
+    books: PropTypes.objectOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+        })
+    ),
+    structure: PropTypes.object,
+    isStructureLoading: PropTypes.bool,
+    selectedBook: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    changeSelectedBook: PropTypes.func.isRequired,
+};
 
 export default BookSelector;

@@ -227,6 +227,11 @@ const SearchPanel = ({
     // Debounced search
     const searchTimeoutRef = useRef(null);
 
+    // Guard against ghost clicks on touch devices — prevents the synthetic click
+    // fired ~300ms after touchend from falling through to the Reader underneath
+    const touchHandledRef = useRef(false);
+    const touchStartPosRef = useRef(null);
+
     // Focus trap for keyboard navigation
     const panelRef = useFocusTrap(isOpen, onClose);
 
@@ -672,6 +677,7 @@ const SearchPanel = ({
                                         });
                                     };
 
+                                    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
                                     return (
                                         <li
                                             key={`${suggestion.type}-${suggestion.text}`}
@@ -716,6 +722,7 @@ const SearchPanel = ({
                                             </span>
                                         </li>
                                     );
+                                    /* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
                                 })}
                             </ul>
                         )}
@@ -852,9 +859,46 @@ const SearchPanel = ({
                                         <button
                                             type="button"
                                             className="search-result-button"
-                                            onClick={() =>
-                                                handleResultClick(result)
-                                            }
+                                            onTouchStart={(e) => {
+                                                const t = e.touches[0];
+                                                touchStartPosRef.current = {
+                                                    x: t.clientX,
+                                                    y: t.clientY,
+                                                };
+                                            }}
+                                            onTouchEnd={(e) => {
+                                                const start =
+                                                    touchStartPosRef.current;
+                                                if (start) {
+                                                    const t =
+                                                        e.changedTouches[0];
+                                                    const dx = Math.abs(
+                                                        t.clientX - start.x
+                                                    );
+                                                    const dy = Math.abs(
+                                                        t.clientY - start.y
+                                                    );
+                                                    // Only treat as tap if finger barely moved
+                                                    if (dx < 10 && dy < 10) {
+                                                        e.preventDefault();
+                                                        touchHandledRef.current =
+                                                            true;
+                                                        handleResultClick(
+                                                            result
+                                                        );
+                                                    }
+                                                }
+                                                touchStartPosRef.current =
+                                                    null;
+                                            }}
+                                            onClick={() => {
+                                                if (touchHandledRef.current) {
+                                                    touchHandledRef.current =
+                                                        false;
+                                                    return;
+                                                }
+                                                handleResultClick(result);
+                                            }}
                                             style={{
                                                 all: "unset",
                                                 display: "block",

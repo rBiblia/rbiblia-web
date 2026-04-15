@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 
 const ChapterSelector = memo(
@@ -14,7 +15,7 @@ const ChapterSelector = memo(
             changeSelectedChapter(event.target.value);
         };
 
-        if (!isStructureLoading && chapters && chapters.length) {
+        if (!isStructureLoading && chapters?.length) {
             return (
                 <select
                     className="form-control"
@@ -39,5 +40,14 @@ const ChapterSelector = memo(
 );
 
 ChapterSelector.displayName = "ChapterSelector";
+
+ChapterSelector.propTypes = {
+    chapters: PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+    isStructureLoading: PropTypes.bool,
+    selectedChapter: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    changeSelectedChapter: PropTypes.func.isRequired,
+};
 
 export default ChapterSelector;

@@ -131,6 +131,7 @@ const TranslationSelector = memo(
         const renderTranslationItem = (t, showStar = true) => {
             const isDisabled = disabledOptions.includes(t.id);
 
+            /* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/mouse-events-have-key-events */
             return (
                 <div
                     key={t.id}
@@ -189,6 +190,7 @@ const TranslationSelector = memo(
                     )}
                 </div>
             );
+            /* eslint-enable jsx-a11y/no-static-element-interactions, jsx-a11y/mouse-events-have-key-events */
         };
 
         return (

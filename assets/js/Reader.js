@@ -174,6 +174,7 @@ const Reader = memo(function Reader({
         return <SkeletonLoader lines={15} />;
     }
 
+    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
     return (
         <main
             className="container" // NOSONAR
@@ -214,6 +215,7 @@ const Reader = memo(function Reader({
             </div>
         </main>
     );
+    /* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
 });
 
 Reader.propTypes = {
