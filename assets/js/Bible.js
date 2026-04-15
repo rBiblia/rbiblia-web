@@ -206,6 +206,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const keepChapterIfPossible = useRef(true);
     const startFromLastVerse = useRef(false);
+    const skipNextBookEffect = useRef(false);
     // Initialize pending highlight with verse ID from URL hash if present
     const pendingHighlightRef = useRef(
         typeof globalThis !== "undefined" && globalThis.location?.hash
@@ -260,6 +261,12 @@ const Bible = ({ intl, setLocale }) => {
 
     useEffect(() => {
         if (!structure || chapters.length === 0) {
+            return;
+        }
+        if (skipNextBookEffect.current) {
+            skipNextBookEffect.current = false;
+            keepChapterIfPossible.current = false;
+            startFromLastVerse.current = false;
             return;
         }
         changeSelectedChapter(
@@ -383,10 +390,15 @@ const Bible = ({ intl, setLocale }) => {
             // sees the correct chapter value when useEffect fires.
             keepChapterIfPossible.current = true;
             setSelectedChapter(chapter);
-            setSelectedBook(book);
+            
+            if (book !== selectedBook) {
+                skipNextBookEffect.current = true;
+                setSelectedBook(book);
+            }
+
             changeSelectedChapter(chapter, book);
         },
-        [changeSelectedChapter]
+        [changeSelectedChapter, selectedBook]
     );
 
     const loadTranslationsAndBooks = () => {
