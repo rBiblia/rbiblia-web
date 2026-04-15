@@ -11,7 +11,7 @@ const SelectionGrid = ({
     currentChapter = null, // Currently active chapter to highlight
     onClose,
 }) => {
-    const { formatMessage, locale } = useIntl();
+    const { formatMessage } = useIntl();
     const [view, setView] = useState(initialBook ? "chapters" : "books");
     const [selectedBook, setSelectedBook] = useState(initialBook);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
