@@ -677,7 +677,6 @@ const SearchPanel = ({
                                         });
                                     };
 
-                                    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
                                     return (
                                         <li
                                             key={`${suggestion.type}-${suggestion.text}`}
@@ -722,7 +721,6 @@ const SearchPanel = ({
                                             </span>
                                         </li>
                                     );
-                                    /* eslint-enable jsx-a11y/no-noninteractive-element-interactions */
                                 })}
                             </ul>
                         )}

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-element-to-interactive-role, jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
