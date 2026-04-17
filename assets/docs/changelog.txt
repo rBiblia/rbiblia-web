@@ -17,6 +17,11 @@ https://rbiblia.github.io
 
 Dziennik wydań (od najnowszych):
 
+2026-04-20 (v2):
+Kompletnie przebudowana wersja aplikacji wprowadza wiele nowych funkcjonalności, takich jak wyszukiwanie, ustawienia, notatki czy porównywanie wersetów. Zmian jest tak dużo, że nie sposób wymienić ich wszystkich. To również pierwsza odsłona, która została przygotowana przy wsparciu agentów AI.
+Za rozwój aplikacji odpowiada Maciej Wajdzik, który poświęcił swój czas oraz środki finansowe, aby wynieść projekt na wyższy poziom. Wraz z tą aktualizacją aplikacja została przeniesiona pod nową domenę https://rbiblia.app, co ma ułatwić korzystanie z niej.
+Stara wersja wciąż jest dostępna pod adresem https://web.rbiblia.toborek.info, jednak nie będzie już dalej rozwijana i z czasem zostanie wyłączona.
+
 2024-10-16:
 - poprawiono zapamiętywanie ostatnio oglądanego rozdziału przy wyborze tłumaczenia.
 
@@ -67,5 +72,5 @@ Dziennik wydań (od najnowszych):
 2021-09-30:
 - dodano aktualizację paska adresu po zmianie wskazania bieżącego rozdziału. Funkcja ta działa w dwie strony i umożliwia otwarcie aplikacji z wybranym tłumaczeniem, księgą i rozdziałem.
 
-2021-09-29:
+2021-09-29 (v1):
 - pierwsze (prawie) publiczne odpalenie aplikacji, jest jeszcze wiele do zrobienia.

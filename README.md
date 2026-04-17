@@ -8,9 +8,12 @@
 ![js-tests](https://github.com/rbiblia/rbiblia-web/actions/workflows/js-tests.yaml/badge.svg)
 ![sonarcloud](https://github.com/rbiblia/rbiblia-web/actions/workflows/sonarcloud.yaml/badge.svg)
 
-Simple web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://rbiblia.app](https://rbiblia.app).
+Advanced web interface to access rBiblia's built-in translations repository in an online mode. You can access repository at the official location under [https://rbiblia.app](https://rbiblia.app).
 
-Check also standalone and more powerful desktop version of this application at [https://rbiblia.toborek.info](https://rbiblia.toborek.info/en-US/). Binary version is available in different languages (English, Polish and Russian) and works on Windows.
+> [!NOTE]
+> There is also a legacy version of the app, created before 2026‑04‑20, which is no longer actively developed and remains available [here](https://web.rbiblia.toborek.info). However, please do not rely on this version, as it will be removed in the future.
+
+Check also standalone and more powerful desktop version of this application at [https://rbiblia.toborek.info](https://rbiblia.toborek.info/en-US/). Binary version is available in different languages (English, Polish and Russian) and works on Windows. You can download it directly [here](https://rbiblia.toborek.info/download).
 
 This piece of software was created by [Rafał Toborek](https://github.com/clash82) with a cooperation of Brothers in Faith (check [contributors list](https://github.com/rBiblia/rbiblia-web/graphs/contributors)).
 
