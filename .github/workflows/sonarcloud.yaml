@@ -40,8 +40,19 @@ jobs:
       - name: Install Composer dependencies
         run: composer install -o
 
-      - name: Generate code coverage report
+      - name: Generate code coverage report for PHP
         run: src/vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Yarn dependencies
+        run: yarn install
+
+      - name: Generate code coverage report for JS
+        run: yarn test:coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6

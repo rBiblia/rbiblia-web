@@ -53,20 +53,20 @@ status:
 .PHONY:
 
 asset:
-	@docker exec -t ${APP_IMAGE_NAME} yarn encore dev
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "yarn encore dev"
 .PHONY:
 
 asset-watch:
-	@docker exec -t ${APP_IMAGE_NAME} yarn encore dev --watch
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "yarn encore dev --watch"
 .PHONY:
 
 lint:
-	@docker exec -t ${APP_IMAGE_NAME} node_modules/.bin/eslint assets --fix
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "node_modules/.bin/eslint assets --fix"
 .PHONY:
 
 dev:
 	@docker exec -t ${APP_IMAGE_NAME} composer install
-	@docker exec -t ${APP_IMAGE_NAME} yarn install
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "yarn install"
 	@make asset
 
 	@echo Build optimized for development.
@@ -74,7 +74,7 @@ dev:
 
 prod:
 	@docker exec -t ${APP_IMAGE_NAME} composer install -o --no-dev
-	@docker exec -t ${APP_IMAGE_NAME} yarn encore production
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "yarn encore production"
 
 	@echo Build optimized for deployment.
 .PHONY:
@@ -96,5 +96,5 @@ test:
 .PHONY:
 
 test-js:
-	@docker exec -t ${APP_IMAGE_NAME} yarn test
+	@docker exec -t ${APP_IMAGE_NAME} bash -lc "yarn test"
 .PHONY:

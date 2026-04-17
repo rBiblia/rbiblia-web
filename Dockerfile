@@ -21,11 +21,15 @@ COPY .docker/composer_installer.sh /tmp/composer_installer.sh
 RUN sh /tmp/composer_installer.sh
 
 # install node
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-RUN apt update && apt install -y nodejs
+#RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+#RUN apt update && apt install -y nodejs
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+RUN . ~/.bashrc
+RUN bash -lc "nvm install 20 --latest-npm"
+RUN bash -lc "nvm use 20"
 
 # install yarn
-RUN npm install -g yarn
+RUN bash -lc "npm install -g yarn"
 
 # modify default apache site
 RUN sed -i 's#/var/www/html#/var/www/html/public_html#' /etc/apache2/sites-enabled/000-default.conf 

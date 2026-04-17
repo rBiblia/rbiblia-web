@@ -5,5 +5,7 @@ public_html/assets
 .phpunit.cache
 yarn-error.log
 .php-cs-fixer.cache
-.agent/
 error.log
+.agent/
+.nyc_output/
+coverage/
