@@ -860,8 +860,10 @@ export {
     SideMenuTab,
     DisplaySettings,
     getComparisonLimit,
+    setComparisonLimitValue,
     getFavoriteTranslations,
     saveFavoriteTranslations,
     isDiffModeStrict,
+    setDiffModeStrict,
     FAVORITE_TRANSLATIONS_UPDATED_EVENT,
 };

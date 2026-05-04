@@ -1487,4 +1487,8 @@ export {
     parseTranslationVerseKey,
     exportNotesXml,
     importNotesXml,
+    escapeXml,
+    downloadFile,
+    loadGeneralNotes,
+    saveGeneralNotes,
 };
