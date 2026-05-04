@@ -2,18 +2,31 @@
   "scripts": {
     "dev": "yarn encore dev --watch",
     "eslint": "eslint assets --fix",
-    "test": "node tests/runAll.js",
-    "test:coverage": "nyc --reporter=lcov --reporter=text node tests/runAll.js"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:legacy": "node tests/runAll.js"
   },
   "nyc": {
     "all": true,
-    "include": ["assets/**/*.js"],
-    "reporter": ["lcov", "text"]
+    "include": [
+      "assets/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ]
   },
   "devDependencies": {
     "@babel/preset-react": "^7.24.1",
     "@fontsource/open-sans": "^4.5.1",
     "@symfony/webpack-encore": "^1.3.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-istanbul": "^4.1.4",
+    "@vitest/coverage-v8": "^4.1.4",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^5.0.1",
     "core-js": "^3.12.1",
@@ -23,6 +36,7 @@
     "eslint-plugin-react": "^7.23.2",
     "file-loader": "6.0.0",
     "js-cookie": "^3.0.1",
+    "jsdom": "^29.0.2",
     "nyc": "^18.0.0",
     "prettier": "2.7.1",
     "prop-types": "^15.7.2",
@@ -30,7 +44,8 @@
     "react-dom": "^19.2.4",
     "react-intl": "^5.25.1",
     "sass": "^1.34.0",
-    "sass-loader": "^11.1.1"
+    "sass-loader": "^11.1.1",
+    "vitest": "^4.1.4"
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.24.5",

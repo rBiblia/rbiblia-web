@@ -1034,3 +1034,4 @@ SearchPanel.propTypes = {
 };
 
 export default SearchPanel;
+export { normalizeQuery };

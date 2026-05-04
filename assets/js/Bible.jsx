@@ -473,6 +473,7 @@ const Bible = ({ intl, setLocale }) => {
     const isNextBookAvailable = () => {
         return (
             !isStructureLoading &&
+            structure !== null &&
             structure[bookKeys[bookIndex + 1]] !== undefined
         );
     };
