@@ -56,9 +56,19 @@ describe('ChangelogModal', () => {
         });
     });
 
-    it('calls onClose when overlay or close button is clicked', () => {
+    it('calls onClose when overlay or close button is clicked', async () => {
+        globalThis.fetch.mockResolvedValueOnce({
+            ok: true,
+            text: () => Promise.resolve('Changelog content')
+        });
+
         const onClose = vi.fn();
         renderWithIntl(<ChangelogModal isOpen={true} onClose={onClose} />);
+
+        // Wait for async fetch in useEffect to settle
+        await waitFor(() => {
+            expect(screen.getByText('Changelog content')).toBeTruthy();
+        });
 
         const overlay = document.querySelector('.changelog-overlay');
         fireEvent.click(overlay);

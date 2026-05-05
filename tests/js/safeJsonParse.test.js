@@ -1,7 +1,19 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { safeJsonParse } from '../../assets/js/safeJsonParse';
 
 describe('safeJsonParse', () => {
+  let warnSpy, debugSpy;
+
+  beforeEach(() => {
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    debugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
+    debugSpy.mockRestore();
+  });
+
   it('parses valid JSON response', async () => {
     const response = new Response(JSON.stringify({ data: [1, 2] }), { status: 200 });
     const result = await safeJsonParse(response);

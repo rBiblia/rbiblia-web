@@ -58,7 +58,8 @@ const messages = {
     selectLanguage: 'Select Language',
     comparisonSettings: 'Comparison Settings',
     diffMode: 'Diff Mode',
-    zenMode: 'Zen Mode'
+    zenMode: 'Zen Mode',
+    removeFromFavorites: 'Remove from favorites'
 };
 
 const renderWithIntl = (ui) => {

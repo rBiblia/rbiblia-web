@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import ChapterComparison from '../../assets/js/ChapterComparison';
 import { IntlProvider } from 'react-intl';
 
@@ -75,8 +75,11 @@ describe('ChapterComparison', () => {
         onNavigateChapter: vi.fn()
     };
 
+    let errorSpy;
+
     beforeEach(() => {
         vi.clearAllMocks();
+        errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         globalThis.fetch = vi.fn().mockImplementation((url) => {
             if (url.includes('pl-bg')) {
                 return Promise.resolve({
@@ -92,6 +95,10 @@ describe('ChapterComparison', () => {
             }
             return Promise.reject(new Error('not found'));
         });
+    });
+
+    afterEach(() => {
+        errorSpy.mockRestore();
     });
 
     it('returns null if not open', () => {

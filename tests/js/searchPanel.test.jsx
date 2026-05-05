@@ -52,6 +52,7 @@ describe('SearchPanel', () => {
         vi.useFakeTimers({ shouldAdvanceTime: true });
         vi.spyOn(safeStorage, 'safeLocalStorageGetItem').mockReturnValue(null);
         vi.spyOn(safeStorage, 'safeLocalStorageSetItem').mockReturnValue(true);
+        vi.spyOn(console, 'error').mockImplementation(() => {});
         globalThis.fetch = vi.fn();
     });
 

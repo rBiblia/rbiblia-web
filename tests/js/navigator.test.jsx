@@ -132,7 +132,13 @@ describe('Navigator', () => {
         expect(screen.getByTestId('nav-btn-right').disabled).toBe(true);
         
         rerender(
-            <IntlProvider locale="pl" messages={{}}>
+            <IntlProvider locale="pl" messages={{
+                search: 'Szukaj',
+                selectBook: 'Wybierz księgę',
+                notes: 'Notatki',
+                chapterComparison: 'Porównanie',
+                settings: 'Ustawienia'
+            }}>
                 <Navigator 
                     {...defaultProps} 
                     isPrevChapterAvailable={true}

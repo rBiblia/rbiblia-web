@@ -1,9 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import migrateOldNotes from '../../assets/js/migrateOldNotes';
 
 describe('migrateOldNotes', () => {
+  let logSpy, errorSpy;
+
   beforeEach(() => {
     localStorage.clear();
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
+    errorSpy.mockRestore();
   });
 
   it('skips migration if no old notes exist', () => {

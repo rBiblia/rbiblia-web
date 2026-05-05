@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Verse from '../../assets/js/Verse';
 
@@ -11,6 +11,15 @@ vi.mock('react-intl', () => ({
 }));
 
 describe('Verse component', () => {
+  let errorSpy;
+
+  beforeEach(() => {
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    errorSpy.mockRestore();
+  });
   const defaultProps = {
     verseId: "1",
     chapterId: "1",
