@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import PropTypes from "prop-types";
 import Icon from "./Icon";
 
 function DirectionalNavigationButton({ direction, disabled, ...restProps }) {
@@ -15,5 +16,10 @@ function DirectionalNavigationButton({ direction, disabled, ...restProps }) {
         </button>
     );
 }
+
+DirectionalNavigationButton.propTypes = {
+    direction: PropTypes.oneOf(["left", "right"]).isRequired,
+    disabled: PropTypes.bool,
+};
 
 export default DirectionalNavigationButton;

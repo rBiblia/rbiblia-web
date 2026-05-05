@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";

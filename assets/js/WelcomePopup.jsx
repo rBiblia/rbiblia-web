@@ -43,7 +43,11 @@ const WelcomePopup = ({ isOpen, onClose }) => {
 
     return (
         <>
-            <div className="welcome-popup-overlay" onClick={onClose} />
+            <div
+                className="welcome-popup-overlay"
+                aria-hidden="true"
+                onClick={onClose}
+            />
             <dialog ref={popupRef} className="welcome-popup-modal" open>
                 <h3 className="welcome-popup-title">Witamy w rBiblia Web</h3>
                 <p className="welcome-popup-text">
