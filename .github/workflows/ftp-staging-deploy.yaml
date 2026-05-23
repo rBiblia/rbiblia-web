@@ -63,7 +63,7 @@ jobs:
           set net:max-retries 3
           set net:timeout 20
           
-          rm -rf /public_html \
+          rm -rf /public_html/* \
 
           mirror -R \
             --verbose \
