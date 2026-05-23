@@ -19,6 +19,7 @@ const Reader = memo(function Reader({
     highlightedVerse = null,
     allNotes = {},
     allTranslationNotes = {},
+    continuousText = false,
 }) {
     // Shared state/refs for long press event delegation
     const isPressing = useRef(false);
@@ -189,8 +190,8 @@ const Reader = memo(function Reader({
             onMouseLeave={clearPress}
             onKeyDown={handleKeyDown}
         >
-            <div className="row">
-                <div className="col-12">
+            <div className={`row ${continuousText ? "reader-continuous-row" : ""}`}>
+                <div className={continuousText ? "col-12 reader-continuous" : "col-12"}>
                     {Object.entries(verses).map(
                         ([verseId, verseContent], index) => (
                             <Verse
@@ -208,6 +209,7 @@ const Reader = memo(function Reader({
                                 isHighlighted={highlightedVerse === verseId}
                                 allNotes={allNotes}
                                 allTranslationNotes={allTranslationNotes}
+                                continuousText={continuousText}
                             />
                         )
                     )}
@@ -231,6 +233,7 @@ Reader.propTypes = {
     highlightedVerse: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     allNotes: PropTypes.object,
     allTranslationNotes: PropTypes.object,
+    continuousText: PropTypes.bool,
 };
 
 export default Reader;

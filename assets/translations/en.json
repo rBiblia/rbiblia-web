@@ -142,5 +142,10 @@
   "zenMode": "Zen Mode",
   "zenModeHint": "Hides navigation while scrolling for distraction-free reading",
   "zenModeOff": "Disabled",
-  "zenModeOn": "Enabled"
+  "zenModeOn": "Enabled",
+  "searchTranslationPlaceholder": "Search translation...",
+  "noTranslationResults": "No translations found",
+  "verseLayout": "Verse layout",
+  "verseLayoutSplit": "Verse by verse",
+  "verseLayoutContinuous": "Continuous text"
 }

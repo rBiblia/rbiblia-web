@@ -130,6 +130,8 @@ const DisplaySettings = ({
     setFontSize,
     fontFamily,
     setFontFamily,
+    continuousText,
+    setContinuousText,
     translations = [],
     setLocaleAndUpdateHistory,
     theme,
@@ -375,6 +377,42 @@ const DisplaySettings = ({
                                                 {ff.label}
                                             </button>
                                         ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Verse layout mode setting */}
+                            {setContinuousText !== undefined && (
+                                <div className="setting-group stagger-3">
+                                    <label className="setting-label">
+                                        {formatMessage({
+                                            id: "verseLayout",
+                                            defaultMessage: "Układ wersetów",
+                                        })}
+                                    </label>
+                                    <div className="diff-mode-toggle">
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                continuousText ? "" : "active"
+                                            }`}
+                                            onClick={() => setContinuousText(false)}
+                                        >
+                                            {formatMessage({
+                                                id: "verseLayoutSplit",
+                                                defaultMessage: "Werset po wersecie",
+                                            })}
+                                        </button>
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                continuousText ? "active" : ""
+                                            }`}
+                                            onClick={() => setContinuousText(true)}
+                                        >
+                                            {formatMessage({
+                                                id: "verseLayoutContinuous",
+                                                defaultMessage: "Tekst ciągły",
+                                            })}
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -842,6 +880,8 @@ DisplaySettings.propTypes = {
     setFontSize: PropTypes.func,
     fontFamily: PropTypes.string,
     setFontFamily: PropTypes.func,
+    continuousText: PropTypes.bool,
+    setContinuousText: PropTypes.func,
     translations: PropTypes.array,
     setLocaleAndUpdateHistory: PropTypes.func,
     theme: PropTypes.string,
