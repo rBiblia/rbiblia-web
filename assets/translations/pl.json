@@ -142,5 +142,10 @@
   "zenMode": "Tryb Zen",
   "zenModeHint": "Ukrywa nawigację podczas przewijania dla wygodniejszego czytania",
   "zenModeOff": "Wyłączony",
-  "zenModeOn": "Włączony"
+  "zenModeOn": "Włączony",
+  "searchTranslationPlaceholder": "Wyszukaj tłumaczenie...",
+  "noTranslationResults": "Nie znaleziono tłumaczeń",
+  "verseLayout": "Układ wersetów",
+  "verseLayoutSplit": "Werset po wersecie",
+  "verseLayoutContinuous": "Tekst ciągły"
 }

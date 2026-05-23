@@ -107,4 +107,21 @@ describe('Verse component', () => {
     fireEvent(link, clickEvent);
     expect(prevented).toBe(true);
   });
+
+  it('renders inline span and standard-sized verse link in continuous text mode', () => {
+    const { container } = render(<Verse {...defaultProps} continuousText={true} />);
+    
+    // In continuous text mode, the main tag is a SPAN with class 'verse-continuous'
+    expect(container.firstChild.tagName).toBe('SPAN');
+    expect(container.firstChild).toHaveClass('verse-continuous');
+    expect(container.firstChild).toHaveClass('verse');
+    
+    // It should render standard-sized verse link inside a .verse-number-inline
+    const numberContainer = container.querySelector('.verse-number-inline');
+    expect(numberContainer).toBeTruthy();
+    expect(numberContainer.querySelector('a')).toBeTruthy();
+    expect(screen.getByText('1')).toBeInTheDocument(); // link text is just the verseId "1" instead of "1:1"
+    
+    expect(screen.getByText('Na początku Bóg stworzył niebo i ziemię.')).toBeInTheDocument();
+  });
 });

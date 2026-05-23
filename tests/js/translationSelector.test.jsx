@@ -24,7 +24,10 @@ const renderWithIntl = (component) => {
         <IntlProvider locale="pl" messages={{
             favorites: 'Ulubione',
             removeFromFavorites: 'Usuń',
-            addToFavorites: 'Dodaj'
+            addToFavorites: 'Dodaj',
+            searchTranslationPlaceholder: 'Wyszukaj tłumaczenie...',
+            noTranslationResults: 'Nie znaleziono tłumaczeń',
+            clear: 'Wyczyść'
         }}>
             {component}
         </IntlProvider>
@@ -122,5 +125,51 @@ describe('TranslationSelector', () => {
         
         const bgOption = screen.getAllByRole('button', { name: /Biblia Gdańska/i }).find(btn => btn.className.includes('translation-name'));
         expect(bgOption.disabled).toBe(true);
+    });
+
+    it('filters translations by search query and auto-expands groups', () => {
+        renderWithIntl(<TranslationSelector {...defaultProps} />);
+        
+        const trigger = screen.getAllByRole('button', { name: /Biblia Gdańska/i })[0];
+        fireEvent.click(trigger);
+        
+        // Initially, pl-ubg is not visible because pl group is collapsed
+        expect(screen.queryByRole('button', { name: /Uwspółcześniona Biblia Gdańska/i })).toBeNull();
+        
+        // Find search input
+        const searchInput = screen.getByPlaceholderText('Wyszukaj tłumaczenie...');
+        expect(searchInput).toBeTruthy();
+        
+        // Type "uwsp"
+        fireEvent.change(searchInput, { target: { value: 'uwsp' } });
+        
+        // Now it should be visible because group is auto-expanded
+        const ubgOption = screen.getByRole('button', { name: /Uwspółcześniona Biblia Gdańska/i });
+        expect(ubgOption).toBeTruthy();
+        
+        // Also it filters out other unrelated translations (e.g. King James Version)
+        expect(screen.queryByText('King James Version')).toBeNull();
+        
+        // Click clear button
+        const clearBtn = screen.getByTitle('Wyczyść');
+        fireEvent.click(clearBtn);
+        
+        // Search query should be cleared
+        expect(searchInput.value).toBe('');
+    });
+
+    it('shows empty state when no results match search query', () => {
+        renderWithIntl(<TranslationSelector {...defaultProps} />);
+        
+        const trigger = screen.getAllByRole('button', { name: /Biblia Gdańska/i })[0];
+        fireEvent.click(trigger);
+        
+        const searchInput = screen.getByPlaceholderText('Wyszukaj tłumaczenie...');
+        
+        // Type something that doesn't match
+        fireEvent.change(searchInput, { target: { value: 'nonexistent-translation-xyz' } });
+        
+        // Should show no results message
+        expect(screen.getByText('Nie znaleziono tłumaczeń')).toBeTruthy();
     });
 });

@@ -35,6 +35,7 @@ const Verse = memo(function Verse({
     isHighlighted = false,
     allNotes = {},
     allTranslationNotes = {},
+    continuousText = false,
 }) {
     const { formatMessage } = useIntl();
     const [isNoteExpanded, setIsNoteExpanded] = useState(false);
@@ -126,6 +127,41 @@ const Verse = memo(function Verse({
         e.stopPropagation();
         onVerseCompare?.(verseId);
     };
+
+    if (continuousText) {
+        return (
+            <span
+                ref={verseRef}
+                className={`verse verse-continuous line ${hasAnyNote ? "has-note" : ""} ${
+                    isHighlighted ? "highlighted" : ""
+                }`}
+                data-verse-id={verseId}
+            >
+                <span className="verse-number-inline">
+                    <a
+                        href={appLink}
+                        title={formatMessage({ id: "linkOpenInRBibliaApp" })}
+                        onClick={(e) => {
+                            if (shouldBlockAppDeepLink()) {
+                                e.preventDefault();
+                            }
+                            e.stopPropagation();
+                        }}
+                    >
+                        {verseId}
+                    </a>
+                </span>
+                <span className="verse-text-inline">
+                    {verseContent.replaceAll("//", " ")}
+                </span>
+                {hasAnyNote && (
+                    <span className="verse-note-indicator-inline" title={noteText || translationNoteText}>
+                        📝
+                    </span>
+                )}
+            </span>
+        );
+    }
 
     return (
         <article
@@ -268,6 +304,7 @@ Verse.propTypes = {
     isHighlighted: PropTypes.bool,
     allNotes: PropTypes.object,
     allTranslationNotes: PropTypes.object,
+    continuousText: PropTypes.bool,
 };
 
 export default Verse;
