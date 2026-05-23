@@ -97,6 +97,104 @@
   }
 }
 
+.translation-search-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  z-index: 10;
+
+  @include dark-mode {
+    background: var(--dm-bg-surface);
+    border-bottom-color: var(--dm-border-subtle);
+  }
+}
+
+.translation-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.translation-search-input {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 2.2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  background: #f9f9f9;
+  color: #333;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: $rb-header-navigator-arrow;
+    background: white;
+    box-shadow: 0 0 0 3px rgba($rb-header-navigator-arrow, 0.15);
+  }
+
+  @include dark-mode {
+    background: var(--dm-bg-elevated);
+    border-color: var(--dm-border-subtle);
+    color: var(--dm-text-primary);
+
+    &:focus {
+      border-color: var(--dm-accent);
+      background: var(--dm-bg-surface);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--dm-accent) 15%, transparent);
+    }
+  }
+}
+
+.translation-search-icon {
+  position: absolute;
+  left: 10px;
+  color: #888;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.translation-search-clear {
+  position: absolute;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #333;
+  }
+
+  @include dark-mode {
+    color: #94a3b8;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--dm-text-primary);
+    }
+  }
+}
+
+.translation-no-results {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+
+  @include dark-mode {
+    color: var(--dm-text-secondary);
+  }
+}
+
 .translation-group {
   padding: 0.5rem 0;
 

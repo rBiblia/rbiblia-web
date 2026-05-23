@@ -718,3 +718,123 @@ footer {
     padding-right: 0.5rem;
   }
 }
+
+// ---------------------------------------------------------
+// Continuous Text Layout Mode
+// ---------------------------------------------------------
+
+.reader-continuous-row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.reader-continuous {
+  font-family: var(--verse-font-family, $font-bible);
+  font-size: var(--verse-font-size, 1.15rem);
+  line-height: 2.2;
+  text-align: justify;
+  padding: 1.5rem 1.25rem;
+
+  @media screen and (max-width: 575px) {
+    padding: 1rem 0.75rem;
+  }
+}
+
+.verse-continuous {
+  display: inline !important;
+  white-space: normal !important;
+  margin-right: 0.4rem;
+  padding: 0.15rem 0.25rem !important;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &.line:hover {
+    background: rgba($rb-header-navigator-arrow, 0.06);
+
+    @include dark-mode {
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  &.pressing {
+    background: rgba($rb-header-navigator-arrow, 0.12) !important;
+
+    @include dark-mode {
+      background: rgba(255, 255, 255, 0.12) !important;
+    }
+  }
+
+  &.highlighted {
+    animation: highlightPulseFade 8s ease-out forwards;
+
+    @include dark-mode {
+      animation: highlightPulseFadeDark 8s ease-out forwards;
+    }
+  }
+
+  &.has-note {
+    border-bottom: 2px dashed rgba($rb-header-navigator-arrow, 0.6);
+    border-radius: 0;
+
+    @include dark-mode {
+      border-bottom-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .verse-number-inline {
+    margin-right: 0.35rem;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.95em;
+    user-select: none;
+    
+    a {
+      color: $rb-header-navigator-arrow;
+      opacity: 0.85;
+      padding: 0.1rem 0.3rem;
+      border-radius: 6px;
+      background: rgba($rb-header-navigator-arrow, 0.06);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      text-align: center;
+      
+      &:hover {
+        opacity: 1;
+        background: rgba($rb-header-navigator-arrow, 0.15);
+        color: $rb-header-navigator-arrow;
+        text-decoration: none;
+      }
+
+      @include dark-mode {
+        color: var(--dm-accent);
+        background: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.18);
+          color: var(--dm-text-primary);
+        }
+      }
+    }
+  }
+
+  .verse-text-inline {
+    color: #2c2c2c;
+
+    @include dark-mode {
+      color: var(--dm-text-primary);
+    }
+  }
+
+  .verse-note-indicator-inline {
+    font-size: 0.8rem;
+    margin-left: 3px;
+    opacity: 0.8;
+    vertical-align: middle;
+  }
+}

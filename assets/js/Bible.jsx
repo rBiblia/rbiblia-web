@@ -82,6 +82,10 @@ const Bible = ({ intl, setLocale }) => {
         return safeLocalStorageGetItem("rbiblia-zen-mode") === "1";
     });
 
+    const [continuousText, setContinuousText] = useState(() => {
+        return safeLocalStorageGetItem("rbiblia-continuous-text") === "1";
+    });
+
     const immersiveDisabled = !zenMode || isWelcomePopupOpen;
 
     // Font family (saved to localStorage)
@@ -142,6 +146,11 @@ const Bible = ({ intl, setLocale }) => {
         safeLocalStorageSetItem("rbiblia-dark-variant", darkVariant);
         document.documentElement.dataset.darkVariant = darkVariant;
     }, [darkVariant]);
+
+    // Save continuous text mode to localStorage
+    useEffect(() => {
+        safeLocalStorageSetItem("rbiblia-continuous-text", continuousText ? "1" : "0");
+    }, [continuousText]);
 
     // Save font family to localStorage and apply to CSS variable
     useEffect(() => {
@@ -793,6 +802,7 @@ const Bible = ({ intl, setLocale }) => {
                 highlightedVerse={highlightedVerse}
                 allNotes={allNotes}
                 allTranslationNotes={allTranslationNotes}
+                continuousText={continuousText}
             />
             <BottomNavigation
                 onPrevChapter={prevChapter}
@@ -855,6 +865,8 @@ const Bible = ({ intl, setLocale }) => {
                     setFontSize={setFontSize}
                     fontFamily={fontFamily}
                     setFontFamily={setFontFamily}
+                    continuousText={continuousText}
+                    setContinuousText={setContinuousText}
                     translations={translations}
                     setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
                     theme={theme}

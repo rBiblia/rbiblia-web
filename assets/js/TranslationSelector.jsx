@@ -22,6 +22,7 @@ const TranslationSelector = memo(
         const [favorites, setFavorites] = useState(getFavoriteTranslations());
         const [hoveredId, setHoveredId] = useState(null);
         const [collapsedGroups, setCollapsedGroups] = useState({});
+        const [searchQuery, setSearchQuery] = useState("");
         const dropdownRef = useRef(null);
 
         const languageNames = new Intl.DisplayNames([locale], {
@@ -47,6 +48,13 @@ const TranslationSelector = memo(
         useEffect(() => {
             if (isOpen) {
                 setFavorites(getFavoriteTranslations());
+            }
+        }, [isOpen]);
+
+        // Clear search query when dropdown closes
+        useEffect(() => {
+            if (!isOpen) {
+                setSearchQuery("");
             }
         }, [isOpen]);
 
@@ -94,11 +102,23 @@ const TranslationSelector = memo(
             saveFavoriteTranslations(newFavorites);
         };
 
+        const normalizedQuery = searchQuery.trim().toLowerCase();
+
+        const filteredTranslations = translations.filter((t) => {
+            if (!normalizedQuery) return true;
+            const nameMatch = t.name.toLowerCase().includes(normalizedQuery);
+            const idMatch = t.id.toLowerCase().includes(normalizedQuery);
+            const dateMatch = t.date ? t.date.toLowerCase().includes(normalizedQuery) : false;
+            const langName = languageNames.of(t.language);
+            const langMatch = langName ? langName.toLowerCase().includes(normalizedQuery) : false;
+            return nameMatch || idMatch || dateMatch || langMatch;
+        });
+
         // Separate favorites and rest
-        const favoriteTranslations = translations.filter((t) =>
+        const favoriteTranslations = filteredTranslations.filter((t) =>
             favorites.includes(t.id)
         );
-        const otherTranslations = translations.filter(
+        const otherTranslations = filteredTranslations.filter(
             (t) => !favorites.includes(t.id)
         );
 
@@ -221,14 +241,54 @@ const TranslationSelector = memo(
 
                 {isOpen && (
                     <div className="translation-dropdown">
+                        <div className="translation-search-container">
+                            <div className="translation-search-input-wrapper">
+                                <Icon name="search" size={16} className="translation-search-icon" />
+                                <input
+                                    type="text"
+                                    className="translation-search-input"
+                                    placeholder={formatMessage({
+                                        id: "searchTranslationPlaceholder",
+                                        defaultMessage: "Wyszukaj tłumaczenie...",
+                                    })}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    autoFocus
+                                />
+                                {searchQuery && (
+                                    <button
+                                        type="button"
+                                        className="translation-search-clear"
+                                        onClick={() => setSearchQuery("")}
+                                        title={formatMessage({
+                                            id: "clear",
+                                            defaultMessage: "Wyczyść",
+                                        })}
+                                    >
+                                        <Icon name="x" size={14} />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {filteredTranslations.length === 0 && (
+                            <div className="translation-no-results">
+                                {formatMessage({
+                                    id: "noTranslationResults",
+                                    defaultMessage: "Nie znaleziono tłumaczeń",
+                                })}
+                            </div>
+                        )}
+
                         {/* Favorites group */}
                         {favoriteTranslations.length > 0 &&
                             (() => {
                                 const favLabel = formatMessage({
                                     id: "favorites",
                                 });
-                                const isFavCollapsed =
-                                    collapsedGroups[favLabel] ?? false;
+                                const isFavCollapsed = searchQuery
+                                    ? false
+                                    : (collapsedGroups[favLabel] ?? false);
                                 return (
                                     <div className="translation-group">
                                         <button
@@ -276,8 +336,9 @@ const TranslationSelector = memo(
 
                         {/* Other translations grouped by language */}
                         {translationList.map(({ languageName, children }) => {
-                            const isCollapsed =
-                                collapsedGroups[languageName] ?? true;
+                            const isCollapsed = searchQuery
+                                ? false
+                                : (collapsedGroups[languageName] ?? true);
                             return (
                                 <div
                                     className="translation-group"
