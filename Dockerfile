@@ -16,13 +16,14 @@ RUN apt update && apt upgrade -y && apt install -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
+# set PHP memory limit to 1GB
+RUN echo "memory_limit = 1G" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 # install composer globally
 COPY .docker/composer_installer.sh /tmp/composer_installer.sh
 RUN sh /tmp/composer_installer.sh
 
 # install node
-#RUN curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-#RUN apt update && apt install -y nodejs
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 RUN . ~/.bashrc
 RUN bash -lc "nvm install 20 --latest-npm"

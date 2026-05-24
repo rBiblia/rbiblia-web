@@ -4,6 +4,7 @@ namespace rBibliaWeb\App;
 
 use FastRoute;
 use rBibliaWeb\Controller\BookController;
+use rBibliaWeb\Controller\ReportController;
 use rBibliaWeb\Controller\SearchController;
 use rBibliaWeb\Controller\TranslationController;
 use rBibliaWeb\Response\LandingPageResponse;
@@ -40,6 +41,7 @@ class WebApp
 
                 $r->addRoute('GET', '/book', new Action(new BookController(), 'getBookList'));
                 $r->addRoute('POST', '/search', new Action(new SearchController($this->settings), 'query'));
+                $r->addRoute('POST', '/report', new Action(new ReportController($this->settings), 'submit'));
             });
         });
 
