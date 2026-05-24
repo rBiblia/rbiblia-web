@@ -15,4 +15,26 @@ return [
 
     // skip if no production
     'stats_class' => '',
+
+    // mailer settings
+    'mailer' => [
+        'name' => 'Postman',
+        'smtp_host' => '',
+        'smtp_user' => '',
+        'smtp_password' => '',
+        'smtp_port' => 0,
+        'smtp_auth' => true,
+    ],
+
+    // settings used to report translation errors
+    'report' => [
+        // e-mail to address
+        'email_to_address' => '',
+
+        // e-mail to name
+        'email_to_name' => '',
+
+        // e-mail subject
+        'subject' => '',
+    ],
 ];

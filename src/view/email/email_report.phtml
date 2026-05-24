@@ -1,0 +1,18 @@
+Imię i nazwisko: <?= $report->getName() ?><br>
+Adres zwrotny: <?= $report->getEmail() ?><br>
+Adres IP: <?= $report->getIP() ?><br>
+<br>
+Wiadomość:<br>
+<br>
+Tłumaczenie: <?= $report->getTranslation() ?><br>
+Księga: <?= $report->getBook() ?><br>
+Rozdział: <?= $report->getChapter() ?><br>
+<br>
+Wersety:<br>
+<?= $report->getOriginalContent() ?>
+<br><br>
+Korekta:<br>
+<?= $report->getContent() ?>
+<br><br>
+Uwagi:<br>
+<?= $report->getNotes() ?>

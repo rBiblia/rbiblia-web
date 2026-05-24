@@ -235,6 +235,81 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/{language}/report:
+    post:
+      summary: Submit a translation error report
+      tags:
+        - public
+      parameters:
+        - $ref: '#/components/parameters/language'
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Reporter's name
+                  example: John Doe
+                email:
+                  type: string
+                  description: Reporter's e-mail address
+                  example: email@example.com
+                notes:
+                  type: string
+                  description: User notes
+                  example: I found a typo in the verse John 3:16.
+                content:
+                  type: string
+                  description: Full content of the fixed verse
+                  example: For God so loved the world, that he gave his only begotten Son.
+                original_content:
+                  type: string
+                  description: Full content of the existing verse
+                  example: For God so loved the world, that he gave his only begotten Son.
+                translation:
+                  type: string
+                  description: Identifier of the translation the report is about
+                  example: en_kjv
+                book:
+                  type: string
+                  description: Identifier of the book the report is about
+                  example: exo
+                chapter:
+                  type: number
+                  description: Chapter number the report is about
+                  example: 20
+                verse:
+                    type: number
+                    description: Verse number the report is about
+                    example: 13
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: Error code
+                    default: 200
+                  data:
+                    type: object
+                    description: This key will be always empty if message was successfully sent
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   parameters:
     language:
