@@ -30,6 +30,7 @@ const Navigator = memo(function Navigator({
     onOpenChapterComparison,
     className = "",
     immersiveDisabled = false,
+    locationText,
 }) {
     const { formatMessage } = useIntl();
     const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
@@ -109,9 +110,9 @@ const Navigator = memo(function Navigator({
                         }
                     >
                         <span className="location-text">
-                            {books[selectedBook]
+                            {locationText || (books[selectedBook]
                                 ? `${books[selectedBook].name} ${selectedChapter}`
-                                : "..."}
+                                : "...")}
                         </span>
                         <Icon name="chevron-down" className="ms-2" size={16} />
                     </button>
@@ -236,6 +237,7 @@ Navigator.propTypes = {
     onOpenChapterComparison: PropTypes.func.isRequired,
     className: PropTypes.string,
     immersiveDisabled: PropTypes.bool,
+    locationText: PropTypes.string,
 };
 
 export default Navigator;
