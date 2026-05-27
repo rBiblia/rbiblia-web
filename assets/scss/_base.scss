@@ -220,120 +220,14 @@ main {
           border-radius: 0 2px 2px 0;
         }
       }
-
-      &:hover .verse-actions {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-      }
     }
 
-    // Verse number cell with floating action buttons (to the left)
+    // Verse number cell
     .verse-number-cell {
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-
-      .verse-actions {
-        position: absolute;
-        right: calc(100% + 4px);
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: row;
-        gap: 3px;
-        padding: 4px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
-          0 1px 2px rgba(0, 0, 0, 0.06);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: opacity 0.15s ease, visibility 0.15s ease;
-        z-index: 10;
-
-        // Invisible hover bridge: fills the gap between tooltip and verse number
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 100%;
-          width: calc(4px + 1rem);
-          height: 100%;
-        }
-
-        @include dark-mode {
-          background: var(--dm-bg-elevated);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
-            0 1px 2px rgba(0, 0, 0, 0.15);
-        }
-
-        @media (max-width: 1199.98px) {
-          right: 50%;
-          left: auto;
-          transform: translate(50%, -50%);
-
-          &::after {
-            display: none;
-          }
-        }
-
-        &.shifted-right {
-          right: auto;
-          left: 50%;
-          transform: translate(-50%, -50%);
-
-          &::after {
-            display: none;
-          }
-        }
-      }
-
-      .verse-action-btn {
-        width: 30px;
-        height: 30px;
-        border: none;
-        border-radius: 8px;
-        background: transparent;
-        color: #999;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        transition: all 0.15s ease;
-
-        svg {
-          width: 18px;
-          height: 18px;
-        }
-
-        &:hover {
-          background: rgba($rb-header-navigator-arrow, 0.12);
-          color: $rb-header-navigator-arrow;
-          transform: scale(1.15);
-        }
-
-        &:active {
-          transform: scale(0.9);
-        }
-
-        @include dark-mode {
-          color: #aaa;
-
-          &:hover {
-            background: rgba($rb-header-navigator-arrow, 0.2);
-            color: var(--dm-accent);
-          }
-        }
-      }
-
-      .verse-action-note.has-note-value {
-        color: $rb-header-navigator-arrow;
-        opacity: 0.8;
-      }
     }
 
     .verse-note-preview-wrap {
@@ -726,6 +620,8 @@ footer {
 .reader-continuous-row {
   margin-left: 0;
   margin-right: 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .reader-continuous {
@@ -733,10 +629,37 @@ footer {
   font-size: var(--verse-font-size, 1.15rem);
   line-height: 2.2;
   text-align: justify;
-  padding: 1.5rem 1.25rem;
+  padding: 1.5rem 1.75rem;
 
-  @media screen and (max-width: 575px) {
+  @media screen and (max-width: 767.98px) {
     padding: 1rem 0.75rem;
+  }
+
+  &.reader-current-chapter {
+    @media screen and (min-width: 768px) {
+      border-right: 1px dashed rgba(0, 0, 0, 0.1);
+
+      @include dark-mode {
+        border-right-color: var(--dm-border);
+      }
+    }
+  }
+}
+
+.continuous-chapter-header {
+  font-family: $font-ui;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+
+  @include dark-mode {
+    color: var(--dm-text-secondary);
+    border-bottom-color: var(--dm-border-subtle);
   }
 }
 
