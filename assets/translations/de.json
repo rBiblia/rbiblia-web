@@ -169,5 +169,15 @@
   "errorReportCopied": "Kopiert!",
   "errorReportCancel": "Abbrechen",
   "errorReportDescriptionRequired": "Fehlerbeschreibung ist erforderlich.",
-  "errorReportTypeRequired": "Wählen Sie einen Fehlertyp aus."
+  "errorReportTypeRequired": "Wählen Sie einen Fehlertyp aus.",
+  "errorReportName": "Name",
+  "errorReportEmail": "E-Mail",
+  "errorReportNotes": "Fehlerbeschreibung / Kommentar",
+  "errorReportContent": "Vorgeschlagene Korrektur (bearbeiten Sie den folgenden Text)",
+  "errorReportNameRequired": "Name ist erforderlich.",
+  "errorReportEmailRequired": "E-Mail-Adresse ist erforderlich.",
+  "errorReportEmailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+  "errorReportContentRequired": "Korrigierter Versinhalt ist erforderlich.",
+  "errorReportSending": "Wird gesendet...",
+  "errorReportFailed": "Fehler beim Senden des Berichts. Überprüfen Sie Ihre Verbindung oder kopieren Sie den Bericht in die Zwischenablage."
 }

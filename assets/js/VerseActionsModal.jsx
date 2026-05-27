@@ -3,14 +3,7 @@ import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import useFocusTrap from "./hooks/useFocusTrap";
 import Icon from "./Icon";
-
-const ERROR_TYPES = [
-    { id: "typo", labelId: "errorReportTypo", defaultMessage: "Literówka / błąd ortograficzny" },
-    { id: "inaccuracy", labelId: "errorReportInaccuracy", defaultMessage: "Niewierność tłumaczenia" },
-    { id: "punctuation", labelId: "errorReportPunctuation", defaultMessage: "Interpunkcja" },
-    { id: "missing_words", labelId: "errorReportMissingWords", defaultMessage: "Brakujące słowa" },
-    { id: "other", labelId: "errorReportOther", defaultMessage: "Inne" },
-];
+import safeJsonParse from "./safeJsonParse";
 
 export default function VerseActionsModal({
     isOpen,
@@ -25,40 +18,58 @@ export default function VerseActionsModal({
     hasNote,
     onAction,
 }) {
-    const { formatMessage } = useIntl();
+    const { formatMessage, locale } = useIntl();
     const [view, setView] = useState("menu"); // "menu" | "report" | "success"
-    const [errorType, setErrorType] = useState("");
-    const [description, setDescription] = useState("");
+    const [name, setName] = useState(() => localStorage.getItem("rbiblia-report-name") || "");
+    const [email, setEmail] = useState(() => localStorage.getItem("rbiblia-report-email") || "");
+    const [content, setContent] = useState("");
+    const [notes, setNotes] = useState("");
     const [errors, setErrors] = useState({});
     const [copied, setCopied] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+    const [submitError, setSubmitError] = useState(null);
     const modalRef = useFocusTrap(isOpen, onClose);
 
-    // Reset state when modal is opened/closed
+    // Reset state when modal is opened/closed or verse changes
     useEffect(() => {
         if (isOpen) {
             setView("menu");
-            setErrorType("");
-            setDescription("");
+            setContent(verseContent ? verseContent.replaceAll("//", " ") : "");
+            setNotes("");
             setErrors({});
             setCopied(false);
+            setIsSending(false);
+            setSubmitError(null);
         }
-    }, [isOpen]);
+    }, [isOpen, verseContent]);
 
     if (!isOpen) return null;
 
-    const handleReportSubmit = (e) => {
+    const handleReportSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
-        if (!errorType) {
-            newErrors.type = formatMessage({
-                id: "errorReportTypeRequired",
-                defaultMessage: "Wybierz typ błędu.",
+
+        if (!name.trim()) {
+            newErrors.name = formatMessage({
+                id: "errorReportNameRequired",
+                defaultMessage: "Imię jest wymagane.",
             });
         }
-        if (!description.trim()) {
-            newErrors.description = formatMessage({
-                id: "errorReportDescriptionRequired",
-                defaultMessage: "Opis błędu jest wymagany.",
+        if (!email.trim()) {
+            newErrors.email = formatMessage({
+                id: "errorReportEmailRequired",
+                defaultMessage: "Adres e-mail jest wymagany.",
+            });
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            newErrors.email = formatMessage({
+                id: "errorReportEmailInvalid",
+                defaultMessage: "Wpisz poprawny adres e-mail.",
+            });
+        }
+        if (!content.trim()) {
+            newErrors.content = formatMessage({
+                id: "errorReportContentRequired",
+                defaultMessage: "Treść wersetu jest wymagana.",
             });
         }
 
@@ -67,7 +78,25 @@ export default function VerseActionsModal({
             return;
         }
 
-        // Save report to localStorage
+        setIsSending(true);
+        setSubmitError(null);
+
+        const parsedChapter = parseInt(chapterId, 10);
+        const parsedVerse = parseInt(verseId, 10);
+
+        const payload = {
+            name: name.trim(),
+            email: email.trim(),
+            notes: notes.trim(),
+            content: content.trim(),
+            original_content: verseContent,
+            translation: translationId,
+            book: bookId,
+            chapter: isNaN(parsedChapter) ? chapterId : parsedChapter,
+            verse: isNaN(parsedVerse) ? verseId : parsedVerse,
+        };
+
+        // Save report to localStorage (both for fallback history & local tracking)
         const newReport = {
             id: `rep_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             timestamp: new Date().toISOString(),
@@ -77,8 +106,7 @@ export default function VerseActionsModal({
             verseId,
             translationId,
             translationName,
-            errorType,
-            description: description.trim(),
+            ...payload,
         };
 
         try {
@@ -90,20 +118,41 @@ export default function VerseActionsModal({
             console.error("Failed to save report to localStorage", err);
         }
 
-        setView("success");
+        try {
+            const response = await fetch(`/api/${locale}/report`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            await safeJsonParse(response);
+
+            // Persist valid name & email in localStorage for future prefilling
+            localStorage.setItem("rbiblia-report-name", name.trim());
+            localStorage.setItem("rbiblia-report-email", email.trim());
+
+            setView("success");
+        } catch (err) {
+            console.error("Failed to submit translation error report", err);
+            const genericMsg = formatMessage({
+                id: "errorReportFailed",
+                defaultMessage: "Nie udało się wysłać zgłoszenia. Sprawdź połączenie lub skopiuj raport do schowka.",
+            });
+            setSubmitError(err.message ? `${genericMsg} (${err.message})` : genericMsg);
+        } finally {
+            setIsSending(false);
+        }
     };
 
     const getReportText = () => {
-        const typeObj = ERROR_TYPES.find((t) => t.id === errorType);
-        const typeLabel = typeObj
-            ? formatMessage({ id: typeObj.labelId, defaultMessage: typeObj.defaultMessage })
-            : errorType;
         return `[Zgłoszenie błędu w tłumaczeniu rBiblia]
 Tłumaczenie: ${translationName || translationId}
 Werset: ${bookName} ${chapterId}:${verseId}
 Oryginalny tekst: "${verseContent}"
-Typ błędu: ${typeLabel}
-Opis/Sugerowana poprawka: ${description}`;
+Proponowana poprawka: "${content}"
+Uwagi/Komentarz: ${notes}`;
     };
 
     const handleCopyReport = () => {
@@ -196,73 +245,102 @@ Opis/Sugerowana poprawka: ${description}`;
 
                     {view === "report" && (
                         <form onSubmit={handleReportSubmit} className="verse-actions-report-form">
-                            {verseContent && (
-                                <div className="verse-actions-verse-preview-small">
-                                    <strong>{translationName || translationId}:</strong> "{verseContent.replaceAll("//", " ")}"
+                            {submitError && (
+                                <div className="verse-actions-error-banner">
+                                    <div className="d-flex align-items-center justify-content-between w-100">
+                                        <div className="d-flex align-items-center">
+                                            <Icon name="alert-triangle" size={18} className="me-2 text-danger" />
+                                            <span>{submitError}</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="btn-copy-error-fallback"
+                                            onClick={handleCopyReport}
+                                            title={formatMessage({ id: "errorReportCopy", defaultMessage: "Skopiuj zgłoszenie" })}
+                                        >
+                                            <Icon name={copied ? "check" : "file-text"} size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 
                             <div className="verse-actions-form-group">
-                                <label className="verse-actions-label">
-                                    {formatMessage({ id: "errorReportType", defaultMessage: "Typ błędu" })}
+                                <label className="verse-actions-label" htmlFor="error-report-name">
+                                    {formatMessage({ id: "errorReportName", defaultMessage: "Imię" })}
                                 </label>
-                                <div className="verse-actions-radio-grid">
-                                    {ERROR_TYPES.map((t) => (
-                                        <label
-                                            key={t.id}
-                                            className={`verse-actions-radio-card ${
-                                                errorType === t.id ? "active" : ""
-                                            }`}
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="errorType"
-                                                value={t.id}
-                                                checked={errorType === t.id}
-                                                onChange={() => {
-                                                    setErrorType(t.id);
-                                                    if (errors.type) {
-                                                        setErrors((prev) => ({ ...prev, type: null }));
-                                                    }
-                                                }}
-                                                className="d-none"
-                                            />
-                                            <span className="radio-card-dot" />
-                                            <span className="radio-card-text">
-                                                {formatMessage({ id: t.labelId, defaultMessage: t.defaultMessage })}
-                                            </span>
-                                        </label>
-                                    ))}
-                                </div>
-                                {errors.type && <div className="verse-actions-error-msg">{errors.type}</div>}
+                                <input
+                                    id="error-report-name"
+                                    type="text"
+                                    className="verse-actions-input"
+                                    value={name}
+                                    onChange={(e) => {
+                                        setName(e.target.value);
+                                        if (errors.name) {
+                                            setErrors((prev) => ({ ...prev, name: null }));
+                                        }
+                                    }}
+                                    placeholder={formatMessage({ id: "errorReportName", defaultMessage: "Imię" })}
+                                    disabled={isSending}
+                                />
+                                {errors.name && <div className="verse-actions-error-msg">{errors.name}</div>}
                             </div>
 
                             <div className="verse-actions-form-group">
-                                <label className="verse-actions-label" htmlFor="error-description">
-                                    {formatMessage({
-                                        id: "errorReportDescription",
-                                        defaultMessage: "Opis błędu / sugerowana poprawka",
-                                    })}
+                                <label className="verse-actions-label" htmlFor="error-report-email">
+                                    {formatMessage({ id: "errorReportEmail", defaultMessage: "E-mail" })}
                                 </label>
-                                <textarea
-                                    id="error-description"
-                                    className="verse-actions-textarea"
-                                    value={description}
+                                <input
+                                    id="error-report-email"
+                                    type="email"
+                                    className="verse-actions-input"
+                                    value={email}
                                     onChange={(e) => {
-                                        setDescription(e.target.value);
-                                        if (errors.description) {
-                                            setErrors((prev) => ({ ...prev, description: null }));
+                                        setEmail(e.target.value);
+                                        if (errors.email) {
+                                            setErrors((prev) => ({ ...prev, email: null }));
                                         }
                                     }}
-                                    placeholder={formatMessage({
-                                        id: "errorReportDescriptionPlaceholder",
-                                        defaultMessage: "Wpisz szczegóły błędu...",
-                                    })}
-                                    rows={4}
+                                    placeholder={formatMessage({ id: "errorReportEmail", defaultMessage: "E-mail" })}
+                                    disabled={isSending}
                                 />
-                                {errors.description && (
-                                    <div className="verse-actions-error-msg">{errors.description}</div>
-                                )}
+                                {errors.email && <div className="verse-actions-error-msg">{errors.email}</div>}
+                            </div>
+
+                            <div className="verse-actions-form-group">
+                                <label className="verse-actions-label" htmlFor="error-report-content">
+                                    {formatMessage({ id: "errorReportContent", defaultMessage: "Proponowana poprawka (edytuj poniższy tekst)" })}
+                                </label>
+                                <textarea
+                                    id="error-report-content"
+                                    className="verse-actions-textarea"
+                                    value={content}
+                                    onChange={(e) => {
+                                        setContent(e.target.value);
+                                        if (errors.content) {
+                                            setErrors((prev) => ({ ...prev, content: null }));
+                                        }
+                                    }}
+                                    rows={3}
+                                    disabled={isSending}
+                                />
+                                {errors.content && <div className="verse-actions-error-msg">{errors.content}</div>}
+                            </div>
+
+                            <div className="verse-actions-form-group">
+                                <label className="verse-actions-label" htmlFor="error-report-notes">
+                                    {formatMessage({ id: "errorReportNotes", defaultMessage: "Opis błędu / komentarz" })}
+                                </label>
+                                <textarea
+                                    id="error-report-notes"
+                                    className="verse-actions-textarea"
+                                    value={notes}
+                                    onChange={(e) => {
+                                        setNotes(e.target.value);
+                                    }}
+                                    placeholder={formatMessage({ id: "errorReportDescriptionPlaceholder", defaultMessage: "Wpisz szczegóły błędu..." })}
+                                    rows={3}
+                                    disabled={isSending}
+                                />
                             </div>
 
                             <div className="verse-actions-form-actions">
@@ -270,11 +348,19 @@ Opis/Sugerowana poprawka: ${description}`;
                                     type="button"
                                     className="verse-actions-btn-secondary"
                                     onClick={() => setView("menu")}
+                                    disabled={isSending}
                                 >
                                     {formatMessage({ id: "errorReportCancel", defaultMessage: "Anuluj" })}
                                 </button>
-                                <button type="submit" className="verse-actions-btn-submit">
-                                    {formatMessage({ id: "errorReportSubmit", defaultMessage: "Wyślij zgłoszenie" })}
+                                <button type="submit" className="verse-actions-btn-submit" disabled={isSending}>
+                                    {isSending ? (
+                                        <>
+                                            <span className="report-spinner me-2" />
+                                            {formatMessage({ id: "errorReportSending", defaultMessage: "Wysyłanie..." })}
+                                        </>
+                                    ) : (
+                                        formatMessage({ id: "errorReportSubmit", defaultMessage: "Wyślij zgłoszenie" })
+                                    )}
                                 </button>
                             </div>
                         </form>
@@ -340,3 +426,4 @@ VerseActionsModal.propTypes = {
     hasNote: PropTypes.bool,
     onAction: PropTypes.func.isRequired,
 };
+

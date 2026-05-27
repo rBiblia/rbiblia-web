@@ -169,5 +169,15 @@
   "errorReportCopied": "Copied!",
   "errorReportCancel": "Cancel",
   "errorReportDescriptionRequired": "Error description is required.",
-  "errorReportTypeRequired": "Select an error type."
+  "errorReportTypeRequired": "Select an error type.",
+  "errorReportName": "Name",
+  "errorReportEmail": "Email",
+  "errorReportNotes": "Error description / comment",
+  "errorReportContent": "Suggested correction (edit the text below)",
+  "errorReportNameRequired": "Name is required.",
+  "errorReportEmailRequired": "Email address is required.",
+  "errorReportEmailInvalid": "Enter a valid email address.",
+  "errorReportContentRequired": "Corrected verse content is required.",
+  "errorReportSending": "Sending...",
+  "errorReportFailed": "Failed to send report. Check your connection or copy the report to the clipboard."
 }
