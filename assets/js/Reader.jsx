@@ -70,7 +70,7 @@ const Reader = memo(function Reader({
             <div className={`row ${continuousText ? "reader-continuous-row" : ""}`}>
                 {continuousText ? (
                     <>
-                        <div className="col-12 col-md-6 reader-continuous reader-current-chapter">
+                        <div className={`col-12 ${nextVerses ? "col-md-6" : ""} reader-continuous reader-current-chapter`}>
                             <h3 className="continuous-chapter-header">
                                 {selectedBookName} {selectedChapter}
                             </h3>
@@ -95,35 +95,33 @@ const Reader = memo(function Reader({
                                 )
                             )}
                         </div>
-                        <div className="col-12 col-md-6 reader-continuous reader-next-chapter">
-                            {nextVerses ? (
-                                <>
-                                    <h3 className="continuous-chapter-header">
-                                        {nextChapterBookName || selectedBookName} {nextChapterId}
-                                    </h3>
-                                    {Object.entries(nextVerses).map(
-                                        ([verseId, verseContent]) => (
-                                            <Verse
-                                                key={verseId}
-                                                bookId={nextChapterBookId}
-                                                chapterId={nextChapterId}
-                                                verseId={verseId}
-                                                translationId={selectedTranslation}
-                                                translationName={translationName}
-                                                verseContent={verseContent}
-                                                onVerseClick={onVerseClick}
-                                                notesVersion={notesVersion}
-                                                isHighlighted={false} // Only highlight in active chapter column
-                                                allNotes={allNotes}
-                                                allTranslationNotes={allTranslationNotes}
-                                                continuousText={continuousText}
-                                                hideVerseNumbers={hideVerseNumbers}
-                                            />
-                                        )
-                                    )}
-                                </>
-                            ) : null}
-                        </div>
+                        {nextVerses ? (
+                            <div className="col-12 col-md-6 reader-continuous reader-next-chapter">
+                                <h3 className="continuous-chapter-header">
+                                    {nextChapterBookName || selectedBookName} {nextChapterId}
+                                </h3>
+                                {Object.entries(nextVerses).map(
+                                    ([verseId, verseContent]) => (
+                                        <Verse
+                                            key={verseId}
+                                            bookId={nextChapterBookId}
+                                            chapterId={nextChapterId}
+                                            verseId={verseId}
+                                            translationId={selectedTranslation}
+                                            translationName={translationName}
+                                            verseContent={verseContent}
+                                            onVerseClick={onVerseClick}
+                                            notesVersion={notesVersion}
+                                            isHighlighted={false} // Only highlight in active chapter column
+                                            allNotes={allNotes}
+                                            allTranslationNotes={allTranslationNotes}
+                                            continuousText={continuousText}
+                                            hideVerseNumbers={hideVerseNumbers}
+                                        />
+                                    )
+                                )}
+                            </div>
+                        ) : null}
                     </>
                 ) : (
                     <div className="col-12">

@@ -92,6 +92,31 @@ const Bible = ({ intl, setLocale }) => {
         return safeLocalStorageGetItem("rbiblia-hide-verse-numbers") === "1";
     });
 
+    const [isMobile, setIsMobile] = useState(() => {
+        return typeof window !== "undefined" && window.innerWidth < 768;
+    });
+
+    // Update isMobile on window resize (debounced)
+    useEffect(() => {
+        let timer;
+        const handleResize = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                setIsMobile(window.innerWidth < 768);
+            }, 150);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    const showContinuous = showContinuousVal();
+    function showContinuousVal() {
+        return continuousText && !isMobile;
+    }
+
     const [nextVerses, setNextVerses] = useState(null);
     const [nextChapterBookId, setNextChapterBookId] = useState(null);
     const [nextChapterId, setNextChapterId] = useState(null);
@@ -249,9 +274,9 @@ const Bible = ({ intl, setLocale }) => {
             ? structure[selectedBook]
             : [];
 
-    // Fetch the next chapter's verses when continuousText is enabled
+    // Fetch the next chapter's verses when continuousText is enabled and not on mobile
     useEffect(() => {
-        if (!continuousText || !structure || !selectedBook || !selectedChapter || chapters.length === 0) {
+        if (!showContinuous || !structure || !selectedBook || !selectedChapter || chapters.length === 0) {
             setNextVerses(null);
             setNextChapterBookId(null);
             setNextChapterId(null);
@@ -309,7 +334,7 @@ const Bible = ({ intl, setLocale }) => {
         };
 
         fetchNextChapter();
-    }, [continuousText, selectedTranslation, selectedBook, selectedChapter, structure, chapters, books, versesCache]);
+    }, [showContinuous, selectedTranslation, selectedBook, selectedChapter, structure, chapters, books, versesCache]);
 
     const changeSelectedTranslation = useCallback(
         (newTranslation) => {
@@ -380,6 +405,9 @@ const Bible = ({ intl, setLocale }) => {
         }
 
         if (startFromLastVerse) {
+            if (showContinuous && structure[selectedBook].length >= 2) {
+                return structure[selectedBook][structure[selectedBook].length - 2];
+            }
             return structure[selectedBook][structure[selectedBook].length - 1];
         }
 
@@ -541,8 +569,12 @@ const Bible = ({ intl, setLocale }) => {
         [chapters, selectedChapter]
     );
 
-    const isNextChapterAvailable = () =>
-        !isStructureLoading && chapters[chapterIndex + 1] !== undefined;
+    const isNextChapterAvailable = () => {
+        if (showContinuous) {
+            return !isStructureLoading && chapters[chapterIndex + 2] !== undefined;
+        }
+        return !isStructureLoading && chapters[chapterIndex + 1] !== undefined;
+    };
 
     const isPrevChapterAvailable = () => {
         return !isStructureLoading && chapterIndex !== 0;
@@ -571,7 +603,11 @@ const Bible = ({ intl, setLocale }) => {
 
     const nextChapter = () => {
         if (isNextChapterAvailable()) {
-            changeSelectedChapter(chapters[chapterIndex + 1]);
+            if (showContinuous) {
+                changeSelectedChapter(chapters[chapterIndex + 2]);
+            } else {
+                changeSelectedChapter(chapters[chapterIndex + 1]);
+            }
             return;
         }
         nextBook();
@@ -579,7 +615,15 @@ const Bible = ({ intl, setLocale }) => {
 
     const prevChapter = () => {
         if (isPrevChapterAvailable()) {
-            changeSelectedChapter(chapters[chapterIndex - 1]);
+            if (showContinuous) {
+                if (chapterIndex - 2 >= 0) {
+                    changeSelectedChapter(chapters[chapterIndex - 2]);
+                } else {
+                    changeSelectedChapter(chapters[0]);
+                }
+            } else {
+                changeSelectedChapter(chapters[chapterIndex - 1]);
+            }
             return;
         }
 
@@ -745,6 +789,32 @@ const Bible = ({ intl, setLocale }) => {
         [selectedBook, books]
     );
 
+    const navigatorLocationText = useMemo(() => {
+        if (!books[selectedBook]) return "...";
+        const currentBookName = books[selectedBook].name;
+        if (showContinuous && nextChapterId) {
+            if (nextChapterBookId === selectedBook) {
+                return `${currentBookName} ${selectedChapter}-${nextChapterId}`;
+            } else if (nextChapterBookName) {
+                return `${currentBookName} ${selectedChapter} - ${nextChapterBookName} ${nextChapterId}`;
+            }
+        }
+        return `${currentBookName} ${selectedChapter}`;
+    }, [books, selectedBook, selectedChapter, showContinuous, nextChapterId, nextChapterBookId, nextChapterBookName]);
+
+    const bottomNavigationLocationText = useMemo(() => {
+        if (!currentBookSigla) return "...";
+        if (showContinuous && nextChapterId) {
+            if (nextChapterBookId === selectedBook) {
+                return `${currentBookSigla} ${selectedChapter}-${nextChapterId}`;
+            } else {
+                const nextBookSigla = books[nextChapterBookId]?.sigla || nextChapterBookId?.toUpperCase() || "";
+                return `${currentBookSigla} ${selectedChapter} - ${nextBookSigla} ${nextChapterId}`;
+            }
+        }
+        return `${currentBookSigla} ${selectedChapter}`;
+    }, [currentBookSigla, selectedChapter, showContinuous, nextChapterId, nextChapterBookId, books, selectedBook]);
+
     // Stable callbacks for Reader → Verse (prevents memo breakage)
     const handleVerseClick = useCallback(
         (verseId, bookId, chapterId) => {
@@ -830,6 +900,7 @@ const Bible = ({ intl, setLocale }) => {
                 onOpenSettings={handleOpenSettings}
                 onOpenChapterComparison={handleOpenChapterComp}
                 immersiveDisabled={immersiveDisabled}
+                locationText={navigatorLocationText}
             />
             <Suspense fallback={<FullscreenOverlayFallback />}>
                 {isSelectionOpen && (
@@ -891,6 +962,7 @@ const Bible = ({ intl, setLocale }) => {
                 currentBook={currentBookSigla}
                 currentChapter={selectedChapter}
                 immersiveDisabled={immersiveDisabled}
+                locationText={bottomNavigationLocationText}
             />
             {/* Notes Panel */}
             <NotesPanel
