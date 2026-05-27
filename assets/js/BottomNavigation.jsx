@@ -17,6 +17,7 @@ const BottomNavigation = memo(function BottomNavigation({
     currentChapter,
     className = "",
     immersiveDisabled = false,
+    locationText,
 }) {
     const { formatMessage } = useIntl();
     const isNavVisible = useScrollDirection({ disabled: immersiveDisabled });
@@ -63,7 +64,7 @@ const BottomNavigation = memo(function BottomNavigation({
             >
                 <Icon className="bottom-nav-icon" name="book-marked" />
                 <span className="bottom-nav-label bottom-nav-location">
-                    {currentBook ? `${currentBook} ${currentChapter}` : "..."}
+                    {locationText || (currentBook ? `${currentBook} ${currentChapter}` : "...")}
                 </span>
             </button>
 
@@ -126,6 +127,7 @@ BottomNavigation.propTypes = {
         .isRequired,
     className: PropTypes.string,
     immersiveDisabled: PropTypes.bool,
+    locationText: PropTypes.string,
 };
 
 export default BottomNavigation;
