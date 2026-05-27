@@ -50,20 +50,20 @@ describe('Verse component', () => {
     expect(screen.getByText('This is a note')).toBeInTheDocument();
   });
 
-  it('handles verse actions for notes and compare', () => {
-    const onVerseLongPress = vi.fn();
-    const onVerseCompare = vi.fn();
-    
-    render(<Verse {...defaultProps} onVerseLongPress={onVerseLongPress} onVerseCompare={onVerseCompare} />);
-    
-    const addNoteBtn = screen.getByTitle('addNote');
-    const compareBtn = screen.getByTitle('compareVerse');
-    
-    fireEvent.click(addNoteBtn);
-    expect(onVerseLongPress).toHaveBeenCalledWith("1");
-    
-    fireEvent.click(compareBtn);
-    expect(onVerseCompare).toHaveBeenCalledWith("1");
+  it('renders dataset attributes on the outermost element in both layouts', () => {
+    // 1. Block layout
+    const { container: blockContainer } = render(<Verse {...defaultProps} />);
+    const blockOuter = blockContainer.firstChild;
+    expect(blockOuter.dataset.verseId).toBe("1");
+    expect(blockOuter.dataset.bookId).toBe("gen");
+    expect(blockOuter.dataset.chapterId).toBe("1");
+
+    // 2. Continuous layout
+    const { container: contContainer } = render(<Verse {...defaultProps} continuousText={true} />);
+    const contOuter = contContainer.firstChild;
+    expect(contOuter.dataset.verseId).toBe("1");
+    expect(contOuter.dataset.bookId).toBe("gen");
+    expect(contOuter.dataset.chapterId).toBe("1");
   });
 
   it('renders translation notes and allows expanding/collapsing long notes', () => {
@@ -123,5 +123,19 @@ describe('Verse component', () => {
     expect(screen.getByText('1')).toBeInTheDocument(); // link text is just the verseId "1" instead of "1:1"
     
     expect(screen.getByText('Na początku Bóg stworzył niebo i ziemię.')).toBeInTheDocument();
+  });
+
+  it('hides verse numbers when hideVerseNumbers is true ONLY in continuous mode', () => {
+    // 1. Block Mode - Should NOT hide verse numbers even if hideVerseNumbers is true
+    const { container: blockContainer } = render(<Verse {...defaultProps} hideVerseNumbers={true} />);
+    const blockNumberCell = blockContainer.querySelector('.verse-number-cell');
+    expect(blockNumberCell).not.toHaveClass('d-none');
+    const blockVerseWrapper = blockContainer.querySelector('.verse');
+    expect(blockVerseWrapper).toHaveClass('col-10');
+
+    // 2. Continuous Mode - Should hide verse numbers
+    const { container: contContainer } = render(<Verse {...defaultProps} continuousText={true} hideVerseNumbers={true} />);
+    const contNumberSpan = contContainer.querySelector('.verse-number-inline');
+    expect(contNumberSpan).toHaveClass('d-none');
   });
 });

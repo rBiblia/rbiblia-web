@@ -418,15 +418,6 @@ header.sticky-top {
   }
 }
 
-// Hide floating action buttons only on actual mobile devices.
-// Combined media query prevents Brave desktop (with fingerprint protection
-// spoofing hover: none) from hiding verse-actions in narrowed windows.
-@media (hover: none) and (pointer: coarse) and (max-width: 991.98px) {
-  .verse-actions {
-    display: none !important;
-  }
-}
-
 // 9. High Contrast Mode Support
 // ---------------------------------------------------------
 

@@ -39,6 +39,7 @@ const SearchPanel = React.lazy(() => import("./SearchPanel"));
 const ChapterComparison = React.lazy(() => import("./ChapterComparison"));
 const ChangelogModal = React.lazy(() => import("./ChangelogModal"));
 const AboutModal = React.lazy(() => import("./AboutModal"));
+const VerseActionsModal = React.lazy(() => import("./VerseActionsModal"));
 
 const FullscreenOverlayFallback = () => (
     <div className="selection-overlay" aria-hidden="true" />
@@ -69,6 +70,7 @@ const Bible = ({ intl, setLocale }) => {
     // Note editor state
     const [editingNoteVerse, setEditingNoteVerse] = useState(null);
     const [notesVersion, setNotesVersion] = useState(0); // Increment to refresh note indicators
+    const [activeVerseMenu, setActiveVerseMenu] = useState(null);
 
     // Font size (saved to localStorage)
     const [fontSize, setFontSize] = useState(() => {
@@ -85,6 +87,15 @@ const Bible = ({ intl, setLocale }) => {
     const [continuousText, setContinuousText] = useState(() => {
         return safeLocalStorageGetItem("rbiblia-continuous-text") === "1";
     });
+
+    const [hideVerseNumbers, setHideVerseNumbers] = useState(() => {
+        return safeLocalStorageGetItem("rbiblia-hide-verse-numbers") === "1";
+    });
+
+    const [nextVerses, setNextVerses] = useState(null);
+    const [nextChapterBookId, setNextChapterBookId] = useState(null);
+    const [nextChapterId, setNextChapterId] = useState(null);
+    const [nextChapterBookName, setNextChapterBookName] = useState(null);
 
     const immersiveDisabled = !zenMode || isWelcomePopupOpen;
 
@@ -151,6 +162,11 @@ const Bible = ({ intl, setLocale }) => {
     useEffect(() => {
         safeLocalStorageSetItem("rbiblia-continuous-text", continuousText ? "1" : "0");
     }, [continuousText]);
+
+    // Save hideVerseNumbers to localStorage
+    useEffect(() => {
+        safeLocalStorageSetItem("rbiblia-hide-verse-numbers", hideVerseNumbers ? "1" : "0");
+    }, [hideVerseNumbers]);
 
     // Save font family to localStorage and apply to CSS variable
     useEffect(() => {
@@ -232,6 +248,68 @@ const Bible = ({ intl, setLocale }) => {
         structure && selectedBook && structure[selectedBook]
             ? structure[selectedBook]
             : [];
+
+    // Fetch the next chapter's verses when continuousText is enabled
+    useEffect(() => {
+        if (!continuousText || !structure || !selectedBook || !selectedChapter || chapters.length === 0) {
+            setNextVerses(null);
+            setNextChapterBookId(null);
+            setNextChapterId(null);
+            setNextChapterBookName(null);
+            return;
+        }
+
+        const fetchNextChapter = async () => {
+            const chIndex = chapters.indexOf(Number.parseInt(selectedChapter, 10));
+            let nextInfo = null;
+
+            if (chapters[chIndex + 1] !== undefined) {
+                nextInfo = {
+                    bookId: selectedBook,
+                    chapterId: chapters[chIndex + 1],
+                    bookName: books[selectedBook]?.name,
+                };
+            } else {
+                const bKeys = Object.keys(structure);
+                const bIndex = bKeys.indexOf(selectedBook);
+                if (bKeys[bIndex + 1] !== undefined) {
+                    const nextBId = bKeys[bIndex + 1];
+                    const nextBChs = structure[nextBId];
+                    if (nextBChs && nextBChs.length > 0) {
+                        nextInfo = {
+                            bookId: nextBId,
+                            chapterId: nextBChs[0],
+                            bookName: books[nextBId]?.name,
+                        };
+                    }
+                }
+            }
+
+            if (nextInfo) {
+                setNextChapterBookId(nextInfo.bookId);
+                setNextChapterId(nextInfo.chapterId);
+                setNextChapterBookName(nextInfo.bookName);
+                try {
+                    const result = await versesCache.getVerses(
+                        selectedTranslation,
+                        nextInfo.bookId,
+                        nextInfo.chapterId
+                    );
+                    setNextVerses(result.data);
+                } catch (err) {
+                    console.error("Failed to load next chapter", err);
+                    setNextVerses(null);
+                }
+            } else {
+                setNextVerses(null);
+                setNextChapterBookId(null);
+                setNextChapterId(null);
+                setNextChapterBookName(null);
+            }
+        };
+
+        fetchNextChapter();
+    }, [continuousText, selectedTranslation, selectedBook, selectedChapter, structure, chapters, books, versesCache]);
 
     const changeSelectedTranslation = useCallback(
         (newTranslation) => {
@@ -669,15 +747,9 @@ const Bible = ({ intl, setLocale }) => {
 
     // Stable callbacks for Reader → Verse (prevents memo breakage)
     const handleVerseClick = useCallback(
-        (verseId) => setComparedVerse(verseId),
-        []
-    );
-    const handleVerseLongPress = useCallback(
-        (verseId) => setEditingNoteVerse(verseId),
-        []
-    );
-    const handleVerseCompare = useCallback(
-        (verseId) => setComparedVerse(verseId),
+        (verseId, bookId, chapterId) => {
+            setActiveVerseMenu({ verseId, bookId, chapterId });
+        },
         []
     );
 
@@ -791,18 +863,22 @@ const Bible = ({ intl, setLocale }) => {
             <Reader
                 showVerses={showVerses}
                 selectedBook={selectedBook}
+                selectedBookName={books[selectedBook]?.name}
                 selectedChapter={selectedChapter}
                 selectedTranslation={selectedTranslation}
                 translationName={translationName}
                 verses={verses}
                 onVerseClick={handleVerseClick}
-                onVerseLongPress={handleVerseLongPress}
-                onVerseCompare={handleVerseCompare}
                 notesVersion={notesVersion}
                 highlightedVerse={highlightedVerse}
                 allNotes={allNotes}
                 allTranslationNotes={allTranslationNotes}
                 continuousText={continuousText}
+                hideVerseNumbers={hideVerseNumbers}
+                nextVerses={nextVerses}
+                nextChapterBookId={nextChapterBookId}
+                nextChapterId={nextChapterId}
+                nextChapterBookName={nextChapterBookName}
             />
             <BottomNavigation
                 onPrevChapter={prevChapter}
@@ -867,6 +943,8 @@ const Bible = ({ intl, setLocale }) => {
                     setFontFamily={setFontFamily}
                     continuousText={continuousText}
                     setContinuousText={setContinuousText}
+                    hideVerseNumbers={hideVerseNumbers}
+                    setHideVerseNumbers={setHideVerseNumbers}
                     translations={translations}
                     setLocaleAndUpdateHistory={setLocaleAndUpdateHistory}
                     theme={theme}
@@ -904,6 +982,55 @@ const Bible = ({ intl, setLocale }) => {
             </Suspense>
             <Suspense fallback={null}>
                 <AboutModal isOpen={isAboutOpen} onClose={handleCloseAbout} />
+            </Suspense>
+            <Suspense fallback={null}>
+                {activeVerseMenu && (
+                    <VerseActionsModal
+                        isOpen={activeVerseMenu !== null}
+                        onClose={() => setActiveVerseMenu(null)}
+                        bookId={activeVerseMenu.bookId || selectedBook}
+                        chapterId={activeVerseMenu.chapterId || selectedChapter}
+                        verseId={activeVerseMenu.verseId}
+                        bookName={books[activeVerseMenu.bookId || selectedBook]?.name}
+                        translationId={selectedTranslation}
+                        translationName={translationName}
+                        verseContent={
+                            (activeVerseMenu.bookId === selectedBook && activeVerseMenu.chapterId === selectedChapter)
+                                ? verses[activeVerseMenu.verseId]
+                                : (nextVerses && activeVerseMenu.bookId === nextChapterBookId && activeVerseMenu.chapterId === nextChapterId)
+                                    ? nextVerses[activeVerseMenu.verseId]
+                                    : ""
+                        }
+                        hasNote={
+                            (() => {
+                                const verseKey = `${activeVerseMenu.bookId || selectedBook}_${activeVerseMenu.chapterId || selectedChapter}_${activeVerseMenu.verseId}`;
+                                const notes = loadNotes();
+                                if (notes[verseKey]) return true;
+                                if (selectedTranslation) {
+                                    const translationVerseKey = `${selectedTranslation}_${verseKey}`;
+                                    const tNotes = loadTranslationNotes();
+                                    if (tNotes[translationVerseKey]) return true;
+                                }
+                                return false;
+                            })()
+                        }
+                        onAction={(action) => {
+                            const { verseId, bookId, chapterId } = activeVerseMenu;
+                            setActiveVerseMenu(null);
+                            if (action === "compare") {
+                                if (bookId && chapterId && (bookId !== selectedBook || chapterId !== selectedChapter)) {
+                                    navigateToBookAndChapter(bookId, chapterId);
+                                }
+                                setComparedVerse(verseId);
+                            } else if (action === "note") {
+                                if (bookId && chapterId && (bookId !== selectedBook || chapterId !== selectedChapter)) {
+                                    navigateToBookAndChapter(bookId, chapterId);
+                                }
+                                setEditingNoteVerse(verseId);
+                            }
+                        }}
+                    />
+                )}
             </Suspense>
             <WelcomePopup
                 isOpen={isWelcomePopupOpen}

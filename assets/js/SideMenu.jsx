@@ -132,6 +132,8 @@ const DisplaySettings = ({
     setFontFamily,
     continuousText,
     setContinuousText,
+    hideVerseNumbers,
+    setHideVerseNumbers,
     translations = [],
     setLocaleAndUpdateHistory,
     theme,
@@ -411,6 +413,42 @@ const DisplaySettings = ({
                                             {formatMessage({
                                                 id: "verseLayoutContinuous",
                                                 defaultMessage: "Tekst ciągły",
+                                            })}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Verse numbers visibility setting */}
+                            {continuousText && setHideVerseNumbers !== undefined && (
+                                <div className="setting-group stagger-4">
+                                    <label className="setting-label">
+                                        {formatMessage({
+                                            id: "verseNumbersVisibility",
+                                            defaultMessage: "Widoczność numerów wersetów",
+                                        })}
+                                    </label>
+                                    <div className="diff-mode-toggle">
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                hideVerseNumbers ? "" : "active"
+                                            }`}
+                                            onClick={() => setHideVerseNumbers(false)}
+                                        >
+                                            {formatMessage({
+                                                id: "showVerseNumbers",
+                                                defaultMessage: "Pokaż",
+                                            })}
+                                        </button>
+                                        <button
+                                            className={`diff-mode-btn ${
+                                                hideVerseNumbers ? "active" : ""
+                                            }`}
+                                            onClick={() => setHideVerseNumbers(true)}
+                                        >
+                                            {formatMessage({
+                                                id: "hideVerseNumbers",
+                                                defaultMessage: "Ukryj",
                                             })}
                                         </button>
                                     </div>
@@ -882,6 +920,8 @@ DisplaySettings.propTypes = {
     setFontFamily: PropTypes.func,
     continuousText: PropTypes.bool,
     setContinuousText: PropTypes.func,
+    hideVerseNumbers: PropTypes.bool,
+    setHideVerseNumbers: PropTypes.func,
     translations: PropTypes.array,
     setLocaleAndUpdateHistory: PropTypes.func,
     theme: PropTypes.string,
