@@ -169,5 +169,15 @@
   "errorReportCopied": "Skopiowano!",
   "errorReportCancel": "Anuluj",
   "errorReportDescriptionRequired": "Opis błędu jest wymagany.",
-  "errorReportTypeRequired": "Wybierz typ błędu."
+  "errorReportTypeRequired": "Wybierz typ błędu.",
+  "errorReportName": "Imię",
+  "errorReportEmail": "E-mail",
+  "errorReportNotes": "Opis błędu / komentarz",
+  "errorReportContent": "Proponowana poprawka (edytuj poniższy tekst)",
+  "errorReportNameRequired": "Imię jest wymagane.",
+  "errorReportEmailRequired": "Adres e-mail jest wymagany.",
+  "errorReportEmailInvalid": "Wpisz poprawny adres e-mail.",
+  "errorReportContentRequired": "Poprawiona treść wersetu jest wymagana.",
+  "errorReportSending": "Wysyłanie...",
+  "errorReportFailed": "Nie udało się wysłać zgłoszenia. Sprawdź połączenie lub skopiuj raport do schowka."
 }

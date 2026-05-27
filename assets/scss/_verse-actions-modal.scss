@@ -348,7 +348,8 @@
   }
 }
 
-.verse-actions-textarea {
+.verse-actions-textarea,
+.verse-actions-input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 2px solid #e5e7eb;
@@ -358,7 +359,6 @@
   font-size: 1rem;
   font-family: inherit;
   transition: border-color 0.15s ease;
-  resize: vertical;
 
   &:focus {
     outline: none;
@@ -372,6 +372,69 @@
 
     &:focus {
       border-color: var(--dm-accent);
+    }
+  }
+}
+
+.verse-actions-textarea {
+  resize: vertical;
+}
+
+.report-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(162, 134, 93, 0.2);
+  border-top-color: #a2865d;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+
+  @include dark-mode {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: var(--dm-accent);
+  }
+}
+
+.verse-actions-error-banner {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  color: #ef4444;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  .btn-copy-error-fallback {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ef4444;
+    padding: 2px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  @include dark-mode {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+
+    .btn-copy-error-fallback {
+      color: #ef4444;
+
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.15);
+      }
     }
   }
 }
