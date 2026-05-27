@@ -1,13 +1,15 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Reader from '../../assets/js/Reader';
 
 vi.mock('../../assets/js/Verse', () => ({
-    default: ({ verseId, verseContent, isHighlighted }) => (
+    default: ({ verseId, verseContent, isHighlighted, bookId, chapterId }) => (
         <div 
-            className={`verse ${isHighlighted ? 'highlight' : ''}`}
+            className={`verse line ${isHighlighted ? 'highlight' : ''}`}
             data-verse-id={verseId}
+            data-book-id={bookId}
+            data-chapter-id={chapterId}
             data-testid={`verse-${verseId}`}
         >
             {verseContent}
@@ -20,15 +22,6 @@ vi.mock('../../assets/js/SkeletonLoader', () => ({
 }));
 
 describe('Reader', () => {
-    beforeEach(() => {
-        vi.useFakeTimers();
-    });
-
-    afterEach(() => {
-        vi.useRealTimers();
-        vi.clearAllMocks();
-    });
-
     const defaultProps = {
         selectedBook: 'gen',
         selectedChapter: 1,
@@ -40,9 +33,11 @@ describe('Reader', () => {
         },
         showVerses: true,
         onVerseClick: vi.fn(),
-        onVerseLongPress: vi.fn(),
-        onVerseCompare: vi.fn(),
     };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
 
     it('renders SkeletonLoader when showVerses is false', () => {
         render(<Reader {...defaultProps} showVerses={false} />);
@@ -70,7 +65,7 @@ describe('Reader', () => {
         const verseEl = screen.getByTestId('verse-1');
         fireEvent.click(verseEl);
         
-        expect(onVerseClick).toHaveBeenCalledWith('1');
+        expect(onVerseClick).toHaveBeenCalledWith('1', 'gen', '1');
     });
 
     it('calls onVerseClick when Enter is pressed on a verse', () => {
@@ -80,98 +75,47 @@ describe('Reader', () => {
         const verseEl = screen.getByTestId('verse-1');
         fireEvent.keyDown(verseEl, { key: 'Enter' });
         
-        expect(onVerseClick).toHaveBeenCalledWith('1');
+        expect(onVerseClick).toHaveBeenCalledWith('1', 'gen', '1');
     });
 
-    it('triggers long press via mouse events', () => {
-        const onVerseLongPress = vi.fn();
-        render(<Reader {...defaultProps} onVerseLongPress={onVerseLongPress} />);
-        
-        const verseEl = screen.getByTestId('verse-2');
-        
-        fireEvent.mouseDown(verseEl, { button: 0, clientX: 100, clientY: 100 });
-        
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-        
-        expect(onVerseLongPress).toHaveBeenCalledWith('2');
-        
-        const onVerseClick = vi.fn();
-        fireEvent.click(verseEl);
-        expect(onVerseClick).not.toHaveBeenCalled();
-    });
+    it('renders side-by-side columns for current and next chapter in continuousText mode', () => {
+        const continuousProps = {
+            ...defaultProps,
+            continuousText: true,
+            selectedBookName: 'Księga Rodzaju',
+            nextVerses: {
+                '1': 'And it came to pass...',
+                '2': 'And God said...'
+            },
+            nextChapterBookId: 'gen',
+            nextChapterId: 2,
+            nextChapterBookName: 'Księga Rodzaju'
+        };
 
-    it('cancels long press on mouse move', () => {
-        const onVerseLongPress = vi.fn();
-        render(<Reader {...defaultProps} onVerseLongPress={onVerseLongPress} />);
-        
-        const verseEl = screen.getByTestId('verse-1');
-        
-        fireEvent.mouseDown(verseEl, { button: 0, clientX: 100, clientY: 100 });
-        fireEvent.mouseMove(verseEl, { clientX: 120, clientY: 120 });
-        
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-        
-        expect(onVerseLongPress).not.toHaveBeenCalled();
-    });
+        const { container } = render(<Reader {...continuousProps} />);
 
-    it('triggers long press via touch events', () => {
-        const onVerseLongPress = vi.fn();
-        render(<Reader {...defaultProps} onVerseLongPress={onVerseLongPress} />);
-        
-        const verseEl = screen.getByTestId('verse-1');
-        
-        fireEvent.touchStart(verseEl, {
-            touches: [{ clientX: 50, clientY: 50 }]
-        });
-        
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-        
-        expect(onVerseLongPress).toHaveBeenCalledWith('1');
-    });
+        // Verify container elements and column headers
+        expect(screen.getByText('Księga Rodzaju 1')).toBeInTheDocument();
+        expect(screen.getByText('Księga Rodzaju 2')).toBeInTheDocument();
 
-    it('cancels long press on touch move', () => {
-        const onVerseLongPress = vi.fn();
-        render(<Reader {...defaultProps} onVerseLongPress={onVerseLongPress} />);
-        
-        const verseEl = screen.getByTestId('verse-1');
-        
-        fireEvent.touchStart(verseEl, {
-            touches: [{ clientX: 50, clientY: 50 }]
-        });
-        
-        fireEvent.touchMove(verseEl, {
-            touches: [{ clientX: 70, clientY: 70 }]
-        });
-        
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-        
-        expect(onVerseLongPress).not.toHaveBeenCalled();
-    });
+        // Verify current chapter verse exists and has correct bookId and chapterId
+        const currentVerseEl = screen.getByText('In the beginning God created the heaven and the earth.');
+        expect(currentVerseEl).toBeInTheDocument();
+        expect(currentVerseEl.dataset.bookId).toBe('gen');
+        expect(currentVerseEl.dataset.chapterId).toBe('1');
 
-    it('cancels long press on touch end', () => {
-        const onVerseLongPress = vi.fn();
-        render(<Reader {...defaultProps} onVerseLongPress={onVerseLongPress} />);
-        
-        const verseEl = screen.getByTestId('verse-1');
-        
-        fireEvent.touchStart(verseEl, {
-            touches: [{ clientX: 50, clientY: 50 }]
-        });
-        
-        fireEvent.touchEnd(verseEl);
-        
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-        
-        expect(onVerseLongPress).not.toHaveBeenCalled();
+        // Verify next chapter verse exists and has correct bookId and chapterId
+        const nextVerseEl = screen.getByText('And it came to pass...');
+        expect(nextVerseEl).toBeInTheDocument();
+        expect(nextVerseEl.dataset.bookId).toBe('gen');
+        expect(nextVerseEl.dataset.chapterId).toBe('2');
+
+        // Verify layout columns are present
+        const currentCol = container.querySelector('.reader-current-chapter');
+        const nextCol = container.querySelector('.reader-next-chapter');
+        expect(currentCol).toBeTruthy();
+        expect(nextCol).toBeTruthy();
+        expect(currentCol).toHaveClass('col-md-6');
+        expect(nextCol).toHaveClass('col-md-6');
     });
 });

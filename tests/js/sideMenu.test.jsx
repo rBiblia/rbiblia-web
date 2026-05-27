@@ -59,7 +59,13 @@ const messages = {
     comparisonSettings: 'Comparison Settings',
     diffMode: 'Diff Mode',
     zenMode: 'Zen Mode',
-    removeFromFavorites: 'Remove from favorites'
+    removeFromFavorites: 'Remove from favorites',
+    verseLayout: 'Verse Layout',
+    verseLayoutSplit: 'Werset po wersecie',
+    verseLayoutContinuous: 'Tekst ciągły',
+    verseNumbersVisibility: 'Widoczność numerów wersetów',
+    showVerseNumbers: 'Pokaż',
+    hideVerseNumbers: 'Ukryj'
 };
 
 const renderWithIntl = (ui) => {
@@ -138,7 +144,11 @@ describe('SideMenu UI Components', () => {
             setZenMode: vi.fn(),
             onClose: vi.fn(),
             onOpenChangelog: vi.fn(),
-            onOpenAbout: vi.fn()
+            onOpenAbout: vi.fn(),
+            continuousText: false,
+            setContinuousText: vi.fn(),
+            hideVerseNumbers: false,
+            setHideVerseNumbers: vi.fn()
         };
 
         it('renders tab dock with 5 tabs', () => {
@@ -265,6 +275,44 @@ describe('SideMenu UI Components', () => {
             if(removeBtns.length > 0) {
                 fireEvent.click(removeBtns[0]);
             }
+        });
+
+        it('shows or hides verse numbers toggle based on continuousText prop', () => {
+            const setContinuousTextMock = vi.fn();
+            const setHideVerseNumbersMock = vi.fn();
+
+            // 1. When continuousText is false, the verse numbers visibility setting should NOT be rendered
+            const { rerender } = renderWithIntl(
+                <DisplaySettings
+                    {...defaultProps}
+                    continuousText={false}
+                    setContinuousText={setContinuousTextMock}
+                    setHideVerseNumbers={setHideVerseNumbersMock}
+                />
+            );
+            expect(screen.queryByText('Widoczność numerów wersetów')).toBeNull();
+
+            // 2. When continuousText is true, the verse numbers visibility setting should be rendered
+            rerender(
+                <IntlProvider locale="en" messages={messages}>
+                    <DisplaySettings
+                        {...defaultProps}
+                        continuousText={true}
+                        setContinuousText={setContinuousTextMock}
+                        setHideVerseNumbers={setHideVerseNumbersMock}
+                    />
+                </IntlProvider>
+            );
+            expect(screen.getByText('Widoczność numerów wersetów')).toBeInTheDocument();
+
+            // 3. Test changing hideVerseNumbers state
+            const hideBtn = screen.getByText('Ukryj');
+            fireEvent.click(hideBtn);
+            expect(setHideVerseNumbersMock).toHaveBeenCalledWith(true);
+
+            const showBtn = screen.getByText('Pokaż');
+            fireEvent.click(showBtn);
+            expect(setHideVerseNumbersMock).toHaveBeenCalledWith(false);
         });
     });
 });
