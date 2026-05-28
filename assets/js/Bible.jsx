@@ -114,7 +114,7 @@ const Bible = ({ intl, setLocale }) => {
 
     const showContinuous = showContinuousVal();
     function showContinuousVal() {
-        return continuousText && !isMobile;
+        return false;
     }
 
     const [nextVerses, setNextVerses] = useState(null);

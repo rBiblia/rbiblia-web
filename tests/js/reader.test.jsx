@@ -78,44 +78,18 @@ describe('Reader', () => {
         expect(onVerseClick).toHaveBeenCalledWith('1', 'gen', '1');
     });
 
-    it('renders side-by-side columns for current and next chapter in continuousText mode', () => {
+    it('renders single column layout with reader-continuous class in continuousText mode', () => {
         const continuousProps = {
             ...defaultProps,
             continuousText: true,
             selectedBookName: 'Księga Rodzaju',
-            nextVerses: {
-                '1': 'And it came to pass...',
-                '2': 'And God said...'
-            },
-            nextChapterBookId: 'gen',
-            nextChapterId: 2,
-            nextChapterBookName: 'Księga Rodzaju'
         };
 
         const { container } = render(<Reader {...continuousProps} />);
 
-        // Verify container elements and column headers
-        expect(screen.getByText('Księga Rodzaju 1')).toBeInTheDocument();
-        expect(screen.getByText('Księga Rodzaju 2')).toBeInTheDocument();
-
-        // Verify current chapter verse exists and has correct bookId and chapterId
-        const currentVerseEl = screen.getByText('In the beginning God created the heaven and the earth.');
-        expect(currentVerseEl).toBeInTheDocument();
-        expect(currentVerseEl.dataset.bookId).toBe('gen');
-        expect(currentVerseEl.dataset.chapterId).toBe('1');
-
-        // Verify next chapter verse exists and has correct bookId and chapterId
-        const nextVerseEl = screen.getByText('And it came to pass...');
-        expect(nextVerseEl).toBeInTheDocument();
-        expect(nextVerseEl.dataset.bookId).toBe('gen');
-        expect(nextVerseEl.dataset.chapterId).toBe('2');
-
-        // Verify layout columns are present
-        const currentCol = container.querySelector('.reader-current-chapter');
-        const nextCol = container.querySelector('.reader-next-chapter');
+        // Verify layout column is present and has correct class
+        const currentCol = container.querySelector('.reader-continuous');
         expect(currentCol).toBeTruthy();
-        expect(nextCol).toBeTruthy();
-        expect(currentCol).toHaveClass('col-md-6');
-        expect(nextCol).toHaveClass('col-md-6');
+        expect(currentCol).toHaveClass('col-12');
     });
 });
