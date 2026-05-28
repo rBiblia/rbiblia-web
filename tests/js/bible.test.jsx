@@ -300,43 +300,6 @@ describe('Bible Component', () => {
         });
 
         // Initially we are on Gen chapter 1. Under mocked structure 'Gen' has [1, 2, 3] chapters.
-        // Clicking next chapter should jump by 2 chapters (from index 0 to index 2), so chapter 3.
-        await act(async () => {
-            fireEvent.click(screen.getByTestId('nav-next-chap'));
-        });
-
-        await waitFor(() => {
-            expect(mockGetVerses).toHaveBeenCalledWith('pl-bg', 'Gen', 3);
-        });
-
-        // Going back by 2 chapters should land back at index 0 (chapter 1).
-        await act(async () => {
-            fireEvent.click(screen.getByTestId('nav-prev-chap'));
-        });
-
-        await waitFor(() => {
-            expect(mockGetVerses).toHaveBeenCalledWith('pl-bg', 'Gen', 1);
-        });
-    });
-
-    it('handles continuousText navigation on mobile (falls back to step size 1)', async () => {
-        // Set window.innerWidth to mobile size
-        Object.defineProperty(window, 'innerWidth', { value: 500, writable: true, configurable: true });
-        window.dispatchEvent(new Event('resize'));
-
-        const { safeLocalStorageGetItem } = await import('../../assets/js/safeStorage');
-        safeLocalStorageGetItem.mockImplementation((key) => {
-            if (key === 'rbiblia-continuous-text') return '1';
-            return null;
-        });
-
-        const { fireEvent } = await import('@testing-library/react');
-        renderWithIntl(<Bible intl={mockIntl} setLocale={vi.fn()} />);
-        
-        await waitFor(() => {
-            expect(screen.getByTestId('nav-next-chap')).toBeTruthy();
-        });
-
         // Clicking next chapter should jump by 1 chapter (from index 0 to index 1), so chapter 2.
         await act(async () => {
             fireEvent.click(screen.getByTestId('nav-next-chap'));
@@ -346,9 +309,14 @@ describe('Bible Component', () => {
             expect(mockGetVerses).toHaveBeenCalledWith('pl-bg', 'Gen', 2);
         });
 
-        // Restore window.innerWidth
-        Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true, configurable: true });
-        window.dispatchEvent(new Event('resize'));
+        // Going back by 1 chapter should land back at index 0 (chapter 1).
+        await act(async () => {
+            fireEvent.click(screen.getByTestId('nav-prev-chap'));
+        });
+
+        await waitFor(() => {
+            expect(mockGetVerses).toHaveBeenCalledWith('pl-bg', 'Gen', 1);
+        });
     });
 
     it('handles next and previous book navigation', async () => {

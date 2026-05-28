@@ -34,10 +34,8 @@ class ReportController
         $this->mailer = new Mailer($transport);
 
         $emailTo = new Address($settings['report']['email_to_address'], $settings['report']['email_to_name']);
-        $emailFrom = new Address($settings['mailer']['smtp_user'], $settings['mailer']['name']);
 
         $this->email = (new Email())
-            ->from($emailFrom)
             ->to($emailTo)
             ->subject($settings['report']['subject']);
 
@@ -57,8 +55,8 @@ class ReportController
             return;
         }
 
-        $replyTo = new Address($report->getEmail(), $report->getName());
-        $this->email->replyTo($replyTo);
+        $emailFrom = new Address($report->getEmail(), $report->getName());
+        $this->email->from($emailFrom);
 
         $emailBody = (new ReportEmailRenderer())->getTemplate($report);
         $this->email->html($emailBody);
