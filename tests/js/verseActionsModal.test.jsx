@@ -28,7 +28,7 @@ const messages = {
     errorReportCancel: "Anuluj",
     errorReportName: "Imię",
     errorReportEmail: "E-mail",
-    errorReportNotes: "Opis błędu / komentarz",
+    errorReportNotes: "Opis błędu / komentarz (opcjonalnie)",
     errorReportContent: "Proponowana poprawka (edytuj poniższy tekst)",
     errorReportNameRequired: "Imię jest wymagane.",
     errorReportEmailRequired: "Adres e-mail jest wymagany.",
@@ -133,7 +133,7 @@ describe("VerseActionsModal", () => {
         expect(screen.getByLabelText("Imię")).toBeInTheDocument();
         expect(screen.getByLabelText("E-mail")).toBeInTheDocument();
         expect(screen.getByLabelText("Proponowana poprawka (edytuj poniższy tekst)")).toBeInTheDocument();
-        expect(screen.getByLabelText("Opis błędu / komentarz")).toBeInTheDocument();
+        expect(screen.getByLabelText("Opis błędu / komentarz (opcjonalnie)")).toBeInTheDocument();
         
         // Click cancel to return to main menu
         const cancelBtn = screen.getByText("Anuluj");
@@ -204,7 +204,7 @@ describe("VerseActionsModal", () => {
         fireEvent.change(screen.getByLabelText("Proponowana poprawka (edytuj poniższy tekst)"), {
             target: { value: "fixed verse content" },
         });
-        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz"), {
+        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz (opcjonalnie)"), {
             target: { value: "here are my notes" },
         });
         
@@ -257,6 +257,40 @@ describe("VerseActionsModal", () => {
         expect(localStorage.getItem("rbiblia-report-email")).toBe("email@address.pl");
     });
 
+    it("allows form submission with empty notes/comments field", async () => {
+        vi.mocked(globalThis.fetch).mockResolvedValue({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(JSON.stringify({ status: "success" })),
+        });
+
+        const { container } = renderWithIntl(<VerseActionsModal {...defaultProps} />);
+        
+        // Go to report form
+        fireEvent.click(screen.getByText("Zgłoś błąd w tłumaczeniu"));
+        
+        // Fill mandatory form fields, leaving notes empty
+        fireEvent.change(screen.getByLabelText("Imię"), { target: { value: "Rafaello" } });
+        fireEvent.change(screen.getByLabelText("E-mail"), { target: { value: "email@address.pl" } });
+        fireEvent.change(screen.getByLabelText("Proponowana poprawka (edytuj poniższy tekst)"), {
+            target: { value: "fixed verse content" },
+        });
+        
+        // Submit form
+        const form = container.querySelector("form");
+        fireEvent.submit(form);
+        
+        // Assert success view is reached
+        await waitFor(() => {
+            expect(screen.getByText("Dziękujemy! Zgłoszenie zostało zapisane.")).toBeInTheDocument();
+        });
+
+        // Assert fetch was called with empty notes payload
+        expect(globalThis.fetch).toHaveBeenCalledWith("/api/pl/report", expect.objectContaining({
+            body: expect.stringContaining('"notes":""'),
+        }));
+    });
+
     it("allows copying report to clipboard", async () => {
         vi.mocked(globalThis.fetch).mockResolvedValue({
             ok: true,
@@ -273,7 +307,7 @@ describe("VerseActionsModal", () => {
         fireEvent.change(screen.getByLabelText("Proponowana poprawka (edytuj poniższy tekst)"), {
             target: { value: "fixed verse content" },
         });
-        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz"), {
+        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz (opcjonalnie)"), {
             target: { value: "here are my notes" },
         });
         
@@ -312,7 +346,7 @@ describe("VerseActionsModal", () => {
         fireEvent.change(screen.getByLabelText("Proponowana poprawka (edytuj poniższy tekst)"), {
             target: { value: "fixed verse content" },
         });
-        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz"), {
+        fireEvent.change(screen.getByLabelText("Opis błędu / komentarz (opcjonalnie)"), {
             target: { value: "here are my notes" },
         });
         

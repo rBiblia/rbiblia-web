@@ -172,7 +172,7 @@
   "errorReportTypeRequired": "Wählen Sie einen Fehlertyp aus.",
   "errorReportName": "Name",
   "errorReportEmail": "E-Mail",
-  "errorReportNotes": "Fehlerbeschreibung / Kommentar",
+  "errorReportNotes": "Fehlerbeschreibung / Kommentar (optional)",
   "errorReportContent": "Vorgeschlagene Korrektur (bearbeiten Sie den folgenden Text)",
   "errorReportNameRequired": "Name ist erforderlich.",
   "errorReportEmailRequired": "E-Mail-Adresse ist erforderlich.",

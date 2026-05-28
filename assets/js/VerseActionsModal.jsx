@@ -328,7 +328,7 @@ Uwagi/Komentarz: ${notes}`;
 
                             <div className="verse-actions-form-group">
                                 <label className="verse-actions-label" htmlFor="error-report-notes">
-                                    {formatMessage({ id: "errorReportNotes", defaultMessage: "Opis błędu / komentarz" })}
+                                    {formatMessage({ id: "errorReportNotes", defaultMessage: "Opis błędu / komentarz (opcjonalnie)" })}
                                 </label>
                                 <textarea
                                     id="error-report-notes"
