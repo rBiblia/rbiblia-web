@@ -33,10 +33,11 @@ class ReportController
 
         $this->mailer = new Mailer($transport);
 
-        $emailTo = new Address($settings['report']['email_to_address'], $settings['report']['email_to_name']);
+        $senderEmail = new Address($settings['report']['email_to_address'], $settings['report']['email_to_name']);
 
         $this->email = (new Email())
-            ->to($emailTo)
+            ->to($senderEmail)
+            ->from($senderEmail)
             ->subject($settings['report']['subject']);
 
         $headers = $this->email->getHeaders();
@@ -55,8 +56,8 @@ class ReportController
             return;
         }
 
-        $emailFrom = new Address($report->getEmail(), $report->getName());
-        $this->email->from($emailFrom);
+        $emailReplyTo = new Address($report->getEmail(), $report->getName());
+        $this->email->addReplyTo($emailReplyTo);
 
         $emailBody = (new ReportEmailRenderer())->getTemplate($report);
         $this->email->html($emailBody);
