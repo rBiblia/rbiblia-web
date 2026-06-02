@@ -14,6 +14,7 @@ class ReportProvider
     private const array SUPPORTED_PARAMS = [
         'name',
         'email',
+        'notes',
         'content',
         'original_content',
         'translation',
@@ -26,13 +27,7 @@ class ReportProvider
 
     public function __construct(string $language, string|false $inputStream)
     {
-        $data = $this->getInputStream($language, self::SUPPORTED_PARAMS, $inputStream);
-        
-        $jsonInput = $inputStream !== false ? $inputStream : '{}';
-        $decoded = \json_decode($jsonInput, true);
-        $data['notes'] = isset($decoded['notes']) ? (string)$decoded['notes'] : '';
-
-        $this->report = new Report($data);
+        $this->report = new Report($this->getInputStream($language, self::SUPPORTED_PARAMS, $inputStream));
     }
 
     public function getReport(): Report
