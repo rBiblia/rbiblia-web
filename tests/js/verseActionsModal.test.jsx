@@ -227,8 +227,8 @@ describe("VerseActionsModal", () => {
                 name: "Rafaello",
                 email: "email@address.pl",
                 notes: "here are my notes",
-                content: "fixed verse content",
-                original_content: "Na początku Bóg stworzył niebo i ziemię.",
+                content: "(1) fixed verse content",
+                original_content: "(1) Na początku Bóg stworzył niebo i ziemię.",
                 translation: "pl-ubg",
                 book: "gen",
                 chapter: 1,
@@ -247,7 +247,7 @@ describe("VerseActionsModal", () => {
             verseId: "1",
             name: "Rafaello",
             email: "email@address.pl",
-            content: "fixed verse content",
+            content: "(1) fixed verse content",
             notes: "here are my notes",
             translationId: "pl-ubg",
         });
@@ -285,9 +285,9 @@ describe("VerseActionsModal", () => {
             expect(screen.getByText("Dziękujemy! Zgłoszenie zostało zapisane.")).toBeInTheDocument();
         });
 
-        // Assert fetch was called with empty notes payload
+        // Assert fetch was called with space notes payload
         expect(globalThis.fetch).toHaveBeenCalledWith("/api/pl/report", expect.objectContaining({
-            body: expect.stringContaining('"notes":""'),
+            body: expect.stringContaining('"notes":" "'),
         }));
     });
 
