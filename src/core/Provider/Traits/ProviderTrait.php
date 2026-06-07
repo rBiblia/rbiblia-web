@@ -25,7 +25,7 @@ trait ProviderTrait
         }
 
         foreach ($supportedParams as $param) {
-            if (empty($queryData[$param])) {
+            if (!isset($queryData[$param])) {
                 throw new InvalidArgumentException(\sprintf($this->getLanguageProvider($language)
                     ->showMessage(LanguageProvider::MSG_ERROR_JSON_PARAMETER_IS_MISSING), $param));
             }
