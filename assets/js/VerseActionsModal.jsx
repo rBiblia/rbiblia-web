@@ -87,9 +87,9 @@ export default function VerseActionsModal({
         const payload = {
             name: name.trim(),
             email: email.trim(),
-            notes: notes.trim() || " ",
-            content: `(${verseId}) ${content.trim()}`,
-            original_content: `(${verseId}) ${verseContent}`,
+            notes: notes.trim(),
+            content: `${verseId}. ${content.trim()}`,
+            original_content: `${verseId}. ${verseContent}`,
             translation: translationId,
             book: bookId,
             chapter: isNaN(parsedChapter) ? chapterId : parsedChapter,
