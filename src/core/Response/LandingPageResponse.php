@@ -17,6 +17,6 @@ class LandingPageResponse
         $cssTimestamp = filemtime(APP_PATH_ASSETS.'/app.css');
         $jsTimestamp = filemtime(APP_PATH_ASSETS.'/app.js');
 
-        require_once self::TEMPLATE_INDEX;
+        require self::TEMPLATE_INDEX;
     }
 }
