@@ -1067,9 +1067,9 @@ const Bible = ({ intl, setLocale }) => {
                         translationId={selectedTranslation}
                         translationName={translationName}
                         verseContent={
-                            (activeVerseMenu.bookId === selectedBook && activeVerseMenu.chapterId === selectedChapter)
+                            (activeVerseMenu.bookId === selectedBook && activeVerseMenu.chapterId == selectedChapter)
                                 ? verses[activeVerseMenu.verseId]
-                                : (nextVerses && activeVerseMenu.bookId === nextChapterBookId && activeVerseMenu.chapterId === nextChapterId)
+                                : (nextVerses && activeVerseMenu.bookId === nextChapterBookId && activeVerseMenu.chapterId == nextChapterId)
                                     ? nextVerses[activeVerseMenu.verseId]
                                     : ""
                         }
@@ -1090,12 +1090,12 @@ const Bible = ({ intl, setLocale }) => {
                             const { verseId, bookId, chapterId } = activeVerseMenu;
                             setActiveVerseMenu(null);
                             if (action === "compare") {
-                                if (bookId && chapterId && (bookId !== selectedBook || chapterId !== selectedChapter)) {
+                                if (bookId && chapterId && (bookId !== selectedBook || chapterId != selectedChapter)) {
                                     navigateToBookAndChapter(bookId, chapterId);
                                 }
                                 setComparedVerse(verseId);
                             } else if (action === "note") {
-                                if (bookId && chapterId && (bookId !== selectedBook || chapterId !== selectedChapter)) {
+                                if (bookId && chapterId && (bookId !== selectedBook || chapterId != selectedChapter)) {
                                     navigateToBookAndChapter(bookId, chapterId);
                                 }
                                 setEditingNoteVerse(verseId);
