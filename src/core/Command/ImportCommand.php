@@ -276,9 +276,9 @@ class ImportCommand extends Command
         try {
             // create translation data table
             $dataTable = new Table(self::TABLE_TEMP);
-            $dataTable->addColumn('book', 'string', ['length' => '3']);
-            $dataTable->addColumn('chapter', 'integer', ['length' => '3']);
-            $dataTable->addColumn('verse', 'integer', ['length' => '3']);
+            $dataTable->addColumn('book', 'string', ['length' => 3]);
+            $dataTable->addColumn('chapter', 'integer', ['length' => 3]);
+            $dataTable->addColumn('verse', 'integer', ['length' => 3]);
             $dataTable->addColumn('content', 'text');
             $dataTable->addUniqueIndex(['book', 'chapter', 'verse']);
 
