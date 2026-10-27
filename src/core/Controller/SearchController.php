@@ -24,7 +24,7 @@ class SearchController
     {
         try {
             $inputStream ??= file_get_contents('php://input');
-            $searchQuery = (new SearchQueryProvider($language, $inputStream))->getSearchQuery();
+            $searchQuery = new SearchQueryProvider($language, $inputStream)->searchQuery;
         } catch (\InvalidArgumentException $e) {
             $this->setErrorResponse($e->getMessage());
 
@@ -72,12 +72,12 @@ class SearchController
 
             $results = [];
             while (($row = $statement->fetchAssociative()) !== false) {
-                $results[] = (new Verse(
+                $results[] = new Verse(
                     $row['book'],
                     $row['chapter'],
                     $row['verse'],
                     $row['content']
-                ))->serialize();
+                )->serialize();
             }
 
             $this->setResponse([

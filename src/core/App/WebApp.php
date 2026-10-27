@@ -31,13 +31,16 @@ class WebApp
                 $translationController = new TranslationController($this->settings);
 
                 $r->addRoute('GET', '/translation', new Action($translationController, 'getTranslationList'));
-                $r->addGroup('/translation/{translationId:[a-z]{2}_\w+}',
+                $r->addGroup(
+                    '/translation/{translationId:[a-z]{2}_\w+}',
                     static function (FastRoute\RouteCollector $r) use ($translationController): void {
                     $r->addRoute('GET', '', new Action($translationController, 'getTranslationStructureById'));
                     $r->addRoute('GET', '/book/{bookId:[a-z0-9]{3}}/chapter/{chapterId:\d+}', new Action(
-                        $translationController, 'getVerses'
+                        $translationController,
+                        'getVerses'
                     ));
-                });
+                }
+                );
 
                 $r->addRoute('GET', '/book', new Action(new BookController(), 'getBookList'));
                 $r->addRoute('POST', '/search', new Action(new SearchController($this->settings), 'query'));
@@ -62,7 +65,7 @@ class WebApp
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
             case FastRoute\Dispatcher::NOT_FOUND:
-                (new PageNotFoundResponse())->render();
+                new PageNotFoundResponse()->render();
                 break;
             case FastRoute\Dispatcher::FOUND:
                 $routeInfo[1]->call($routeInfo[2]);

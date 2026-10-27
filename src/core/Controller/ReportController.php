@@ -35,7 +35,7 @@ class ReportController
 
         $senderEmail = new Address($settings['report']['email_to_address'], $settings['report']['email_to_name']);
 
-        $this->email = (new Email())
+        $this->email = new Email()
             ->to($senderEmail)
             ->from($senderEmail)
             ->subject($settings['report']['subject']);
@@ -49,7 +49,7 @@ class ReportController
     {
         try {
             $inputStream ??= file_get_contents('php://input');
-            $report = (new ReportProvider($language, $inputStream))->getReport();
+            $report = new ReportProvider($language, $inputStream)->report;
         } catch (\InvalidArgumentException $e) {
             $this->setErrorResponse($e->getMessage());
 
@@ -59,7 +59,7 @@ class ReportController
         $emailReplyTo = new Address($report->getEmail(), $report->getName());
         $this->email->addReplyTo($emailReplyTo);
 
-        $emailBody = (new ReportEmailRenderer())->getTemplate($report);
+        $emailBody = new ReportEmailRenderer()->getTemplate($report);
         $this->email->html($emailBody);
 
         try {

@@ -16,7 +16,7 @@ class SearchQueryProviderTest extends TestCase
     public function testIfSearchQueryValueObjectWasCreatedWithCorrectData(): void
     {
         $searchQueryProvider = new SearchQueryProvider('en', json_encode(self::INPUT_DATA));
-        $results = $searchQueryProvider->getSearchQuery();
+        $results = $searchQueryProvider->searchQuery;
 
         $this->assertSame(self::INPUT_DATA['translation'], $results->getTranslation());
         $this->assertSame(self::INPUT_DATA['query'], $results->getQuery());

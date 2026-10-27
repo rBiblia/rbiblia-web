@@ -16,15 +16,14 @@ class SearchQueryProvider
         'translation',
     ];
 
-    private ?SearchQuery $searchQuery = null;
+    public ?SearchQuery $searchQuery {
+        get {
+            return $this->searchQuery;
+        }
+    }
 
     public function __construct(string $language, string|false $inputStream)
     {
         $this->searchQuery = new SearchQuery($this->getInputStream($language, self::SUPPORTED_PARAMS, $inputStream));
-    }
-
-    public function getSearchQuery(): SearchQuery
-    {
-        return $this->searchQuery;
     }
 }

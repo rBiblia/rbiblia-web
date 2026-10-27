@@ -25,7 +25,7 @@ class ReportProviderTest extends TestCase
         $inputStream = json_encode(self::VALID_PAYLOAD);
         $provider = new ReportProvider('en', $inputStream);
 
-        $report = $provider->getReport();
+        $report = $provider->report;
         $this->assertInstanceOf(Report::class, $report);
         $this->assertSame('John Doe', $report->getName());
         $this->assertSame('john@example.com', $report->getEmail());

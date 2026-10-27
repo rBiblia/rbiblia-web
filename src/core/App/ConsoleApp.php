@@ -14,7 +14,7 @@ class ConsoleApp
         $this->application = new Application();
 
         $importCommand = new ImportCommand($settings);
-        $this->application->add($importCommand);
+        $this->application->addCommand($importCommand);
     }
 
     public function run(): void

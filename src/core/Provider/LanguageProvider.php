@@ -14,7 +14,7 @@ class LanguageProvider
     final public const string MSG_ERROR_JSON_IS_MALFORMED = 'error_json_is_malformed';
     final public const string MSG_ERROR_JSON_PARAMETER_IS_MISSING = 'error_json_parameter_is_missing';
 
-    private array $data = [];
+    private array $data;
 
     public function __construct(public readonly string $language)
     {

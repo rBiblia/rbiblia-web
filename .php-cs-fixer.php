@@ -13,7 +13,7 @@ $finder = PhpCsFixer\Finder::create()
 $config = new PhpCsFixer\Config();
 
 return $config->setRules([
-        '@PHP71Migration' => true,
+        '@PHP85Migration' => true,
         '@Symfony:risky' => true,
         'array_syntax' => ['syntax' => 'short'],
         'combine_consecutive_unsets' => true,

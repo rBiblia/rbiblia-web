@@ -26,12 +26,12 @@ class BodyTest extends TestCase
                 1 => [
                     1 => 'In the beginning',
                     2 => 'And the earth',
-                ]
+                ],
             ],
             'exo' => [
                 2 => [
                     1 => 'And there went',
-                ]
+                ],
             ],
         ];
 

@@ -15,7 +15,7 @@ class LandingPageResponseTest extends TestCase
     {
         $this->assetsDir = APP_PATH_ASSETS;
         if (!is_dir($this->assetsDir)) {
-            mkdir($this->assetsDir, 0777, true);
+            mkdir($this->assetsDir, 0o777, true);
         }
 
         $this->cssFile = $this->assetsDir . '/app.css';

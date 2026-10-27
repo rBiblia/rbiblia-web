@@ -19,7 +19,7 @@ class TranslationController
     final public const string TABLE_DATA = 'data_%s';
     private const string TABLE_SECURITY = 'security';
 
-    private int $securityQueryLimit = 0;
+    private int $securityQueryLimit;
 
     public function __construct(array $settings)
     {

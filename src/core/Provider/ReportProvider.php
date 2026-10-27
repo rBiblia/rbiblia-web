@@ -23,15 +23,14 @@ class ReportProvider
         'verse',
     ];
 
-    private ?Report $report = null;
+    public ?Report $report {
+        get {
+            return $this->report;
+        }
+    }
 
     public function __construct(string $language, string|false $inputStream)
     {
         $this->report = new Report($this->getInputStream($language, self::SUPPORTED_PARAMS, $inputStream));
-    }
-
-    public function getReport(): Report
-    {
-        return $this->report;
     }
 }
