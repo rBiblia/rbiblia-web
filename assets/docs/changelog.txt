@@ -15,6 +15,9 @@ https://rbiblia.github.io
 
 Dziennik wydań (od najnowszych):
 
+2026-11-11:
+- poprawiono błąd "pustej strony" pojawiający się podczas próby wyboru księgi na konfiguracjach z włączoną opcją redukcji wyświetlanych animacji.
+
 2026-07-02:
 - dodano możliwość zgłaszania błędów w tłumaczeniu, analogicznie do wersji komputerowej,
 - dodano możliwość wyświetlania treści rozdziału w układzie ciągłym lub z podziałem na poszczególne wersety,
